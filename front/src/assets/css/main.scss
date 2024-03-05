@@ -111,7 +111,7 @@
   --primary-darkened: #995300;
   --background: #151619;
   --system: #22252A;
-  --system-hover: #2E3138;
+  --system-lightened: #2E3138;
   --border-background: #5B606E;
   --white: #FFFFFF;
   --text-grey: #737A8C;
@@ -119,6 +119,9 @@
 
   // borders
   --border: 1px solid var(--border-background);
+
+  // borders radius
+  --input-text-radius: 6px;
 
   // team colors
   --blue-team: #094CF6;

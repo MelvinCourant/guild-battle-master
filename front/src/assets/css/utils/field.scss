@@ -1,0 +1,112 @@
+.field {
+  &--text,
+  &--email,
+  &--password,
+  &--search {
+    .field__input {
+      width: 250px;
+      height: 34px;
+      padding: 10px 14px;
+      border-radius: var(--input-text-radius);
+      background: var(--background);
+      border: var(--border);
+      font-size: 0.875rem; // 14px
+      line-height: 1;
+      font-weight: 500;
+
+      &::placeholder {
+        color: var(--text-grey);
+      }
+
+      &:focus {
+        outline: none;
+        border: 1px solid var(--primary);
+      }
+    }
+  }
+
+  &--text,
+  &--email,
+  &--password {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    width: fit-content;
+    height: 55px;
+
+    &.field--without-label {
+      position: relative;
+      height: initial !important;
+
+      .field__error-text {
+        position: absolute;
+        left: 0;
+        top: 0;
+        transform: translateY(-100%);
+      }
+    }
+
+    .field__label {
+      font-size: 0.75rem; // 12px
+      margin-bottom: 4px;
+    }
+  }
+
+  &--submit,
+  &--button {
+    .field__input {
+      padding: 5.5px 14px 8.5px 14px;
+      font-size: 0.875rem; // 14px
+      line-height: 1.42857;
+      font-weight: 500;
+      border-radius: var(--input-text-radius);
+      border: var(--border);
+      background: var(--system);
+      cursor: pointer;
+
+      &:active {
+        background: var(--system-lightened);
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      &.primary {
+        border: none;
+        background: var(--primary);
+
+        &:active {
+          background: var(--primary-darkened);
+        }
+      }
+
+      &.danger {
+        color: var(--danger);
+
+        &:hover {
+          color: var(--white);
+          background: var(--danger);
+        }
+
+        &:active {
+          color: var(--danger);
+        }
+      }
+    }
+  }
+
+  &.error {
+    .field {
+      &__error-text {
+        color: var(--danger);
+        font-size: 0.75rem; // 12px
+      }
+
+      &__input {
+        border: 1px solid var(--danger);
+      }
+    }
+  }
+}
