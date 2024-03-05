@@ -18,6 +18,11 @@
         style: "primary"
       }
     ],
+    footerText: {
+      text: "Vous n’avez pas de compte ?",
+      link: "Inscrivez-vous",
+      href: "/register",
+    }
   };
 </script>
 

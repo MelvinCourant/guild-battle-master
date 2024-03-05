@@ -1,0 +1,66 @@
+.form {
+  display: flex;
+  max-width: 500px;
+  width: 100%;
+  padding: 40px 50px;
+  margin: auto;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  border-radius: 20px;
+  background: var(--system);
+
+  &__title {
+    color: var(--primary);
+    font-family: 'Mona Sans', sans-serif;
+    font-size: 1.5rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+
+  &__fields {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+
+    &__logs {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    &__footer {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+
+      &__text {
+        font-size: 0.875rem; // 14px
+        line-height: 1.4286;
+        font-weight: 500;
+        text-align: right;
+
+        a {
+          color: var(--primary);
+          font-weight: 700;
+
+          &:hover {
+            color: var(--primary-darkened);
+          }
+        }
+      }
+    }
+
+    .field {
+      width: 100%;
+
+      &__input {
+        width: 100%;
+      }
+    }
+  }
+}

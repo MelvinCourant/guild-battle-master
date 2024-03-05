@@ -1,10 +1,11 @@
 .field {
+  width: 250px;
+
   &--text,
   &--email,
   &--password,
   &--search {
     .field__input {
-      width: 250px;
       height: 34px;
       padding: 10px 14px;
       border-radius: var(--input-text-radius);
@@ -32,22 +33,16 @@
     flex-direction: column;
     justify-content: flex-end;
     width: fit-content;
-    height: 55px;
+    position: relative;
 
-    &.field--without-label {
-      position: relative;
-      height: initial !important;
-
-      .field__error-text {
-        position: absolute;
-        left: 0;
-        top: 0;
-        transform: translateY(-100%);
-      }
-    }
-
-    .field__label {
+    .field__label,
+    .field__error-text {
+      position: absolute;
+      left: 0;
+      top: 0;
+      transform: translateY(calc(-100% - 4px));
       font-size: 0.75rem; // 12px
+      line-height: normal;
       margin-bottom: 4px;
     }
   }
@@ -100,8 +95,7 @@
   &.error {
     .field {
       &__error-text {
-        color: var(--danger);
-        font-size: 0.75rem; // 12px
+        transform: translateY(-100%);
       }
 
       &__input {

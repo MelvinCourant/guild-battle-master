@@ -33,10 +33,6 @@
   });
   const typeClass = ref(`field--${props.type}`);
   const noLabelClass = ref('');
-
-  if(!props.label) {
-    noLabelClass.value = `field--without-label`;
-  }
 </script>
 
 <template>
