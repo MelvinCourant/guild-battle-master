@@ -31,6 +31,10 @@
       text: "Vous n’avez pas de compte ?",
       link: "Inscrivez-vous",
       href: "/register",
+    },
+    passwordForgotten: {
+      text: "Mot de passe oublié ?",
+      href: "/password-forgotten",
     }
   };
 </script>

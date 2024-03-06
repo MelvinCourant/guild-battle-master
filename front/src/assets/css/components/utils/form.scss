@@ -1,74 +1,94 @@
-.form {
+.form-container {
   display: flex;
-  max-width: 500px;
-  width: 100%;
-  padding: 40px 50px;
-  margin: auto;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 40px;
-  border-radius: 20px;
-  background: var(--system);
+  flex: 1;
+  gap: 10px;
 
-  @media screen and (max-width: 767px) {
-    padding: 30px 40px;
-  }
-
-  &__title {
-    color: var(--primary);
-    font-family: 'Mona Sans', sans-serif;
-    font-size: 1.5rem;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-  }
-
-  &__fields {
+  .form {
     display: flex;
-    flex-direction: column;
-    gap: 15px;
+    max-width: 500px;
     width: 100%;
+    padding: 40px 50px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    border-radius: 20px;
+    background: var(--system);
 
-    &__logs {
-      display: flex;
-      flex-direction: column;
-      gap: 30px;
+    @media screen and (max-width: 767px) {
+      padding: 30px 40px;
     }
 
-    &__footer {
+    &__title {
+      color: var(--primary);
+      font-family: 'Mona Sans', sans-serif;
+      font-size: 1.5rem;
+      font-style: normal;
+      font-weight: 700;
+      line-height: normal;
+    }
+
+    &__fields {
       display: flex;
       flex-direction: column;
-      align-items: flex-end;
-      gap: 8px;
+      gap: 15px;
+      width: 100%;
 
-      &__text {
-        font-size: 0.875rem; // 14px
-        line-height: 1.4286;
-        font-weight: 500;
-        text-align: right;
+      &__logs {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+      }
 
-        @media screen and (max-width: 767px) {
-          font-size: 0.75rem; // 12px
-        }
+      &__footer {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 8px;
 
-        a {
-          color: var(--primary);
-          font-weight: 700;
+        &__text {
+          font-size: 0.875rem; // 14px
+          line-height: 1.4286;
+          font-weight: 500;
+          text-align: right;
 
-          &:hover {
-            color: var(--primary-darkened);
+          @media screen and (max-width: 767px) {
+            font-size: 0.75rem; // 12px
+          }
+
+          a {
+            color: var(--primary);
+            font-weight: 700;
+
+            &:hover {
+              color: var(--primary-darkened);
+            }
           }
         }
       }
-    }
 
-    .field {
-      width: 100%;
-
-      &__input {
+      .field {
         width: 100%;
+
+        &__input {
+          width: 100%;
+        }
       }
+    }
+  }
+
+  .password-forgotten {
+    color: var(--primary);
+    font-size: 0.875rem; // 14px
+    line-height: normal;
+    font-weight: 700;
+    text-align: center;
+
+    &:hover {
+      color: var(--primary-darkened);
     }
   }
 }
