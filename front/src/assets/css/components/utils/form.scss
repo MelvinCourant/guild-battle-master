@@ -11,6 +11,10 @@
   border-radius: 20px;
   background: var(--system);
 
+  @media screen and (max-width: 767px) {
+    padding: 30px 40px;
+  }
+
   &__title {
     color: var(--primary);
     font-family: 'Mona Sans', sans-serif;
@@ -43,6 +47,10 @@
         line-height: 1.4286;
         font-weight: 500;
         text-align: right;
+
+        @media screen and (max-width: 767px) {
+          font-size: 0.75rem; // 12px
+        }
 
         a {
           color: var(--primary);

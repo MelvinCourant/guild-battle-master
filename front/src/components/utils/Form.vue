@@ -1,5 +1,5 @@
 <script setup>
-  import "@css/utils/form.scss";
+  import "@css/components/utils/form.scss";
   import Field from "@components/utils/Field.vue";
 
   defineProps({

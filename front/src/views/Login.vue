@@ -1,6 +1,15 @@
 <script setup>
+  import '@css/views/login.scss';
   import FormPage from "@components/FormPage.vue";
 
+  function generateImgSrc(src) {
+    return new URL(`../assets/imgs/${src}`, import.meta.url).href;
+  }
+
+  const image = {
+    src: generateImgSrc("camilla.jpg"),
+    alt: "Login image",
+  }
   const loginForm = {
     title: "Guild battle Master",
     fields: [
@@ -28,6 +37,6 @@
 
 <template>
   <main class="login">
-    <FormPage :form="loginForm" />
+    <FormPage :image="image" :form="loginForm" />
   </main>
 </template>

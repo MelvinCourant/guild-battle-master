@@ -1,5 +1,5 @@
 <script setup>
-  import '@css/utils/field.scss';
+  import '@css/components/utils/field.scss';
   import { ref } from "vue";
 
   const props = defineProps({
