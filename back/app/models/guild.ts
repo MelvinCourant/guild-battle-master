@@ -1,18 +1,24 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 
-export default class Member extends BaseModel {
+export default class Guild extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
 
   @column()
-  declare pseudo: string
+  declare name: string
 
   @column()
-  declare user_id: number
+  declare birth_date: Date
 
   @column()
-  declare guild_id: number
+  declare leader_id: number
+
+  @column()
+  declare siege_rank: string
+
+  @column()
+  declare image: string
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
