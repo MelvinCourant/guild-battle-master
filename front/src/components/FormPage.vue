@@ -3,12 +3,11 @@
   import Form from "@components/utils/Form.vue";
   import Stepper from "@components/utils/Stepper.vue";
   import type { PropType } from "vue";
-  import type { IImage, IForm } from "@models/form.ts";
+  import type { ISteps, IImage, IForm } from "@models/form.ts";
 
   defineProps({
     steps: {
-      type: Array as PropType<string[]>,
-      required: true,
+      type: Array as PropType<ISteps>,
     },
     image: {
       type: Object as PropType<IImage>,

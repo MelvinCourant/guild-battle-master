@@ -36,6 +36,7 @@ interface IInput {
     checked?: boolean;
     disabled?: boolean;
     required?: boolean;
+    accept?: string;
     style?: string;
 }
 

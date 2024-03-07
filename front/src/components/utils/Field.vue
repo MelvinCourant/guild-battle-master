@@ -22,9 +22,31 @@
   });
   const typeClass = ref(`field--${props.input.type}`);
   const imageClass = ref('');
+  const image = ref(props.image);
 
   if(props.image) {
     imageClass.value = 'field--image';
+  }
+
+  function loadImageInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    const fileName = input.files?.[0].name;
+
+    if(file) {
+      const reader = new FileReader();
+
+      reader.addEventListener("load", function (e) {
+        const readerTarget = e.target;
+
+        image.value = {
+          src: readerTarget?.result,
+          alt: fileName,
+        };
+      });
+
+      reader.readAsDataURL(file);
+    }
   }
 </script>
 
@@ -61,7 +83,9 @@
       :checked="input.checked"
       :disabled="input.disabled"
       :required="input.required"
+      :accept="input.accept"
       :style="input.style"
+      @imageChange="loadImageInput"
     />
   </div>
 </template>

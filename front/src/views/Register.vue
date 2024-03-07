@@ -32,7 +32,8 @@
           alt: 'User icon',
         },
         input: {
-          type: 'file'
+          type: 'file',
+          accept: 'image/png, image/jpeg, image/jpg, image/webp',
         }
       },
       {
