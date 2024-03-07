@@ -22,30 +22,24 @@
         {{ form.title }}
       </h2>
       <div class="form__fields">
-        <div class="form__fields__logs">
+        <div class="form__fields__inputs">
           <Field
               v-for="field in form.fields.splice(0, form.fields.length - 1)"
               :key="field.label"
-              :type="field.type"
               :label="field.label"
-              :placeholder="field.placeholder"
-              :value="field.value"
-              :checked="field.checked"
-              :disabled="field.disabled"
               :style="field.style"
-              :required="field.required"
+              :error="field.error"
+              :image="field.image"
+              :input="field.input"
           />
         </div>
         <div class="form__fields__footer">
           <Field
-              :type="form.fields[form.fields.length - 1].type"
               :label="form.fields[form.fields.length - 1].label"
-              :placeholder="form.fields[form.fields.length - 1].placeholder"
-              :value="form.fields[form.fields.length - 1].value"
-              :checked="form.fields[form.fields.length - 1].checked"
-              :disabled="form.fields[form.fields.length - 1].disabled"
               :style="form.fields[form.fields.length - 1].style"
-              :required="form.fields[form.fields.length - 1].required"
+              :error="form.fields[form.fields.length - 1].error"
+              :image="form.fields[form.fields.length - 1].image"
+              :input="form.fields[form.fields.length - 1].input"
           />
           <p
               class="form__fields__footer__text"
@@ -61,7 +55,11 @@
         </div>
       </div>
     </form>
-    <router-link :to="form.passwordForgotten.href" class="password-forgotten">
+    <router-link
+        v-if="form.passwordForgotten"
+        :to="form.passwordForgotten.href"
+        class="password-forgotten"
+    >
       {{ form.passwordForgotten.text }}
     </router-link>
   </div>

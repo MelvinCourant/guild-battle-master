@@ -1,9 +1,11 @@
 interface IFormPage {
-    image?: {
-        src: string;
-        alt: string;
-    };
+    image?: IImage;
     form: IForm;
+}
+
+interface IImage {
+    src: string;
+    alt: string;
 }
 
 interface IForm {
@@ -14,14 +16,20 @@ interface IForm {
 }
 
 interface IField {
-    type: string;
     label?: string;
+    error?: string;
+    image?: IImage;
+    input: IInput;
+}
+
+interface IInput {
+    type: string;
     placeholder?: string;
     value?: string;
     checked?: boolean;
     disabled?: boolean;
-    style?: string;
     required?: boolean;
+    style?: string;
 }
 
 interface IFooterText {
@@ -35,4 +43,12 @@ interface IPasswordForgotten {
     href: string;
 }
 
-export type { IFormPage, IForm, IField, IFooterText, IPasswordForgotten };
+export type {
+    IFormPage,
+    IImage,
+    IForm,
+    IField,
+    IInput,
+    IFooterText,
+    IPasswordForgotten
+};

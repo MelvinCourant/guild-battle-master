@@ -1,40 +1,26 @@
-<script setup>
+<script setup lang="ts">
   import '@css/components/utils/field.scss';
   import { ref } from "vue";
+  import type { IField } from "@models/form.ts";
+  import Input from "@components/utils/Input.vue";
 
-  const props = defineProps({
-    type: {
-      type: String,
-      required: true,
-    },
+  const props: IField = defineProps({
     label: {
-      type: String,
-      default: "",
-    },
-    placeholder: {
-      type: String,
-    },
-    value: {
-      type: String,
-    },
-    checked: {
-      type: Boolean,
-    },
-    disabled: {
-      type: Boolean
-    },
-    required: {
-      type: Boolean,
-    },
-    style: {
       type: String,
       default: "",
     },
     error: {
       type: String,
     },
+    image: {
+      type: Object,
+    },
+    input: {
+      type: Object,
+      required: true,
+    }
   });
-  const typeClass = ref(`field--${props.type}`);
+  const typeClass = ref(`field--${props.input.type}`);
   const noLabelClass = ref('');
 </script>
 
@@ -44,7 +30,7 @@
     :class="[typeClass, noLabelClass, {error: error}]"
   >
     <label
-      :for="type"
+      :for="input.type"
       class="field__label"
       v-if="label"
       v-show="!error"
@@ -57,15 +43,21 @@
     >
       {{ error }}
     </p>
-    <input
-      :type="type"
-      :placeholder="placeholder"
-      :value="value"
-      :checked="checked"
-      :disabled="disabled"
-      :required="required"
-      class="field__input"
-      :class="style"
+    <div class="field__image">
+      <img
+          v-if="image"
+          :src="image.src"
+          :alt="image.alt"
+      />
+    </div>
+    <Input
+      :type="input.type"
+      :placeholder="input.placeholder"
+      :value="input.value"
+      :checked="input.checked"
+      :disabled="input.disabled"
+      :required="input.required"
+      :style="input.style"
     />
   </div>
 </template>

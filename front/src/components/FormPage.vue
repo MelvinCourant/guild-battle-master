@@ -2,11 +2,11 @@
   import "@css/components/form-page.scss";
   import Form from "@components/utils/Form.vue";
   import type { PropType } from "vue";
-  import type { IFormPage, IForm } from "@models/form.ts";
+  import type { IImage, IForm } from "@models/form.ts";
 
   defineProps({
     image: {
-      type: Object as PropType<IFormPage["image"]>,
+      type: Object as PropType<IImage>,
     },
     form: {
       type: Object as PropType<IForm>,
