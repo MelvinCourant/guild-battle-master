@@ -12,6 +12,7 @@ export default defineConfig({
       '@imgs': fileURLToPath(new URL('./src/assets/imgs', import.meta.url)),
       '@views': fileURLToPath(new URL('./src/views', import.meta.url)),
       '@components': fileURLToPath(new URL('./src/components', import.meta.url)),
+      '@models': fileURLToPath(new URL('./src/models', import.meta.url)),
     },
   },
   server: {

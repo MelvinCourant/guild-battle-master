@@ -1,10 +1,12 @@
-<script setup>
+<script setup lang="ts">
   import "@css/components/utils/form.scss";
   import Field from "@components/utils/Field.vue";
+  import type { PropType } from "vue";
+  import type { IForm } from "@models/form.ts";
 
   defineProps({
     form: {
-      type: Object,
+      type: Object as PropType<IForm>,
       required: true,
     }
   })
@@ -26,14 +28,24 @@
               :key="field.label"
               :type="field.type"
               :label="field.label"
+              :placeholder="field.placeholder"
+              :value="field.value"
+              :checked="field.checked"
+              :disabled="field.disabled"
               :style="field.style"
+              :required="field.required"
           />
         </div>
         <div class="form__fields__footer">
           <Field
               :type="form.fields[form.fields.length - 1].type"
+              :label="form.fields[form.fields.length - 1].label"
+              :placeholder="form.fields[form.fields.length - 1].placeholder"
               :value="form.fields[form.fields.length - 1].value"
+              :checked="form.fields[form.fields.length - 1].checked"
+              :disabled="form.fields[form.fields.length - 1].disabled"
               :style="form.fields[form.fields.length - 1].style"
+              :required="form.fields[form.fields.length - 1].required"
           />
           <p
               class="form__fields__footer__text"

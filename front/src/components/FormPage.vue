@@ -1,13 +1,15 @@
-<script setup>
+<script setup lang="ts">
   import "@css/components/form-page.scss";
   import Form from "@components/utils/Form.vue";
+  import type { PropType } from "vue";
+  import type { IFormPage, IForm } from "@models/form.ts";
 
   defineProps({
     image: {
-      type: Object
+      type: Object as PropType<IFormPage["image"]>,
     },
     form: {
-      type: Object,
+      type: Object as PropType<IForm>,
       required: true,
     }
   })

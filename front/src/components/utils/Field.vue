@@ -23,6 +23,9 @@
     disabled: {
       type: Boolean
     },
+    required: {
+      type: Boolean,
+    },
     style: {
       type: String,
       default: "",
@@ -60,6 +63,7 @@
       :value="value"
       :checked="checked"
       :disabled="disabled"
+      :required="required"
       class="field__input"
       :class="style"
     />

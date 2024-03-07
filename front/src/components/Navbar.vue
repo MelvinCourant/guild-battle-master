@@ -10,7 +10,10 @@
           <router-link to="/">Home</router-link>
         </li>
         <li>
-          <router-link to="/map">Map</router-link>
+          <router-link to="/login">Login</router-link>
+        </li>
+        <li>
+          <router-link to="/register">Register</router-link>
         </li>
       </ul>
     </nav>
