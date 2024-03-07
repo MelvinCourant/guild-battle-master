@@ -8,52 +8,69 @@
   }
 
   const registerForm: IForm = {
+    steps: [
+      {
+        level: 1,
+        label: 'Compte',
+        active: true,
+      },
+      {
+        level: 2,
+        label: 'Guilde',
+        active: false,
+      },
+      {
+        level: 3,
+        label: 'Résumé',
+        active: false,
+      },
+    ],
     fields: [
       {
         image: {
-          src: generateImgSrc("placeholder.jpg"),
-          alt: "User icon",
+          src: generateImgSrc('placeholder.jpg'),
+          alt: 'User icon',
         },
         input: {
-          type: "file"
+          type: 'file'
         }
       },
       {
-        label: "Email",
+        label: 'Email',
         input: {
-          type: "email",
+          type: 'email',
         }
       },
       {
-        label: "Pseudo",
+        label: 'Pseudo',
         input: {
-          type: "text",
+          type: 'text',
         }
       },
       {
         label: "Mot de passe",
         input: {
-          type: "password",
+          type: 'password',
         }
       },
       {
-        label: "Confirmer le mot de passe",
+        label: 'Confirmer le mot de passe',
         input: {
-          type: "password",
+          type: 'password',
         }
       },
       {
         input: {
-          type: "button",
-          value: "Continuer",
-          style: "primary",
+          type: 'button',
+          value: 'Continuer',
+          style: 'primary',
         }
       }
     ],
     footerText: {
-      text: "Vous possédez déjà un compte ?",
-      link: "Connectez-vous",
-      href: "/login",
+      text: 'Vous possédez déjà un compte ?',
+      link: 'Connectez-vous',
+      href: '/login',
     }
   };
 </script>

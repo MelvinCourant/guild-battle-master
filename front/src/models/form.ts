@@ -1,6 +1,13 @@
 interface IFormPage {
+    steps?: ISteps;
     image?: IImage;
     form: IForm;
+}
+
+interface ISteps {
+    level: number;
+    label: string;
+    active: boolean;
 }
 
 interface IImage {
@@ -45,6 +52,7 @@ interface IPasswordForgotten {
 
 export type {
     IFormPage,
+    ISteps,
     IImage,
     IForm,
     IField,

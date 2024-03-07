@@ -97,6 +97,10 @@
     justify-content: center;
     position: relative;
 
+    &.field--image {
+      margin-bottom: 10px;
+    }
+
     .field {
       &__image {
         position: relative;

@@ -7,7 +7,7 @@
   const route = useRoute();
 
   watch(route, () => {
-    if (route.path === "/login" || route.path === "/register") {
+    if (route.path === '/login' || route.path === '/register') {
       hideNavbar.value = true;
     } else {
       hideNavbar.value = false;

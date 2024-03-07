@@ -33,4 +33,9 @@
       background: linear-gradient(270deg, #151619 0%, rgba(21, 22, 25, 0.60) 100%, rgba(21, 22, 25, 0.40) 100%);
     }
   }
+
+  &__form {
+    margin: auto;
+    position: relative;
+  }
 }

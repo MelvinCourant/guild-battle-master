@@ -9,39 +9,39 @@
 
   const image: IImage = {
     src: generateImgSrc("camilla.jpg"),
-    alt: "Login image",
+    alt: 'Login image',
   }
   const loginForm: IForm = {
-    title: "Guild battle Master",
+    title: 'Guild battle Master',
     fields: [
       {
-        label: "Pseudo/email",
+        label: 'Pseudo/email',
         input: {
-          type: "text",
+          type: 'text',
         }
       },
       {
-        label: "Mot de passe",
+        label: 'Mot de passe',
         input: {
-          type: "password",
+          type: 'password',
         }
       },
       {
         input: {
-          type: "submit",
-          value: "Connexion",
-          style: "primary"
+          type: 'submit',
+          value: 'Connexion',
+          style: 'primary'
         }
       }
     ],
     footerText: {
-      text: "Vous n’avez pas de compte ?",
-      link: "Inscrivez-vous",
-      href: "/register",
+      text: 'Vous n’avez pas de compte ?',
+      link: 'Inscrivez-vous',
+      href: '/register',
     },
     passwordForgotten: {
-      text: "Mot de passe oublié ?",
-      href: "/password-forgotten",
+      text: 'Mot de passe oublié ?',
+      href: '/password-forgotten',
     }
   };
 </script>

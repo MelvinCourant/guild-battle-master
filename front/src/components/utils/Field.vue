@@ -21,13 +21,17 @@
     }
   });
   const typeClass = ref(`field--${props.input.type}`);
-  const noLabelClass = ref('');
+  const imageClass = ref('');
+
+  if(props.image) {
+    imageClass.value = 'field--image';
+  }
 </script>
 
 <template>
   <div
     class="field"
-    :class="[typeClass, noLabelClass, {error: error}]"
+    :class="[typeClass, imageClass, {error: error}]"
   >
     <label
       :for="input.type"
