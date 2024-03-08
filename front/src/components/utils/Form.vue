@@ -1,15 +1,11 @@
 <script setup lang="ts">
   import "@css/components/utils/form.scss";
   import Field from "@components/utils/Field.vue";
-  import type { PropType } from "vue";
   import type { IForm } from "@models/form.ts";
+  import { reactive, inject } from "vue";
 
-  defineProps({
-    form: {
-      type: Object as PropType<IForm>,
-      required: true,
-    }
-  })
+  const formContainer = reactive(inject('formContainer') as IForm);
+  const forms = reactive(formContainer.forms);
 </script>
 
 <template>
@@ -17,21 +13,29 @@
     <form class="form">
       <h2
           class="form__title"
-          v-if="form.title"
+          v-if="formContainer.title"
       >
-        {{ form.title }}
+        {{ formContainer.title }}
       </h2>
-      <div class="form__fields">
+      <div
+        class="form__fields"
+        v-for="(form, index) in forms"
+        :key="index"
+      >
         <div class="form__fields__inputs">
-          <Field
-              v-for="field in form.fields.splice(0, form.fields.length - 1)"
-              :key="field.label"
+          <template
+            v-for="(field, index) in form.fields"
+            :key="index"
+          >
+            <Field
               :label="field.label"
               :style="field.style"
               :error="field.error"
               :image="field.image"
               :input="field.input"
-          />
+              v-if="index !== form.fields.length - 1"
+            />
+          </template>
         </div>
         <div class="form__fields__footer">
           <Field
@@ -43,24 +47,24 @@
           />
           <p
               class="form__fields__footer__text"
-              v-if="form.footerText"
+              v-if="formContainer.footerText"
           >
-            {{ form.footerText.text }}
+            {{ formContainer.footerText.text }}
             <a
-                :href="form.footerText.href"
+                :href="formContainer.footerText.href"
             >
-              {{ form.footerText.link }}
+              {{ formContainer.footerText.link }}
             </a>
           </p>
         </div>
       </div>
     </form>
     <router-link
-        v-if="form.passwordForgotten"
-        :to="form.passwordForgotten.href"
+        v-if="formContainer.passwordForgotten"
+        :to="formContainer.passwordForgotten.href"
         class="password-forgotten"
     >
-      {{ form.passwordForgotten.text }}
+      {{ formContainer.passwordForgotten.text }}
     </router-link>
   </div>
 </template>

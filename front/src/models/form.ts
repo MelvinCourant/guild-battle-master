@@ -1,10 +1,9 @@
 interface IFormPage {
-    steps?: ISteps;
     image?: IImage;
-    form: IForm;
+    formContainer: IForm;
 }
 
-interface ISteps {
+interface IStep {
     level: number;
     label: string;
     active: boolean;
@@ -17,9 +16,14 @@ interface IImage {
 
 interface IForm {
     title?: string;
-    fields: [IField];
+    forms: IForms
     footerText?: IFooterText;
     passwordForgotten?: IPasswordForgotten;
+}
+
+interface IForms {
+    id: number;
+    fields: IField;
 }
 
 interface IField {
@@ -53,9 +57,10 @@ interface IPasswordForgotten {
 
 export type {
     IFormPage,
-    ISteps,
+    IStep,
     IImage,
     IForm,
+    IForms,
     IField,
     IInput,
     IFooterText,

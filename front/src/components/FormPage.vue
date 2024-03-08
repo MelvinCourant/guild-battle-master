@@ -3,18 +3,14 @@
   import Form from "@components/utils/Form.vue";
   import Stepper from "@components/utils/Stepper.vue";
   import type { PropType } from "vue";
-  import type { ISteps, IImage, IForm } from "@models/form.ts";
+  import type { IStep, IImage } from "@models/form.ts";
 
   defineProps({
     steps: {
-      type: Array as PropType<ISteps>,
+      type: Array as PropType<Array<IStep>>,
     },
     image: {
       type: Object as PropType<IImage>,
-    },
-    form: {
-      type: Object as PropType<IForm>,
-      required: true,
     }
   })
 </script>
@@ -25,10 +21,10 @@
     </div>
     <div class="form-page__form">
       <Stepper
-          v-if="form.steps"
-          :steps="form.steps"
+          v-if="steps"
+          :steps="steps"
       />
-      <Form :form="form"/>
+      <Form/>
     </div>
   </div>
 </template>

@@ -2,6 +2,7 @@
   import '@css/views/login-register.scss';
   import FormPage from "@components/FormPage.vue";
   import { IImage, IForm } from "@models/form.ts";
+  import { provide } from "vue";
 
   function generateImgSrc(src: string) {
     return new URL(`../assets/imgs/${src}`, import.meta.url).href;
@@ -13,25 +14,30 @@
   }
   const loginForm: IForm = {
     title: 'Guild battle Master',
-    fields: [
+    forms: [
       {
-        label: 'Pseudo/email',
-        input: {
-          type: 'text',
-        }
-      },
-      {
-        label: 'Mot de passe',
-        input: {
-          type: 'password',
-        }
-      },
-      {
-        input: {
-          type: 'submit',
-          value: 'Connexion',
-          style: 'primary'
-        }
+        id: 1,
+        fields: [
+          {
+            label: 'Pseudo/email',
+            input: {
+              type: 'text',
+            }
+          },
+          {
+            label: 'Mot de passe',
+            input: {
+              type: 'password',
+            }
+          },
+          {
+            input: {
+              type: 'submit',
+              value: 'Connexion',
+              style: 'primary'
+            }
+          }
+        ],
       }
     ],
     footerText: {
@@ -44,10 +50,12 @@
       href: '/password-forgotten',
     }
   };
+
+  provide('formContainer', loginForm);
 </script>
 
 <template>
   <main class="login">
-    <FormPage :image="image" :form="loginForm" />
+    <FormPage :image="image"/>
   </main>
 </template>
