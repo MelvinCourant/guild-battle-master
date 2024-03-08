@@ -1,13 +1,19 @@
-<script setup>
+<script setup lang="ts">
   import "@css/components/form-page.scss";
   import Form from "@components/utils/Form.vue";
+  import Stepper from "@components/utils/Stepper.vue";
+  import type { PropType } from "vue";
+  import type { ISteps, IImage, IForm } from "@models/form.ts";
 
   defineProps({
+    steps: {
+      type: Array as PropType<ISteps>,
+    },
     image: {
-      type: Object
+      type: Object as PropType<IImage>,
     },
     form: {
-      type: Object,
+      type: Object as PropType<IForm>,
       required: true,
     }
   })
@@ -17,6 +23,12 @@
     <div class="form-page__image" v-if="image">
       <img :src="image.src" :alt="image.alt" />
     </div>
-    <Form :form="form"/>
+    <div class="form-page__form">
+      <Stepper
+          v-if="form.steps"
+          :steps="form.steps"
+      />
+      <Form :form="form"/>
+    </div>
   </div>
 </template>

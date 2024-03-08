@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Navbar from "@components/Navbar.vue";
   import { ref, watch } from "vue";
   import { useRoute } from "vue-router";
@@ -7,7 +7,7 @@
   const route = useRoute();
 
   watch(route, () => {
-    if (route.path === "/login" || route.path === "/register") {
+    if (route.path === '/login' || route.path === '/register') {
       hideNavbar.value = true;
     } else {
       hideNavbar.value = false;

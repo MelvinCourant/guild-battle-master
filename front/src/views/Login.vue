@@ -1,36 +1,47 @@
-<script setup>
-  import '@css/views/login.scss';
+<script setup lang="ts">
+  import '@css/views/login-register.scss';
   import FormPage from "@components/FormPage.vue";
+  import { IImage, IForm } from "@models/form.ts";
 
-  function generateImgSrc(src) {
+  function generateImgSrc(src: string) {
     return new URL(`../assets/imgs/${src}`, import.meta.url).href;
   }
 
-  const image = {
+  const image: IImage = {
     src: generateImgSrc("camilla.jpg"),
-    alt: "Login image",
+    alt: 'Login image',
   }
-  const loginForm = {
-    title: "Guild battle Master",
+  const loginForm: IForm = {
+    title: 'Guild battle Master',
     fields: [
       {
-        type: "text",
-        label: "Pseudo/email",
+        label: 'Pseudo/email',
+        input: {
+          type: 'text',
+        }
       },
       {
-        type: "password",
-        label: "Password",
+        label: 'Mot de passe',
+        input: {
+          type: 'password',
+        }
       },
       {
-        type: "submit",
-        value: "Connexion",
-        style: "primary"
+        input: {
+          type: 'submit',
+          value: 'Connexion',
+          style: 'primary'
+        }
       }
     ],
     footerText: {
-      text: "Vous n’avez pas de compte ?",
-      link: "Inscrivez-vous",
-      href: "/register",
+      text: 'Vous n’avez pas de compte ?',
+      link: 'Inscrivez-vous',
+      href: '/register',
+    },
+    passwordForgotten: {
+      text: 'Mot de passe oublié ?',
+      href: '/password-forgotten',
     }
   };
 </script>
