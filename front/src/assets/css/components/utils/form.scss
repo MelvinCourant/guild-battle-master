@@ -16,10 +16,6 @@
     overflow: hidden;
     position: relative;
 
-    @media screen and (max-width: 767px) {
-      padding: 30px 40px;
-    }
-
     &__title {
       color: var(--primary);
       font-family: 'Mona Sans', sans-serif;
@@ -40,6 +36,10 @@
 
       @media screen and (max-width: 767px) {
         padding: 30px 40px;
+      }
+
+      &__back {
+        cursor: pointer;
       }
 
       &__inputs {

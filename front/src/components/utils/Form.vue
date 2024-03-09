@@ -12,7 +12,7 @@
     },
   });
 
-  defineEmits(['nextStep']);
+  defineEmits(['previousStep', 'nextStep']);
 
   const formContainer = inject('formContainer') as IFormContainer;
   const forms: Array<Object> = formContainer.forms;
@@ -77,24 +77,34 @@
     }
   }
 
-  async function nextStep() {
+  async function updateStep() {
     await nextTick();
 
-    const newFieldActive = document.querySelector('.form__fields[data-active="true"]:last-of-type');
+    const newFieldActive = document.querySelector(`.form__fields[data-active="true"]:nth-of-type(${props.currentStep})`);
 
     if(newFieldActive) {
-      let heightValue: string = `${newFieldActive.clientHeight}px`;
+      const height: string = `${newFieldActive.clientHeight}px`;
 
       updateTranslations();
 
       gsap.to('.form', {
-        height: heightValue,
+        height: height,
         duration: 0.5,
       });
     }
   }
 
-  watch(() => props.currentStep, () => nextStep());
+  watch(() => props.currentStep, () => updateStep());
+
+  window.addEventListener('resize', () => {
+    const fieldActive = document.querySelector(`.form__fields[data-active="true"]:nth-of-type(${props.currentStep})`);
+
+    if(fieldActive) {
+      const height = fieldActive.clientHeight;
+
+      formStyle.value = `height: ${height}px`;
+    }
+  });
 </script>
 
 <template>
@@ -116,6 +126,16 @@
           :data-active="currentStep >= index + 1"
           :style="formsTransform[index]"
       >
+        <svg
+            class="form__fields__back"
+            @click.stop="$emit('previousStep')"
+            v-if="
+              forms.length !== 1 &&
+              index !== 0
+            "
+            xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M23.3333 10.7083H5.58542L13.7375 2.55625L11.6667 0.5L0 12.1667L11.6667 23.8333L13.7229 21.7771L5.58542 13.625H23.3333V10.7083Z" fill="white"/>
+        </svg>
         <div class="form__fields__inputs">
           <template
               v-for="(field, index) in form.fields"

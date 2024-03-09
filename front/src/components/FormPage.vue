@@ -6,7 +6,7 @@
   import type { IStep, IImage } from "@models/form.ts";
   import { ref } from "vue";
 
-  defineProps({
+  const props = defineProps({
     steps: {
       type: Array as PropType<Array<IStep>>,
     },
@@ -17,8 +17,16 @@
 
   const currentStep = ref(1);
 
+  function decrementStep() {
+    if(currentStep.value > 1) {
+      currentStep.value--;
+    }
+  }
+
   function incrementStep() {
-    currentStep.value++;
+    if (currentStep.value < props.steps.length) {
+      currentStep.value++;
+    }
   }
 </script>
 <template>
@@ -37,6 +45,7 @@
       />
       <Form
           :currentStep="currentStep"
+          @previousStep="decrementStep"
           @nextStep="incrementStep"
       />
     </div>
