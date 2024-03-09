@@ -7,7 +7,11 @@
     steps: {
       type: Object as PropType<ISteps>,
       required: true,
-    }
+    },
+    currentStep: {
+      type: Number,
+      required: true,
+    },
   })
 </script>
 
@@ -17,7 +21,7 @@
       v-for="(step, index) in steps"
       :key="index"
       class="stepper__step"
-      :class="{ active: step.active }"
+      :data-active="currentStep >= step.level"
     >
       <div
           class="stepper__step__line"

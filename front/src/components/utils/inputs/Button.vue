@@ -9,6 +9,8 @@
       required: true,
     },
   });
+
+  defineEmits(['nextStep']);
 </script>
 
 <template>
@@ -18,5 +20,6 @@
     class="button"
     :class="attributes.style"
     :disabled="attributes.disabled"
+    @click.stop="$emit('nextStep')"
   />
 </template>

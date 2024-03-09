@@ -18,12 +18,13 @@
   })
 
   const typeClass = ref(`input-string--${props.attributes.type}`);
+  const labelClass = ref("input-string--label");
 </script>
 
 <template>
   <div
       class="input-string"
-      :class="[typeClass, {error: error}]"
+      :class="[typeClass, labelClass, {error: error}]"
   >
     <label
         class="input-string__label"

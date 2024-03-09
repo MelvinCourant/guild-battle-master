@@ -33,7 +33,7 @@
         height: 100%;
         background: var(--primary);
         clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
-        transition: clip-path 0.5s ease-in-out;
+        transition: clip-path 0.3s ease-in-out 0.2s;
       }
     }
 
@@ -65,8 +65,8 @@
         &:after {
           z-index: 2;
           background: var(--border-background);
-          clip-path: circle(50% at 50% 50%);
-          transition: clip-path 0.3s ease-in-out 0.4s;
+          clip-path: circle(45px at 50% 50%);
+          transition: clip-path 0.2s ease-in-out;
         }
 
         p {
@@ -89,20 +89,21 @@
       }
     }
 
-    &.active {
+    &[data-active='true'] {
       .stepper {
         &__step {
           &__line {
-            background: var(--primary);
-            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-            transition: clip-path 0.5s ease-in-out 0.3s;
+            &:before {
+              clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+              transition: clip-path 0.3s ease-in-out;
+            }
           }
 
           &__circle {
             &__number {
               &:after {
-                clip-path: circle(0% at 50% 50%);
-                transition: clip-path 0.4s ease-in-out;
+                clip-path: circle(0px at 50% 50%);
+                transition: clip-path 0.2s ease-in-out 0.3s;
               }
             }
           }

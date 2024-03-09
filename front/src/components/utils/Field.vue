@@ -19,6 +19,8 @@
       required: true,
     }
   });
+
+  defineEmits(['nextStep']);
 </script>
 
 <template>
@@ -45,5 +47,6 @@
       attributes.type === 'button' ||
       attributes.type === 'submit'
     "
+    @nextStep="$emit('nextStep')"
   />
 </template>
