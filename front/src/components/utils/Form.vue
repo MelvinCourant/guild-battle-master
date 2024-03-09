@@ -1,10 +1,10 @@
 <script setup lang="ts">
   import "@css/components/utils/form.scss";
   import Field from "@components/utils/Field.vue";
-  import type { IForm } from "@models/form.ts";
+  import type { IFormContainer } from "@models/form.ts";
   import { reactive, inject } from "vue";
 
-  const formContainer = reactive(inject('formContainer') as IForm);
+  const formContainer = reactive(inject('formContainer') as IFormContainer);
   const forms = reactive(formContainer.forms);
 </script>
 
@@ -29,10 +29,9 @@
           >
             <Field
               :label="field.label"
-              :style="field.style"
               :error="field.error"
               :image="field.image"
-              :input="field.input"
+              :attributes="field.attributes"
               v-if="index !== form.fields.length - 1"
             />
           </template>
@@ -40,10 +39,9 @@
         <div class="form__fields__footer">
           <Field
               :label="form.fields[form.fields.length - 1].label"
-              :style="form.fields[form.fields.length - 1].style"
               :error="form.fields[form.fields.length - 1].error"
               :image="form.fields[form.fields.length - 1].image"
-              :input="form.fields[form.fields.length - 1].input"
+              :attributes="form.fields[form.fields.length - 1].attributes"
           />
           <p
               class="form__fields__footer__text"

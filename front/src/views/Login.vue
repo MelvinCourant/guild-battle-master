@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import '@css/views/login-register.scss';
   import FormPage from "@components/FormPage.vue";
-  import { IImage, IForm } from "@models/form.ts";
+  import { IImage, IFormContainer } from "@models/form.ts";
   import { provide } from "vue";
 
   function generateImgSrc(src: string) {
@@ -12,26 +12,28 @@
     src: generateImgSrc("camilla.jpg"),
     alt: 'Login image',
   }
-  const loginForm: IForm = {
+  const loginForm: IFormContainer = {
     title: 'Guild battle Master',
     forms: [
       {
         id: 1,
         fields: [
           {
-            label: 'Pseudo/email',
-            input: {
+            label: 'Pseudo/email*',
+            attributes: {
               type: 'text',
+              required: true,
             }
           },
           {
-            label: 'Mot de passe',
-            input: {
+            label: 'Mot de passe*',
+            attributes: {
               type: 'password',
+              required: true,
             }
           },
           {
-            input: {
+            attributes: {
               type: 'submit',
               value: 'Connexion',
               style: 'primary'

@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import "@css/views/login-register.scss";
   import FormPage from "@components/FormPage.vue";
-  import {IStep, IForm} from "@models/form.ts";
+  import {IStep, IFormContainer} from "@models/form.ts";
   import { provide } from "vue";
 
   function generateImgSrc(src: string) {
@@ -26,7 +26,7 @@
       },
   ];
 
-  const registerForm: IForm = {
+  const registerForm: IFormContainer = {
     forms: [
       {
         id: 1,
@@ -36,37 +36,41 @@
               src: generateImgSrc('placeholder.jpg'),
               alt: 'User icon',
             },
-            input: {
+            attributes: {
               type: 'file',
               accept: 'image/png, image/jpeg, image/jpg, image/webp',
             }
           },
           {
-            label: 'Email',
-            input: {
+            label: 'Email*',
+            attributes: {
               type: 'email',
+              required: true,
             }
           },
           {
-            label: 'Pseudo',
-            input: {
+            label: 'Pseudo*',
+            attributes: {
               type: 'text',
+              required: true,
             }
           },
           {
-            label: "Mot de passe",
-            input: {
+            label: "Mot de passe*",
+            attributes: {
               type: 'password',
+              required: true,
             }
           },
           {
-            label: 'Confirmer le mot de passe',
-            input: {
+            label: 'Confirmer le mot de passe*',
+            attributes: {
               type: 'password',
+              required: true,
             }
           },
           {
-            input: {
+            attributes: {
               type: 'button',
               value: 'Continuer',
               style: 'primary',
@@ -78,19 +82,20 @@
         id: 2,
         fields: [
           {
-            label: 'Nom de la guilde',
-            input: {
+            label: 'Nom de la guilde*',
+            attributes: {
               type: 'text',
+              required: true,
             }
           },
           {
-            input: {
+            attributes: {
               type: 'file',
               accept: 'application/JSON',
             }
           },
           {
-            input: {
+            attributes: {
               type: 'button',
               value: 'Continuer',
               style: 'primary',

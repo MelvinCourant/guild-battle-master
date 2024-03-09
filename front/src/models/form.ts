@@ -1,8 +1,3 @@
-interface IFormPage {
-    image?: IImage;
-    formContainer: IForm;
-}
-
 interface IStep {
     level: number;
     label: string;
@@ -14,7 +9,7 @@ interface IImage {
     alt: string;
 }
 
-interface IForm {
+interface IFormContainer {
     title?: string;
     forms: IForms
     footerText?: IFooterText;
@@ -30,10 +25,10 @@ interface IField {
     label?: string;
     error?: string;
     image?: IImage;
-    input: IInput;
+    attributes: IAttributes;
 }
 
-interface IInput {
+interface IAttributes {
     type: string;
     placeholder?: string;
     value?: string;
@@ -56,13 +51,12 @@ interface IPasswordForgotten {
 }
 
 export type {
-    IFormPage,
     IStep,
     IImage,
-    IForm,
+    IFormContainer,
     IForms,
     IField,
-    IInput,
+    IAttributes,
     IFooterText,
     IPasswordForgotten
 };

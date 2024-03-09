@@ -27,6 +27,7 @@
       font-style: normal;
       font-weight: 700;
       line-height: normal;
+      margin-bottom: 10px;
     }
 
     &__fields {
@@ -68,12 +69,10 @@
         }
       }
 
-      .field {
+      .input-string,
+      .button,
+      .input-file {
         width: 100%;
-
-        &__input {
-          width: 100%;
-        }
       }
     }
   }
