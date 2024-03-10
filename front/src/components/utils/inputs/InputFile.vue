@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import "@css/components/utils/inputs/input-file.scss";
   import { IImage, IAttributes } from "@models/form.js";
-  import {PropType, ref} from "vue";
+  import {PropType, ref, nextTick} from "vue";
 
   const props = defineProps({
     image: {
@@ -15,6 +15,7 @@
       required: true,
     }
   });
+  const emit = defineEmits(["sendValue"]);
 
   const type = ref("");
   const typeClass = ref("");
@@ -29,11 +30,14 @@
 
   const image = ref(props.image);
 
-  function changeFile(event: Event) {
-    if(props.attributes.accept.match(/image/)) {
-      const input = event.target as HTMLInputElement;
-      const file = input.files?.[0];
-      const fileName = input.files?.[0].name;
+  async function changeFile(event: Event) {
+    await nextTick();
+
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
+    if(type.value === "image") {
+      const fileName = file?.name;
 
       if(file) {
         const reader = new FileReader();
@@ -50,6 +54,8 @@
         reader.readAsDataURL(file);
       }
     }
+
+    emit("sendValue", props.attributes.name, file);
   }
 </script>
 
@@ -71,7 +77,7 @@
 
     <label
         class="input-file__label"
-        :for="attributes.type"
+        :for="attributes.name"
         v-if="
           type === 'file' &&
           label
@@ -85,7 +91,7 @@
       </button>
       <input
           class="input-file__label__input"
-          :name="attributes.type"
+          :name="attributes.name"
           :type="attributes.type"
           :value="attributes.value"
           :accept="attributes.accept"
@@ -106,7 +112,7 @@
       />
       <input
           class="input-file__label__input"
-          :name="attributes.type"
+          :name="attributes.name"
           :type="attributes.type"
           :value="attributes.value"
           :accept="attributes.accept"

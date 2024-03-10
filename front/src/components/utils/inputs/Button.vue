@@ -9,8 +9,6 @@
       required: true,
     },
   });
-
-  defineEmits(['nextStep']);
 </script>
 
 <template>
@@ -20,6 +18,14 @@
     class="button"
     :class="attributes.style"
     :disabled="attributes.disabled"
-    @click.stop="$emit('nextStep')"
+    v-if="attributes.type === 'button'"
+  />
+  <input
+      :type="attributes.type"
+      :value="attributes.value"
+      class="button"
+      :class="attributes.style"
+      :disabled="attributes.disabled"
+      v-else
   />
 </template>

@@ -17,15 +17,15 @@ export default class AuthController {
     if(request.params().step === "1") {
       // Verify user and member and create user
       const payload = await request.validateUsing(createUserMemberValidator)
-      const userImage: any = request.file('user.image')
+      const userImage: any = payload.image
 
       await userImage?.move(app.makePath('uploads'), {
         name: `${cuid()}.${userImage.extname}`,
       })
 
       await User.create({
-        email: payload.user.email,
-        password: payload.user.password,
+        email: payload.email,
+        password: payload.password,
         role: 'leader',
         image: userImage?.fileName,
       })
@@ -40,7 +40,7 @@ export default class AuthController {
       const payload = await request.validateUsing(createGuildValidator)
       const user: any = await db
         .from('users')
-        .where('email', request.input('user.email'))
+        .where('email', request.input('email'))
         .select('id')
         .first()
 
@@ -52,7 +52,7 @@ export default class AuthController {
       let guild: any = null
 
       guild = await Guild.create({
-        name: payload.guild.name,
+        name: payload.guild_name,
         leader_id: user.id,
         image: userImage?.fileName,
       })
@@ -74,8 +74,8 @@ export default class AuthController {
           throw error
         })
 
-      if(payload.guild.json) {
-        const json = payload.guild.json;
+      if(payload.json) {
+        const json = payload.json;
         const jsonFile: any = await json.move(app.makePath('uploads/json'), {
           name: `${cuid()}.${json.extname}`,
         })

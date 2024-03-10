@@ -30,6 +30,7 @@ interface IField {
 
 interface IAttributes {
     type: string;
+    name: string;
     placeholder?: string;
     value?: string;
     checked?: boolean;

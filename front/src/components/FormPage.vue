@@ -4,30 +4,20 @@
   import Stepper from "@components/utils/Stepper.vue";
   import type { PropType } from "vue";
   import type { IStep, IImage } from "@models/form.ts";
-  import { ref } from "vue";
 
-  const props = defineProps({
+  defineProps({
     steps: {
       type: Array as PropType<Array<IStep>>,
+    },
+    currentStep: {
+      type: Number,
+      default: 1,
     },
     image: {
       type: Object as PropType<IImage>,
     }
   })
-
-  const currentStep = ref(1);
-
-  function decrementStep() {
-    if(currentStep.value > 1) {
-      currentStep.value--;
-    }
-  }
-
-  function incrementStep() {
-    if (currentStep.value < props.steps.length) {
-      currentStep.value++;
-    }
-  }
+  defineEmits(["sendValue", "previousStep", "nextStep"]);
 </script>
 <template>
   <div class="form-page">
@@ -45,8 +35,9 @@
       />
       <Form
           :currentStep="currentStep"
-          @previousStep="decrementStep"
-          @nextStep="incrementStep"
+          @previousStep="$emit('previousStep')"
+          @nextStep="$emit('nextStep')"
+          @sendValue="(inputName: string, value: string) => $emit('sendValue', inputName, value)"
       />
     </div>
   </div>

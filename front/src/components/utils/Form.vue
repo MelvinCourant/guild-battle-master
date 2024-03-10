@@ -12,7 +12,7 @@
     },
   });
 
-  defineEmits(['previousStep', 'nextStep']);
+  defineEmits(['previousStep', 'nextStep', 'sendValue']);
 
   const formContainer = inject('formContainer') as IFormContainer;
   const forms: Array<Object> = formContainer.forms;
@@ -109,7 +109,7 @@
 
 <template>
   <div class="form-container">
-    <form
+    <div
         class="form"
         :style="formStyle"
     >
@@ -119,12 +119,13 @@
       >
         {{ formContainer.title }}
       </h2>
-      <div
+      <form
           class="form__fields"
           v-for="(form, index) in forms"
           :key="index"
           :data-active="currentStep >= index + 1"
           :style="formsTransform[index]"
+          @submit.prevent="$emit('nextStep')"
       >
         <svg
             class="form__fields__back"
@@ -147,6 +148,7 @@
                 :image="field.image"
                 :attributes="field.attributes"
                 v-if="index !== form.fields.length - 1"
+                @sendValue="(inputName: string, value: string) => $emit('sendValue', inputName, value)"
             />
           </template>
         </div>
@@ -170,8 +172,8 @@
             </a>
           </p>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
     <router-link
         v-if="formContainer.passwordForgotten"
         :to="formContainer.passwordForgotten.href"

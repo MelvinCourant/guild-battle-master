@@ -20,7 +20,7 @@
     }
   });
 
-  defineEmits(['nextStep']);
+  defineEmits(['nextStep', 'sendValue']);
 </script>
 
 <template>
@@ -29,6 +29,7 @@
     :label="label"
     :attributes="attributes"
     v-if="attributes.type === 'file'"
+    @sendValue="(inputName: string, value: string) => $emit('sendValue', inputName, value)"
   />
 
   <InputString
@@ -40,6 +41,7 @@
       attributes.type === 'password' ||
       attributes.type === 'search'
     "
+    @sendValue="(inputName: string, value: string) => $emit('sendValue', inputName, value)"
   />
 
   <Button
