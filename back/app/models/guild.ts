@@ -1,5 +1,7 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import {BaseModel, belongsTo, column} from '@adonisjs/lucid/orm'
+import type { BelongsTo } from '@adonisjs/lucid/types/relations'
+import User from '#models/user'
 
 export default class Guild extends BaseModel {
   @column({ isPrimary: true })
@@ -13,6 +15,9 @@ export default class Guild extends BaseModel {
 
   @column()
   declare leader_id: number
+
+  @belongsTo(() => User)
+  declare user: BelongsTo<typeof User>
 
   @column()
   declare siege_rank: string

@@ -71,7 +71,7 @@
           },
           {
             attributes: {
-              type: 'button',
+              type: 'submit',
               value: 'Continuer',
               style: 'primary',
             }
@@ -98,7 +98,7 @@
           },
           {
             attributes: {
-              type: 'button',
+              type: 'submit',
               value: 'Continuer',
               style: 'primary',
             }

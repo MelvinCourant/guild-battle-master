@@ -17,7 +17,7 @@ router.group(() => {
     return authController.login()
   })
 
-  router.post('/register', async (data) => {
+  router.post('/register/:step', async (data) => {
     return authController.register(data)
   })
 }).prefix('api/auth')

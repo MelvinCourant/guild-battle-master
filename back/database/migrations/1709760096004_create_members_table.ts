@@ -7,8 +7,9 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table.string('pseudo').notNullable()
-      table.integer('user_id').unsigned().references('user.id').notNullable()
-      table.unique(['pseudo', 'user_id'])
+      table.unique(['pseudo'])
+      table.enu('grade', ['leader', 'vice-leader', 'senior', 'member']).notNullable().defaultTo('member')
+      table.integer('user_id').unsigned().references('user.id').nullable()
       table.integer('guild_id').unsigned().references('id').inTable('guilds').notNullable()
       table.unique(['id', 'guild_id'])
 
