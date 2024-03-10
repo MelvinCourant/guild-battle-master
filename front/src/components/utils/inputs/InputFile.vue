@@ -7,40 +7,48 @@
     image: {
       type: Object as PropType<IImage>,
     },
+    label: {
+      type: String,
+    },
     attributes: {
       type: Object as PropType<IAttributes>,
       required: true,
     }
   });
 
+  const type = ref("");
   const typeClass = ref("");
 
   if(props.attributes.accept.match(/image/)) {
+    type.value = "image";
     typeClass.value = `input-file--image`;
   } else {
+    type.value = "file";
     typeClass.value = `input-file--file`;
   }
 
   const image = ref(props.image);
 
-  function loadImageInput(event: Event) {
-    const input = event.target as HTMLInputElement;
-    const file = input.files?.[0];
-    const fileName = input.files?.[0].name;
+  function changeFile(event: Event) {
+    if(props.attributes.accept.match(/image/)) {
+      const input = event.target as HTMLInputElement;
+      const file = input.files?.[0];
+      const fileName = input.files?.[0].name;
 
-    if(file) {
-      const reader = new FileReader();
+      if(file) {
+        const reader = new FileReader();
 
-      reader.addEventListener("load", function (e) {
-        const readerTarget = e.target;
+        reader.addEventListener("load", function (e) {
+          const readerTarget = e.target;
 
-        image.value = {
-          src: readerTarget?.result,
-          alt: fileName,
-        };
-      });
+          image.value = {
+            src: readerTarget?.result,
+            alt: fileName,
+          };
+        });
 
-      reader.readAsDataURL(file);
+        reader.readAsDataURL(file);
+      }
     }
   }
 </script>
@@ -51,20 +59,59 @@
       :class="typeClass"
   >
     <div
-        class="input-file__image"
-        v-if="image"
+        class="input-file__drop"
+        v-if="type === 'file'"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="41" viewBox="0 0 40 41" fill="none">
+        <path d="M35 28V35.5H5V28H0V35.5C0 38.25 2.25 40.5 5 40.5H35C37.75 40.5 40 38.25 40 35.5V28H35ZM7.5 13L11.025 16.525L17.5 10.075V30.5H22.5V10.075L28.975 16.525L32.5 13L20 0.5L7.5 13Z" fill="#737A8C"/>
+      </svg>
+      Glisser et déposer le JSON
+      <br>ou
+    </div>
+
+    <label
+        class="input-file__label"
+        :for="attributes.type"
+        v-if="
+          type === 'file' &&
+          label
+        "
+    >
+      <button
+          class="input-file__label__browse button"
+          :class="attributes.style"
+      >
+        {{ label }}
+      </button>
+      <input
+          class="input-file__label__input"
+          :name="attributes.type"
+          :type="attributes.type"
+          :value="attributes.value"
+          :accept="attributes.accept"
+          @change="changeFile"
+      />
+    </label>
+
+    <label
+        class="input-file__label"
+        v-if="
+          type==='image' &&
+          image
+        "
     >
       <img
           :src="image.src"
           :alt="image.alt"
       />
-    </div>
-    <input
-        class="input-file__input"
-        :type="attributes.type"
-        :value="attributes.value"
-        :accept="attributes.accept"
-        @change="loadImageInput"
-    />
+      <input
+          class="input-file__label__input"
+          :name="attributes.type"
+          :type="attributes.type"
+          :value="attributes.value"
+          :accept="attributes.accept"
+          @change="changeFile"
+      />
+    </label>
   </div>
 </template>

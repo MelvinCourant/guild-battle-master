@@ -26,6 +26,7 @@
 <template>
   <InputFile
     :image="image"
+    :label="label"
     :attributes="attributes"
     v-if="attributes.type === 'file'"
   />

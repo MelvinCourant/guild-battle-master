@@ -89,9 +89,11 @@
             }
           },
           {
+            label: 'Parcourir',
             attributes: {
               type: 'file',
               accept: 'application/JSON',
+              style: 'primary',
             }
           },
           {

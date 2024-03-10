@@ -16,7 +16,7 @@
 
   const formContainer = inject('formContainer') as IFormContainer;
   const forms: Array<Object> = formContainer.forms;
-  const formsTransform = ref<Array<Object>>([]);
+  const formsTransform: any = ref([]);
   const formStyle = ref<string>('');
 
   function initTranslations() {
