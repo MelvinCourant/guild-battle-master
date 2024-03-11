@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import "@css/components/utils/inputs/input-string.scss";
   import { IAttributes } from "@models/form.ts";
-  import { PropType, ref, nextTick } from "vue";
+  import { PropType, ref } from "vue";
 
   const props = defineProps({
     label: {
@@ -21,12 +21,8 @@
   const typeClass = ref(`input-string--${props.attributes.type}`);
   const labelClass = ref("input-string--label");
 
-  async function updateValue(event: Event) {
-    await nextTick();
-
-    const input = event.target as HTMLInputElement;
-
-    emit("sendValue", props.attributes.name, input.value);
+  async function updateValue() {
+    emit("sendValue", props.attributes.name, props.attributes.value);
   }
 </script>
 
@@ -56,6 +52,7 @@
       :disabled="props.attributes.disabled"
       :required="props.attributes.required"
       @input="updateValue"
+      v-model="props.attributes.value"
     />
   </div>
 </template>
