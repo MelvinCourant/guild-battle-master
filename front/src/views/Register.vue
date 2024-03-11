@@ -163,37 +163,55 @@
     }
   }
 
-  // TODO: Refactor this function to avoid repetitions
-  async function sendUserMember() {
-    const submitButton = formFieldsStepOne[formFieldsStepOne.length - 1];
+  async function makeRequest(step: number, fields: any, optionalFile: any) {
+    fields.forEach((field: any) => {
+      field.error = '';
+    });
 
+    const submitButton = fields[fields.length - 1];
     submitButton.loading = 'Chargement...';
 
-    let jsonFormat: any = {
-      email: formValues.email,
-      password: formValues.password,
-      password_confirmation: formValues.confirmationPassword,
-      pseudo: formValues.pseudo
-    };
-
-    if(image.value) {
+    let jsonFormat: any;
+    if(step === 1) {
       jsonFormat = {
-        ...jsonFormat,
-        image: image.value
+        email: formValues.email,
+        password: formValues.password,
+        password_confirmation: formValues.confirmationPassword,
+        pseudo: formValues.pseudo
+      };
+
+      if(optionalFile.value) {
+        jsonFormat = {
+          ...jsonFormat,
+          image: optionalFile.value
+        }
+      }
+    } else if(step === 2) {
+      jsonFormat = {
+        email: formValues.email,
+        password: formValues.password,
+        password_confirmation: formValues.confirmationPassword,
+        pseudo: formValues.pseudo,
+        guild_name: formValues.guildName
+      };
+
+      if(optionalFile.value) {
+        jsonFormat = {
+          ...jsonFormat,
+          json: optionalFile.value
+        }
       }
     }
 
     const formData = new FormData();
-
     for (const key in jsonFormat) {
       formData.append(key, jsonFormat[key]);
     }
 
-    const result = await fetch(`${env.VITE_URL}/auth/register/1`, {
+    const result = await fetch(`${env.VITE_URL}/auth/register/${step}`, {
       method: 'POST',
       body: formData,
     });
-
     if(result.status === 201) {
       canIncrement.value = true;
       incrementStep();
@@ -204,59 +222,7 @@
       const errors = resultJson.errors;
 
       errors.forEach((error: any) => {
-        formFieldsStepOne.forEach((field: any) => {
-          if(field.attributes.name === error.field) {
-            field.error = error.message;
-          }
-        });
-      });
-    }
-
-    submitButton.loading = '';
-  }
-
-  async function sendGuild() {
-    const submitButton = formFieldsStepTwo[formFieldsStepTwo.length - 1];
-
-    submitButton.loading = 'Chargement...';
-
-    let jsonFormat: any = {
-      email: formValues.email,
-      password: formValues.password,
-      password_confirmation: formValues.confirmationPassword,
-      pseudo: formValues.pseudo,
-      guild_name: formValues.guildName
-    };
-
-    if(json.value) {
-      jsonFormat = {
-        ...jsonFormat,
-        json: json.value
-      }
-    }
-
-    const formData = new FormData();
-
-    for (const key in jsonFormat) {
-      formData.append(key, jsonFormat[key]);
-    }
-
-    const result = await fetch(`${env.VITE_URL}/auth/register/2`, {
-      method: 'POST',
-      body: formData,
-    });
-
-    if(result.status === 201) {
-      canIncrement.value = true;
-      incrementStep();
-    } else {
-      canIncrement.value = false;
-
-      const resultJson = await result.json();
-      const errors = resultJson.errors;
-
-      errors.forEach((error: any) => {
-        formFieldsStepTwo.forEach((field: any) => {
+        fields.forEach((field: any) => {
           if(field.attributes.name === error.field) {
             field.error = error.message;
           }
@@ -274,15 +240,12 @@
         formValues.password !== '' &&
         currentStep.value === 1
     ) {
-      formFieldsStepOne.forEach((field: any) => {
-        field.error = '';
-      });
-      sendUserMember();
+      makeRequest(currentStep.value, formFieldsStepOne, image);
     } else if(
         formValues.guildName !== '' &&
         currentStep.value === 2
     ) {
-      sendGuild();
+      makeRequest(currentStep.value, formFieldsStepTwo, json);
     }
   }
 
