@@ -30,6 +30,7 @@ export default class AuthController {
         image: userImage?.fileName,
       })
         .catch((error) => {
+          // TODO: find a way to delete image if user creation fails
           userImage?.delete()
           throw error
         });
@@ -58,6 +59,7 @@ export default class AuthController {
       })
         .catch((error) => {
           user.delete()
+          // TODO: find a way to delete image if user creation fails
           userImage?.delete()
           throw error
         })
@@ -69,6 +71,7 @@ export default class AuthController {
       })
         .catch((error) => {
           user.delete()
+          // TODO: find a way to delete image if user creation fails
           userImage?.delete()
           guild.delete()
           throw error
@@ -109,6 +112,7 @@ export default class AuthController {
             }
           })
 
+          // TODO: find a way to delete json file
           jsonFile.delete()
 
           return response.status(201).created({
@@ -167,6 +171,7 @@ export default class AuthController {
       await request.validateUsing(createRegisterValidator)
         .catch(async (error) => {
           user.delete()
+          // TODO: find a way to delete image if user creation fails
           userImage?.delete()
           guild.delete()
           member.delete()
