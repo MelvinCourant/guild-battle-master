@@ -18,7 +18,6 @@ export default class AuthController {
       // Verify user and member and create user
       const payload = await request.validateUsing(createUserMemberValidator)
       const userImage: any = payload.image
-
       await userImage?.move(app.makePath('uploads'), {
         name: `${cuid()}.${userImage.extname}`,
       })
@@ -44,14 +43,12 @@ export default class AuthController {
         .where('email', request.input('email'))
         .select('id')
         .first()
-
       if(!user) {
         return response.status(404).send({ message: 'User not found, back to step 1' })
       }
 
       const userImage: any = request.file('user.image')
       let guild: any = null
-
       guild = await Guild.create({
         name: payload.guild_name,
         leader_id: user.id,
@@ -65,7 +62,7 @@ export default class AuthController {
         })
 
       await Member.create({
-        pseudo: request.input('member.pseudo'),
+        pseudo: request.input('pseudo'),
         user_id: user.id,
         guild_id: guild.id,
       })
