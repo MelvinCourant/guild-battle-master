@@ -164,8 +164,7 @@
       email: formValues.email,
       password: formValues.password,
       password_confirmation: formValues.confirmationPassword,
-      pseudo: formValues.pseudo,
-      guild_name: formValues.guildName,
+      pseudo: formValues.pseudo
     };
 
     if(image.value) {
@@ -184,13 +183,24 @@
     const result = await fetch(`${env.VITE_URL}/auth/register/1`, {
       method: 'POST',
       body: formData,
-    })
+    });
 
     if(result.status === 201) {
       canIncrement.value = true;
       incrementStep();
     } else {
       canIncrement.value = false;
+
+      const resultJson = await result.json();
+      const errors = resultJson.errors;
+
+      errors.forEach((error: any) => {
+        registerForm.forms[0].fields.forEach((field: any) => {
+          if(field.attributes.name === error.field) {
+            field.error = error.message;
+          }
+        });
+      });
     }
   }
 
@@ -201,6 +211,9 @@
         formValues.password !== '' &&
         currentStep.value === 1
     ) {
+      registerForm.forms[0].fields.forEach((field: any) => {
+        field.error = '';
+      });
       sendUserMember();
     }
   }
@@ -225,4 +238,4 @@
         @nextStep="sendDataForm"
     />
   </main>
-</template>
+</template

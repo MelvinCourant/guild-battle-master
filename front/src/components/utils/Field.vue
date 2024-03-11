@@ -34,6 +34,7 @@
 
   <InputString
     :label="label"
+    :error="error"
     :attributes="attributes"
     v-if="
       attributes.type === 'text' ||

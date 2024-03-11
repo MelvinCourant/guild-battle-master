@@ -49,7 +49,7 @@
   &.error {
     .input-string {
       &__error-text {
-        transform: translateY(-100%);
+        color: var(--danger);
       }
 
       &__input {
