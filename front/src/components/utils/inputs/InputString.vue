@@ -51,6 +51,7 @@
       :value="props.attributes.value"
       :disabled="props.attributes.disabled"
       :required="props.attributes.required"
+      :autocomplete="props.attributes.autocomplete"
       @input="updateValue"
       v-model="props.attributes.value"
     />

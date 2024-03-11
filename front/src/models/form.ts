@@ -37,6 +37,7 @@ interface IAttributes {
     disabled?: boolean;
     required?: boolean;
     accept?: string;
+    autocomplete?: string;
     style?: string;
 }
 

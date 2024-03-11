@@ -23,6 +23,7 @@
             attributes: {
               type: 'text',
               required: true,
+              autocomplete: 'username',
             }
           },
           {
@@ -30,6 +31,7 @@
             attributes: {
               type: 'password',
               required: true,
+              autocomplete: 'current-password',
             }
           },
           {

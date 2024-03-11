@@ -48,6 +48,7 @@
               type: 'email',
               name: 'email',
               required: true,
+              autocomplete: 'email',
             }
           },
           {
@@ -56,6 +57,7 @@
               type: 'text',
               name: 'pseudo',
               required: true,
+              autocomplete: 'username'
             }
           },
           {
@@ -64,6 +66,7 @@
               type: 'password',
               name: 'password',
               required: true,
+              autocomplete: 'new-password',
             }
           },
           {
@@ -72,6 +75,7 @@
               type: 'password',
               name: 'confirmationPassword',
               required: true,
+              autocomplete: 'new-password',
             }
           },
           {
@@ -92,6 +96,7 @@
               type: 'text',
               name: 'guildName',
               required: true,
+              autocomplete: 'organization',
             }
           },
           {
@@ -238,7 +243,7 @@
         step === 1 ||
         step === 2
     ) {
-      if (result.status === 201) {
+      if (result.ok) {
         canIncrement.value = true;
         incrementStep();
 
@@ -268,7 +273,7 @@
         }
       }
     } else {
-      if (result.status === 201) {
+      if (result.ok) {
         window.location.href = '/login';
       } else {
         const errors = resultJson.errors;
