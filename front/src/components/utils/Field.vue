@@ -14,6 +14,10 @@
       type: String,
       default: "",
     },
+    loading: {
+      type: String,
+      default: "",
+    },
     attributes: {
       type: Object,
       required: true,
@@ -46,6 +50,7 @@
   />
 
   <Button
+    :loading="loading"
     :attributes="attributes"
     v-if="
       attributes.type === 'button' ||

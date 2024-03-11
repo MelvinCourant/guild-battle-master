@@ -129,6 +129,8 @@
   });
   const image = ref<File | null>();
   const json = ref<File | null>();
+  const formStepOne = registerForm.forms[0];
+  const formFieldsStepOne = formStepOne.fields;
   const canIncrement = ref(false);
 
   provide('formContainer', registerForm);
@@ -160,6 +162,10 @@
   }
 
   async function sendUserMember() {
+    const submitButton = formFieldsStepOne[formFieldsStepOne.length - 1];
+
+    submitButton.loading = 'Chargement...';
+
     let jsonFormat: any = {
       email: formValues.email,
       password: formValues.password,
@@ -195,13 +201,15 @@
       const errors = resultJson.errors;
 
       errors.forEach((error: any) => {
-        registerForm.forms[0].fields.forEach((field: any) => {
+        formFieldsStepOne.forEach((field: any) => {
           if(field.attributes.name === error.field) {
             field.error = error.message;
           }
         });
       });
     }
+
+    submitButton.loading = '';
   }
 
   function sendDataForm() {
@@ -211,7 +219,7 @@
         formValues.password !== '' &&
         currentStep.value === 1
     ) {
-      registerForm.forms[0].fields.forEach((field: any) => {
+      formFieldsStepOne.forEach((field: any) => {
         field.error = '';
       });
       sendUserMember();

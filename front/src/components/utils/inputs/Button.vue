@@ -4,6 +4,10 @@
   import { PropType } from "vue";
 
   defineProps({
+    loading: {
+      type: String as PropType<string>,
+      default: '',
+    },
     attributes: {
       type: Object as PropType<IAttributes>,
       required: true,
@@ -22,7 +26,7 @@
   />
   <input
       :type="attributes.type"
-      :value="attributes.value"
+      :value="loading || attributes.value"
       class="button"
       :class="attributes.style"
       :disabled="attributes.disabled"

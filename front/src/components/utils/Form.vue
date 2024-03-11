@@ -157,6 +157,7 @@
               :label="form.fields[form.fields.length - 1].label"
               :error="form.fields[form.fields.length - 1].error"
               :image="form.fields[form.fields.length - 1].image"
+              :loading="form.fields[form.fields.length - 1].loading"
               :attributes="form.fields[form.fields.length - 1].attributes"
               @nextStep="$emit('nextStep')"
           />
