@@ -163,7 +163,7 @@
     }
   }
 
-  async function makeRequest(step: number, fields: any, optionalFile: any) {
+  async function makeRequest(step: number, fields: any, optionalFiles: any) {
     fields.forEach((field: any) => {
       field.error = '';
     });
@@ -171,6 +171,8 @@
     const submitButton = fields[fields.length - 1];
     submitButton.loading = 'Chargement...';
 
+    const image = optionalFiles[0];
+    const json = optionalFiles[1];
     let jsonFormat: any;
     if(step === 1) {
       jsonFormat = {
@@ -179,14 +181,7 @@
         password_confirmation: formValues.confirmationPassword,
         pseudo: formValues.pseudo
       };
-
-      if(optionalFile.value) {
-        jsonFormat = {
-          ...jsonFormat,
-          image: optionalFile.value
-        }
-      }
-    } else if(step === 2) {
+    } else {
       jsonFormat = {
         email: formValues.email,
         password: formValues.password,
@@ -194,12 +189,19 @@
         pseudo: formValues.pseudo,
         guild_name: formValues.guildName
       };
+    }
 
-      if(optionalFile.value) {
-        jsonFormat = {
-          ...jsonFormat,
-          json: optionalFile.value
-        }
+    if(image.value) {
+      jsonFormat = {
+        ...jsonFormat,
+        image: image.value
+      }
+    }
+
+    if(json.value) {
+      jsonFormat = {
+        ...jsonFormat,
+        json: json.value
       }
     }
 
@@ -212,22 +214,42 @@
       method: 'POST',
       body: formData,
     });
-    if(result.status === 201) {
-      canIncrement.value = true;
-      incrementStep();
-    } else {
-      canIncrement.value = false;
 
-      const resultJson = await result.json();
-      const errors = resultJson.errors;
+    const resultJson = await result.json();
+    if(
+        step === 1 ||
+        step === 2
+    ) {
+      if (result.status === 201) {
+        canIncrement.value = true;
+        incrementStep();
 
-      errors.forEach((error: any) => {
-        fields.forEach((field: any) => {
-          if(field.attributes.name === error.field) {
-            field.error = error.message;
-          }
+        if(step === 2) {
+          console.log(resultJson.message);
+        }
+
+      } else {
+        canIncrement.value = false;
+
+        const errors = resultJson.errors;
+
+        errors.forEach((error: any) => {
+          fields.forEach((field: any) => {
+            if (field.attributes.name === error.field) {
+              field.error = error.message;
+            }
+          });
         });
-      });
+      }
+    } else {
+      if (result.status === 201) {
+        window.location.href = '/login';
+      } else {
+        const errors = resultJson.errors;
+
+        // TODO: create an alert component to display errors
+        console.log(errors);
+      }
     }
 
     submitButton.loading = '';
@@ -240,12 +262,14 @@
         formValues.password !== '' &&
         currentStep.value === 1
     ) {
-      makeRequest(currentStep.value, formFieldsStepOne, image);
+      makeRequest(currentStep.value, formFieldsStepOne, [image]);
     } else if(
         formValues.guildName !== '' &&
         currentStep.value === 2
     ) {
-      makeRequest(currentStep.value, formFieldsStepTwo, json);
+      makeRequest(currentStep.value, formFieldsStepTwo, [image, json]);
+    } else if(currentStep.value === 3) {
+      makeRequest(currentStep.value, formFieldsStepTwo, [image, json])
     }
   }
 
