@@ -29,6 +29,7 @@
   }
 
   const image = ref(props.image);
+  const fileName: any = ref("");
 
   function triggerInputFile() {
     const input = document.querySelector(`input[name="${props.attributes.name}"]`);
@@ -42,7 +43,7 @@
     const file = input.files?.[0];
 
     if(type.value === "image") {
-      const fileName = file?.name;
+      fileName.value = file?.name;
 
       if(file) {
         const reader = new FileReader();
@@ -58,6 +59,8 @@
 
         reader.readAsDataURL(file);
       }
+    } else {
+      fileName.value = file?.name;
     }
 
     emit("sendValue", props.attributes.name, file);
@@ -76,8 +79,17 @@
       <svg xmlns="http://www.w3.org/2000/svg" width="40" height="41" viewBox="0 0 40 41" fill="none">
         <path d="M35 28V35.5H5V28H0V35.5C0 38.25 2.25 40.5 5 40.5H35C37.75 40.5 40 38.25 40 35.5V28H35ZM7.5 13L11.025 16.525L17.5 10.075V30.5H22.5V10.075L28.975 16.525L32.5 13L20 0.5L7.5 13Z" fill="#737A8C"/>
       </svg>
-      Glisser et déposer le JSON
-      <br>ou
+      <span
+          v-if="fileName"
+      >
+        {{ fileName }}
+      </span>
+      <span
+          v-else
+      >
+         Glisser et déposer le fichier
+        <br>ou
+      </span>
     </div>
 
     <label
