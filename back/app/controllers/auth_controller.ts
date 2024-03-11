@@ -30,7 +30,7 @@ export default class AuthController {
       })
         .catch((error) => {
           // TODO: find a way to delete image if user creation fails
-          userImage?.delete()
+          // userImage?.delete()
           throw error
         });
 
@@ -57,7 +57,7 @@ export default class AuthController {
         .catch((error) => {
           user.delete()
           // TODO: find a way to delete image if user creation fails
-          userImage?.delete()
+          // userImage?.delete()
           throw error
         })
 
@@ -69,54 +69,65 @@ export default class AuthController {
         .catch((error) => {
           user.delete()
           // TODO: find a way to delete image if user creation fails
-          userImage?.delete()
+          // userImage?.delete()
           guild.delete()
           throw error
         })
 
       if(payload.json) {
-        const json = payload.json;
-        const jsonFile: any = await json.move(app.makePath('uploads/json'), {
+        const json: any = payload.json;
+        await json.move(app.makePath('uploads/json'), {
           name: `${cuid()}.${json.extname}`,
         })
 
-        fs.readFile(jsonFile.filePath, 'utf8', (error, data) => {
+        let membersNumber: number = 1;
+
+        fs.readFile(`./uploads/json/${json.fileName}`, 'utf8', async (error, data) => {
           if (error) {
-            jsonFile.delete()
+            // TODO: find a way to delete json
+            // json.delete()
             return response.status(500).send({ message: 'Error reading json file' })
           }
 
-          const jsonParsed: any = JSON.parse(data)
-          const members: any = jsonParsed.guild_members
+          async function createMembers(members: any) {
+            for (const memberIndex of Object.keys(members)) {
+              const member: any = members[memberIndex];
 
-          members.forEach(async (member: any) => {
-            if(member.grade !== 1) {
-              let grade: any;
+              if(member.grade !== 1) {
+                let grade: any;
+                const pseudo: string = member.wizard_name;
 
-              if(member.grade === 2) {
-                grade = 'vice-leader'
-              } else if(member.grade === 3) {
-                grade = 'senior'
-              } else {
-                grade = 'member'
+                if(member.grade === 2) {
+                  grade = 'member'
+                } else if(member.grade === 3) {
+                  grade = 'vice-leader'
+                } else if(member.grade === 4) {
+                  grade = 'senior'
+                }
+
+                await Member.create({
+                  pseudo: pseudo,
+                  grade: grade,
+                  guild_id: guild.id,
+                })
               }
-
-              await Member.create({
-                pseudo: member.pseudo,
-                grade: grade,
-                guild_id: guild.id,
-              })
             }
-          })
 
-          // TODO: find a way to delete json file
-          jsonFile.delete()
+            membersNumber = Object.keys(members).length
+          }
 
-          return response.status(201).created({
-            message: 'Guild, member and members created',
-            leader: user.pseudo,
-            members: members.length - 1,
-          })
+          const jsonParsed: any = JSON.parse(data)
+          const members: any = jsonParsed.guild.guild_members
+
+          await createMembers(members)
+        })
+
+        // TODO: find a way to delete json file
+        // jsonFile.delete()
+        return response.status(201).created({
+          message: 'Guild, member and guild mates created',
+          leader: user.pseudo,
+          members: membersNumber,
         })
       } else {
         return response.status(201).created({ message: 'Guild and member created' })
@@ -124,16 +135,16 @@ export default class AuthController {
     } else if(request.params().step === "3") {
       const user: any = await db
         .from('users')
-        .where('email', request.input('user.email'))
+        .where('email', request.input('email'))
         .first()
-      const userImage: any = request.file('user.image')
+      const userImage: any = request.file('image')
       const guild: any = await db
         .from('guilds')
-        .where('name', request.input('guild.name'))
+        .where('name', request.input('guild_name'))
         .first()
       const member: any = await db
         .from('members')
-        .where('pseudo', request.input('member.pseudo'))
+        .where('pseudo', request.input('pseudo'))
         .first()
       const members: any = await db
         .from('members')
@@ -169,7 +180,7 @@ export default class AuthController {
         .catch(async (error) => {
           user.delete()
           // TODO: find a way to delete image if user creation fails
-          userImage?.delete()
+          // userImage?.delete()
           guild.delete()
           member.delete()
           members.forEach((member: any) => {

@@ -8,6 +8,8 @@ const messages = {
   'password.minLength': 'Le mot de passe doit avoir au minimum {{ min }} caractères',
   'password.maxLength': 'Le mot de passe doit avoir au maximum {{ max }} caractères',
   'password.confirmed': 'Les mots de passe ne correspondent pas',
+  'guild_name.minLength': 'Le nom de la guilde doit avoir au minimum {{ min }} caractères',
+  'guild_name.maxLength': 'Le nom de la guilde doit avoir au maximum {{ max }} caractères',
 }
 
 vine.messagesProvider = new SimpleMessagesProvider(messages)

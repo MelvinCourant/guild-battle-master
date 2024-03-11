@@ -30,6 +30,11 @@
 
   const image = ref(props.image);
 
+  function triggerInputFile() {
+    const input = document.querySelector(`input[name="${props.attributes.name}"]`);
+    input?.click();
+  }
+
   async function changeFile(event: Event) {
     await nextTick();
 
@@ -83,12 +88,13 @@
           label
         "
     >
-      <button
+      <input
+          type="button"
           class="input-file__label__browse button"
           :class="attributes.style"
-      >
-        {{ label }}
-      </button>
+          :value="label"
+          @click.prevent="triggerInputFile"
+      />
       <input
           class="input-file__label__input"
           :name="attributes.name"

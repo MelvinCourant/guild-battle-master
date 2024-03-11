@@ -111,6 +111,18 @@
             }
           }
         ],
+      },
+      {
+        id: 3,
+        fields: [
+          {
+            attributes: {
+              type: 'submit',
+              value: 'Valider',
+              style: 'primary',
+            }
+          }
+        ],
       }
     ],
     footerText: {
@@ -191,14 +203,20 @@
       };
     }
 
-    if(image.value) {
+    if(
+        image &&
+        image.value
+    ) {
       jsonFormat = {
         ...jsonFormat,
         image: image.value
       }
     }
 
-    if(json.value) {
+    if(
+        json &&
+        json.value
+    ) {
       jsonFormat = {
         ...jsonFormat,
         json: json.value
@@ -225,7 +243,7 @@
         incrementStep();
 
         if(step === 2) {
-          console.log(resultJson.message);
+          console.log(resultJson);
         }
 
       } else {
@@ -233,13 +251,21 @@
 
         const errors = resultJson.errors;
 
-        errors.forEach((error: any) => {
-          fields.forEach((field: any) => {
-            if (field.attributes.name === error.field) {
-              field.error = error.message;
+        if(step === 1) {
+          errors.forEach((error: any) => {
+            fields.forEach((field: any) => {
+              if (field.attributes.name === error.field) {
+                field.error = error.message;
+              }
+            });
+          });
+        } else {
+          errors.forEach((error: any) => {
+            if(error.field === 'guild_name') {
+              fields[0].error = error.message;
             }
           });
-        });
+        }
       }
     } else {
       if (result.status === 201) {
