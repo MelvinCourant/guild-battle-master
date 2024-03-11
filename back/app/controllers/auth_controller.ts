@@ -21,6 +21,7 @@ export default class AuthController {
       await userImage?.move(app.makePath('uploads'), {
         name: `${cuid()}.${userImage.extname}`,
       })
+      const imageLink: string = `./uploads/${userImage?.fileName}`
 
       await User.create({
         email: payload.email,
@@ -29,8 +30,9 @@ export default class AuthController {
         image: userImage?.fileName,
       })
         .catch((error) => {
-          // TODO: find a way to delete image if user creation fails
-          // userImage?.delete()
+          if(userImage) {
+            fs.unlinkSync(imageLink)
+          }
           throw error
         });
 
@@ -47,7 +49,12 @@ export default class AuthController {
         return response.status(404).send({ message: 'User not found, back to step 1' })
       }
 
-      const userImage: any = request.file('user.image')
+      const userImage: any = await db
+        .from('users')
+        .where('email', request.input('email'))
+        .select('image')
+        .first()
+      const imageLink: string = `./uploads/${userImage?.image}`
       let guild: any = null
       guild = await Guild.create({
         name: payload.guild_name,
@@ -56,8 +63,9 @@ export default class AuthController {
       })
         .catch((error) => {
           user.delete()
-          // TODO: find a way to delete image if user creation fails
-          // userImage?.delete()
+          if(userImage) {
+            fs.unlinkSync(imageLink)
+          }
           throw error
         })
 
@@ -68,8 +76,9 @@ export default class AuthController {
       })
         .catch((error) => {
           user.delete()
-          // TODO: find a way to delete image if user creation fails
-          // userImage?.delete()
+          if(userImage) {
+            fs.unlinkSync(imageLink)
+          }
           guild.delete()
           throw error
         })
@@ -79,51 +88,49 @@ export default class AuthController {
         await json.move(app.makePath('uploads/json'), {
           name: `${cuid()}.${json.extname}`,
         })
+        const jsonLink: string = `./uploads/json/${json.fileName}`
 
-        let membersNumber: number = 1;
+        const data = fs.readFileSync(jsonLink, 'utf8')
 
-        fs.readFile(`./uploads/json/${json.fileName}`, 'utf8', async (error, data) => {
-          if (error) {
-            // TODO: find a way to delete json
-            // json.delete()
-            return response.status(500).send({ message: 'Error reading json file' })
-          }
+        if (!data) {
+          fs.unlinkSync(jsonLink)
+          return response.status(500).send({ message: 'Error reading json file' })
+        }
 
-          async function createMembers(members: any) {
-            for (const memberIndex of Object.keys(members)) {
-              const member: any = members[memberIndex];
+        async function createMembers(members: any) {
+          for (const memberIndex of Object.keys(members)) {
+            const member: any = members[memberIndex];
 
-              if(member.grade !== 1) {
-                let grade: any;
-                const pseudo: string = member.wizard_name;
+            if(member.grade !== 1) {
+              let grade: any;
+              const pseudo: string = member.wizard_name;
 
-                if(member.grade === 2) {
-                  grade = 'member'
-                } else if(member.grade === 3) {
-                  grade = 'vice-leader'
-                } else if(member.grade === 4) {
-                  grade = 'senior'
-                }
-
-                await Member.create({
-                  pseudo: pseudo,
-                  grade: grade,
-                  guild_id: guild.id,
-                })
+              if(member.grade === 2) {
+                grade = 'member'
+              } else if(member.grade === 3) {
+                grade = 'vice-leader'
+              } else if(member.grade === 4) {
+                grade = 'senior'
               }
+
+              await Member.create({
+                pseudo: pseudo,
+                grade: grade,
+                guild_id: guild.id,
+              })
             }
-
-            membersNumber = Object.keys(members).length
           }
+        }
 
-          const jsonParsed: any = JSON.parse(data)
-          const members: any = jsonParsed.guild.guild_members
+        const jsonParsed: any = JSON.parse(data)
+        const members: any = jsonParsed.guild.guild_members
 
-          await createMembers(members)
-        })
+        await createMembers(members)
 
-        // TODO: find a way to delete json file
-        // jsonFile.delete()
+        const membersNumber = Object.keys(members).length
+
+        fs.unlinkSync(jsonLink)
+
         return response.status(201).created({
           message: 'Guild, member and guild mates created',
           leader: user.pseudo,
@@ -137,7 +144,12 @@ export default class AuthController {
         .from('users')
         .where('email', request.input('email'))
         .first()
-      const userImage: any = request.file('image')
+      const userImage: any = await db
+        .from('users')
+        .where('email', request.input('email'))
+        .select('image')
+        .first()
+      const imageLink: string = `./uploads/${userImage?.image}`
       const guild: any = await db
         .from('guilds')
         .where('name', request.input('guild_name'))
@@ -179,14 +191,14 @@ export default class AuthController {
       await request.validateUsing(createRegisterValidator)
         .catch(async (error) => {
           user.delete()
-          // TODO: find a way to delete image if user creation fails
-          // userImage?.delete()
+          if(userImage) {
+            fs.unlinkSync(imageLink)
+          }
           guild.delete()
           member.delete()
           members.forEach((member: any) => {
             member.delete()
           })
-
           throw error
         });
 
