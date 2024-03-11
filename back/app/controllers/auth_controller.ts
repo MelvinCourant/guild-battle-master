@@ -21,7 +21,6 @@ export default class AuthController {
       await userImage?.move(app.makePath('uploads'), {
         name: `${cuid()}.${userImage.extname}`,
       })
-      const imageLink: string = `./uploads/${userImage?.fileName}`
 
       await User.create({
         email: payload.email,
@@ -30,9 +29,6 @@ export default class AuthController {
         image: userImage?.fileName,
       })
         .catch((error) => {
-          if(userImage) {
-            fs.unlinkSync(imageLink)
-          }
           throw error
         });
 
@@ -54,7 +50,6 @@ export default class AuthController {
         .where('email', request.input('email'))
         .select('image')
         .first()
-      const imageLink: string = `./uploads/${userImage?.image}`
       let guild: any = null
       guild = await Guild.create({
         name: payload.guild_name,
@@ -62,10 +57,6 @@ export default class AuthController {
         image: userImage?.fileName,
       })
         .catch((error) => {
-          user.delete()
-          if(userImage) {
-            fs.unlinkSync(imageLink)
-          }
           throw error
         })
 
@@ -75,11 +66,6 @@ export default class AuthController {
         guild_id: guild.id,
       })
         .catch((error) => {
-          user.delete()
-          if(userImage) {
-            fs.unlinkSync(imageLink)
-          }
-          guild.delete()
           throw error
         })
 
@@ -133,23 +119,20 @@ export default class AuthController {
 
         return response.status(201).created({
           message: 'Guild, member and guild mates created',
-          leader: user.pseudo,
+          leader: request.input('pseudo'),
           members: membersNumber,
         })
       } else {
-        return response.status(201).created({ message: 'Guild and member created' })
+        return response.status(201).created({
+          message: 'Guild and member created',
+          leader: request.input('pseudo'),
+        })
       }
     } else if(request.params().step === "3") {
       const user: any = await db
         .from('users')
         .where('email', request.input('email'))
         .first()
-      const userImage: any = await db
-        .from('users')
-        .where('email', request.input('email'))
-        .select('image')
-        .first()
-      const imageLink: string = `./uploads/${userImage?.image}`
       const guild: any = await db
         .from('guilds')
         .where('name', request.input('guild_name'))
@@ -158,9 +141,6 @@ export default class AuthController {
         .from('members')
         .where('pseudo', request.input('pseudo'))
         .first()
-      const members: any = await db
-        .from('members')
-        .where('guild_id', guild.id)
 
       if(
         !user &&
@@ -190,15 +170,6 @@ export default class AuthController {
       // Verify all information
       await request.validateUsing(createRegisterValidator)
         .catch(async (error) => {
-          user.delete()
-          if(userImage) {
-            fs.unlinkSync(imageLink)
-          }
-          guild.delete()
-          member.delete()
-          members.forEach((member: any) => {
-            member.delete()
-          })
           throw error
         });
 

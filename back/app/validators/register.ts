@@ -5,6 +5,7 @@ const messages = {
   string: 'Le {{ field }} doit être une chaîne de caractères',
   email: 'L\'email n\'est pas valide',
   'pseudo.minLength': 'Le pseudo doit avoir au minimum {{ min }} caractères',
+  'pseudo.maxLength': 'Le pseudo doit avoir au maximum {{ max }} caractères',
   'password.minLength': 'Le mot de passe doit avoir au minimum {{ min }} caractères',
   'password.maxLength': 'Le mot de passe doit avoir au maximum {{ max }} caractères',
   'password.confirmed': 'Les mots de passe ne correspondent pas',

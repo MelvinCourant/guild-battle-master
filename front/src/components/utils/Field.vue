@@ -24,7 +24,7 @@
     }
   });
 
-  defineEmits(['nextStep', 'sendValue']);
+  defineEmits(['click', 'sendValue']);
 </script>
 
 <template>
@@ -56,6 +56,6 @@
       attributes.type === 'button' ||
       attributes.type === 'submit'
     "
-    @nextStep="$emit('nextStep')"
+    @click="$emit('click')"
   />
 </template>

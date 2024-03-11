@@ -9,6 +9,9 @@
     return new URL(`../assets/imgs/${src}`, import.meta.url).href;
   }
 
+  const placeholderImage = generateImgSrc('placeholder.jpg');
+  const leaderImage = generateImgSrc('roles/leader.svg');
+  const membersImage = generateImgSrc('members.svg');
   const steps: IStep[] = [
       {
         level: 1,
@@ -33,7 +36,7 @@
         fields: [
           {
             image: {
-              src: generateImgSrc('placeholder.jpg'),
+              src: placeholderImage,
               alt: 'User icon',
             },
             attributes: {
@@ -110,26 +113,53 @@
           },
           {
             attributes: {
-              type: 'submit',
+              type: 'button',
               value: 'Continuer',
-              style: 'primary',
-            }
-          }
-        ],
-      },
-      {
-        id: 3,
-        fields: [
-          {
-            attributes: {
-              type: 'submit',
-              value: 'Valider',
               style: 'primary',
             }
           }
         ],
       }
     ],
+    resume: {
+      id: 3,
+      content: [
+        {
+          type: 'image',
+          image: {
+            src: placeholderImage,
+            alt: 'User icon',
+          }
+        },
+        {
+          type: 'title',
+          text: 'Guild Name'
+        },
+        {
+          type: 'text',
+          image: {
+            src: leaderImage,
+            alt: 'Leader icon',
+          },
+          text: 'Leader'
+        },
+        {
+          type: 'text',
+          image: {
+            src: membersImage,
+            alt: 'Members icon',
+          },
+          text: '1 membre (vous)'
+        }
+      ],
+      submit: {
+        attributes: {
+          type: 'button',
+          value: 'Valider',
+          style: 'primary',
+        }
+      }
+    },
     footerText: {
       text: 'Vous possédez déjà un compte ?',
       link: 'Connectez-vous',
@@ -144,19 +174,21 @@
     pseudo: '',
     guildName: '',
   });
-  const image = ref<File | null>();
+  const memberImage = ref<File | null>();
   const json = ref<File | null>();
   const formStepOne = registerForm.forms[0];
   const formFieldsStepOne = formStepOne.fields;
   const formStepTwo = registerForm.forms[1];
   const formFieldsStepTwo = formStepTwo.fields;
+  const resume = registerForm.resume;
+  const resumeContent = resume.content;
   const canIncrement = ref(false);
 
   provide('formContainer', registerForm);
 
   function updateValue(inputName: string, value: string | File) {
     if(inputName === 'image') {
-      image.value = value as File;
+      memberImage.value = value as File;
     } else if(inputName === 'email') {
       formValues.email = value as string;
     } else if(inputName === 'pseudo') {
@@ -169,14 +201,6 @@
       formValues.guildName = value as string;
     } else if(inputName === 'json') {
       json.value = value as File;
-    }
-  }
-
-  function decrementStep() {
-    if(
-        currentStep.value > 1
-    ) {
-      currentStep.value--;
     }
   }
 
@@ -248,7 +272,24 @@
         incrementStep();
 
         if(step === 2) {
-          console.log(resultJson);
+          if(
+              image
+              && image.value
+          ) {
+            resumeContent[0].image = {
+              src: URL.createObjectURL(image.value),
+              alt: image.value.name
+            };
+          }
+
+          resumeContent[1].text = formValues.guildName;
+          resumeContent[2].text = resultJson.leader;
+
+          if(resultJson.members > 1) {
+            resumeContent[3].text = `${resultJson.members} membres (vous)`;
+          } else if(resultJson.members === 1) {
+            resumeContent[3].text = `${resultJson.members} membre (vous)`;
+          }
         }
 
       } else {
@@ -293,14 +334,20 @@
         formValues.password !== '' &&
         currentStep.value === 1
     ) {
-      makeRequest(currentStep.value, formFieldsStepOne, [image]);
+      makeRequest(currentStep.value, formFieldsStepOne, [memberImage]);
     } else if(
         formValues.guildName !== '' &&
         currentStep.value === 2
     ) {
-      makeRequest(currentStep.value, formFieldsStepTwo, [image, json]);
-    } else if(currentStep.value === 3) {
-      makeRequest(currentStep.value, formFieldsStepTwo, [image, json])
+      makeRequest(currentStep.value, formFieldsStepTwo, [memberImage, json]);
+    } else if(
+        formValues.email !== '' &&
+        formValues.pseudo !== '' &&
+        formValues.password !== '' &&
+        formValues.guildName !== '' &&
+        currentStep.value === 3
+    ) {
+      makeRequest(currentStep.value, formFieldsStepTwo, [memberImage, json])
     }
   }
 
@@ -320,7 +367,6 @@
         :steps="steps"
         :currentStep="currentStep"
         @sendValue="updateValue"
-        @previousStep="decrementStep"
         @nextStep="sendDataForm"
     />
   </main>

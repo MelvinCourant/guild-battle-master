@@ -11,20 +11,34 @@ interface IImage {
 
 interface IFormContainer {
     title?: string;
-    forms: IForms
+    forms: Array<IForms>;
+    resume?: IResume
     footerText?: IFooterText;
     passwordForgotten?: IPasswordForgotten;
 }
 
 interface IForms {
     id: number;
-    fields: IField;
+    fields: Array<IField>;
+}
+
+interface IResume {
+    id: number;
+    content: Array<IContent>;
+    submit: IField;
+}
+
+interface IContent {
+    type: string;
+    image?: IImage;
+    text?: string;
 }
 
 interface IField {
     label?: string;
     error?: string;
     image?: IImage;
+    loading?: boolean;
     attributes: IAttributes;
 }
 
@@ -57,6 +71,8 @@ export type {
     IImage,
     IFormContainer,
     IForms,
+    IResume,
+    IContent,
     IField,
     IAttributes,
     IFooterText,

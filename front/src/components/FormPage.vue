@@ -17,7 +17,7 @@
       type: Object as PropType<IImage>,
     }
   })
-  defineEmits(["sendValue", "previousStep", "nextStep"]);
+  defineEmits(["sendValue", "nextStep"]);
 </script>
 <template>
   <div class="form-page">
@@ -35,7 +35,6 @@
       />
       <Form
           :currentStep="currentStep"
-          @previousStep="$emit('previousStep')"
           @nextStep="$emit('nextStep')"
           @sendValue="(inputName: string, value: string) => $emit('sendValue', inputName, value)"
       />

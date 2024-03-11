@@ -26,7 +26,8 @@
       margin-bottom: 10px;
     }
 
-    &__fields {
+    &__fields,
+    &__resume {
       display: flex;
       flex-direction: column;
       gap: 15px;
@@ -38,17 +39,14 @@
         padding: 30px 40px;
       }
 
-      &__back {
-        cursor: pointer;
-        transform: translate(calc(-100% - 6px), -16px);
-
-        & + .form__fields__inputs:first-of-type {
-          div:first-child {
-            margin-top: 0;
-          }
-        }
+      .input-string,
+      .button,
+      .input-file {
+        width: 100%;
       }
+    }
 
+    &__fields {
       &__inputs {
         display: flex;
         flex-direction: column;
@@ -81,11 +79,68 @@
           }
         }
       }
+    }
 
-      .input-string,
-      .button,
-      .input-file {
-        width: 100%;
+    &__resume {
+      &__content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+
+        .line {
+          &--image {
+            .line {
+              &__image {
+                width: 100px;
+                height: 100px;
+                border-radius: 50%;
+                overflow: hidden;
+
+                img {
+                  width: 100%;
+                  height: 100%;
+                  object-fit: cover;
+                }
+              }
+            }
+          }
+
+          &--title {
+            .line {
+              &__text {
+                font-size: 1.5rem; // 24px
+                font-weight: 700;
+                line-height: 0.83333;
+                text-align: center;
+              }
+            }
+          }
+
+          &--text {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+
+            .line {
+              &__image {
+                display: flex;
+                width: fit-content;
+                height: fit-content;
+              }
+
+              &__text {
+                font-size: 1.25rem; // 20px
+                font-weight: 700;
+                line-height: 0.9;
+              }
+            }
+          }
+        }
+      }
+
+      &__footer {
+        margin-top: 35px;
       }
     }
   }

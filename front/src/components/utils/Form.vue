@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import "@css/components/utils/form.scss";
   import Field from "@components/utils/Field.vue";
-  import type { IFormContainer } from "@models/form.ts";
+  import type { IFormContainer, IResume } from "@models/form.ts";
   import gsap from "gsap";
   import { inject, ref, onMounted, watch, nextTick } from "vue";
 
@@ -12,15 +12,23 @@
     },
   });
 
-  defineEmits(['previousStep', 'nextStep', 'sendValue']);
+  defineEmits(['nextStep', 'sendValue']);
 
   const formContainer = inject('formContainer') as IFormContainer;
-  const forms: Array<Object> = formContainer.forms;
+  const forms: any = formContainer.forms;
   const formsTransform: any = ref([]);
+  const resume: IResume = formContainer.resume;
   const formStyle = ref<string>('');
+  let formLength: number;
+
+  if(resume) {
+    formLength = forms.length + 1;
+  } else {
+    formLength = forms.length;
+  }
 
   function initTranslations() {
-    for(let i = 0; i < forms.length; i++) {
+    for(let i = 0; i < formLength; i++) {
       let translate: string = '';
       let translateValue: string = '';
       let position: string = 'initial';
@@ -45,7 +53,7 @@
     initTranslations();
 
     onMounted(() => {
-      const fieldsActive = document.querySelectorAll('.form__fields[data-active="true"]');
+      const fieldsActive = document.querySelectorAll('.form [data-active="true"]');
       const height = fieldsActive[0].clientHeight;
 
       formStyle.value = `height: ${height}px`;
@@ -53,7 +61,7 @@
   }
 
   function updateTranslations() {
-    for(let formIndex = 0; formIndex < forms.length; formIndex++) {
+    for(let formIndex = 0; formIndex < formLength; formIndex++) {
       let translate: string = '';
       let translateValue: string = '';
       let position: string = 'initial';
@@ -80,7 +88,7 @@
   async function updateStep() {
     await nextTick();
 
-    const newFieldActive = document.querySelector(`.form__fields[data-active="true"]:nth-of-type(${props.currentStep})`);
+    const newFieldActive = document.querySelector(`.form [data-active="true"]:nth-child(${props.currentStep})`);
 
     if(newFieldActive) {
       const height: string = `${newFieldActive.clientHeight}px`;
@@ -97,7 +105,7 @@
   watch(() => props.currentStep, () => updateStep());
 
   window.addEventListener('resize', () => {
-    const fieldActive = document.querySelector(`.form__fields[data-active="true"]:nth-of-type(${props.currentStep})`);
+    const fieldActive = document.querySelector(`.form [data-active="true"]:nth-child(${props.currentStep})`);
 
     if(fieldActive) {
       const height = fieldActive.clientHeight;
@@ -127,16 +135,6 @@
           :style="formsTransform[index]"
           @submit.prevent="$emit('nextStep')"
       >
-        <svg
-            class="form__fields__back"
-            @click.stop="$emit('previousStep')"
-            v-if="
-              forms.length !== 1 &&
-              index !== 0
-            "
-            xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-          <path d="M23.3333 10.7083H5.58542L13.7375 2.55625L11.6667 0.5L0 12.1667L11.6667 23.8333L13.7229 21.7771L5.58542 13.625H23.3333V10.7083Z" fill="white"/>
-        </svg>
         <div class="form__fields__inputs">
           <template
               v-for="(field, index) in form.fields"
@@ -159,7 +157,7 @@
               :image="form.fields[form.fields.length - 1].image"
               :loading="form.fields[form.fields.length - 1].loading"
               :attributes="form.fields[form.fields.length - 1].attributes"
-              @nextStep="$emit('nextStep')"
+              @click="$emit('nextStep')"
           />
           <p
               class="form__fields__footer__text"
@@ -174,6 +172,53 @@
           </p>
         </div>
       </form>
+      <div
+          class="form__resume"
+          :style="formsTransform[resume.id - 1]"
+          :data-active="currentStep >= resume.id"
+          v-if="resume"
+      >
+        <div
+            class="form__resume__content"
+        >
+          <template
+              v-for="(line, index) in resume.content"
+              :key="index"
+          >
+            <div
+                class="line"
+                :class="[
+                    line.type === 'image' ? 'line--image' : '',
+                    line.type === 'title' ? 'line--title' : '',
+                    line.type === 'text' ? 'line--text' : '',
+                ]"
+            >
+              <div
+                  class="line__image"
+                  v-if="line.image"
+              >
+                <img
+                    :src="line.image.src"
+                    :alt="line.image.alt"
+                />
+              </div>
+              <p
+                  class="line__text"
+                  v-if="line.text"
+              >
+                {{ line.text }}
+              </p>
+            </div>
+          </template>
+        </div>
+        <div class="form__resume__footer">
+          <Field
+              :loading="resume.submit.loading"
+              :attributes="resume.submit.attributes"
+              @click="$emit('nextStep')"
+          />
+        </div>
+      </div>
     </div>
     <router-link
         v-if="formContainer.passwordForgotten"
