@@ -1,14 +1,13 @@
 import vine from '@vinejs/vine'
 import { SimpleMessagesProvider } from '@vinejs/vine'
 
-// TODO: Update messages to fr
 const messages = {
-  string: 'The {{ field }} field must be a string',
-  email: 'The {{ field }} field must be a valid email address',
-  minLength: 'Le champ {{ field }} doit avoir au minimum {{ min }} caractères',
-  maxLength: 'The {{ field }} field must not be greater than {{ max }} characters',
-  confirmed: 'The {{ field }} field and {{ otherField }} field must be the same',
-  jwt: 'The {{ field }} field must be a valid JWT token',
+  string: 'Le {{ field }} doit être une chaîne de caractères',
+  email: 'L\'email n\'est pas valide',
+  'pseudo.minLength': 'Le pseudo doit avoir au minimum {{ min }} caractères',
+  'password.minLength': 'Le mot de passe doit avoir au minimum {{ min }} caractères',
+  'password.maxLength': 'Le mot de passe doit avoir au maximum {{ max }} caractères',
+  'password.confirmed': 'Les mots de passe ne correspondent pas',
 }
 
 vine.messagesProvider = new SimpleMessagesProvider(messages)
