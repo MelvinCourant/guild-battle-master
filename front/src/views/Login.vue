@@ -15,7 +15,7 @@
     src: generateImgSrc("camilla.jpg"),
     alt: 'Login image',
   }
-  const loginForm: IFormContainer = {
+  const loginForm: IFormContainer = reactive({
     title: 'Guild battle Master',
     forms: [
       {
@@ -58,7 +58,7 @@
       text: 'Mot de passe oublié ?',
       href: '/password-forgotten',
     }
-  };
+  });
   const fields = loginForm.forms[0].fields;
   const formValues = reactive({
     email: '',
@@ -79,6 +79,35 @@
     }
   }
 
+  function displayError(resultJson: any) {
+    let errorsFields: any;
+    let globalError: any;
+
+    if(resultJson.errors) {
+      errorsFields = resultJson.errors;
+    } else {
+      globalError = resultJson.message;
+    }
+
+    if(errorsFields) {
+      errorsFields.forEach((error: any) => {
+        fields.forEach((field: any) => {
+          if (field.attributes.name === error.field) {
+            field.error = error.message;
+          }
+        });
+      });
+    } else {
+      alert.display = true;
+      alert.type = 'error';
+      alert.message = globalError;
+
+      setTimeout(() => {
+        alert.display = false;
+      }, 3000);
+    }
+  }
+
   async function login() {
     const submitButton = fields[2];
     submitButton.loading = 'Chargement...';
@@ -96,34 +125,11 @@
     const resultJson = await result.json();
 
     if (result.ok) {
-      // TODO: redirect to dashboard and store token
+      const tokenObject: any = resultJson.token;
+      const tokenValue = tokenObject.token;
+      localStorage.setItem('token', tokenValue);
     } else {
-      let errorsFields: any;
-      let globalError: any;
-
-      if(resultJson.errors) {
-        errorsFields = resultJson.errors;
-      } else {
-        globalError = resultJson.message;
-      }
-
-      if(errorsFields) {
-        errorsFields.forEach((error: any) => {
-          fields.forEach((field: any) => {
-            if (field.attributes.name === error.field) {
-              field.error = error.message;
-            }
-          });
-        });
-      } else {
-        alert.display = true;
-        alert.type = 'error';
-        alert.message = globalError;
-
-        setTimeout(() => {
-          alert.display = false;
-        }, 3000);
-      }
+      displayError(resultJson);
     }
   }
 </script>

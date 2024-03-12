@@ -210,6 +210,35 @@
     }
   }
 
+  function displayError(fields: any, resultJson: any) {
+    let errorsFields: any;
+    let globalError: any;
+
+    if(resultJson.errors) {
+      errorsFields = resultJson.errors;
+    } else {
+      globalError = resultJson.message;
+    }
+
+    if(errorsFields) {
+      errorsFields.forEach((error: any) => {
+        fields.forEach((field: any) => {
+          if (field.attributes.name === error.field) {
+            field.error = error.message;
+          }
+        });
+      });
+    } else {
+      alert.display = true;
+      alert.type = 'error';
+      alert.message = globalError;
+
+      setTimeout(() => {
+        alert.display = false;
+      }, 3000);
+    }
+  }
+
   async function register(step: number, fields: any, optionalFiles: any) {
     fields.forEach((field: any) => {
       field.error = '';
@@ -300,55 +329,13 @@
 
       } else {
         canIncrement.value = false;
-
-        let errorsFields: any;
-        let globalError: any;
-
-        if(resultJson.errors) {
-          errorsFields = resultJson.errors;
-        } else {
-          globalError = resultJson.message;
-        }
-
-        if(errorsFields) {
-          if (step === 1) {
-            errorsFields.forEach((error: any) => {
-              fields.forEach((field: any) => {
-                if (field.attributes.name === error.field) {
-                  field.error = error.message;
-                }
-              });
-            });
-          } else {
-            errorsFields.forEach((error: any) => {
-              if (error.field === 'guild_name') {
-                fields[0].error = error.message;
-              }
-            });
-          }
-        } else {
-          alert.display = true;
-          alert.type = 'error';
-          alert.message = globalError;
-
-          setTimeout(() => {
-            alert.display = false;
-          }, 5000);
-        }
+        displayError(fields, resultJson);
       }
     } else {
       if (result.ok) {
         window.location.href = '/login';
       } else {
-        const globalError: any = resultJson.message;
-
-        alert.display = true;
-        alert.type = 'error';
-        alert.message = globalError;
-
-        setTimeout(() => {
-          alert.display = false;
-        }, 5000);
+        displayError(null, resultJson);
       }
     }
 

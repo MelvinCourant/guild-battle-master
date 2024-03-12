@@ -1,4 +1,4 @@
-import type { HttpContext } from '@adonisjs/core/http'
+import type { HttpContext} from '@adonisjs/core/http'
 import { cuid } from '@adonisjs/core/helpers'
 import app from '@adonisjs/core/services/app'
 import {
@@ -265,12 +265,14 @@ export default class AuthController {
 
   public async login({ request, response }: HttpContext) {
     const {email, password} = await request.validateUsing(loginValidator)
-    const user = await User.verifyCredentials(email, password)
-    const token = await User.accessTokens.create(user)
 
-    return response.ok({
-      token: token,
-      ...user.serialize(),
-    })
+    try {
+      const user = await User.verifyCredentials(email, password)
+      const token = await User.accessTokens.create(user)
+
+      return response.status(200).send({ token })
+    } catch (error) {
+      return response.status(400).send({ message: 'Email ou mot de passe incorrect' })
+    }
   }
 }

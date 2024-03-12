@@ -10,7 +10,6 @@ export default class extends BaseSchema {
       table.string('password').notNullable()
       table.enu('role', ['admin', 'leader', 'member']).notNullable().defaultTo('member')
       table.string('image').nullable()
-      table.string('remember_me_token').nullable()
       table.boolean('pending').notNullable().defaultTo(true)
 
       table.timestamp('created_at').notNullable()
