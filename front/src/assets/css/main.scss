@@ -116,12 +116,16 @@
   --white: #FFFFFF;
   --text-grey: #737A8C;
   --danger: #F85149;
+  --success: #00DE4A;
 
   // borders
   --border: 1px solid var(--border-background);
 
   // borders radius
   --input-text-radius: 6px;
+
+  // shadows
+  --shadow: 0 2px 4px 2px rgba(0, 0, 0, 0.25);
 
   // team colors
   --blue-team: #094CF6;

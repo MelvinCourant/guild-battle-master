@@ -1,7 +1,9 @@
 <script setup lang="ts">
   import "@css/views/login-register.scss";
   import FormPage from "@components/FormPage.vue";
-  import {IStep, IFormContainer} from "@models/form.ts";
+  import Alert from "@components/utils/Alert.vue";
+  import { IStep, IFormContainer } from "@models/form.ts";
+  import { IAlert } from "@models/alert.ts";
   import { reactive, ref, provide } from "vue";
   const env = import.meta.env;
 
@@ -166,6 +168,10 @@
       href: '/login',
     }
   });
+  const alert: IAlert = reactive({
+    display: false,
+    message: '',
+  });
   const currentStep = ref(1);
   const formValues = reactive({
     email: '',
@@ -295,32 +301,54 @@
       } else {
         canIncrement.value = false;
 
-        const errors = resultJson.errors;
+        let errorsFields: any;
+        let globalError: any;
 
-        if(step === 1) {
-          errors.forEach((error: any) => {
-            fields.forEach((field: any) => {
-              if (field.attributes.name === error.field) {
-                field.error = error.message;
+        if(resultJson.errors) {
+          errorsFields = resultJson.errors;
+        } else {
+          globalError = resultJson.message;
+        }
+
+        if(errorsFields) {
+          if (step === 1) {
+            errorsFields.forEach((error: any) => {
+              fields.forEach((field: any) => {
+                if (field.attributes.name === error.field) {
+                  field.error = error.message;
+                }
+              });
+            });
+          } else {
+            errorsFields.forEach((error: any) => {
+              if (error.field === 'guild_name') {
+                fields[0].error = error.message;
               }
             });
-          });
+          }
         } else {
-          errors.forEach((error: any) => {
-            if(error.field === 'guild_name') {
-              fields[0].error = error.message;
-            }
-          });
+          alert.display = true;
+          alert.type = 'error';
+          alert.message = globalError;
+
+          setTimeout(() => {
+            alert.display = false;
+          }, 5000);
         }
       }
     } else {
       if (result.ok) {
         window.location.href = '/login';
       } else {
-        const errors = resultJson.errors;
+        const globalError: any = resultJson.message;
 
-        // TODO: create an alert component to display errors
-        console.log(errors);
+        alert.display = true;
+        alert.type = 'error';
+        alert.message = globalError;
+
+        setTimeout(() => {
+          alert.display = false;
+        }, 5000);
       }
     }
 
@@ -368,6 +396,11 @@
         :currentStep="currentStep"
         @sendValue="updateValue"
         @nextStep="sendDataForm"
+    />
+    <Alert
+        :display="alert.display"
+        :type="alert.type"
+        :message="alert.message"
     />
   </main>
 </template>

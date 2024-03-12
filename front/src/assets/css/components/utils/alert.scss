@@ -1,0 +1,33 @@
+.alert {
+  position: fixed;
+  left: 15px;
+  bottom: 20px;
+  display: flex;
+  min-width: 400px;
+  width: fit-content;
+  max-width: calc(100% - 30px);
+  padding: 18px 50px 18px 25px;
+  align-items: flex-start;
+  gap: 14px;
+  background: var(--system);
+  border-radius: 15px;
+  box-shadow: var(--shadow);
+
+  &__icon {
+    min-width: 24px;
+    min-height: 24px;
+  }
+
+  &__message {
+    font-size: 1rem; // 16px
+    line-height: 1.5;
+  }
+
+  &--error {
+    background: var(--danger);
+
+    .alert__message {
+        color: var(--white);
+    }
+  }
+}
