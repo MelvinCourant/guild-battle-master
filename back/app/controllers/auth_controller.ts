@@ -6,6 +6,7 @@ import {
   createUserMemberValidator,
   createGuildValidator,
 } from "#validators/register";
+import { loginValidator } from "#validators/login";
 import db from '@adonisjs/lucid/services/db'
 import fs from 'fs'
 import User from "#models/user";
@@ -262,7 +263,14 @@ export default class AuthController {
     }
   }
 
-  public async login() {
+  public async login({ request, response }: HttpContext) {
+    const {email, password} = await request.validateUsing(loginValidator)
+    const user = await User.verifyCredentials(email, password)
+    const token = await User.accessTokens.create(user)
 
+    return response.ok({
+      token: token,
+      ...user.serialize(),
+    })
   }
 }

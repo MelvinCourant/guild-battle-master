@@ -210,7 +210,7 @@
     }
   }
 
-  async function makeRequest(step: number, fields: any, optionalFiles: any) {
+  async function register(step: number, fields: any, optionalFiles: any) {
     fields.forEach((field: any) => {
       field.error = '';
     });
@@ -362,12 +362,12 @@
         formValues.password !== '' &&
         currentStep.value === 1
     ) {
-      makeRequest(currentStep.value, formFieldsStepOne, [memberImage]);
+      register(currentStep.value, formFieldsStepOne, [memberImage]);
     } else if(
         formValues.guildName !== '' &&
         currentStep.value === 2
     ) {
-      makeRequest(currentStep.value, formFieldsStepTwo, [memberImage, json]);
+      register(currentStep.value, formFieldsStepTwo, [memberImage, json]);
     } else if(
         formValues.email !== '' &&
         formValues.pseudo !== '' &&
@@ -375,7 +375,7 @@
         formValues.guildName !== '' &&
         currentStep.value === 3
     ) {
-      makeRequest(currentStep.value, formFieldsStepTwo, [memberImage, json])
+      register(currentStep.value, formFieldsStepTwo, [memberImage, json])
     }
   }
 

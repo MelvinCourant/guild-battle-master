@@ -4,4 +4,4 @@ interface IAlert {
     message: string
 }
 
-export default IAlert;
+export default { IAlert };

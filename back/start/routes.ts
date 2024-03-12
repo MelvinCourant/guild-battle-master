@@ -13,8 +13,8 @@ import AuthController from '#controllers/auth_controller'
 router.group(() => {
   const authController = new AuthController()
 
-  router.post('/login', async () => {
-    return authController.login()
+  router.post('/login', async (data) => {
+    return authController.login(data)
   })
 
   router.post('/register/:step', async (data) => {
