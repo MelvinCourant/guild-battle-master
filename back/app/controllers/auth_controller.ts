@@ -17,6 +17,15 @@ export default class AuthController {
     if(request.params().step === "1") {
       // Verify user and member and create user
       const payload = await request.validateUsing(createUserMemberValidator)
+      const user: any = await db
+        .from('users')
+        .where('email', payload.email)
+        .first()
+
+      if(user) {
+        return response.status(400).send({ message: 'Un compte existe déjà avec cette adresse email' })
+      }
+
       const userImage: any = payload.image
       await userImage?.move(app.makePath('uploads'), {
         name: `${cuid()}.${userImage.extname}`,
