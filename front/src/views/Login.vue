@@ -131,6 +131,8 @@
     } else {
       displayError(resultJson);
     }
+
+    submitButton.loading = '';
   }
 </script>
 

@@ -31,7 +31,10 @@ export default class AuthController {
           .select('image')
           .first()
 
-        if(userImage) {
+        if(
+          userImage &&
+          userImage.image
+        ) {
           const imageLink: string = `./uploads/${userImage.image}`
 
           fs.unlinkSync(imageLink)

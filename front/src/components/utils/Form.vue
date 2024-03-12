@@ -99,6 +99,11 @@
         height: height,
         duration: 0.5,
       });
+
+      setTimeout(() => {
+        const firstInput = newFieldActive.querySelector('input:first-of-type');
+        firstInput?.focus();
+      }, 500);
     }
   }
 
