@@ -9,6 +9,7 @@
 
 import router from '@adonisjs/core/services/router'
 import AuthController from '#controllers/auth_controller'
+import { middleware } from '#start/kernel'
 
 router.group(() => {
   const authController = new AuthController()
@@ -21,3 +22,7 @@ router.group(() => {
     return authController.register(data)
   })
 }).prefix('api/auth')
+
+router.get('/', async () => {
+  return { greeting: 'Hello world in JSON' }
+}).use(middleware.auth())

@@ -114,7 +114,7 @@ export default class AuthController {
           throw error
         });
 
-      return response.status(201).created({ message: 'User created' })
+      return response.created({ message: 'User created' })
     } else if(request.params().step === "2") {
       // Verify guild and create guild and member
       const payload = await request.validateUsing(createGuildValidator)
@@ -199,13 +199,13 @@ export default class AuthController {
 
         fs.unlinkSync(jsonLink)
 
-        return response.status(201).created({
+        return response.created({
           message: 'Guild, member and guild mates created',
           leader: request.input('pseudo'),
           members: membersNumber,
         })
       } else {
-        return response.status(201).created({
+        return response.created({
           message: 'Guild and member created',
           leader: request.input('pseudo'),
         })
@@ -260,7 +260,7 @@ export default class AuthController {
         .where('email', request.input('email'))
         .update({ pending: 0 })
 
-      return response.status(201).created({ message: 'Registration successful' })
+      return response.created({ message: 'Registration successful' })
     } else {
       return response.status(400).send({ message: 'Invalid step' })
     }
@@ -271,9 +271,18 @@ export default class AuthController {
 
     try {
       const user = await User.verifyCredentials(email, password)
+      const member: any = await db
+        .from('members')
+        .where('user_id', user.id)
+        .select('pseudo')
+        .first()
       const token = await User.accessTokens.create(user)
 
-      return response.status(200).send({ token })
+      return response.status(200).send({
+        "user": user.serialize({fields: ['id', 'email', 'role', 'image']}),
+        "pseudo": member.pseudo,
+        token
+      })
     } catch (error) {
       return response.status(400).send({ message: 'Email ou mot de passe incorrect' })
     }

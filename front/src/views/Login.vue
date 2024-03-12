@@ -5,7 +5,10 @@
   import { IImage, IFormContainer } from "@models/form.ts";
   import { IAlert } from "@models/alert.ts";
   import { provide, reactive } from "vue";
+  import { useUserStore } from "@stores/user.ts";
+
   const env = import.meta.env;
+  const store = useUserStore();
 
   function generateImgSrc(src: string) {
     return new URL(`../assets/imgs/${src}`, import.meta.url).href;
@@ -125,9 +128,16 @@
     const resultJson = await result.json();
 
     if (result.ok) {
+      const user: any = resultJson.user;
+      store.updateUser(user);
+      localStorage.setItem('user', JSON.stringify(user));
+
       const tokenObject: any = resultJson.token;
       const tokenValue = tokenObject.token;
+      store.updateToken(tokenValue);
       localStorage.setItem('token', tokenValue);
+
+      window.location.href = '/';
     } else {
       displayError(resultJson);
     }

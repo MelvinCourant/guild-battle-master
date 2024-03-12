@@ -321,7 +321,7 @@
           resumeContent[2].text = resultJson.leader;
 
           if(resultJson.members > 1) {
-            resumeContent[3].text = `${resultJson.members} membres (vous)`;
+            resumeContent[3].text = `${resultJson.members} membres`;
           } else if(resultJson.members === 1) {
             resumeContent[3].text = `${resultJson.members} membre (vous)`;
           }
