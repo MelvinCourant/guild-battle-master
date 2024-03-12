@@ -2,7 +2,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import { cuid } from '@adonisjs/core/helpers'
 import app from '@adonisjs/core/services/app'
 import {
-  createRegisterValidator,
+  registerValidator,
   createUserMemberValidator,
   createGuildValidator,
 } from "#validators/register";
@@ -22,8 +22,77 @@ export default class AuthController {
         .where('email', payload.email)
         .first()
 
-      if(user) {
+      async function deletePreviousData(user: any) {
+        // Delete previous data if user exists but not completed registration
+        const userImage: any = await db
+          .from('users')
+          .where('email', payload.email)
+          .select('image')
+          .first()
+
+        if(userImage) {
+          const imageLink: string = `./uploads/${userImage.image}`
+
+          fs.unlinkSync(imageLink)
+        }
+
+        const member: any = await db
+          .from('members')
+          .where('user_id', user.id)
+          .first()
+
+        if(member) {
+          await db
+            .from('members')
+            .where('user_id', user.id)
+            .delete()
+        }
+
+        const guild: any = await db
+          .from('guilds')
+          .where('leader_id', user.id)
+          .first()
+        let members: any = null;
+
+        if(guild) {
+          await db
+            .from('guilds')
+            .where('leader_id', user.id)
+            .delete()
+
+          members = await db
+            .from('members')
+            .where('guild_id', guild.id)
+            .select('id')
+            .first()
+        }
+
+        if(members) {
+          await db
+            .from('members')
+            .where('guild_id', guild.id)
+            .delete()
+        }
+
+        await db
+          .from('users')
+          .where('email', payload.email)
+          .delete()
+      }
+
+      // Check if user exists
+      if(
+        user &&
+        user.pending === 0
+      ) {
+        // User exists and already registered
         return response.status(400).send({ message: 'Un compte existe déjà avec cette adresse email' })
+      } else if(
+        user &&
+        user.pending === 1
+      ) {
+        // User exists but not completed registration
+        await deletePreviousData(user)
       }
 
       const userImage: any = payload.image
@@ -177,10 +246,15 @@ export default class AuthController {
       }
 
       // Verify all information
-      await request.validateUsing(createRegisterValidator)
+      await request.validateUsing(registerValidator)
         .catch(async (error) => {
           throw error
         });
+
+      await db
+        .from('users')
+        .where('email', request.input('email'))
+        .update({ pending: 0 })
 
       return response.status(201).created({ message: 'Registration successful' })
     } else {

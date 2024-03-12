@@ -36,7 +36,7 @@ export const createGuildValidator = vine.compile(
   })
 )
 
-export const createRegisterValidator = vine.compile(
+export const registerValidator = vine.compile(
   vine.object({
     email: vine.string().trim().email(),
     password: vine.string().trim().minLength(8).maxLength(20).confirmed(),

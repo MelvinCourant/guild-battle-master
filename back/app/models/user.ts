@@ -26,6 +26,12 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column()
   declare image: string
 
+  @column()
+  declare pending: boolean
+
+  @column()
+  declare rememberMeToken: string | null
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
