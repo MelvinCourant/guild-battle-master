@@ -19,6 +19,8 @@
 
   const type = ref("");
   const typeClass = ref("");
+  const onDragOver = ref(false);
+  const files: any = ref(null);
 
   if(props.attributes.accept.match(/image/)) {
     type.value = "image";
@@ -36,11 +38,26 @@
     input?.click();
   }
 
-  async function changeFile(event: Event) {
+  function dropFile(event: Event) {
+    event.preventDefault();
+
+    files.value = (event as DragEvent).dataTransfer?.files;
+    changeFile(event, true);
+
+    onDragOver.value = false;
+  }
+
+  async function changeFile(event: Event, drop = false) {
     await nextTick();
 
     const input = event.target as HTMLInputElement;
-    const file = input.files?.[0];
+    let file: File | null = null;
+
+    if(drop) {
+      file = files.value[0];
+    } else {
+      file = input.files?.[0];
+    }
 
     if(type.value === "image") {
       fileName.value = file?.name;
@@ -70,7 +87,12 @@
 <template>
   <div
       class="input-file"
-      :class="typeClass"
+      :class="
+        [
+          typeClass,
+          { 'dragging': onDragOver }
+        ]
+      "
   >
     <div
         class="input-file__drop"
@@ -114,6 +136,9 @@
           :value="attributes.value"
           :accept="attributes.accept"
           @change="changeFile"
+          @dragenter.prevent="onDragOver = true"
+          @dragleave.prevent="onDragOver = false"
+          @drop.prevent="dropFile"
       />
     </label>
 
