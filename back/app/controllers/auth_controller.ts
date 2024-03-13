@@ -279,8 +279,12 @@ export default class AuthController {
       const token = await User.accessTokens.create(user)
 
       return response.status(200).send({
-        "user": user.serialize({fields: ['id', 'email', 'role', 'image']}),
-        "pseudo": member.pseudo,
+        "user": {
+          "id": user.id,
+          "email": user.email,
+          "image": user.image,
+          "pseudo": member.pseudo,
+        },
         token
       })
     } catch (error) {

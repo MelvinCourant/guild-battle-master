@@ -9,6 +9,7 @@
 
 import router from '@adonisjs/core/services/router'
 import AuthController from '#controllers/auth_controller'
+import app from '@adonisjs/core/services/app'
 import { middleware } from '#start/kernel'
 
 router.group(() => {
@@ -23,6 +24,11 @@ router.group(() => {
   })
 }).prefix('api/auth')
 
+router.get('/uploads/:filename', async ({ params, response }) => {
+  const { filename } = params
+  response.download(app.makePath('uploads', filename))
+})
+
 router.get('/', async () => {
-  return { greeting: 'Hello world in JSON' }
+  return { hello: 'world' }
 }).use(middleware.auth())
