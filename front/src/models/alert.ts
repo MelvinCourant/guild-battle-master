@@ -1,4 +1,4 @@
-interface IAlert {
+export interface IAlert {
     display: boolean,
     type?: string,
     message: string

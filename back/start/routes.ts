@@ -22,6 +22,10 @@ router.group(() => {
   router.post('/register/:step', async (data) => {
     return authController.register(data)
   })
+
+  router.post('/logout', async (data) => {
+    return authController.logout(data)
+  })
 }).prefix('api/auth')
 
 router.get('/uploads/:filename', async ({ params, response }) => {

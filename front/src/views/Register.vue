@@ -5,7 +5,10 @@
   import { IStep, IFormContainer } from "@models/form.ts";
   import { IAlert } from "@models/alert.ts";
   import { reactive, ref, provide } from "vue";
+  import { useRouter } from "vue-router";
+
   const env = import.meta.env;
+  const router = useRouter();
 
   function generateImgSrc(src: string) {
     return new URL(`../assets/imgs/${src}`, import.meta.url).href;
@@ -333,7 +336,7 @@
       }
     } else {
       if (result.ok) {
-        window.location.href = '/login';
+        await router.push('/login');
       } else {
         displayError(null, resultJson);
       }

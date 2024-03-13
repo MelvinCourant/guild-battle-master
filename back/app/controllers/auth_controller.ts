@@ -276,19 +276,33 @@ export default class AuthController {
         .where('user_id', user.id)
         .select('pseudo')
         .first()
+      const guild: any = await db
+        .from('guilds')
+        .where('leader_id', user.id)
+        .select('id')
+        .first()
       const token = await User.accessTokens.create(user)
 
       return response.status(200).send({
         "user": {
           "id": user.id,
           "email": user.email,
-          "image": user.image,
           "pseudo": member.pseudo,
+          "image": user.image,
+          "guild_id": guild.id,
         },
         token
       })
     } catch (error) {
       return response.status(400).send({ message: 'Email ou mot de passe incorrect' })
     }
+  }
+
+  public async logout({ auth, response }: HttpContext) {
+    const user = await auth.authenticate()
+    const token = user.currentAccessToken
+    await User.accessTokens.delete(user, token.identifier)
+
+    return response.status(200).send({ message: 'User logged out' })
   }
 }

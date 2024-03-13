@@ -6,9 +6,11 @@
   import { IAlert } from "@models/alert.ts";
   import { provide, reactive } from "vue";
   import { useUserStore } from "@stores/user.ts";
+  import { useRouter } from "vue-router";
 
   const env = import.meta.env;
-  const store = useUserStore();
+  const userStore = useUserStore();
+  const router = useRouter();
 
   function generateImgSrc(src: string) {
     return new URL(`../assets/imgs/${src}`, import.meta.url).href;
@@ -129,15 +131,13 @@
 
     if (result.ok) {
       const user: any = resultJson.user;
-      store.updateUser(user);
-      localStorage.setItem('user', JSON.stringify(user));
+      userStore.updateUser(JSON.stringify(user));
 
       const tokenObject: any = resultJson.token;
       const tokenValue = tokenObject.token;
-      store.updateToken(tokenValue);
-      localStorage.setItem('token', tokenValue);
+      userStore.updateToken(tokenValue);
 
-      window.location.href = '/';
+      await router.push('/');
     } else {
       displayError(resultJson);
     }
