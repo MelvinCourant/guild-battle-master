@@ -148,6 +148,7 @@
 
 <template>
   <main class="login">
+    <h1 class="login__title">Connexion</h1>
     <FormPage
         :image="image"
         @sendValue="updateValue"

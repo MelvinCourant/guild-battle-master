@@ -381,6 +381,7 @@
 
 <template>
   <main class="register">
+    <h1 class="register__title">Inscription</h1>
     <FormPage
         :steps="steps"
         :currentStep="currentStep"

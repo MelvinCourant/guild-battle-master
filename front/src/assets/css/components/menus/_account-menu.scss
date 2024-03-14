@@ -1,5 +1,11 @@
+@use "../../partials/mixins";
+
 .account-menu {
   position: relative;
+
+  &__button {
+    @include mixins.resetButton(none, transparent);
+  }
 
   &__avatar {
     width: 40px;

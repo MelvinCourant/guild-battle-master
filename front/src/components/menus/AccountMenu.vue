@@ -14,13 +14,17 @@
 
 <template>
   <nav class="account-menu">
-    <img
-        class="account-menu__avatar"
-        :src="userImage"
-        alt="User image"
+    <button
+        class="account-menu__button"
         title="Ouvrir le menu de compte"
         @click.stop="submenuIsOpen = !submenuIsOpen"
     >
+      <img
+          class="account-menu__avatar"
+          :src="userImage"
+          alt="User image"
+      >
+    </button>
     <Submenu
         :isOpened="submenuIsOpen"
         @closeSubmenu="submenuIsOpen = false"

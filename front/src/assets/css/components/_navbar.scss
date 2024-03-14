@@ -75,6 +75,10 @@
     gap: 30px;
   }
 
+  &__notifications-button {
+    @include mixins.resetButton(none, transparent);
+  }
+
   & + main {
     margin-top: 70px;
   }
