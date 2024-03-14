@@ -20,7 +20,7 @@
   defineEmits(["sendValue", "nextStep"]);
 </script>
 <template>
-  <div class="form-page">
+  <section class="form-page">
     <div class="form-page__image" v-if="image">
       <img :src="image.src" :alt="image.alt" />
     </div>
@@ -39,5 +39,5 @@
           @sendValue="(inputName: string, value: string) => $emit('sendValue', inputName, value)"
       />
     </div>
-  </div>
+  </section>
 </template>

@@ -137,7 +137,7 @@
       const tokenValue = tokenObject.token;
       userStore.updateToken(tokenValue);
 
-      await router.push('/');
+      await router.push('/guild');
     } else {
       displayError(resultJson);
     }

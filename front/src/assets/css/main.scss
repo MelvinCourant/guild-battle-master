@@ -54,7 +54,7 @@
   font-style: italic;
   font-weight: 400;
   font-display: swap;
-  src: url('../fonts/Marianne/Marianne-Regular-Italic.ttf') format('ttf');
+  src: url('../fonts/Marianne/Marianne-RegularItalic.ttf') format('ttf');
 }
 
 @font-face {
@@ -155,15 +155,8 @@
 }
 
 html {
-  min-height: 100vh;
-
   body {
-    min-height: 100vh;
     background-color: var(--background);
-
-    #app {
-      min-height: 100vh;
-    }
 
     video,
     img,

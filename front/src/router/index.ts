@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Home from '@views/Home.vue';
+import Guild from '@views/Guild.vue';
 import Map from '@views/Map.vue';
 import Login from "@views/Login.vue";
 import Register from "@views/Register.vue";
@@ -10,8 +10,8 @@ const router = createRouter(
     history: createWebHistory(),
     routes: [
         {
-            path: '/',
-            component: Home,
+            path: '/guild',
+            component: Guild,
         },
         {
             path: '/map',
