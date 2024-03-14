@@ -3,8 +3,11 @@
   import '@css/components/_navbar.scss';
   import { useRoute } from "vue-router";
   import logo from '@imgs/logo.svg';
+  import type { ILink } from "@models/navbar.ts";
+  import AccountMenu from "@components/menus/AccountMenu.vue";
+  import { provide } from "vue";
 
-  const links = [
+  const links: Array<ILink> = [
     {
       name: 'Guilde',
       path: '/guild',
@@ -24,7 +27,30 @@
   const route = useRoute();
   const userStore = useUserStore();
   const user = userStore.user;
+  const submenu = [
+    {
+      icon: 'settings',
+      text: 'Paramètres',
+      path: '/settings'
+    },
+    {
+      icon: 'upload',
+      text: 'Importer un json',
+      path: '/upload-json'
+    },
+    {
+      icon: 'information',
+      text: 'À propos',
+      path: '/about'
+    },
+    {
+      icon: 'logout',
+      text: 'Se déconnecter',
+      path: '/logout'
+    }
+  ];
 
+  provide('submenu', submenu);
 </script>
 
 <template>
@@ -68,11 +94,7 @@
               </svg>
             </li>
             <li>
-              <img
-                  class="navbar__user-image"
-                  :src="user.image"
-                  alt="User image"
-              >
+              <AccountMenu :userImage="user.image" />
             </li>
           </ul>
         </li>

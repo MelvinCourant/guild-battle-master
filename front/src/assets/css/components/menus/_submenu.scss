@@ -1,0 +1,39 @@
+@use '../../partials/functions';
+
+.submenu {
+  position: absolute;
+  top: 48px;
+  right: 0;
+  width: 240px;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--input-text-radius);
+  background: var(--system);
+  padding: 4px 0;
+  box-shadow: var(--shadow);
+
+  &__link {
+    display: flex;
+    align-items: center;
+    height: 42px;
+    padding: 0 36px 0 20px;
+
+    &:hover,
+    &:focus {
+      background: var(--system-lightened);
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &__icon {
+    width: 32px;
+  }
+
+  &__text {
+    font-size: functions.rem(14);
+    line-height: 1;
+  }
+}

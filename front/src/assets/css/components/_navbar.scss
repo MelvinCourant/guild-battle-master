@@ -1,5 +1,5 @@
-@use "../partials/mixins" as mixins;
-@use "../partials/functions" as functions;
+@use "../partials/mixins";
+@use "../partials/functions";
 
 .navbar {
   position: fixed;
@@ -73,13 +73,6 @@
 
   &__right {
     gap: 30px;
-  }
-
-  &__user-image {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
   }
 
   & + main {
