@@ -124,13 +124,13 @@
     >
       <input
           type="button"
-          class="input-file__label__browse button"
+          class="input-file__browse button"
           :class="attributes.style"
           :value="label"
           @click.prevent="triggerInputFile"
       />
       <input
-          class="input-file__label__input"
+          class="input-file__input"
           :name="attributes.name"
           :type="attributes.type"
           :value="attributes.value"
@@ -154,7 +154,7 @@
           :alt="image.alt"
       />
       <input
-          class="input-file__label__input"
+          class="input-file__input"
           :name="attributes.name"
           :type="attributes.type"
           :value="attributes.value"

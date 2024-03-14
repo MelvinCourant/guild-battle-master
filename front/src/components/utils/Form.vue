@@ -140,7 +140,7 @@
           :style="formsTransform[index]"
           @submit.prevent="$emit('nextStep')"
       >
-        <div class="form__fields__inputs">
+        <div class="form__input">
           <template
               v-for="(field, index) in form.fields"
               :key="index"
@@ -155,7 +155,7 @@
             />
           </template>
         </div>
-        <div class="form__fields__footer">
+        <div class="form__footer">
           <Field
               :label="form.fields[form.fields.length - 1].label"
               :error="form.fields[form.fields.length - 1].error"
@@ -165,7 +165,7 @@
               @click="$emit('nextStep')"
           />
           <p
-              class="form__fields__footer__text"
+              class="form__text"
               v-if="formContainer.footerText"
           >
             {{ formContainer.footerText.text }}
@@ -178,13 +178,13 @@
         </div>
       </form>
       <div
-          class="form__resume"
+          class="resume"
           :style="formsTransform[resume.id - 1]"
           :data-active="currentStep >= resume.id"
           v-if="resume"
       >
         <div
-            class="form__resume__content"
+            class="resume__content"
         >
           <template
               v-for="(line, index) in resume.content"
@@ -216,7 +216,7 @@
             </div>
           </template>
         </div>
-        <div class="form__resume__footer">
+        <div class="resume__footer">
           <Field
               :loading="resume.submit.loading"
               :attributes="resume.submit.attributes"

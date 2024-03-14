@@ -24,17 +24,17 @@
       :data-active="currentStep >= step.level"
     >
       <div
-          class="stepper__step__line"
+          class="stepper__line"
           v-if="index !== 0"
       >
       </div>
-      <div class="stepper__step__circle">
-        <div class="stepper__step__circle__number">
+      <div class="stepper__circle">
+        <div class="stepper__number">
           <p>
             {{step.level}}
           </p>
         </div>
-        <p class="stepper__step__circle__label">{{step.label}}</p>
+        <p class="stepper__label">{{step.label}}</p>
       </div>
     </li>
   </ul>
