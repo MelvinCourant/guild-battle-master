@@ -1,3 +1,5 @@
+@use "../../../partials/functions" as functions;
+
 .input-file {
   &--image {
     position: relative;
@@ -75,7 +77,7 @@
 
         span {
           color: var(--text-grey);
-          font-size: 1.25rem; // 20px
+          font-size: functions.rem(20);
           line-height: normal;
           text-align: center;
         }

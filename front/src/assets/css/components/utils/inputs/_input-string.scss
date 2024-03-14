@@ -1,3 +1,5 @@
+@use "../../../partials/functions" as functions;
+
 .input-string {
   width: 250px;
 
@@ -20,7 +22,7 @@
     left: 0;
     top: 0;
     transform: translateY(calc(-100% - 4px));
-    font-size: 0.75rem; // 12px
+    font-size: functions.rem(12);
     line-height: normal;
     margin-bottom: 4px;
   }
@@ -32,7 +34,7 @@
     border-radius: var(--input-text-radius);
     background: var(--background);
     border: var(--border);
-    font-size: 0.875rem; // 14px
+    font-size: functions.rem(14);
     line-height: 1;
     font-weight: 500;
 

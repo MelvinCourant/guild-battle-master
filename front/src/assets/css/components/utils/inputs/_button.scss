@@ -1,6 +1,8 @@
+@use "../../../partials/functions" as functions;
+
 .button {
   padding: 5.5px 14px 8.5px 14px;
-  font-size: 0.875rem; // 14px
+  font-size: functions.rem(14);
   line-height: 1.42857;
   font-weight: 500;
   border-radius: var(--input-text-radius);

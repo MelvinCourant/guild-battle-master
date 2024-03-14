@@ -1,3 +1,5 @@
+@use "../../partials/functions" as functions;
+
 .alert {
   position: fixed;
   z-index: 9999;
@@ -20,7 +22,7 @@
   }
 
   &__message {
-    font-size: 1rem; // 16px
+    font-size: functions.rem(16);
     line-height: 1.5;
   }
 
