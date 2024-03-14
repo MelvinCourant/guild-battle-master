@@ -1,0 +1,46 @@
+$colors: (
+  // global colors
+  "primary": #DE7800,
+  "primary-darkened": #995300,
+  "background": #151619,
+  "system": #22252A,
+  "system-lightened": #2E3138,
+  "border-background": #5B606E,
+  "white": #FFFFFF,
+  "text-grey": #737A8C,
+  "danger": #F85149,
+  "success": #00DE4A,
+
+  // team colors
+  "blue-team": #094CF6,
+  "red-team": #F61509,
+  "yellow-team": #F6F609,
+
+  // attributes colors
+  "wind": #DE9B00,
+  "wind-transparent": rgba(222, 155, 0, 0.2),
+  "fire": #DE2500,
+  "fire-transparent": rgba(222, 37, 0, 0.2),
+  "water": #0081DE,
+  "water-transparent": rgba(0, 129, 222, 0.2),
+  "dark": #7C00DE,
+  "dark-transparent": rgba(124, 0, 222, 0.2),
+  "light-transparent": rgba(255, 255, 255, 0.2),
+  "dark-light": linear-gradient(90deg, var(dark) 0%, var(white) 100%),
+  "dark-light-transparent": linear-gradient(90deg, var(dark-transparent) 0%, var(light-transparent) 100%)
+);
+
+:root {
+  @each $name, $value in $colors {
+    --#{$name}: #{$value};
+  }
+
+  // borders
+  --border: 1px solid var(--border-background);
+
+  // borders radius
+  --input-text-radius: 6px;
+
+  // shadows
+  --shadow: 0 2px 4px 2px rgba(0, 0, 0, 0.25);
+}

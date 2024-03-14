@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import "@css/components/utils/inputs/input-string.scss";
+  import "@css/components/utils/inputs/_input-string.scss";
   import { IAttributes } from "@models/form.ts";
   import { PropType, ref } from "vue";
 

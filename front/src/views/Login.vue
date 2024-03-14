@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import '@css/views/login-register.scss';
+  import '@css/views/_login-register.scss';
   import FormPage from "@components/FormPage.vue";
   import Alert from "@components/utils/Alert.vue";
   import { IImage, IFormContainer } from "@models/form.ts";

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import "@css/components/utils/inputs/input-file.scss";
+  import "@css/components/utils/inputs/_input-file.scss";
   import { IImage, IAttributes } from "@models/form.js";
   import {PropType, ref, nextTick} from "vue";
 

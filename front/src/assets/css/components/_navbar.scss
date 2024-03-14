@@ -1,3 +1,6 @@
+@use "../partials/mixins" as mixins;
+@use "../partials/functions" as functions;
+
 .navbar {
   position: fixed;
   top: 0;
@@ -37,11 +40,10 @@
   }
 
   &__gbm {
+    @include mixins.font(title);
     color: var(--primary);
     text-align: center;
-    font-family: 'Mona Sans', sans-serif;
-    font-size: 1.25rem; /* 20px */
-    font-weight: 700;
+    font-size: functions.rem(24);
     line-height: 0.85;
   }
 
@@ -54,7 +56,7 @@
   }
 
   &__link {
-    font-size: 1rem; // 16px
+    font-size: functions.rem(16);
     font-weight: 500;
     line-height: 1.125;
     text-align: center;

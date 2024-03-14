@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import "@css/components/form-page.scss";
+  import "@css/components/_form-page.scss";
   import Form from "@components/utils/Form.vue";
   import Stepper from "@components/utils/Stepper.vue";
   import type { PropType } from "vue";

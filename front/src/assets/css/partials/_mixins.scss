@@ -1,0 +1,11 @@
+@use "fonts" as fonts;
+
+@mixin font($text-type) {
+  @if($text-type == 'title') {
+    font-family: fonts.$mona-sans;
+    font-weight: 700;
+    font-stretch: 125%;
+  } @else if($text-type == 'text') {
+    font-family: fonts.$mona-sans;
+  }
+}

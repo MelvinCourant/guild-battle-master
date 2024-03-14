@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import '@css/components/utils/inputs/button.scss';
+  import '@css/components/utils/inputs/_button.scss';
   import { IAttributes } from "@models/form.ts";
   import { PropType } from "vue";
 

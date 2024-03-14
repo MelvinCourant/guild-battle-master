@@ -1,7 +1,6 @@
 <script setup lang="ts">
-  import { watch } from 'vue';
   import { useUserStore } from "@stores/user.ts";
-  import '@css/components/navbar.scss';
+  import '@css/components/_navbar.scss';
   import { useRoute } from "vue-router";
   import logo from '@imgs/logo.svg';
 
@@ -23,11 +22,6 @@
     }
   ];
   const route = useRoute();
-
-  watch(() => route.path, () => {
-    console.log(route.path);
-  });
-
   const userStore = useUserStore();
   const user = userStore.user;
 

@@ -1,0 +1,110 @@
+// Mona-Sans Wide
+@font-face {
+  font-family: 'Mona Sans';
+  src:
+    url('../../fonts/Mona-Sans/Mona-Sans.woff2') format('woff2 supports variations'),
+    url('../../fonts/Mona-Sans/Mona-Sans.woff2') format('woff2-variations');
+  font-weight: 200 900;
+  font-stretch: 75% 125%;
+}
+
+$mona-sans: 'Mona Sans', sans-serif;
+
+// Marianne
+@font-face {
+  font-family: 'Marianne';
+  font-style: normal;
+  font-weight: 250;
+  font-display: swap;
+  src: url('../../fonts/Marianne/Marianne-Thin.ttf') format('ttf');
+}
+
+@font-face {
+  font-family: 'Marianne';
+  font-style: italic;
+  font-weight: 250;
+  font-display: swap;
+  src: url('../../fonts/Marianne/Marianne-ThinItalic.ttf') format('ttf');
+}
+
+@font-face {
+  font-family: 'Marianne';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('../../fonts/Marianne/Marianne-Light.ttf') format('ttf');
+}
+
+@font-face {
+  font-family: 'Marianne';
+  font-style: italic;
+  font-weight: 300;
+  font-display: swap;
+  src: url('../../fonts/Marianne/Marianne-LightItalic.ttf') format('ttf');
+}
+
+@font-face {
+  font-family: 'Marianne';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../../fonts/Marianne/Marianne-Regular.ttf') format('ttf');
+}
+
+@font-face {
+  font-family: 'Marianne';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../../fonts/Marianne/Marianne-RegularItalic.ttf') format('ttf');
+}
+
+@font-face {
+  font-family: 'Marianne';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../../fonts/Marianne/Marianne-Medium.ttf') format('ttf');
+}
+
+@font-face {
+  font-family: 'Marianne';
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../../fonts/Marianne/Marianne-MediumItalic.ttf') format('ttf');
+}
+
+@font-face {
+  font-family: 'Marianne';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../../fonts/Marianne/Marianne-Bold.ttf') format('ttf');
+}
+
+@font-face {
+  font-family: 'Marianne';
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../../fonts/Marianne/Marianne-BoldItalic.ttf') format('ttf');
+}
+
+@font-face {
+  font-family: 'Marianne';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('../../fonts/Marianne/Marianne-ExtraBold.ttf') format('ttf');
+}
+
+@font-face {
+  font-family: 'Marianne';
+  font-style: italic;
+  font-weight: 800;
+  font-display: swap;
+  src: url('../../fonts/Marianne/Marianne-ExtraBoldItalic.ttf') format('ttf');
+}
+
+$marianne: 'Marianne', sans-serif;

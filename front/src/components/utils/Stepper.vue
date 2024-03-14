@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import "@css/components/utils/stepper.scss";
+  import "@css/components/utils/_stepper.scss";
   import type { ISteps } from "@models/form.ts";
   import type { PropType } from "vue";
 

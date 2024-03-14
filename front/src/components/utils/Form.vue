@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import "@css/components/utils/form.scss";
+  import "@css/components/utils/_form.scss";
   import Field from "@components/utils/Field.vue";
   import type { IFormContainer, IResume } from "@models/form.ts";
   import gsap from "gsap";

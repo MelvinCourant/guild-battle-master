@@ -1,0 +1,44 @@
+@use 'fonts' as fonts;
+@use "variables";
+@use "mixins" as mixins;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: var(--white);
+  font-family: fonts.$marianne;
+}
+
+html {
+  body {
+    background-color: var(--background);
+
+    video,
+    img,
+    svg,
+    object {
+      max-width: 100%;
+      height: auto;
+      vertical-align: middle;
+    }
+
+    li {
+      list-style: none;
+      text-decoration: none;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      @include mixins.font(title);
+    }
+  }
+}

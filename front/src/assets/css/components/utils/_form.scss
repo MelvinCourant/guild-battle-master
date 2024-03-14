@@ -1,3 +1,6 @@
+@use "../../partials/functions" as functions;
+@use "../../partials/mixins" as mixins;
+
 .form-container {
   display: flex;
   flex-direction: column;
@@ -17,11 +20,9 @@
     position: relative;
 
     &__title {
+      @include mixins.font(title);
       color: var(--primary);
-      font-family: 'Mona Sans', sans-serif;
-      font-size: 1.5rem; // 24px
-      font-style: normal;
-      font-weight: 700;
+      font-size: functions.rem(24);
       line-height: normal;
       margin-bottom: 10px;
     }
@@ -60,13 +61,13 @@
         gap: 8px;
 
         &__text {
-          font-size: 0.875rem; // 14px
+          font-size: functions.rem(14);
           line-height: 1.4286;
           font-weight: 500;
           text-align: right;
 
           @media screen and (max-width: 767px) {
-            font-size: 0.75rem; // 12px
+            font-size: functions.rem(12);
           }
 
           a {
@@ -109,7 +110,7 @@
           &--title {
             .line {
               &__text {
-                font-size: 1.5rem; // 24px
+                font-size: functions.rem(24);
                 font-weight: 700;
                 line-height: 0.83333;
                 text-align: center;
@@ -130,7 +131,7 @@
               }
 
               &__text {
-                font-size: 1.25rem; // 20px
+                font-size: functions.rem(20);
                 font-weight: 700;
                 line-height: 0.9;
               }
@@ -147,7 +148,7 @@
 
   .password-forgotten {
     color: var(--primary);
-    font-size: 0.875rem; // 14px
+    font-size: functions.rem(14);
     line-height: normal;
     font-weight: 700;
     text-align: center;
