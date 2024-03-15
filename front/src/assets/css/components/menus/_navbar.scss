@@ -1,5 +1,5 @@
-@use "../partials/mixins";
-@use "../partials/functions";
+@use "../../partials/mixins";
+@use "../../partials/functions";
 
 .navbar {
   position: fixed;
@@ -10,6 +10,11 @@
   background: var(--background);
   border-bottom: 1px solid var(--border-background);
   padding: 0 50px;
+
+  @media screen and (max-width: 768px) {
+    height: 55px;
+    padding: 0 30px;
+  }
 
   &__nav,
   &__list {
@@ -37,6 +42,10 @@
 
   &__logo {
     height: 25px;
+
+    @media screen and (max-width: 768px) {
+      height: 22px;
+    }
   }
 
   &__gbm {
@@ -45,6 +54,10 @@
     text-align: center;
     font-size: functions.rem(24);
     line-height: 0.85;
+
+    @media screen and (max-width: 768px) {
+      display: none;
+    }
   }
 
   &__center {

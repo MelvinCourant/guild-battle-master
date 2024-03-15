@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import Navbar from "@components/Navbar.vue";
+  import Navbar from "@components/menus/Navbar.vue";
   import { ref, watch } from "vue";
   import { useRoute } from "vue-router";
 
