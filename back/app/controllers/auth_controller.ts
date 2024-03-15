@@ -144,6 +144,7 @@ export default class AuthController {
 
       await Member.create({
         pseudo: request.input('pseudo'),
+        grade: 'leader',
         user_id: user.id,
         guild_id: guild.id,
       })
@@ -274,7 +275,7 @@ export default class AuthController {
       const member: any = await db
         .from('members')
         .where('user_id', user.id)
-        .select('pseudo')
+        .select('pseudo', 'grade')
         .first()
       const guild: any = await db
         .from('guilds')
@@ -288,6 +289,7 @@ export default class AuthController {
           "id": user.id,
           "email": user.email,
           "pseudo": member.pseudo,
+          "grade": member.grade,
           "image": user.image,
           "guild_id": guild.id,
         },

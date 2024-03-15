@@ -19,6 +19,7 @@ export const useUserStore = defineStore("user", () => {
     let id: any = null;
     let email: string = "";
     let pseudo: string = "";
+    let grade: string = "";
     let imageName: string = "";
     let image: string = assetImgSrc("placeholder.jpg");
     let guild_id: any = null;
@@ -27,6 +28,7 @@ export const useUserStore = defineStore("user", () => {
         id = localStorageUser.id;
         email = localStorageUser.email;
         pseudo = localStorageUser.pseudo;
+        grade = localStorageUser.grade;
         guild_id = localStorageUser.guild_id;
 
         if(localStorageUser.image) {
@@ -39,6 +41,7 @@ export const useUserStore = defineStore("user", () => {
         id: id,
         email: email,
         pseudo: pseudo,
+        grade: grade,
         image: image,
         guild_id: guild_id,
     })
@@ -72,6 +75,7 @@ export const useUserStore = defineStore("user", () => {
             id: null,
             email: "",
             pseudo: "",
+            grade: "",
             image: assetImgSrc("placeholder.jpg"),
             guild_id: null,
         };

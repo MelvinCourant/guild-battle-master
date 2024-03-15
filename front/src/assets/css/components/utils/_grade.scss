@@ -1,0 +1,19 @@
+.grade {
+  &--leader {
+    path {
+      fill: var(--primary);
+    }
+  }
+
+  &--vice-leader {
+    path {
+      fill: var(--text-grey);
+    }
+  }
+
+  &--senior {
+    path {
+      fill: var(--primary-darkened);
+    }
+  }
+}

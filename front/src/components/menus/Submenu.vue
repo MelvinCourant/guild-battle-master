@@ -34,29 +34,28 @@
 </script>
 
 <template>
-  <ul
-      class="submenu"
-      v-show="isOpened"
-  >
-    <li
-        v-for="(link, index) in submenu"
-        :key="index"
-    >
-      <router-link
-          :to="link.path"
-          class="submenu__link"
-          @click="$emit('closeSubmenu')"
+  <nav v-show="isOpened">
+    <ul class="submenu">
+      <li
+          v-for="(link, index) in submenu"
+          :key="index"
       >
-        <div class="submenu__icon">
-          <img
-              :src="generateIconPath(link.icon)"
-              alt="link.icon"
-          />
-        </div>
-        <span class="submenu__text">
-          {{ link.text }}
-        </span>
-      </router-link>
-    </li>
-  </ul>
+        <router-link
+            :to="link.path"
+            class="submenu__link"
+            @click="$emit('closeSubmenu')"
+        >
+          <div class="submenu__icon">
+            <img
+                :src="generateIconPath(link.icon)"
+                alt="link.icon"
+            />
+          </div>
+          <span class="submenu__text">
+            {{ link.text }}
+          </span>
+        </router-link>
+      </li>
+    </ul>
+  </nav>
 </template>

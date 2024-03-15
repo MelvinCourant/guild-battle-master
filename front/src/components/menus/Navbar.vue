@@ -5,7 +5,7 @@
   import logo from '@imgs/logo.svg';
   import type { ILink } from "@models/navbar.js";
   import AccountMenu from "@components/menus/AccountMenu.vue";
-  import NavbarMobile from "@components/menus/NavbarMobile.vue";
+  import NavbarMobile from "@components/menus/mobile/NavbarMobile.vue";
   import { provide, ref } from "vue";
 
   const desktopLinks: Array<ILink> = [
@@ -50,6 +50,11 @@
   const route = useRoute();
   const userStore = useUserStore();
   const user = userStore.user;
+  const userProfile = {
+    pseudo: user.pseudo,
+    image: user.image,
+    grade: user.grade
+  }
   const submenu = [
     {
       icon: 'settings',
@@ -75,6 +80,8 @@
   const onMobile = ref(false);
 
   provide('submenu', submenu);
+  provide('userProfile', userProfile);
+  provide('onMobile', onMobile);
 
   function handleMobile() {
     if(
