@@ -12,6 +12,19 @@
 
   const submenuIsOpen = ref(false);
   const onMobile: boolean | undefined = inject('onMobile');
+
+  function closeSubmenuOnResize() {
+    if(
+        window.innerWidth <= 768 &&
+        submenuIsOpen.value ||
+        window.innerWidth > 768 &&
+        submenuIsOpen.value
+    ) {
+      submenuIsOpen.value = false;
+    }
+  }
+
+  window.addEventListener('resize', closeSubmenuOnResize);
 </script>
 
 <template>
