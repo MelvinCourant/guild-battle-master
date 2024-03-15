@@ -108,7 +108,10 @@
           </router-link>
           <router-link to="/" class="navbar__gbm">Guild battle Master</router-link>
         </li>
-        <li v-show="!onMobile">
+        <li
+            v-show="!onMobile"
+            :aria-hidden="onMobile"
+        >
           <ul class="navbar__center">
             <li
                 v-for="desktopLink in desktopLinks"
@@ -124,12 +127,18 @@
             </li>
           </ul>
         </li>
-        <li v-show="onMobile">
+        <li
+            v-show="onMobile"
+            :aria-hidden="!onMobile"
+        >
           <NavbarMobile :mobileLinks="mobileLinks" />
         </li>
         <li>
           <ul class="navbar__right">
-            <li v-show="!onMobile">
+            <li
+                v-show="!onMobile"
+                :aria-hidden="onMobile"
+            >
               <button class="navbar__notifications-button">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="18" viewBox="0 0 16 18" fill="none">
                   <path fill-rule="evenodd" clip-rule="evenodd" d="M13.4998 7.85417V12.4375L15.3332 14.2708V15.1875H0.666504V14.2708L2.49984 12.4375V7.85417C2.49984 5.03083 3.994 2.68417 6.62484 2.06083V1.4375C6.62484 0.676667 7.239 0.0625 7.99984 0.0625C8.76067 0.0625 9.37484 0.676667 9.37484 1.4375V2.06083C11.9965 2.68417 13.4998 5.04 13.4998 7.85417ZM9.83317 16.1042C9.83317 16.5904 9.64002 17.0567 9.2962 17.4005C8.95238 17.7443 8.48607 17.9375 7.99984 17.9375C7.51361 17.9375 7.04729 17.7443 6.70348 17.4005C6.35966 17.0567 6.1665 16.5904 6.1665 16.1042H9.83317Z" fill="white"/>
