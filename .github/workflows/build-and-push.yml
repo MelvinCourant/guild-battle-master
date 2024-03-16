@@ -127,6 +127,7 @@ jobs:
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
+          debug: true
           script: |
             scp -r apps/back/build ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }}:/back
             scp -r apps/front/dist ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }}:./
