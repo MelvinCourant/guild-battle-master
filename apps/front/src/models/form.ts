@@ -38,13 +38,13 @@ interface IField {
     label?: string;
     error?: string;
     image?: IImage;
-    loading?: boolean;
+    loading?: string;
     attributes: IAttributes;
 }
 
 interface IAttributes {
     type: string;
-    name: string;
+    name?: string;
     placeholder?: string;
     value?: string;
     checked?: boolean;

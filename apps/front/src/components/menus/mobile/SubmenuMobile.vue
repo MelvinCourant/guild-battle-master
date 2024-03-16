@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import { inject, watch } from "vue";
-  import { ISubmenuLink } from "@models/navbar.ts";
-  import '@css/components/menus/mobile/_submenu-mobile.scss'
-  import Grade from "@components/utils/Grade.vue";
+  import { inject } from "vue";
+  import { ISubmenuLink } from "../../../models/navbar.ts";
+  import '../../../assets/css/components/menus/mobile/_submenu-mobile.scss'
+  import Grade from "../../../components/utils/Grade.vue";
 
   defineProps({
     isOpened: {
@@ -50,7 +50,10 @@
               class="submenu-mobile__line"
           >
             <li
-                v-if="index !== submenu.length - 1"
+                v-if="
+                  submenu &&
+                  index !== submenu.length - 1
+                "
             >
               <router-link
                   :to="link.path"
@@ -70,7 +73,10 @@
             </li>
           </template>
         </ul>
-        <div class="submenu-mobile__footer">
+        <div
+            class="submenu-mobile__footer"
+            v-if="submenu"
+        >
           <router-link
               :to="submenu[submenu.length - 1].path"
               @click="$emit('closeSubmenu')"

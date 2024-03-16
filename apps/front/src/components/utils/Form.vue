@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import "@css/components/utils/_form.scss";
-  import Field from "@components/utils/Field.vue";
-  import type { IFormContainer, IResume } from "@models/form.ts";
+  import '../../assets/css/components/utils/_form.scss';
+  import Field from "../../components/utils/Field.vue";
+  import type { IFormContainer, IResume } from "../../models/form.ts";
   import gsap from "gsap";
   import { inject, ref, onMounted, watch, nextTick } from "vue";
 
@@ -17,7 +17,7 @@
   const formContainer = inject('formContainer') as IFormContainer;
   const forms: any = formContainer.forms;
   const formsTransform: any = ref([]);
-  const resume: IResume = formContainer.resume;
+  const resume: IResume | undefined = formContainer.resume;
   const formStyle = ref<string>('');
   let formLength: number;
 
@@ -101,8 +101,8 @@
       });
 
       setTimeout(() => {
-        const firstInput = newFieldActive.querySelector('input:first-of-type');
-        firstInput?.focus();
+        const firstInput = newFieldActive.querySelector('input:first-of-type') as HTMLInputElement;
+        firstInput.focus();
       }, 500);
     }
   }
@@ -187,7 +187,7 @@
             class="resume__content"
         >
           <template
-              v-for="(line, index) in resume.content"
+              v-for="line in resume.content"
               :key="index"
           >
             <div

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import "@css/components/_form-page.scss";
-  import Form from "@components/utils/Form.vue";
-  import Stepper from "@components/utils/Stepper.vue";
+  import "../assets/css/components/_form-page.scss";
+  import Form from "../components/utils/Form.vue";
+  import Stepper from "../components/utils/Stepper.vue";
   import type { PropType } from "vue";
-  import type { IStep, IImage } from "@models/form.ts";
+  import type { IStep, IImage } from "../models/form.ts";
 
   defineProps({
     steps: {

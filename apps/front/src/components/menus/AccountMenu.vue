@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import '@css/components/menus/_account-menu.scss';
-  import Submenu from "@components/menus/Submenu.vue";
-  import SubmenuMobile from "@components/menus/mobile/SubmenuMobile.vue";
+  import '../../assets/css/components/menus/_account-menu.scss';
+  import Submenu from "../../components/menus/Submenu.vue";
+  import SubmenuMobile from "../../components/menus/mobile/SubmenuMobile.vue";
   import { ref, inject } from "vue";
 
   defineProps({
