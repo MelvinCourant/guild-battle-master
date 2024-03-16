@@ -6,7 +6,9 @@ settings:
 
 importers:
 
-  back:
+  .: {}
+
+  apps/back:
     dependencies:
       '@adonisjs/auth':
         specifier: ^9.1.1
@@ -82,7 +84,7 @@ importers:
         specifier: ^5.3.3
         version: 5.4.2
 
-  front:
+  apps/front:
     dependencies:
       gsap:
         specifier: ^3.12.5
