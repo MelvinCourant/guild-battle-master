@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import "@css/views/_login-register.scss";
-  import FormPage from "@components/FormPage.vue";
-  import Alert from "@components/utils/Alert.vue";
-  import { IStep, IFormContainer } from "@models/form.ts";
-  import { IAlert } from "@models/alert.ts";
+  import "../assets/css/views/_login-register.scss";
+  import FormPage from "../components/FormPage.vue";
+  import Alert from "../components/utils/Alert.vue";
+  import { IStep, IFormContainer } from "../models/form.ts";
+  import { IAlert } from "../models/alert.ts";
   import { reactive, ref, provide } from "vue";
   import { useRouter } from "vue-router";
 
@@ -190,7 +190,7 @@
   const formStepTwo = registerForm.forms[1];
   const formFieldsStepTwo = formStepTwo.fields;
   const resume = registerForm.resume;
-  const resumeContent = resume.content;
+  const resumeContent = resume?.content;
   const canIncrement = ref(false);
 
   provide('formContainer', registerForm);
@@ -313,6 +313,7 @@
           if(
               image
               && image.value
+              && resumeContent
           ) {
             resumeContent[0].image = {
               src: URL.createObjectURL(image.value),
@@ -320,13 +321,15 @@
             };
           }
 
-          resumeContent[1].text = formValues.guildName;
-          resumeContent[2].text = resultJson.leader;
+          if (resumeContent) {
+            resumeContent[1].text = formValues.guildName;
+            resumeContent[2].text = resultJson.leader;
 
-          if(resultJson.members > 1) {
-            resumeContent[3].text = `${resultJson.members} membres`;
-          } else if(resultJson.members === 1) {
-            resumeContent[3].text = `${resultJson.members} membre (vous)`;
+            if(resultJson.members > 1) {
+              resumeContent[3].text = `${resultJson.members} membres`;
+            } else if(resultJson.members === 1) {
+              resumeContent[3].text = `${resultJson.members} membre (vous)`;
+            }
           }
         }
 

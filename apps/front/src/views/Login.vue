@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import '@css/views/_login-register.scss';
-  import FormPage from "@components/FormPage.vue";
-  import Alert from "@components/utils/Alert.vue";
-  import { IImage, IFormContainer } from "@models/form.ts";
-  import { IAlert } from "@models/alert.ts";
+  import '../assets/css/views/_login-register.scss';
+  import FormPage from "../components/FormPage.vue";
+  import Alert from "../components/utils/Alert.vue";
+  import { IImage, IFormContainer } from "../models/form.ts";
+  import { IAlert } from "../models/alert.ts";
   import { provide, reactive } from "vue";
-  import { useUserStore } from "@stores/user.ts";
+  import { useUserStore } from "../stores/user.ts";
   import { useRouter } from "vue-router";
 
   const env = import.meta.env;

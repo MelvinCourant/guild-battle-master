@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import '@css/components/menus/mobile/_navbar-mobile.scss';
-  import type { ILink } from "@models/navbar.js";
+  import '../../../assets/css/components/menus/mobile/_navbar-mobile.scss';
+  import type { ILink } from "../../../models/navbar.js";
   import { PropType } from "vue";
   import { useRoute } from "vue-router";
 

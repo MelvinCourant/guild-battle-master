@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import '@css/components/utils/_alert.scss';
+  import '../../assets/css/components/utils/_alert.scss';
 
   defineProps({
     display: {

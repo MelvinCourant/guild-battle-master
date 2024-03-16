@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import "@css/components/utils/inputs/_input-file.scss";
-  import { IImage, IAttributes } from "@models/form.js";
+  import "../../../assets/css/components/utils/inputs/_input-file.scss";
+  import { IImage, IAttributes } from "../../../models/form.js";
   import {PropType, ref, nextTick} from "vue";
 
   const props = defineProps({
@@ -22,7 +22,7 @@
   const onDragOver = ref(false);
   const files: any = ref(null);
 
-  if(props.attributes.accept.match(/image/)) {
+  if(props.attributes.accept?.match(/image/)) {
     type.value = "image";
     typeClass.value = `input-file--image`;
   } else {
@@ -34,8 +34,8 @@
   const fileName: any = ref("");
 
   function triggerInputFile() {
-    const input = document.querySelector(`input[name="${props.attributes.name}"]`);
-    input?.click();
+    const input = document.querySelector(`input[name="${props.attributes.name}"]`) as HTMLInputElement;
+    input.click();
   }
 
   function dropFile(event: Event) {
@@ -51,7 +51,7 @@
     await nextTick();
 
     const input = event.target as HTMLInputElement;
-    let file: File | null = null;
+    let file: File | undefined = undefined;
 
     if(drop) {
       file = files.value[0];
@@ -67,9 +67,14 @@
 
         reader.addEventListener("load", function (e) {
           const readerTarget = e.target;
+          let srcTarget: string = "";
+
+          if(readerTarget) {
+            srcTarget = readerTarget.result as string;
+          }
 
           image.value = {
-            src: readerTarget?.result,
+            src: srcTarget,
             alt: fileName,
           };
         });

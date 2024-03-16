@@ -1,14 +1,16 @@
 <script setup lang="ts">
-  import InputString from "@components/utils/inputs/InputString.vue";
-  import InputFile from "@components/utils/inputs/InputFile.vue";
-  import Button from "@components/utils/inputs/Button.vue";
+  import InputString from "../../components/utils/inputs/InputString.vue";
+  import InputFile from "../../components/utils/inputs/InputFile.vue";
+  import Button from "../../components/utils/inputs/Button.vue";
+  import type { IAttributes, IImage } from "../../models/form.ts";
+  import type { PropType } from "vue";
 
   defineProps({
     error: {
       type: String,
     },
     image: {
-      type: Object,
+      type: Object as PropType<IImage>,
     },
     label: {
       type: String,
@@ -19,7 +21,7 @@
       default: "",
     },
     attributes: {
-      type: Object,
+      type: Object as PropType<IAttributes>,
       required: true,
     }
   });

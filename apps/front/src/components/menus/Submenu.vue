@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import '@css/components/menus/_submenu.scss';
+  import '../../assets/css/components/menus/_submenu.scss';
   import { inject, watch } from "vue";
-  import { ISubmenuLink } from "@models/navbar.ts";
+  import { ISubmenuLink } from "../../models/navbar.ts";
 
   const props = defineProps({
     isOpened: {
