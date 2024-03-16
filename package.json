@@ -1,0 +1,12 @@
+{
+  "name": "guild-battle-master",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "pnpm recursive run dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
