@@ -123,7 +123,7 @@ jobs:
       - name: SSH to VPS and deploy
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.VPS_HOST }}
+          host: ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
