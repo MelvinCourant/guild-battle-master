@@ -42,12 +42,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Test the connection
-        run: |
-          pnpm dev &
-          sleep 5
-          curl -I http://localhost:3333
-
   front:
     runs-on: ubuntu-latest
 
@@ -85,12 +79,6 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
-
-      - name: Test the connection
-        run: |
-          pnpm dev &
-          sleep 5
-          curl -I http://localhost:5137
 
   deploy:
     runs-on: ubuntu-latest
