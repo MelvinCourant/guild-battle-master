@@ -32,7 +32,7 @@ jobs:
           context: .
           file: Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ghcr.io/melvincourant/guild-battle-master/back:latest
+          tags: ghcr.io/melvincourant/guild-battle-master/back:${{ github.sha }}
           target: back
 
       - name: Build and push frontend Docker image
@@ -41,7 +41,7 @@ jobs:
           context: .
           file: Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ghcr.io/melvincourant/guild-battle-master/front:latest
+          tags: ghcr.io/melvincourant/guild-battle-master/front:${{ github.sha }}
           target: front
 
       - name: Deploy the new image
