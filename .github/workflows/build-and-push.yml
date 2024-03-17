@@ -31,7 +31,7 @@ jobs:
         with:
           context: .
           file: Dockerfile
-          push: ${{ github.event_name !== 'pull_request' }}
+          push: ${{ github.event_name != 'pull_request' }}
           tags: ghcr.io/MelvinCourant/guild-battle-master/back:latest
           target: back
 
@@ -40,7 +40,7 @@ jobs:
         with:
           context: .
           file: Dockerfile
-          push: ${{ github.event_name !== 'pull_request' }}
+          push: ${{ github.event_name != 'pull_request' }}
           tags: ghcr.io/MelvinCourant/guild-battle-master/front:latest
           target: front
 
