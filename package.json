@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "pnpm recursive run dev"
+    "dev": "pnpm recursive run dev",
+    "build": "pnpm recursive run build"
   },
   "keywords": [],
   "author": "",
