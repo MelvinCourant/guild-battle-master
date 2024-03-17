@@ -9,7 +9,6 @@
 
 import router from '@adonisjs/core/services/router'
 import AuthController from '#controllers/auth_controller'
-import MembersController from "#controllers/members_controller";
 import GuildsController from "#controllers/guilds_controller";
 import app from '@adonisjs/core/services/app'
 

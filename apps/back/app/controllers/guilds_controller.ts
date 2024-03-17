@@ -4,8 +4,18 @@ import Guild from "#models/guild";
 
 export default class GuildsController {
   public async show({ auth, params, response }: HttpContext) {
-    await auth.authenticate()
+    const user = await auth.authenticate()
+    const memberGuildId = await Member
+      .query()
+      .where('user_id', user.id)
+      .select('guild_id')
+      .firstOrFail()
     const guildId = params.id
+
+    if(guildId !== memberGuildId.guild_id) {
+      return response.status(403).json({ error: 'Invalid guild' })
+    }
+
     const guild = await Guild
       .query()
       .where('id', guildId)
