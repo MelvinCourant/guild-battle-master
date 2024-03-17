@@ -10,6 +10,7 @@
 import router from '@adonisjs/core/services/router'
 import AuthController from '#controllers/auth_controller'
 import MembersController from "#controllers/members_controller";
+import GuildsController from "#controllers/guilds_controller";
 import app from '@adonisjs/core/services/app'
 
 router.group(() => {
@@ -38,5 +39,11 @@ router.group(() => {
 
   router.get('/members', async (data) => {
     return membersController.index(data)
+  })
+
+  const guildsController = new GuildsController()
+
+  router.get('/guild', async (data) => {
+    return guildsController.show(data)
   })
 }).prefix('api')
