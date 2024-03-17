@@ -52,6 +52,5 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cd ~/stacks
             docker service update --image ghcr.io/melvincourant/guild-battle-master/back:${{ github.sha }}
             docker service update --image ghcr.io/melvincourant/guild-battle-master/front:${{ github.sha }}
