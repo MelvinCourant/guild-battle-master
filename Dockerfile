@@ -8,9 +8,9 @@ COPY . /usr/src/app
 WORKDIR /usr/src/app
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 ENV NODE_OPTIONS="--max-old-space-size=4096"
-RUN pnpm --filter=back build
-RUN pnpm --filter=back --prod deploy ./prod/back
-RUN pnpm --filter=front build
+RUN pnpm --filter back run build
+RUN pnpm --filter back --prod deploy ./prod/back
+RUN pnpm --filter front run build
 
 FROM base AS back
 WORKDIR /usr/app
