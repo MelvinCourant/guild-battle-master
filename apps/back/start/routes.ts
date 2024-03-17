@@ -35,15 +35,9 @@ router.get('/uploads/:filename', async ({ params, response }) => {
 })
 
 router.group(() => {
-  const membersController = new MembersController()
-
-  router.get('/members', async (data) => {
-    return membersController.index(data)
-  })
-
   const guildsController = new GuildsController()
 
-  router.get('/guild', async (data) => {
+  router.get('/guild/:id', async (data) => {
     return guildsController.show(data)
   })
 }).prefix('api')
