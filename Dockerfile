@@ -7,19 +7,16 @@ FROM base AS build
 COPY . /usr/src/app
 WORKDIR /usr/src/app
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
-ENV NODE_OPTIONS="--max-old-space-size=4096"
-RUN pnpm --filter back run build
-RUN pnpm --filter back --prod deploy ./prod/back
-RUN pnpm --filter front run build
+RUN pnpm run -r build
+RUN pnpm deploy --filter=back --prod /prod/back
+RUN pnpm deploy --filter=front --prod /prod/front
 
 FROM base AS back
-WORKDIR /usr/app
-ENV NODE_ENV=production
-COPY --from=build /usr/src/app/prod/back/build .
-COPY --from=build /usr/src/app/prod/back/node_modules node_modules
+COPY --from=build /prod/back /prod/back
+WORKDIR /prod/back
 EXPOSE 3333
 CMD [ "pnpm", "start" ]
 
 FROM base AS front
-WORKDIR /usr/app
-COPY --from=build /prod/front .
+COPY --from=build /prod/front /prod/front
+WORKDIR /prod/front
