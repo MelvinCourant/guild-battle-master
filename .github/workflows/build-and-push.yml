@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  back:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
@@ -32,7 +32,7 @@ jobs:
           context: .
           file: Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ghcr.io/MelvinCourant/guild-battle-master/back:latest
+          tags: ghcr.io/melvincourant/guild-battle-master/back:latest
           target: back
 
       - name: Build and push frontend Docker image
@@ -41,7 +41,7 @@ jobs:
           context: .
           file: Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ghcr.io/MelvinCourant/guild-battle-master/front:latest
+          tags: ghcr.io/melvincourant/guild-battle-master/front:latest
           target: front
 
       - name: Deploy the new image
@@ -52,5 +52,5 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            docker service update --image ghcr.io/MelvinCourant/guild-battle-master/back:latest
-            docker service update --image ghcr.io/MelvinCourant/guild-battle-master/front:latest
+            docker service update --image ghcr.io/melvincourant/guild-battle-master/back:latest
+            docker service update --image ghcr.io/melvincourant/guild-battle-master/front:latest
