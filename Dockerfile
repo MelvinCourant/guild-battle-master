@@ -14,7 +14,7 @@ RUN pnpm deploy --filter=front --prod /prod/front
 
 FROM base AS back
 ENV NODE_ENV=production
-COPY --from=build /prod/back /prod/back
+COPY --from=build /prod/back/build .
 WORKDIR /prod/back
 EXPOSE 3333
 CMD [ "pnpm", "start" ]
