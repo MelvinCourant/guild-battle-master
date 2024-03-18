@@ -1,0 +1,103 @@
+@use "../../../partials/functions";
+
+.input-file {
+  &--image {
+    position: relative;
+    margin: auto auto 10px;
+    width: fit-content !important;
+
+    .input-file {
+      &__label {
+        display: block;
+        position: relative;
+        z-index: 1;
+        width: 100px;
+        height: 100px;
+
+        &:before {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='12' viewBox='0 0 14 12' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M4.66667 0L3.44667 1.33333H1.33333C0.6 1.33333 0 1.93333 0 2.66667V10.6667C0 11.4 0.6 12 1.33333 12H12C12.7333 12 13.3333 11.4 13.3333 10.6667V2.66667C13.3333 1.93333 12.7333 1.33333 12 1.33333H9.88667L8.66667 0H4.66667ZM6.66667 8.66667C7.1971 8.66667 7.70581 8.45595 8.08088 8.08088C8.45595 7.70581 8.66667 7.1971 8.66667 6.66667C8.66667 6.13623 8.45595 5.62753 8.08088 5.25245C7.70581 4.87738 7.1971 4.66667 6.66667 4.66667C6.13623 4.66667 5.62753 4.87738 5.25245 5.25245C4.87738 5.62753 4.66667 6.13623 4.66667 6.66667C4.66667 7.1971 4.87738 7.70581 5.25245 8.08088C5.62753 8.45595 6.13623 8.66667 6.66667 8.66667ZM3.33333 6.66667C3.33333 8.50667 4.82667 10 6.66667 10C8.50667 10 10 8.50667 10 6.66667C10 4.82667 8.50667 3.33333 6.66667 3.33333C4.82667 3.33333 3.33333 4.82667 3.33333 6.66667Z' fill='%235B606E'/%3E%3C/svg%3E");
+          position: absolute;
+          z-index: 3;
+          right: 2px;
+          bottom: -6px;
+          background: var(--white);
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          box-shadow: -2px -2px 4px rgba(0, 0, 0, 0.50);
+          cursor: pointer;
+        }
+
+        img {
+          position: relative;
+          z-index: 2;
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          overflow: hidden;
+          object-fit: cover;
+          cursor: pointer;
+        }
+      }
+
+      &__input {
+        position: absolute;
+        z-index: 1;
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+    }
+  }
+
+  &--file {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    height: 220px;
+    border-radius: var(--input-text-radius);
+    background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='6' ry='6' stroke='%235B606EFF' stroke-width='1' stroke-dasharray='10' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+
+    &.dragging {
+      background-color: var(--system-lightened) !important;
+    }
+
+    .input-file {
+      &__drop {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+
+        span {
+          color: var(--text-grey);
+          font-size: functions.rem(20);
+          line-height: normal;
+          text-align: center;
+        }
+      }
+
+      &__browse {
+        position: relative;
+        z-index: 2;
+      }
+
+      &__input {
+        position: absolute;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+      }
+    }
+  }
+}

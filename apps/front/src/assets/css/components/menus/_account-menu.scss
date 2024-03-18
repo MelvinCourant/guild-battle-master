@@ -1,0 +1,22 @@
+@use "../../partials/mixins";
+
+.account-menu {
+  position: relative;
+
+  &__button {
+    @include mixins.resetButton(none, transparent);
+  }
+
+  &__avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+
+    @media screen and (max-width: 768px) {
+      width: 35px;
+      height: 35px;
+    }
+  }
+}

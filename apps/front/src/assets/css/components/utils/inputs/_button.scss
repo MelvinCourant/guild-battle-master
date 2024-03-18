@@ -1,0 +1,43 @@
+@use "../../../partials/functions";
+
+.button {
+  padding: 5.5px 14px 8.5px 14px;
+  font-size: functions.rem(14);
+  line-height: 1.42857;
+  font-weight: 500;
+  border-radius: var(--input-text-radius);
+  border: var(--border);
+  background: var(--system);
+  cursor: pointer;
+
+  &:active {
+    background: var(--system-lightened);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &.primary {
+    border: none;
+    background: var(--primary);
+
+    &:active {
+      background: var(--primary-darkened);
+    }
+  }
+
+  &.danger {
+    color: var(--danger);
+
+    &:hover {
+      color: var(--white);
+      background: var(--danger);
+    }
+
+    &:active {
+      color: var(--danger);
+    }
+  }
+}

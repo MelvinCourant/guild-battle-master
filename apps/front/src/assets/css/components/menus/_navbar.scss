@@ -1,0 +1,98 @@
+@use "../../partials/mixins";
+@use "../../partials/functions";
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70px;
+  background: var(--background);
+  border-bottom: var(--border);
+  padding: 0 50px;
+
+  @media screen and (max-width: 768px) {
+    height: 55px;
+    padding: 0 30px;
+  }
+
+  &__nav,
+  &__list {
+    width: 100%;
+    height: 100%;
+  }
+
+  &__list {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__left,
+  &__center,
+  &__right {
+    display: flex;
+    align-items: center;
+  }
+
+  &__left {
+    gap: 15px;
+  }
+
+  &__logo {
+    height: 25px;
+
+    @media screen and (max-width: 768px) {
+      height: 22px;
+    }
+  }
+
+  &__gbm {
+    @include mixins.font(title);
+    color: var(--primary);
+    text-align: center;
+    font-size: functions.rem(24);
+    line-height: 0.85;
+
+    @media screen and (max-width: 1099px) {
+      display: none;
+    }
+  }
+
+  &__center {
+    gap: 40px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  &__link {
+    font-size: functions.rem(16);
+    font-weight: 500;
+    line-height: 1.125;
+    text-align: center;
+
+    &:hover {
+      color: var(--primary);
+    }
+
+    &--selected {
+      color: var(--primary);
+      font-weight: 700;
+    }
+  }
+
+  &__right {
+    gap: 30px;
+  }
+
+  &__notifications-button {
+    @include mixins.resetButton(none, transparent);
+  }
+
+  & + main {
+    margin-top: 70px;
+  }
+}
