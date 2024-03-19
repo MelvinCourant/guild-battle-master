@@ -136,7 +136,7 @@ export default class AuthController {
       guild = await Guild.create({
         name: payload.guild_name,
         leader_id: user.id,
-        image: userImage?.fileName,
+        image: userImage.image,
       })
         .catch((error) => {
           throw error
