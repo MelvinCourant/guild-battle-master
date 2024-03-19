@@ -10,7 +10,7 @@ export default class extends BaseSchema {
       table.unique(['pseudo'])
       table.enu('grade', ['leader', 'vice-leader', 'senior', 'member']).notNullable().defaultTo('member')
       table.integer('user_id').unsigned().references('id').inTable('users').nullable()
-      table.integer('guild_id').unsigned().references('id').inTable('guilds').notNullable()
+      table.integer('guild_id').unsigned().references('id').inTable('guilds').nullable()
       table.unique(['id', 'guild_id'])
 
       table.timestamp('created_at')
