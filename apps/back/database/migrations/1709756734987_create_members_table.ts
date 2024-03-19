@@ -9,7 +9,7 @@ export default class extends BaseSchema {
       table.string('pseudo').notNullable()
       table.unique(['pseudo'])
       table.enu('grade', ['leader', 'vice-leader', 'senior', 'member']).notNullable().defaultTo('member')
-      table.integer('user_id').unsigned().references('user.id').nullable()
+      table.integer('user_id').unsigned().references('id').inTable('users').nullable()
       table.integer('guild_id').unsigned().references('id').inTable('guilds').notNullable()
       table.unique(['id', 'guild_id'])
 
