@@ -7,7 +7,6 @@ import {
   createGuildValidator,
 } from "#validators/register";
 import { loginValidator } from "#validators/login";
-import db from '@adonisjs/lucid/services/db'
 import fs from 'fs'
 import User from "#models/user";
 import Member from "#models/member";
@@ -18,15 +17,15 @@ export default class AuthController {
     if(request.params().step === "1") {
       // Verify user and member and create user
       const payload = await request.validateUsing(createUserMemberValidator)
-      const user: any = await db
-        .from('users')
+      const user: any = await User
+        .query()
         .where('email', payload.email)
         .first()
 
       async function deletePreviousData(user: any) {
         // Delete previous data if user exists but not completed registration
-        const userImage: any = await db
-          .from('users')
+        const userImage: any = await User
+          .query()
           .where('email', payload.email)
           .select('image')
           .first()
@@ -40,46 +39,46 @@ export default class AuthController {
           fs.unlinkSync(imageLink)
         }
 
-        const member: any = await db
-          .from('members')
+        const member: any = await Member
+          .query()
           .where('user_id', user.id)
           .first()
 
         if(member) {
-          await db
-            .from('members')
+          await Member
+            .query()
             .where('user_id', user.id)
             .delete()
         }
 
-        const guild: any = await db
-          .from('guilds')
+        const guild: any = await Guild
+          .query()
           .where('leader_id', user.id)
           .first()
         let members: any = null;
 
         if(guild) {
-          await db
-            .from('guilds')
+          await Guild
+            .query()
             .where('leader_id', user.id)
             .delete()
 
-          members = await db
-            .from('members')
+          members = await Member
+            .query()
             .where('guild_id', guild.id)
             .select('id')
             .first()
         }
 
         if(members) {
-          await db
-            .from('members')
+          await Member
+            .query()
             .where('guild_id', guild.id)
             .delete()
         }
 
-        await db
-          .from('users')
+        await User
+          .query()
           .where('email', payload.email)
           .delete()
       }
@@ -118,8 +117,8 @@ export default class AuthController {
     } else if(request.params().step === "2") {
       // Verify guild and create guild and member
       const payload = await request.validateUsing(createGuildValidator)
-      const user: any = await db
-        .from('users')
+      const user: any = await User
+        .query()
         .where('email', request.input('email'))
         .select('id')
         .first()
@@ -127,8 +126,8 @@ export default class AuthController {
         return response.status(404).send({ message: 'User not found, back to step 1' })
       }
 
-      const userImage: any = await db
-        .from('users')
+      const userImage: any = await User
+        .query()
         .where('email', request.input('email'))
         .select('image')
         .first()
@@ -212,16 +211,16 @@ export default class AuthController {
         })
       }
     } else if(request.params().step === "3") {
-      const user: any = await db
-        .from('users')
+      const user: any = await User
+        .query()
         .where('email', request.input('email'))
         .first()
-      const guild: any = await db
-        .from('guilds')
+      const guild: any = await Guild
+        .query()
         .where('name', request.input('guild_name'))
         .first()
-      const member: any = await db
-        .from('members')
+      const member: any = await Member
+        .query()
         .where('pseudo', request.input('pseudo'))
         .first()
 
@@ -256,8 +255,8 @@ export default class AuthController {
           throw error
         });
 
-      await db
-        .from('users')
+      await User
+        .query()
         .where('email', request.input('email'))
         .update({ pending: 0 })
 
@@ -272,13 +271,13 @@ export default class AuthController {
 
     try {
       const user = await User.verifyCredentials(email, password)
-      const member: any = await db
-        .from('members')
+      const member: any = await Member
+        .query()
         .where('user_id', user.id)
         .select('pseudo', 'grade')
         .first()
-      const guild: any = await db
-        .from('guilds')
+      const guild: any = await Guild
+        .query()
         .where('leader_id', user.id)
         .select('id')
         .first()
