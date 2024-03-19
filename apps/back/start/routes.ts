@@ -10,6 +10,7 @@
 import router from '@adonisjs/core/services/router'
 import AuthController from '#controllers/auth_controller'
 import GuildsController from "#controllers/guilds_controller";
+import MembersController from "#controllers/members_controller";
 import app from '@adonisjs/core/services/app'
 
 router.group(() => {
@@ -36,7 +37,15 @@ router.get('/uploads/:filename', async ({ params, response }) => {
 router.group(() => {
   const guildsController = new GuildsController()
 
-  router.get('/guild/:id', async (data) => {
+  router.get('/:id', async (data) => {
     return guildsController.show(data)
   })
-}).prefix('api')
+}).prefix('/guilds')
+
+router.group(() => {
+  const membersController = new MembersController()
+
+  router.patch('/:id', async (data) => {
+    return membersController.update(data)
+  })
+}).prefix('/members')
