@@ -1,23 +1,24 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Member from "#models/member";
+import Guild from "#models/guild";
 
 export default class MembersController {
   public async update({ auth, params, request, response }: HttpContext) {
     const user = await auth.authenticate()
-    const leadGuildId = await Member
+    const leadGuildId = await Guild
       .query()
-      .where('user_id', user.id)
-      .select('guild_id')
+      .where('leader_id', user.id)
+      .select('id')
       .firstOrFail()
     const member = await Member
       .query()
-      .where('member_id', params.id)
+      .where('id', params.id)
       .firstOrFail()
 
     if(
       user.role !== 'admin' &&
-      user.role !== 'leader' &&
-      leadGuildId.guild_id !== member.guild_id
+      user.role !== 'leader' ||
+      leadGuildId.id !== member.guild_id
     ) {
       return response.status(403).json({ error: 'Vous n\'avez pas les droits' })
     }
@@ -31,6 +32,8 @@ export default class MembersController {
       grade !== 'member'
     ) {
       return response.status(400).json({ error: 'Ce rôle n\'existe pas' })
+    } else if(grade === member.grade) {
+      return response.status(400).json({ error: `Le membre ${member.pseudo} a déjà le rôle ${grade}` })
     } else {
       member.grade = grade
       await member.save()

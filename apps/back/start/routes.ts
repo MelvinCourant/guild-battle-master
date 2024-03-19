@@ -40,7 +40,7 @@ router.group(() => {
   router.get('/:id', async (data) => {
     return guildsController.show(data)
   })
-}).prefix('/guilds')
+}).prefix('api/guilds')
 
 router.group(() => {
   const membersController = new MembersController()
@@ -48,4 +48,4 @@ router.group(() => {
   router.patch('/:id', async (data) => {
     return membersController.update(data)
   })
-}).prefix('/members')
+}).prefix('api/members')
