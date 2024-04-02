@@ -11,7 +11,7 @@ export default class Monster extends BaseModel {
   declare name: string
 
   @column()
-  declare attribute: 'fire' | 'water' | 'wind' | 'light' | 'dark'
+  declare element: 'fire' | 'water' | 'wind' | 'light' | 'dark'
 
   @column()
   declare natural_grade: 2 | 3 | 4 | 5

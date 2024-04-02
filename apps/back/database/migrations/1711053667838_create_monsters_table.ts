@@ -7,7 +7,7 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table.string('name').notNullable()
-      table.enum('attribute', ['fire', 'water', 'wind', 'light', 'dark']).notNullable()
+      table.enum('element', ['fire', 'water', 'wind', 'light', 'dark']).notNullable()
       table.enum('natural_grade', [2, 3, 4, 5]).notNullable()
       table.string('image').notNullable()
     })
