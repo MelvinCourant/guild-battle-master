@@ -2,6 +2,8 @@ import type { HttpContext } from '@adonisjs/core/http'
 import User from "#models/user";
 import Member from "#models/member";
 import Guild from "#models/guild";
+import Box from "#models/box";
+import Monster from "#models/monster";
 import {fileValidator} from "#validators/guild";
 import fs from "fs";
 import app from "@adonisjs/core/services/app";
@@ -30,9 +32,58 @@ export default class GuildsController {
     const members = await Member
       .query()
       .where('guild_id', guildId)
-      .select('pseudo', 'grade')
+      .select('id', 'pseudo', 'grade')
+    let membersInformations = [];
 
-    return response.json({ guild, members })
+    for (const member of members) {
+      const memberBox = await Box
+        .query()
+        .where('member_id', member.id)
+      let lds: any = [];
+
+      async function addLds(memberBox: any) {
+        for (const monster of memberBox) {
+          const monsterData = await Monster
+            .query()
+            .where('unit_master_id', monster.monster_id)
+            .select('name', 'element', 'natural_grade')
+            .first()
+
+          if(!monsterData) {
+             continue;
+          }
+
+          if(
+            // @ts-ignore
+            monsterData.natural_grade === "5" &&
+            monsterData.element === 'light' ||
+            // @ts-ignore
+            monsterData.natural_grade === "5" &&
+            monsterData.element === 'dark'
+          ) {
+            lds.push({
+              name: monsterData.name,
+              quantity: monster.quantity,
+            });
+          }
+        }
+      }
+
+      if(memberBox.length !== 0) {
+        await addLds(memberBox);
+      }
+
+      membersInformations.push({
+        pseudo: member.pseudo,
+        grade: member.grade,
+        lds: lds,
+      });
+    }
+
+    return response.json({
+      guild,
+      members: membersInformations
+    })
   }
 
   public async create({ auth, request, response }: HttpContext) {
@@ -112,7 +163,10 @@ export default class GuildsController {
       }
 
       for (const previousMember of previousMembers) {
-        if(!members[previousMember.pseudo]) {
+        if(
+          !members[previousMember.pseudo] &&
+          previousMember.user_id !== user.id
+        ) {
           await Member
             .query()
             .where('pseudo', previousMember.pseudo)

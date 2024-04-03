@@ -34,6 +34,13 @@ export default class MonstersController {
     }
 
     async function insertMonsterIntoDb(monster: any) {
+      let monsterName: string = monster.name
+      const monsterElement: string = monster.element.toLowerCase()
+
+      if(monster.awakens_to) {
+        monsterName = `${monster.element} ${monsterName}`
+      }
+
       const result: any = await fetch(`https://swarfarm.com/static/herders/images/monsters/${monster.image_filename}`)
       const dirPath = 'uploads/monsters'
 
@@ -41,8 +48,7 @@ export default class MonstersController {
         fs.mkdirSync(dirPath, { recursive: true });
       }
 
-      const bestiarySlug = monster.bestiary_slug.replace(/\d+-/g, '');
-      const monsterFileName = `${bestiarySlug}.png`
+      const monsterFileName = `${monsterName.toLowerCase().replace(' ', '-')}.png`
       const monsterExists = fs.existsSync(`${dirPath}/${monsterFileName}`)
 
       if (monsterExists) {
@@ -50,13 +56,6 @@ export default class MonstersController {
       }
 
       await streamPipeline(result.body, fs.createWriteStream(`${dirPath}/${monsterFileName}`))
-
-      let monsterName: string = monster.name
-      const monsterElement: string = monster.element.toLowerCase()
-
-      if(monster.awakens_to) {
-        monsterName = `${monster.element} ${monsterName}`
-      }
 
       const monsterData = {
         unit_master_id: monster.com2us_id,
