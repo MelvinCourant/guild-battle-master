@@ -59,6 +59,7 @@ export default class MonstersController {
       }
 
       const monsterData = {
+        unit_master_id: monster.com2us_id,
         name: monsterName,
         element: monsterElement,
         natural_grade: monster.natural_stars - 1, // -1 to fix natural_grade is 1 star higher than it should be

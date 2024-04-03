@@ -12,6 +12,7 @@ import AuthController from '#controllers/auth_controller'
 import GuildsController from "#controllers/guilds_controller";
 import MembersController from "#controllers/members_controller";
 import MonstersController from "#controllers/monsters_controller";
+import BoxesController from "#controllers/boxes_controller";
 import app from '@adonisjs/core/services/app'
 
 router.group(() => {
@@ -62,3 +63,11 @@ router.group(() => {
     return monstersController.create(data)
   });
 }).prefix('api/monsters')
+
+router.group(() => {
+  const boxesController = new BoxesController()
+
+  router.put('/:memberId', async (data) => {
+    return boxesController.create(data)
+  });
+}).prefix('api/boxes')

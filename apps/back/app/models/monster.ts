@@ -5,7 +5,7 @@ export default class Monster extends BaseModel {
   declare id: number
 
   @column()
-  declare monster_id: number
+  declare unit_master_id: number
 
   @column()
   declare name: string

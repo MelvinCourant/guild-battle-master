@@ -8,6 +8,9 @@ export default class Box extends BaseModel {
   declare id: number
 
   @column()
+  declare monster_id: number
+
+  @column()
   declare member_id: number
 
   @column()
