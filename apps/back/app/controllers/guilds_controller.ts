@@ -63,6 +63,7 @@ export default class GuildsController {
           ) {
             lds.push({
               name: monsterData.name,
+              element: monsterData.element,
               quantity: monster.quantity,
             });
           }
