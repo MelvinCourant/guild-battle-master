@@ -71,7 +71,7 @@ export default class GuildsController {
 
     const jsonParsed: any = JSON.parse(data)
 
-    async function createOrUpdateMembers(members: any, guildId: number) {
+    async function createOrUpdateMembers(members: any, guildId: number, previousMembers: any) {
       for (const memberIndex of Object.keys(members)) {
         const member: any = members[memberIndex];
         const memberExists = await Member
@@ -110,11 +110,23 @@ export default class GuildsController {
           await memberExists.save()
         }
       }
+
+      for (const previousMember of previousMembers) {
+        if(!members[previousMember.pseudo]) {
+          await Member
+            .query()
+            .where('pseudo', previousMember.pseudo)
+            .delete()
+        }
+      }
     }
 
     const members: any = jsonParsed.guild.guild_members
+    const previousMembers = await Member
+      .query()
+      .where('guild_id', guild.id)
 
-    await createOrUpdateMembers(members, guild.id)
+    await createOrUpdateMembers(members, guild.id, previousMembers)
 
     const membersNumber = Object.keys(members).length
 
