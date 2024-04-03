@@ -6,12 +6,12 @@ import Box from "#models/box";
 import Member from "#models/member";
 import User from "#models/user";
 import Monster from "#models/monster";
-import {boxValidator} from "#validators/box";
+import {fileValidator} from "#validators/box";
 
 export default class BoxesController {
   public async create({ auth, params, request, response }: HttpContext) {
     const user = await auth.authenticate()
-    const payload = await request.validateUsing(boxValidator)
+    const payload = await request.validateUsing(fileValidator)
     const userRole = await User
       .query()
       .where('id', user.id)

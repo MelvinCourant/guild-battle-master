@@ -42,6 +42,10 @@ router.group(() => {
   router.get('/:id', async (data) => {
     return guildsController.show(data)
   })
+
+  router.put('/', async (data) => {
+    return guildsController.create(data)
+  });
 }).prefix('api/guilds')
 
 router.group(() => {
