@@ -1,0 +1,47 @@
+@use '../../partials/functions';
+
+.badge {
+  display: flex;
+  width: fit-content;
+  padding: 3.5px 7.5px 5.5px 7.5px;
+  border-radius: 15px;
+  text-align: center;
+  font-size: functions.rem(12);
+  line-height: 0.5;
+
+  &--water {
+    border: 1px solid var(--water);
+    color: var(--water);
+    background: var(--water-transparent);
+  }
+
+  &--fire {
+    border: 1px solid var(--fire);
+    color: var(--fire);
+    background: var(--fire-transparent);
+  }
+
+  &--wind {
+    border: 1px solid var(--wind);
+    color: var(--wind);
+    background: var(--wind-transparent);
+  }
+
+  &--dark {
+    border: 1px solid var(--dark);
+    color: var(--dark);
+    background: var(--dark-transparent);
+  }
+
+  &--light {
+    border: 1px solid var(--white);
+    color: var(--white);
+    background: var(--light-transparent);
+  }
+
+  &--dark-light {
+    border: 1px solid var(--dark-light);
+    color: var(--dark-light);
+    background: var(--dark-light-transparent);
+  }
+}

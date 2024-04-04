@@ -34,10 +34,10 @@ const columns = [
     width: 55
   }
 ];
-const members = ref([]);
+const data: object = ref({});
 
 provide("columns", columns);
-provide("data", members);
+provide("data", data);
 
 async function getMembers() {
   const result = await fetch(`${env.VITE_URL}/guilds/${user.guild_id}`, {
@@ -50,7 +50,10 @@ async function getMembers() {
 
   if (result.ok) {
     const resultJson = await result.json();
-    members.value = resultJson.members;
+    data.value = {
+      rows: resultJson.members,
+      badges: ['lds']
+    };
   }
 }
 
