@@ -117,7 +117,7 @@
     const submitButton = fields[2];
     submitButton.loading = 'Chargement...';
 
-    const result = await fetch(`${env.VITE_URL}/auth/login`, {
+    const result = await fetch(`${env.VITE_URL}/api/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

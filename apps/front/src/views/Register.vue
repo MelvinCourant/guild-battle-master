@@ -295,7 +295,7 @@
       formData.append(key, jsonFormat[key]);
     }
 
-    const result = await fetch(`${env.VITE_URL}/auth/register/${step}`, {
+    const result = await fetch(`${env.VITE_URL}/api/auth/register/${step}`, {
       method: 'POST',
       body: formData,
     });

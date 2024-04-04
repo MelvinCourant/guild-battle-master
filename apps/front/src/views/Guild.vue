@@ -10,28 +10,23 @@ const env = import.meta.env;
 const columns = [
   {
     name: "",
-    key: "picture",
-    width: 70
+    key: "picture"
   },
   {
     name: "Grade",
-    key: "grade",
-    width: 200
+    key: "grade"
   },
   {
     name: "Pseudo",
-    key: "pseudo",
-    width: 220
+    key: "pseudo"
   },
   {
     name: "5 nats lumière et ténèbre",
-    key: "lds",
-    width: null
+    key: "lds"
   },
   {
     name: "",
-    key: "actions",
-    width: 55
+    key: "actions"
   }
 ];
 const data = ref({});
@@ -40,7 +35,7 @@ provide("columns", columns);
 provide("data", data);
 
 async function getMembers() {
-  const result = await fetch(`${env.VITE_URL}/guilds/${user.guild_id}`, {
+  const result = await fetch(`${env.VITE_URL}/api/guilds/${user.guild_id}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

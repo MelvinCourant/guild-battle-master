@@ -83,12 +83,24 @@ export default class GuildsController {
         await addLds(memberBox);
       }
 
-      membersInformations.push({
-        image: user?.image,
-        grade: member.grade,
-        pseudo: member.pseudo,
-        lds: lds,
-      });
+      if(
+        user &&
+        user.image
+      ) {
+        membersInformations.push({
+          image: user.image,
+          grade: member.grade,
+          pseudo: member.pseudo,
+          lds: lds,
+        });
+      } else {
+        membersInformations.push({
+          image: 'placeholder.jpg',
+          grade: member.grade,
+          pseudo: member.pseudo,
+          lds: lds,
+        });
+      }
     }
 
     return response.json({

@@ -1,13 +1,15 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 
+const env = import.meta.env;
+
 export const useUserStore = defineStore("user", () => {
     function assetImgSrc(src: string) {
         return new URL(`../assets/imgs/${src}`, import.meta.url).href;
     }
 
     function getUploadsUrl(imageName: string) {
-        return `http://localhost:3333/uploads/${imageName}`;
+        return `${env.VITE_URL}/uploads/${imageName}`;
     }
 
     let localStorageUser: any = null;
