@@ -20,6 +20,8 @@ defineProps({
       `badge--${element}`
     ]"
   >
-    {{ name }}
+    <span class="badge__name">
+      {{ name }}
+    </span>
   </li>
 </template>

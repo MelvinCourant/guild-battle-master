@@ -34,7 +34,7 @@ const columns = [
     width: 55
   }
 ];
-const data: object = ref({});
+const data = ref({});
 
 provide("columns", columns);
 provide("data", data);
