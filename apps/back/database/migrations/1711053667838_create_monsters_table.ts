@@ -11,6 +11,7 @@ export default class extends BaseSchema {
       table.enum('element', ['fire', 'water', 'wind', 'light', 'dark']).notNullable()
       table.enum('natural_grade', [2, 3, 4, 5]).notNullable()
       table.string('image').notNullable()
+      table.boolean('is_fusion_shop').notNullable().defaultTo(false)
     })
   }
 
