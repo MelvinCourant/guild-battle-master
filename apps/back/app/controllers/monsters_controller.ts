@@ -57,12 +57,44 @@ export default class MonstersController {
 
       await streamPipeline(result.body, fs.createWriteStream(`${dirPath}/${monsterFileName}`))
 
+      let isFusionOrShop = false
+
+      const fusionOrShopMonsters = [
+        'water-ifrit',
+        'fire-ifrit',
+        'wind-ifrit',
+        'dark-ifrit',
+        'light-ifrit',
+        'water-phoenix',
+        'fire-panda-warrior',
+        'light-paladin',
+        'dark-dokkaebi-lord',
+        'light-fairy-queen',
+        'dark-vampire-lord',
+        'homunculus',
+        'fire-ken',
+        'light-dual-blade',
+        'fire-shadow-claw',
+        'light-altaïr',
+        'light-magical-archer-fami',
+        'wind-lollipop-warrior',
+        'wind-gingerbrave',
+        'cow-girl',
+        'wind-totemist',
+        'wind-valkyrja'
+      ]
+
+      if (fusionOrShopMonsters.some(slug => monster.bestiary_slug.includes(slug))) {
+        isFusionOrShop = true;
+      }
+
       const monsterData = {
         unit_master_id: monster.com2us_id,
         name: monsterName,
         element: monsterElement,
         natural_grade: monster.natural_stars - 1, // -1 to fix natural_grade is 1 star higher than it should be
         image: `/monsters/${monsterFileName}`,
+        is_fusion_shop: isFusionOrShop
       }
       // @ts-ignore
       await Monster.create(monsterData)
