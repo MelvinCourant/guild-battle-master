@@ -187,7 +187,7 @@
             class="resume__content"
         >
           <template
-              v-for="line in resume.content"
+              v-for="(line, index) in resume.content"
               :key="index"
           >
             <div
