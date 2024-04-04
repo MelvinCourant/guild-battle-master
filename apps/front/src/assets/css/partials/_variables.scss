@@ -26,8 +26,8 @@ $colors: (
   "dark": #7C00DE,
   "dark-transparent": rgba(124, 0, 222, 0.2),
   "light-transparent": rgba(255, 255, 255, 0.2),
-  "dark-light": linear-gradient(90deg, var(dark) 0%, var(white) 100%),
-  "dark-light-transparent": linear-gradient(90deg, var(dark-transparent) 0%, var(light-transparent) 100%)
+  "dark-light": linear-gradient(90deg, var(--dark) 0%, var(--white) 100%),
+  "dark-light-transparent": linear-gradient(90deg, var(--dark-transparent) 0%, var(--light-transparent) 100%)
 );
 
 :root {
