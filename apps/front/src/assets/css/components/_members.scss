@@ -1,0 +1,25 @@
+.members {
+  flex: 1;
+
+  &__picture {
+    width: 70px;
+  }
+
+  &__grade {
+    width: 200px;
+  }
+
+  &__pseudo {
+    width: 220px;
+  }
+
+  &__lds {
+    padding: 27.5px 15px;
+
+    ul {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+  }
+}

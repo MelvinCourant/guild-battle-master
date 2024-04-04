@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import '../../assets/css/components/tables/_table.scss'
 import {inject, ref, watch} from "vue";
 import Badge from "../utils/Badge.vue";
 
@@ -20,20 +21,28 @@ function assetPlaceholderSrc() {
 </script>
 
 <template>
-  <table>
+  <table class="table">
     <thead>
       <tr>
         <th
           v-for="column in columns"
           :key="column"
+          :class="column.class"
         >
           {{ column.name }}
         </th>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(row, index) in rows" :key="index">
-        <td v-for="(info, key) in row" :key="key">
+      <tr
+          v-for="(row, index) in rows"
+          :key="index"
+      >
+        <td
+            v-for="(info, key, index) in row"
+            :key="key"
+            :class="columns[index].class"
+        >
           <ul
             v-if="badges.includes(key)"
           >
