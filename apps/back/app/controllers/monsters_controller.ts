@@ -41,14 +41,14 @@ export default class MonstersController {
         monsterName = `${monster.element} ${monsterName}`
       }
 
-      const result: any = await fetch(`https://swarfarm.com/static/herders/images/monsters/${monster.image_filename}`)
+      const monsterFileName = monster.image_filename
+      const result: any = await fetch(`https://swarfarm.com/static/herders/images/monsters/${monsterFileName}`)
       const dirPath = 'uploads/monsters'
 
       if (!fs.existsSync(dirPath)){
         fs.mkdirSync(dirPath, { recursive: true });
       }
 
-      const monsterFileName = `${monsterName.toLowerCase().replace(' ', '-')}.png`
       const monsterExists = fs.existsSync(`${dirPath}/${monsterFileName}`)
 
       if (monsterExists) {
