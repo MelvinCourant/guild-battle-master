@@ -27,7 +27,7 @@ defineEmits(["sort"]);
           viewBox="0 0 12 6"
           fill="none"
         >
-          <path d="M0 0L6 6L12 0H0Z" fill="white"/>
+          <path d="M0 0L6 6L12 0H0Z" fill="var(--white)"/>
         </svg>
       </th>
     </tr>

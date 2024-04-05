@@ -58,7 +58,19 @@ async function getMembers() {
     const resultJson = await result.json();
     data.value = {
       rows: resultJson.members,
-      badges: ['lds']
+      badges: ['lds'],
+      actions: [
+        {
+          name: 'update',
+          label: 'Mettre à jour',
+          danger: false
+        },
+        {
+          name: 'exclude',
+          label: 'Exclure',
+          danger: true
+        }
+      ]
     };
     guild.value = resultJson.guild;
   }

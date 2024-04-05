@@ -3,6 +3,7 @@ import '../../assets/css/components/tables/_table-rows.scss'
 import Badge from "../utils/Badge.vue";
 import Grade from "../utils/Grade.vue";
 import {inject, ref, watch} from "vue";
+import More from "../utils/More.vue";
 
 const data = ref(inject("data"));
 const columns = inject("columns");
@@ -53,17 +54,17 @@ function placeholderSrc() {
         </ul>
         <img
           v-else-if="
-                  key === 'image' &&
-                  info !== 'placeholder.jpg'
-                "
+            key === 'image' &&
+            info !== 'placeholder.jpg'
+          "
           :src="`${env.VITE_URL}/uploads/${info}`"
           alt="avatar"
         />
         <img
           v-else-if="
-                    key === 'image' &&
-                    info === 'placeholder.jpg'
-                  "
+            key === 'image' &&
+            info === 'placeholder.jpg'
+          "
           :src="placeholderSrc()"
           alt="avatar"
         />
@@ -84,6 +85,14 @@ function placeholderSrc() {
           <span>{{ info }}</span>
         </div>
         <span v-else>{{ info }}</span>
+      </td>
+      <td
+        class="table-rows__actions"
+      >
+        <More
+          v-if="data.actions"
+          :actions="data.actions"
+        />
       </td>
     </tr>
   </tbody>

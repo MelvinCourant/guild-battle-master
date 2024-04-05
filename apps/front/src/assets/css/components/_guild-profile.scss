@@ -8,7 +8,8 @@
   flex-direction: column;
   align-items: center;
   gap: 15px;
-  width: 430px;
+  min-width: 250px;
+  width: 22.4%;
 
   &__image {
     min-width: 100px;
