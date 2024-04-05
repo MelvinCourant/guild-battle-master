@@ -88,6 +88,7 @@ export default class GuildsController {
         user.image
       ) {
         membersInformations.push({
+          id: member.id,
           image: user.image,
           grade: member.grade,
           pseudo: member.pseudo,
@@ -95,6 +96,7 @@ export default class GuildsController {
         });
       } else {
         membersInformations.push({
+          id: member.id,
           image: 'placeholder.jpg',
           grade: member.grade,
           pseudo: member.pseudo,

@@ -13,6 +13,8 @@ defineProps({
   }
 });
 
+defineEmits(['actionSelected']);
+
 const isOpened = ref(false);
 
 function closeActions(event) {
@@ -36,12 +38,16 @@ document.addEventListener('click', closeActions);
     </button>
     <ul
       v-show="isOpened"
-      @click="isOpened = false"
       :class="['more__actions', `more__actions--${orientation}`]"
     >
-      <li v-for="action in actions" :key="action.id" class="more__item">
+      <li
+          v-for="action in actions"
+          :key="action.id"
+          class="more__item"
+      >
         <button
           :class="['more__action', { 'more__action--danger': action.danger }]"
+          @click.stop="$emit('actionSelected', action.name); isOpened = false"
         >
           {{ action.label }}
         </button>

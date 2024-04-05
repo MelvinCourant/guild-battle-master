@@ -5,6 +5,8 @@ import Grade from "../utils/Grade.vue";
 import {inject, ref, watch} from "vue";
 import More from "../utils/More.vue";
 
+defineEmits(["actionSelected"]);
+
 const data = ref(inject("data"));
 const columns = inject("columns");
 const rows = ref([]);
@@ -27,71 +29,81 @@ function placeholderSrc() {
       v-for="(row, index) in rows"
       :key="index"
     >
-      <td
+      <template
         v-for="(info, key, index) in row"
         :key="key"
         :class="columns[index].class"
       >
-        <ul
-          v-if="badges.includes(key)"
+        <td
+          v-if="key !== 'id'"
         >
-          <template
-            v-for="(monster, index) in info"
+          <ul
+              v-if="badges.includes(key)"
           >
+            <template
+                v-for="(monster, index) in info"
+            >
+              <Badge
+                  v-if="index < 7"
+                  :key="monster.name"
+                  :name="monster.name"
+                  :element="monster.element"
+              />
+            </template>
             <Badge
-              v-if="index < 7"
-              :key="monster.name"
-              :name="monster.name"
-              :element="monster.element"
+                v-if="info.length > 7"
+                :key="'others'"
+                :name="'+' + (info.length - 7) + ' autres'"
+                element="dark-light"
             />
-          </template>
-          <Badge
-            v-if="info.length > 7"
-            :key="'others'"
-            :name="'+' + (info.length - 7) + ' autres'"
-            element="dark-light"
+          </ul>
+          <img
+            v-else-if="
+              key === 'image' &&
+              info !== 'placeholder.jpg'
+            "
+            :src="`${env.VITE_URL}/uploads/${info}`"
+            alt="avatar"
+            loading="lazy"
           />
-        </ul>
-        <img
-          v-else-if="
-            key === 'image' &&
-            info !== 'placeholder.jpg'
-          "
-          :src="`${env.VITE_URL}/uploads/${info}`"
-          alt="avatar"
-        />
-        <img
-          v-else-if="
-            key === 'image' &&
-            info === 'placeholder.jpg'
-          "
-          :src="placeholderSrc()"
-          alt="avatar"
-        />
-        <div
-          v-else-if="key === 'grade'"
-          class="members__grade-name"
-        >
-          <Grade
-            v-if="info !== 'member'"
-            :grade="info"
+          <img
+            v-else-if="
+              key === 'image' &&
+              info === 'placeholder.jpg'
+            "
+            :src="placeholderSrc()"
+            alt="avatar"
+            loading="lazy"
           />
-          <span
-            v-else
-            class="members__grade--member"
+          <div
+              v-else-if="key === 'grade'"
+              class="members__grade-name"
           >
-                  💩
-          </span>
-          <span>{{ info }}</span>
-        </div>
-        <span v-else>{{ info }}</span>
-      </td>
+            <Grade
+                v-if="info !== 'member'"
+                :grade="info"
+            />
+            <span
+                v-else
+                class="members__grade--member"
+            >
+              💩
+            </span>
+            <span>{{ info }}</span>
+          </div>
+          <span v-else>{{ info }}</span>
+        </td>
+      </template>
       <td
         class="table-rows__actions"
       >
         <More
           v-if="data.actions"
           :actions="data.actions"
+          @actionSelected="$emit('actionSelected', {
+            action: $event,
+            id: row.id
+          })"
         />
       </td>
     </tr>

@@ -126,6 +126,17 @@ function sort(key: string) {
     actualSort.value = key;
   }
 }
+
+function actionSelected(selection: any) {
+  const action = selection.action;
+  const memberId = selection.id;
+
+  if (action === 'update') {
+    console.log('update', memberId);
+  } else if (action === 'exclude') {
+    console.log('exclude', memberId);
+  }
+}
 </script>
 
 <template>
@@ -136,6 +147,7 @@ function sort(key: string) {
     />
     <Members
       @sort="sort"
+      @actionSelected="actionSelected"
     />
   </main>
 </template>
