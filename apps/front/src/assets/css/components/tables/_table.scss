@@ -5,48 +5,6 @@
   border-collapse: separate;
   border-spacing: 0;
 
-  thead {
-    height: 50px;
-
-    tr {
-      th {
-        font-size: functions.rem(16);
-        font-weight: 500;
-        padding: 0 15px;
-        text-align: left;
-        border-bottom: 1px solid var(--border-background);
-      }
-    }
-  }
-
-  tbody {
-    tr {
-      height: 70px;
-
-      &:not(:last-child) {
-        td {
-          border-bottom: 1px solid var(--system);
-        }
-      }
-
-      td {
-        padding: 0 15px;
-
-        img {
-          border-radius: 50%;
-          object-fit: cover;
-          cursor: pointer;
-          width: 28px;
-          height: 28px;
-        }
-
-        span {
-          font-size: functions.rem(16);
-        }
-      }
-    }
-  }
-
   &__actions {
     width: 55px;
   }

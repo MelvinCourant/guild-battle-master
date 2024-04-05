@@ -1,0 +1,15 @@
+@use '../../partials/functions.scss';
+
+.table-head {
+  height: 50px;
+
+  tr {
+    th {
+      font-size: functions.rem(16);
+      font-weight: 500;
+      padding: 0 15px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-background);
+    }
+  }
+}
