@@ -3,6 +3,7 @@ import '../assets/css/views/_guild.scss';
 import Members from "../components/Members.vue";
 import {provide, ref} from "vue";
 import {useUserStore} from "../stores/user.ts";
+import GuildProfile from "../components/GuildProfile.vue";
 
 const userStore = useUserStore();
 const user = userStore.user;
@@ -36,6 +37,7 @@ const columns = [
   }
 ];
 const data = ref({});
+const guild = ref({});
 
 provide('columns', columns);
 provide('data', data);
@@ -55,6 +57,7 @@ async function getMembers() {
       rows: resultJson.members,
       badges: ['lds']
     };
+    guild.value = resultJson.guild;
   }
 }
 
@@ -63,6 +66,10 @@ getMembers();
 
 <template>
   <main class="guild">
+    <GuildProfile
+      :name="guild.name"
+      :image="guild.image"
+    />
     <Members/>
   </main>
 </template>

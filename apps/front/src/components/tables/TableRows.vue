@@ -15,7 +15,7 @@ watch(data, () => {
   badges.value = data.value.badges;
 });
 
-function assetPlaceholderSrc() {
+function placeholderSrc() {
   return new URL('../../assets/imgs/placeholder.jpg', import.meta.url).href;
 }
 </script>
@@ -64,7 +64,7 @@ function assetPlaceholderSrc() {
                     key === 'image' &&
                     info === 'placeholder.jpg'
                   "
-          :src="assetPlaceholderSrc()"
+          :src="placeholderSrc()"
           alt="avatar"
         />
         <div
