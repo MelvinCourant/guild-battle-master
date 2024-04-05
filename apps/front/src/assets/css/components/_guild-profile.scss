@@ -1,0 +1,41 @@
+@use '../partials/mixins';
+@use '../partials/functions';
+
+.guild-profile {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  min-width: 250px;
+  width: 22.4%;
+
+  &__image {
+    min-width: 100px;
+    width: 100px;
+    min-height: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+
+  &__name {
+    @include mixins.font('text');
+    font-size: functions.rem(24);
+    font-weight: 700;
+    line-height: 0.83333;
+  }
+
+  &__update {
+    color: var(--primary);
+    text-align: center;
+    font-size: functions.rem(14);
+    font-weight: 700;
+    line-height: 0.85714;
+
+    &:hover {
+      color: var(--primary-darkened);
+    }
+  }
+}

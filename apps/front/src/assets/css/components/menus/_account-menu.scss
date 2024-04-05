@@ -2,6 +2,7 @@
 
 .account-menu {
   position: relative;
+  z-index: 9998;
 
   &__button {
     @include mixins.resetButton(none, transparent);

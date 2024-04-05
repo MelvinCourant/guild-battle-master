@@ -1,0 +1,50 @@
+@use '../../partials/mixins';
+@use '../../partials/functions';
+
+.more {
+  position: relative;
+
+  &__button {
+    position: relative;
+    z-index: 1;
+    @include mixins.resetButton(none, transparent);
+    width: 25px;
+    height: 25px;
+  }
+
+  &__actions {
+    position: absolute;
+    z-index: 2;
+    bottom: -8px;
+    transform: translateY(100%);
+    box-shadow: var(--shadow);
+    border-radius: var(--input-text-radius);
+    overflow: hidden;
+
+    &--left {
+      left: 0;
+    }
+
+    &--right {
+      right: 0;
+    }
+  }
+
+  &__action {
+    @include mixins.resetButton(none, var(--system));
+    width: 200px;
+    height: 34px;
+    padding: 10px 14px;
+    text-align: left;
+    font-size: functions.rem(14);
+    line-height: 1;
+
+    &:hover {
+      background: var(--system-lightened);
+    }
+
+    &--danger {
+      color: var(--danger);
+    }
+  }
+}

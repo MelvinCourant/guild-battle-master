@@ -3,6 +3,7 @@
 .navbar-mobile {
   display: flex;
   position: fixed;
+  z-index: 9997;
   top: initial;
   left: 0;
   bottom: 0;
