@@ -32,10 +32,15 @@ export default class GuildsController {
     const members = await Member
       .query()
       .where('guild_id', guildId)
-      .select('id', 'pseudo', 'grade')
+      .select('id', 'pseudo', 'grade', 'user_id')
     let membersInformations = [];
 
     for (const member of members) {
+      const user = await User
+        .query()
+        .where('id', member.user_id)
+        .select('image')
+        .first()
       const memberBox = await Box
         .query()
         .where('member_id', member.id)
@@ -78,11 +83,24 @@ export default class GuildsController {
         await addLds(memberBox);
       }
 
-      membersInformations.push({
-        pseudo: member.pseudo,
-        grade: member.grade,
-        lds: lds,
-      });
+      if(
+        user &&
+        user.image
+      ) {
+        membersInformations.push({
+          image: user.image,
+          grade: member.grade,
+          pseudo: member.pseudo,
+          lds: lds,
+        });
+      } else {
+        membersInformations.push({
+          image: 'placeholder.jpg',
+          grade: member.grade,
+          pseudo: member.pseudo,
+          lds: lds,
+        });
+      }
     }
 
     return response.json({

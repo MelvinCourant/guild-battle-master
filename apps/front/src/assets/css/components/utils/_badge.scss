@@ -8,7 +8,7 @@
   text-align: center;
 
   &__name {
-    font-size: functions.rem(12);
+    font-size: functions.rem(12) !important;
     line-height: 0.5;
   }
 
