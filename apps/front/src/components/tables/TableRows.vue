@@ -32,10 +32,10 @@ function placeholderSrc() {
       <template
         v-for="(info, key, index) in row"
         :key="key"
-        :class="columns[index].class"
       >
         <td
           v-if="key !== 'id'"
+          :class="columns[index - 1].class"
         >
           <ul
               v-if="badges.includes(key)"

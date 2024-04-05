@@ -101,6 +101,9 @@ importers:
       vue-router:
         specifier: ^4.3.0
         version: 4.3.0(vue@3.4.21)
+      vue3-loading-skeleton:
+        specifier: ^0.0.13
+        version: 0.0.13(typescript@5.4.2)
     devDependencies:
       '@vitejs/plugin-vue':
         specifier: ^5.0.4
@@ -4706,6 +4709,14 @@ packages:
       semver: 7.6.0
       typescript: 5.4.2
     dev: true
+
+  /vue3-loading-skeleton@0.0.13(typescript@5.4.2):
+    resolution: {integrity: sha512-TLDYuk+3MUIzmkcJ5Xk9WapL2mrzPc9g5XdVkcu6Ur/E3vD8LurcS1GTgzredgzLbckb18Zoczc8fuqaeZj1kg==}
+    dependencies:
+      vue: 3.4.21(typescript@5.4.2)
+    transitivePeerDependencies:
+      - typescript
+    dev: false
 
   /vue@3.4.21(typescript@5.4.2):
     resolution: {integrity: sha512-5hjyV/jLEIKD/jYl4cavMcnzKwjMKohureP8ejn3hhEjwhWIhWeuzL2kJAjzl/WyVsgPY56Sy4Z40C3lVshxXA==}
