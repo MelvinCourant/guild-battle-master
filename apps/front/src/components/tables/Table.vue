@@ -2,6 +2,7 @@
 import '../../assets/css/components/tables/_table.scss'
 import {inject, ref, watch} from "vue";
 import Badge from "../utils/Badge.vue";
+import Grade from "../utils/Grade.vue";
 
 const columns = inject("columns");
 const data = ref(inject("data"));
@@ -70,8 +71,6 @@ function assetPlaceholderSrc() {
             "
             :src="`${env.VITE_URL}/uploads/${info}`"
             alt="avatar"
-            width="28"
-            height="28"
           />
           <img
               v-else-if="
@@ -80,9 +79,23 @@ function assetPlaceholderSrc() {
               "
               :src="assetPlaceholderSrc()"
               alt="avatar"
-              width="28"
-              height="28"
           />
+          <div
+            v-else-if="key === 'grade'"
+            class="members__grade-name"
+          >
+            <Grade
+              v-if="info !== 'member'"
+              :grade="info"
+            />
+            <span
+              v-else
+              class="members__grade--member"
+            >
+              💩
+            </span>
+            <span>{{ info }}</span>
+          </div>
           <span v-else>{{ info }}</span>
         </td>
       </tr>

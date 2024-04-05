@@ -1,3 +1,5 @@
+@use '../partials/functions.scss';
+
 .members {
   flex: 1;
 
@@ -7,6 +9,17 @@
 
   &__grade {
     width: 200px;
+
+    &-name {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-transform: capitalize;
+    }
+
+    &--member {
+      font-size: functions.rem(21) !important;
+    }
   }
 
   &__pseudo {
