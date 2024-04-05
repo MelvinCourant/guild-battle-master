@@ -44,16 +44,16 @@ function placeholderSrc() {
                 v-for="(monster, index) in info"
             >
               <Badge
-                  v-if="index < 7"
+                  v-if="index < 3"
                   :key="monster.name"
                   :name="monster.name"
                   :element="monster.element"
               />
             </template>
             <Badge
-                v-if="info.length > 7"
+                v-if="info.length > 3"
                 :key="'others'"
-                :name="'+' + (info.length - 7) + ' autres'"
+                :name="'+' + (info.length - 3) + ' autres'"
                 element="dark-light"
             />
           </ul>
