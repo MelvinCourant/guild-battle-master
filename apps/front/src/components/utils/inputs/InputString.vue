@@ -22,7 +22,7 @@
   const labelClass = ref('');
 
   if(props.label) {
-    labelClass.value = '"input-string--label"';
+    labelClass.value = 'input-string--label';
   }
 
   async function updateValue() {

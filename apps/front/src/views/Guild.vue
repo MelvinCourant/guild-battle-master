@@ -229,13 +229,18 @@ async function dialogResponse(name: string) {
         Authorization: `Bearer ${token}`
       }
     });
+    const resultJson = await result.json();
 
     if(result.ok) {
       await getMembers();
       closeDialog();
       alert.display = true;
       alert.type = 'success';
-      alert.message = `${memberSelected.value.pseudo} a été exclu de la guilde.`;
+      alert.message = resultJson.message;
+    } else {
+      alert.display = true;
+      alert.type = 'error';
+      alert.message = resultJson.error;
     }
 
     setTimeout(() => {
