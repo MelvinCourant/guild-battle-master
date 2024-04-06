@@ -9,6 +9,23 @@ const userStore = useUserStore();
 const user = userStore.user;
 const token = userStore.token;
 const env = import.meta.env;
+const fields = [
+  {
+    type: "search",
+    name: "search",
+    placeholder: "Grade, pseudo ...etc",
+  }
+];
+const displayModes = reactive([
+  {
+    name: 'list',
+    isSelected: true
+  },
+  {
+    name: 'grid',
+    isSelected: false
+  }
+]);
 const columns = reactive([
   {
     name: '',
@@ -43,6 +60,8 @@ const data = ref({});
 const members = ref([]);
 const guild = ref({});
 
+provide('fields', fields);
+provide('displayModes', displayModes);
 provide('columns', columns);
 provide('data', data);
 

@@ -19,7 +19,11 @@
   const emit = defineEmits(["sendValue"]);
 
   const typeClass = ref(`input-string--${props.attributes.type}`);
-  const labelClass = ref("input-string--label");
+  const labelClass = ref('');
+
+  if(props.label) {
+    labelClass.value = '"input-string--label"';
+  }
 
   async function updateValue() {
     emit("sendValue", props.attributes.name, props.attributes.value);
