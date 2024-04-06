@@ -24,13 +24,14 @@
     class="button"
     :class="attributes.style"
     :disabled="attributes.disabled"
-    @click="$emit('click')"
+    @click="$emit('click', attributes.name)"
     v-if="attributes.type === 'button'"
   />
   <input
     :type="attributes.type"
     :value="loading || attributes.value"
     class="button"
+    @click="$emit('click', attributes.name)"
     :class="attributes.style"
     :disabled="attributes.disabled"
     v-else

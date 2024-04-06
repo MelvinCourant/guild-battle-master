@@ -40,6 +40,11 @@
     margin-bottom: 10px;
   }
 
+  &__description {
+    font-size: functions.rem(14);
+    line-height: normal;
+  }
+
   &__fields {
     display: flex;
     justify-content: flex-end;

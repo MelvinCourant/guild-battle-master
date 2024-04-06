@@ -58,6 +58,6 @@
       attributes.type === 'button' ||
       attributes.type === 'submit'
     "
-    @click="$emit('click')"
+    @click="$emit('click', $event)"
   />
 </template>

@@ -5,6 +5,8 @@ import {provide, reactive, ref} from "vue";
 import {useUserStore} from "../stores/user.ts";
 import GuildProfile from "../components/GuildProfile.vue";
 import Dialog from "../components/utils/Dialog.vue";
+import Alert from "../components/utils/Alert.vue";
+import {IAlert} from "../models/alert.ts";
 
 const userStore = useUserStore();
 const user = userStore.user;
@@ -59,15 +61,16 @@ const columns = reactive([
 ]);
 const data = ref({});
 const members = ref([]);
+const memberSelected = ref({});
 const guild = ref({});
 const dialog = reactive({
   image: {
-    src: 'http://localhost:3333/uploads/wlht4zblg8okco0udwhpafyj.jpg',
-    alt: 'test'
+    src: '',
+    alt: ''
   },
   content: {
-    title: 'Exclure Zyxe de la guilde ?',
-    description: 'Cet utilisateur ne sera plus membre de votre guilde. Cependant il ne sera pas exclu définitivement s’il est encore membre de votre guilde en jeu.'
+    title: '',
+    description: ''
   },
   fields: [
     {
@@ -83,7 +86,12 @@ const dialog = reactive({
     }
   ]
 });
-const dialogIsOpen = ref(true);
+const dialogIsOpen = ref(false);
+const alert: IAlert = reactive({
+  display: false,
+  type: '',
+  message: '',
+});
 
 provide('fields', fields);
 provide('displayModes', displayModes);
@@ -179,6 +187,10 @@ function sort(key: string) {
   toggleSortOrder(columns);
 }
 
+function placeholderSrc() {
+  return new URL('../assets/imgs/placeholder.jpg', import.meta.url).href;
+}
+
 function actionSelected(selection: any) {
   const action = selection.action;
   const memberId = selection.id;
@@ -186,8 +198,56 @@ function actionSelected(selection: any) {
   if (action === 'update') {
     console.log('update', memberId);
   } else if (action === 'exclude') {
-    console.log('exclude', memberId);
+    let memberImage;
+
+    memberSelected.value = members.value.find((member) => member.id === memberId);
+
+    if(memberSelected.value.image === 'placeholder.jpg') {
+      memberImage = placeholderSrc();
+    } else {
+      memberImage = `${env.VITE_URL}/uploads/${memberSelected.value.image}`;
+    }
+
+    dialog.image = {
+      src: memberImage,
+      alt: memberSelected.value.pseudo
+    };
+    dialog.content = {
+      title: `Exclure ${memberSelected.value.pseudo} de la guilde ?`,
+      description: 'Cet utilisateur ne sera plus membre de votre guilde. Cependant il ne sera pas exclu définitivement s’il est encore membre de votre guilde en jeu.'
+    };
+    dialogIsOpen.value = true;
   }
+}
+
+async function dialogResponse(name: string) {
+  if(name === 'exclude') {
+    const result = await fetch(`${env.VITE_URL}/api/members/${memberSelected.value.id}/exclude`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    if(result.ok) {
+      await getMembers();
+      closeDialog();
+      alert.display = true;
+      alert.type = 'success';
+      alert.message = `${memberSelected.value.pseudo} a été exclu de la guilde.`;
+    }
+
+    setTimeout(() => {
+      alert.display = false;
+    }, 3000);
+  } else {
+    closeDialog();
+  }
+}
+
+function closeDialog() {
+  dialogIsOpen.value = false;
 }
 </script>
 
@@ -205,5 +265,12 @@ function actionSelected(selection: any) {
   <Dialog
     :dialog="dialog"
     :isOpen="dialogIsOpen"
+    @click="dialogResponse"
+    @close="closeDialog"
+  />
+  <Alert
+    :display="alert.display"
+    :type="alert.type"
+    :message="alert.message"
   />
 </template>

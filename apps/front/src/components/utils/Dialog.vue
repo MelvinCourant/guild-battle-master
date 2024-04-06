@@ -12,10 +12,12 @@ defineProps({
     default: false
   }
 });
+defineEmits(['close', 'click']);
 </script>
 
-<template v-if="isOpen">
+<template>
   <dialog
+      v-if="isOpen"
       open
       class="dialog"
       aria-labelledby="dialog_title"
@@ -43,11 +45,13 @@ defineProps({
           v-for="field in dialog.fields"
           :attributes="field"
           :key="field.name"
+          @click="$emit('click', $event)"
       />
     </div>
   </dialog>
   <div
+      v-if="isOpen"
       class="dialog__overlay"
-      @click="!isOpen"
+      @click="$emit('close')"
   ></div>
 </template>

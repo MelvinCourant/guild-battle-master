@@ -55,7 +55,7 @@ router.group(() => {
     return membersController.update(data)
   })
 
-  router.patch('/exclude/:id', async (data) => {
+  router.patch('/:id/exclude', async (data) => {
     return membersController.destroy(data)
   });
 }).prefix('api/members')
