@@ -4,6 +4,7 @@ import Members from "../components/Members.vue";
 import {provide, reactive, ref} from "vue";
 import {useUserStore} from "../stores/user.ts";
 import GuildProfile from "../components/GuildProfile.vue";
+import Dialog from "../components/utils/Dialog.vue";
 
 const userStore = useUserStore();
 const user = userStore.user;
@@ -59,6 +60,30 @@ const columns = reactive([
 const data = ref({});
 const members = ref([]);
 const guild = ref({});
+const dialog = reactive({
+  image: {
+    src: 'http://localhost:3333/uploads/wlht4zblg8okco0udwhpafyj.jpg',
+    alt: 'test'
+  },
+  content: {
+    title: 'Exclure Zyxe de la guilde ?',
+    description: 'Cet utilisateur ne sera plus membre de votre guilde. Cependant il ne sera pas exclu définitivement s’il est encore membre de votre guilde en jeu.'
+  },
+  fields: [
+    {
+      type: 'button',
+      name: 'cancel',
+      value: 'Annuler',
+    },
+    {
+      type: 'button',
+      name: 'exclude',
+      value: 'Exclure',
+      style: 'danger'
+    }
+  ]
+});
+const dialogIsOpen = ref(true);
 
 provide('fields', fields);
 provide('displayModes', displayModes);
@@ -177,4 +202,8 @@ function actionSelected(selection: any) {
       @actionSelected="actionSelected"
     />
   </main>
+  <Dialog
+    :dialog="dialog"
+    :isOpen="dialogIsOpen"
+  />
 </template>
