@@ -90,16 +90,16 @@ export default class GuildsController {
         membersInformations.push({
           id: member.id,
           image: user.image,
-          grade: member.grade,
           pseudo: member.pseudo,
+          grade: member.grade,
           lds: lds,
         });
       } else {
         membersInformations.push({
           id: member.id,
           image: 'placeholder.jpg',
-          grade: member.grade,
           pseudo: member.pseudo,
+          grade: member.grade,
           lds: lds,
         });
       }

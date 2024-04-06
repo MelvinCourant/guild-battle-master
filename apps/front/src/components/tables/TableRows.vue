@@ -83,12 +83,6 @@ function placeholderSrc() {
                 v-if="info !== 'member'"
                 :grade="info"
             />
-            <span
-                v-else
-                class="members__grade--member"
-            >
-              💩
-            </span>
             <span>{{ info }}</span>
           </div>
           <span v-else>{{ info }}</span>

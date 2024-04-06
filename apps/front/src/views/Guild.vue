@@ -16,15 +16,15 @@ const columns = reactive([
     class: 'members__picture'
   },
   {
-    name: 'Grade',
-    key: 'grade',
-    class: 'members__grade',
-    sortOrder: ''
-  },
-  {
     name: 'Pseudo',
     key: 'pseudo',
     class: 'members__pseudo',
+    sortOrder: ''
+  },
+  {
+    name: 'Grade',
+    key: 'grade',
+    class: 'members__grade',
     sortOrder: ''
   },
   {
@@ -40,6 +40,7 @@ const columns = reactive([
   }
 ]);
 const data = ref({});
+const members = ref([]);
 const guild = ref({});
 
 provide('columns', columns);
@@ -72,6 +73,7 @@ async function getMembers() {
         }
       ]
     };
+    members.value = resultJson.members;
     guild.value = resultJson.guild;
   }
 }
@@ -81,25 +83,28 @@ getMembers();
 const actualSort = ref('');
 
 function sort(key: string) {
-  if(
-    key === 'picture' ||
-    key === 'actions'
-  ) {
-    return;
+  function ascendingSort(a: any, b: any) {
+    if (a[key] < b[key]) {
+      return -1;
+    }
+    if (a[key] > b[key]) {
+      return 1;
+    }
+    return 0;
   }
 
   function toggleSortOrder(columns: any) {
     columns.forEach((column) => {
       if (
-        column.key === key &&
-        column.sortOrder === '' ||
-        column.key === key &&
-        column.sortOrder === 'desc'
+          column.key === key &&
+          column.sortOrder === '' ||
+          column.key === key &&
+          column.sortOrder === 'desc'
       ) {
         column.sortOrder = 'asc';
       } else if (
-        column.key === key &&
-        column.sortOrder === 'asc'
+          column.key === key &&
+          column.sortOrder === 'asc'
       ) {
         column.sortOrder = 'desc';
       } else {
@@ -108,23 +113,26 @@ function sort(key: string) {
     });
   }
 
-  if (actualSort.value === key) {
-    data.value.rows = data.value.rows.reverse();
-    toggleSortOrder(columns);
-  } else {
-    // Ascending sort depending on the key
-    data.value.rows = data.value.rows.sort((a: any, b: any) => {
-      if (a[key] < b[key]) {
-        return -1;
-      }
-      if (a[key] > b[key]) {
-        return 1;
-      }
-      return 0;
+  if(
+    key === 'picture' ||
+    key === 'actions'
+  ) {
+    return;
+  } else if (actualSort.value === key) {
+    members.value = members.value.reverse();
+  } else if(key === 'grade') {
+    const gradeOrder = ['leader', 'vice-leader', 'senior', 'member'];
+
+    members.value = members.value.sort((a: any, b: any) => {
+      return gradeOrder.indexOf(a.grade) - gradeOrder.indexOf(b.grade);
     });
-    toggleSortOrder(columns);
+    actualSort.value = key;
+  } else {
+    members.value = members.value.sort(ascendingSort);
     actualSort.value = key;
   }
+
+  toggleSortOrder(columns);
 }
 
 function actionSelected(selection: any) {

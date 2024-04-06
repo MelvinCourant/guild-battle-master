@@ -7,6 +7,10 @@
     width: 70px;
   }
 
+  &__pseudo {
+    width: 180px;
+  }
+
   &__grade {
     width: 200px;
 
@@ -20,10 +24,6 @@
     &--member {
       font-size: functions.rem(21) !important;
     }
-  }
-
-  &__pseudo {
-    width: 220px;
   }
 
   &__lds {
