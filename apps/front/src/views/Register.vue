@@ -25,7 +25,7 @@
       },
       {
         level: 2,
-        label: 'Guilde',
+        label: 'JSON',
         active: false,
       },
       {
@@ -60,10 +60,10 @@
             }
           },
           {
-            label: 'Pseudo*',
+            label: 'Nom d\'utilisateur*',
             attributes: {
               type: 'text',
-              name: 'pseudo',
+              name: 'username',
               required: true,
               autocomplete: 'username'
             }
@@ -98,15 +98,6 @@
       {
         id: 2,
         fields: [
-          {
-            label: 'Nom de la guilde*',
-            attributes: {
-              type: 'text',
-              name: 'guildName',
-              required: true,
-              autocomplete: 'organization',
-            }
-          },
           {
             label: 'Parcourir',
             attributes: {
@@ -180,11 +171,10 @@
     email: '',
     password: '',
     confirmationPassword: '',
-    pseudo: '',
-    guildName: '',
+    username: '',
+    json: null,
   });
   const memberImage = ref<File | null>();
-  const json = ref<File | null>();
   const formStepOne = registerForm.forms[0];
   const formFieldsStepOne = formStepOne.fields;
   const formStepTwo = registerForm.forms[1];
@@ -200,16 +190,14 @@
       memberImage.value = value as File;
     } else if(inputName === 'email') {
       formValues.email = value as string;
-    } else if(inputName === 'pseudo') {
-      formValues.pseudo = value as string;
+    } else if(inputName === 'username') {
+      formValues.username = value as string;
     } else if(inputName === 'password') {
       formValues.password = value as string;
     } else if(inputName === 'confirmationPassword') {
       formValues.confirmationPassword = value as string;
-    } else if(inputName === 'guildName') {
-      formValues.guildName = value as string;
     } else if(inputName === 'json') {
-      json.value = value as File;
+      formValues.json = value as File;
     }
   }
 
@@ -251,22 +239,21 @@
     submitButton.loading = 'Chargement...';
 
     const image = optionalFiles[0];
-    const json = optionalFiles[1];
     let jsonFormat: any;
     if(step === 1) {
       jsonFormat = {
         email: formValues.email,
         password: formValues.password,
         password_confirmation: formValues.confirmationPassword,
-        pseudo: formValues.pseudo
+        username: formValues.username
       };
     } else {
       jsonFormat = {
         email: formValues.email,
         password: formValues.password,
         password_confirmation: formValues.confirmationPassword,
-        pseudo: formValues.pseudo,
-        guild_name: formValues.guildName
+        username: formValues.username,
+        json: formValues.json
       };
     }
 
@@ -277,16 +264,6 @@
       jsonFormat = {
         ...jsonFormat,
         image: image.value
-      }
-    }
-
-    if(
-        json &&
-        json.value
-    ) {
-      jsonFormat = {
-        ...jsonFormat,
-        json: json.value
       }
     }
 
@@ -322,7 +299,7 @@
           }
 
           if (resumeContent) {
-            resumeContent[1].text = formValues.guildName;
+            resumeContent[1].text = resultJson.guildName;
             resumeContent[2].text = resultJson.leader;
 
             if(resultJson.members > 1) {
@@ -351,24 +328,23 @@
   function sendDataForm() {
     if(
         formValues.email !== '' &&
-        formValues.pseudo !== '' &&
+        formValues.username !== '' &&
         formValues.password !== '' &&
         currentStep.value === 1
     ) {
       register(currentStep.value, formFieldsStepOne, [memberImage]);
     } else if(
-        formValues.guildName !== '' &&
+        formValues.json &&
         currentStep.value === 2
     ) {
-      register(currentStep.value, formFieldsStepTwo, [memberImage, json]);
+      register(currentStep.value, formFieldsStepTwo, [memberImage]);
     } else if(
         formValues.email !== '' &&
-        formValues.pseudo !== '' &&
+        formValues.username !== '' &&
         formValues.password !== '' &&
-        formValues.guildName !== '' &&
         currentStep.value === 3
     ) {
-      register(currentStep.value, formFieldsStepTwo, [memberImage, json])
+      register(currentStep.value, formFieldsStepTwo, [memberImage])
     }
   }
 

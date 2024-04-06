@@ -106,7 +106,8 @@ export default class AuthController {
       await User.create({
         email: payload.email,
         password: payload.password,
-        role: 'leader',
+        username: payload.username,
+        role: 'moderator',
         image: userImage?.fileName,
       })
         .catch((error) => {
@@ -131,9 +132,72 @@ export default class AuthController {
         .where('email', request.input('email'))
         .select('image')
         .first()
+
+      const json: any = payload.json;
+      await json.move(app.makePath('uploads/json'), {
+        name: `${cuid()}.${json.extname}`,
+      })
+      const jsonLink: string = `./uploads/json/${json.fileName}`
+
+      const data = fs.readFileSync(jsonLink, 'utf8')
+
+      if (!data) {
+        fs.unlinkSync(jsonLink)
+        return response.status(500).send({ message: 'Error reading json file' })
+      }
+
+      async function createMembers(wizardId: number, members: any) {
+        for (const memberIndex of Object.keys(members)) {
+          const member: any = members[memberIndex];
+          let grade: any;
+          const pseudo: string = member.wizard_name;
+
+          if(member.grade === 1) {
+            grade = 'leader'
+
+            if(
+              member.wizard_id === wizardId
+            ) {
+              user.role = 'leader'
+              await user.save()
+            } else {
+              leaderPseudo = member.wizard_name
+            }
+          } else if(member.grade === 2) {
+            grade = 'member'
+          } else if(member.grade === 3) {
+            grade = 'vice-leader'
+          } else if(member.grade === 4) {
+            grade = 'senior'
+          }
+
+          if(
+            member.wizard_id === wizardId
+          ) {
+            await Member.create({
+              wizard_id: member.wizard_id,
+              pseudo: pseudo,
+              grade: grade,
+              guild_id: guild.id,
+              user_id: user.id,
+            })
+          } else {
+            await Member.create({
+              wizard_id: member.wizard_id,
+              pseudo: pseudo,
+              grade: grade,
+              guild_id: guild.id,
+            })
+          }
+        }
+      }
+
+      const jsonParsed: any = JSON.parse(data)
+      const wizardId: number = jsonParsed.wizard_info.wizard_id
       let guild: any = null
+      const guildName: string = jsonParsed.guild.guild_info.name
       guild = await Guild.create({
-        name: payload.guild_name,
+        name: guildName,
         leader_id: user.id,
         image: userImage.image,
       })
@@ -141,88 +205,34 @@ export default class AuthController {
           throw error
         })
 
-      await Member.create({
-        pseudo: request.input('pseudo'),
-        grade: 'leader',
-        user_id: user.id,
-        guild_id: guild.id,
+      const members: any = jsonParsed.guild.guild_members
+      let leaderPseudo: string = members[wizardId].wizard_name
+
+      await createMembers(wizardId, members)
+
+      const membersNumber = Object.keys(members).length
+
+      fs.unlinkSync(jsonLink)
+
+      return response.created({
+        message: 'Guild, member and guild mates created',
+        guildName: guildName,
+        leader: leaderPseudo,
+        members: membersNumber,
       })
-        .catch((error) => {
-          throw error
-        })
-
-      if(payload.json) {
-        const json: any = payload.json;
-        await json.move(app.makePath('uploads/json'), {
-          name: `${cuid()}.${json.extname}`,
-        })
-        const jsonLink: string = `./uploads/json/${json.fileName}`
-
-        const data = fs.readFileSync(jsonLink, 'utf8')
-
-        if (!data) {
-          fs.unlinkSync(jsonLink)
-          return response.status(500).send({ message: 'Error reading json file' })
-        }
-
-        async function createMembers(members: any) {
-          for (const memberIndex of Object.keys(members)) {
-            const member: any = members[memberIndex];
-
-            if(member.grade !== 1) {
-              let grade: any;
-              const pseudo: string = member.wizard_name;
-
-              if(member.grade === 2) {
-                grade = 'member'
-              } else if(member.grade === 3) {
-                grade = 'vice-leader'
-              } else if(member.grade === 4) {
-                grade = 'senior'
-              }
-
-              await Member.create({
-                pseudo: pseudo,
-                grade: grade,
-                guild_id: guild.id,
-              })
-            }
-          }
-        }
-
-        const jsonParsed: any = JSON.parse(data)
-        const members: any = jsonParsed.guild.guild_members
-
-        await createMembers(members)
-
-        const membersNumber = Object.keys(members).length
-
-        fs.unlinkSync(jsonLink)
-
-        return response.created({
-          message: 'Guild, member and guild mates created',
-          leader: request.input('pseudo'),
-          members: membersNumber,
-        })
-      } else {
-        return response.created({
-          message: 'Guild and member created',
-          leader: request.input('pseudo'),
-        })
-      }
     } else if(request.params().step === "3") {
       const user: any = await User
         .query()
         .where('email', request.input('email'))
         .first()
-      const guild: any = await Guild
-        .query()
-        .where('name', request.input('guild_name'))
-        .first()
       const member: any = await Member
         .query()
-        .where('pseudo', request.input('pseudo'))
+        .where('user_id', user.id)
         .first()
+      const guild: any = await Guild
+          .query()
+          .where('id', member.guild_id)
+          .first()
 
       if(
         !user &&
@@ -255,10 +265,8 @@ export default class AuthController {
           throw error
         });
 
-      await User
-        .query()
-        .where('email', request.input('email'))
-        .update({ pending: 0 })
+      user.pending = 0
+      await user.save()
 
       return response.created({ message: 'Registration successful' })
     } else {
