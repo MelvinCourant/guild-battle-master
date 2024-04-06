@@ -342,6 +342,7 @@
         formValues.email !== '' &&
         formValues.username !== '' &&
         formValues.password !== '' &&
+        formValues.json &&
         currentStep.value === 3
     ) {
       register(currentStep.value, formFieldsStepTwo, [memberImage])

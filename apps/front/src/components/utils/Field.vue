@@ -54,10 +54,14 @@
   <Button
     :loading="loading"
     :attributes="attributes"
-    v-if="
-      attributes.type === 'button' ||
-      attributes.type === 'submit'
-    "
+    v-if="attributes.type === 'button'"
     @click="$emit('click', $event)"
+  />
+
+  <Button
+      :loading="loading"
+      :attributes="attributes"
+      v-if="attributes.type === 'submit'"
+      @click="$emit('click')"
   />
 </template>

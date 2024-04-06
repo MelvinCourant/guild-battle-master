@@ -124,8 +124,11 @@ export default class GuildsController {
       .where('leader_id', user.id)
       .first()
 
-    if(userRole.role !== 'leader') {
-      return response.status(403).json({ error: 'Vous n\'êtes pas le leader d\'une guilde' })
+    if(
+      userRole.role !== 'leader' &&
+      userRole.role !== 'moderator'
+    ) {
+      return response.status(403).json({ error: 'Vous n\'avez pas les droits pour effectuer cette action' })
     }
 
     if(!guild) {
@@ -152,11 +155,13 @@ export default class GuildsController {
         const member: any = members[memberIndex];
         const memberExists = await Member
           .query()
-          .where('pseudo', member.wizard_name)
+          .where('wizard_id', member.wizard_id)
           .first()
 
         function getGrade(member: any) {
-          if(member.grade === 2) {
+          if(member.grade === 1) {
+            return 'leader'
+          } else if(member.grade === 2) {
             return 'member'
           } else if(member.grade === 3) {
             return 'vice-leader'
@@ -165,21 +170,16 @@ export default class GuildsController {
           }
         }
 
-        if(
-          member.grade !== 1
-          && !memberExists
-        ) {
+        if(!memberExists) {
           const pseudo: string = member.wizard_name;
 
           await Member.create({
+            wizard_id: member.wizard_id,
             pseudo: pseudo,
             grade: getGrade(member),
             guild_id: guildId,
           })
-        } else if(
-          member.grade !== 1 &&
-          memberExists
-        ) {
+        } else if(memberExists) {
           // @ts-ignore
           memberExists.grade = getGrade(member)
           memberExists.guild_id = guildId
@@ -189,12 +189,12 @@ export default class GuildsController {
 
       for (const previousMember of previousMembers) {
         if(
-          !members[previousMember.pseudo] &&
+          !members[previousMember.wizard_id] &&
           previousMember.user_id !== user.id
         ) {
           await Member
             .query()
-            .where('pseudo', previousMember.pseudo)
+            .where('wizard_id', previousMember.wizard_id)
             .delete()
         }
       }

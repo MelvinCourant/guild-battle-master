@@ -19,7 +19,8 @@ export default class MembersController {
 
     if(
       user.role !== 'admin' &&
-      user.role !== 'leader' ||
+      user.role !== 'leader' &&
+      user.role !== 'moderator' ||
       leadGuildId !== memberGuildId
     ) {
       return response.status(403).json({ error: 'Vous n\'avez pas les droits' })
@@ -47,6 +48,11 @@ export default class MembersController {
 
   public async destroy({ auth, params, response }: HttpContext) {
     const user = await auth.authenticate()
+    const userMember = await Member
+      .query()
+      .where('user_id', user.id)
+      .select('id')
+      .firstOrFail()
     const leadGuild = await Guild
       .query()
       .where('leader_id', user.id)
@@ -61,8 +67,10 @@ export default class MembersController {
 
     if(
       user.role !== 'admin' &&
-      user.role !== 'leader' ||
-      leadGuildId !== memberGuildId
+      user.role !== 'leader' &&
+      user.role !== 'moderator' ||
+      leadGuildId !== memberGuildId ||
+      userMember.id === member.id
     ) {
       return response.status(403).json({ error: 'Vous n\'avez pas les droits' })
     }
