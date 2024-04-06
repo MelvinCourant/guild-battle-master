@@ -7,4 +7,12 @@
   max-height: calc(100vh - 70px);
   overflow: auto;
   padding: 80px 70px;
+
+  @media screen and (max-width: 1399px) {
+    gap: 50px;
+  }
+
+  @media screen and (max-width: 1199px) {
+    flex-direction: column;
+  }
 }
