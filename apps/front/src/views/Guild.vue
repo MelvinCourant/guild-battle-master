@@ -45,7 +45,7 @@ const columns = reactive([
     name: 'Grade',
     key: 'grade',
     class: 'members__grade',
-    sortOrder: ''
+    sortOrder: 'asc'
   },
   {
     name: '5 nats lumière et ténèbre',
@@ -132,7 +132,7 @@ async function getMembers() {
 
 getMembers();
 
-const actualSort = ref('');
+const actualSort = ref('grade');
 
 function sort(key: string) {
   function ascendingSort(a: any, b: any) {

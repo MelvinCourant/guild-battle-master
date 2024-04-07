@@ -105,6 +105,12 @@ export default class GuildsController {
       }
     }
 
+    const gradeOrder = ['leader', 'vice-leader', 'senior', 'member']
+
+    membersInformations = membersInformations.sort((a: any, b: any) => {
+      return gradeOrder.indexOf(a.grade) - gradeOrder.indexOf(b.grade)
+    })
+
     return response.json({
       guild,
       members: membersInformations
