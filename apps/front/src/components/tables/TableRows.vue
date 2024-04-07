@@ -46,7 +46,7 @@ function placeholderSrc() {
               <Badge
                   v-if="index < 3"
                   :key="monster.id"
-                  :monsterId="monster.id"
+                  :monstersIds="[monster.id]"
                   :name="monster.name"
                   :element="monster.element"
               />
@@ -54,6 +54,7 @@ function placeholderSrc() {
             <Badge
                 v-if="info.length > 3"
                 :key="'others'"
+                :monstersIds="info.slice(3).map(monster => monster.id)"
                 :name="'+' + (info.length - 3) + ' autres'"
                 element="dark-light"
             />

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import '../../assets/css/components/utils/_tooltip.scss'
 defineProps( {
-  img: {
-    type: Object,
+  imgs: {
+    type: Array,
     required: true
   }
 });
@@ -11,6 +11,7 @@ defineProps( {
 <template>
   <div class="tooltip">
     <img
+      v-for="img in imgs"
       :src="img.src"
       :alt="img.alt"
       width="30"

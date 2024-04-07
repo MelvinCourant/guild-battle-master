@@ -6,8 +6,8 @@ import Tooltip from "./Tooltip.vue";
 
 const env = import.meta.env;
 const props = defineProps({
-  monsterId: {
-    type: Number
+  monstersIds: {
+    type: Array
   },
   name: {
     type: String,
@@ -19,11 +19,8 @@ const props = defineProps({
   }
 });
 const monstersStore = useMonstersStore();
-const monster: any = ref(null);
-const monsterImage = reactive({
-  src: '',
-  alt: ''
-});
+const monsters = ref([]);
+const monstersImages = ref([]) as any;
 const tooltipIsDisplayed = ref(false);
 
 async function getMonsterFromDb(id: number) {
@@ -39,24 +36,35 @@ async function getMonsterFromDb(id: number) {
   return await result.json();
 }
 
-async function getMonster(id: number) {
-  if(!monster.value) {
-    await getMonsterFromDb(id).then((data) => {
-      monster.value = data;
-      monstersStore.setMonster(monster.value);
-    });
-    monsterImage.src = `${env.VITE_URL}/uploads/${monster.value.image}`;
-    monsterImage.alt = monster.name;
+async function getMonsters(monstersIds: any) {
+  if(!monsters.value) {
+    for (const id of monstersIds) {
+      await getMonsterFromDb(id).then((data) => {
+        monsters.value = data;
+        monstersStore.setMonster(monsters.value);
+      });
+      monstersImages.value.push({
+        src: `${env.VITE_URL}/uploads/${monsters.value.image}`,
+        alt: monsters.name
+      });
+    }
   } else {
-    monsterImage.src = `${env.VITE_URL}/uploads/${monster.value.image}`;
-    monsterImage.alt = monster.name;
+    monsters.value.forEach((monster: any) => {
+      monstersImages.value.push({
+        src: `${env.VITE_URL}/uploads/${monster.image}`,
+        alt: monster.name
+      });
+    });
   }
 }
 
 onMounted(async () => {
-  if(props.monsterId) {
-    monster.value = monstersStore.getMonster(props.monsterId);
-    await getMonster(props.monsterId);
+  if(props.monstersIds) {
+    for (const id of props.monstersIds) {
+      monsters.value.push(monstersStore.getMonster(id));
+    }
+
+    await getMonsters(props.monstersIds);
   }
 });
 </script>
@@ -75,10 +83,10 @@ onMounted(async () => {
     </span>
     <Tooltip
         v-show="
-          monsterImage.src &&
+          monstersImages &&
           tooltipIsDisplayed
         "
-        :img="monsterImage"
+        :imgs="monstersImages"
     />
   </li>
 </template>
