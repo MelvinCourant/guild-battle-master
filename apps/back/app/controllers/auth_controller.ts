@@ -11,6 +11,8 @@ import fs from 'fs'
 import User from "#models/user";
 import Member from "#models/member";
 import Guild from "#models/guild";
+import Box from "#models/box";
+import Monster from "#models/monster";
 
 export default class AuthController {
   public async register({ request, response }: HttpContext) {
@@ -45,6 +47,11 @@ export default class AuthController {
           .first()
 
         if(member) {
+          await Box
+            .query()
+            .where('member_id', member.id)
+            .delete()
+
           await Member
             .query()
             .where('user_id', user.id)
@@ -174,19 +181,55 @@ export default class AuthController {
           if(
             member.wizard_id === wizardId
           ) {
-            await Member.create({
+            const memberRegistered = await Member.create({
               wizard_id: member.wizard_id,
               pseudo: pseudo,
               grade: grade,
               guild_id: guild.id,
               user_id: user.id,
             })
+
+            memberId = memberRegistered.id
+            const monsters: any = jsonParsed.unit_list
+            await createBoxes(memberId, monsters)
           } else {
             await Member.create({
               wizard_id: member.wizard_id,
               pseudo: pseudo,
               grade: grade,
               guild_id: guild.id,
+            })
+          }
+        }
+      }
+
+      async function createBoxes(memberId: number, monsters: any) {
+        for (const monster of monsters) {
+          const box: any = await Box
+            .query()
+            .where('monster_id', monster.unit_master_id)
+            .andWhere('member_id', memberId)
+            .first()
+          const monsterExists: any = await Monster
+            .query()
+            .where('unit_master_id', monster.unit_master_id)
+            .first()
+
+          if(!monsterExists) {
+            continue
+          }
+
+          if(box) {
+            box.quantity =
+              monsters.filter((m: any) => m.unit_master_id === monster.unit_master_id)
+                .length
+            await box.save()
+          } else {
+            await Box.create({
+              monster_id: monster.unit_master_id,
+              member_id: memberId,
+              quantity: 1,
+              monsters_assigned: 0,
             })
           }
         }
@@ -206,6 +249,7 @@ export default class AuthController {
         })
 
       const members: any = jsonParsed.guild.guild_members
+      let memberId: number = 0
       let leaderPseudo: string = members[wizardId].wizard_name
 
       await createMembers(wizardId, members)

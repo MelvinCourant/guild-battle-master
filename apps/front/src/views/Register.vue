@@ -88,7 +88,7 @@
           },
           {
             attributes: {
-              type: 'submit',
+              type: 'button',
               value: 'Continuer',
               style: 'primary',
             }
@@ -325,19 +325,19 @@
     submitButton.loading = '';
   }
 
-  function sendDataForm() {
+  async function sendDataForm() {
     if(
         formValues.email !== '' &&
         formValues.username !== '' &&
         formValues.password !== '' &&
         currentStep.value === 1
     ) {
-      register(currentStep.value, formFieldsStepOne, [memberImage]);
+      await register(currentStep.value, formFieldsStepOne, [memberImage]);
     } else if(
         formValues.json &&
         currentStep.value === 2
     ) {
-      register(currentStep.value, formFieldsStepTwo, [memberImage]);
+      await register(currentStep.value, formFieldsStepTwo, [memberImage]);
     } else if(
         formValues.email !== '' &&
         formValues.username !== '' &&
@@ -345,7 +345,7 @@
         formValues.json &&
         currentStep.value === 3
     ) {
-      register(currentStep.value, formFieldsStepTwo, [memberImage])
+      await register(currentStep.value, formFieldsStepTwo, [memberImage])
     }
   }
 
