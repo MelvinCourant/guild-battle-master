@@ -254,6 +254,22 @@ export default class GuildsController {
         .where('pseudo', 'like', `%${keyword}%`)
         .orWhere('grade', 'like', `%${keyword}%`)
         .select('id', 'pseudo', 'grade', 'user_id')
+
+      if(members.length === 0) {
+        const monsters = await Monster
+          .query()
+          .where('name', 'like', `%${keyword}%`)
+          .select('unit_master_id')
+        const boxes = await Box
+          .query()
+          .whereIn('monster_id', monsters.map((monster: any) => monster.unit_master_id))
+          .select('member_id')
+
+        members = await Member
+          .query()
+          .whereIn('id', boxes.map((box: any) => box.member_id))
+          .select('id', 'pseudo', 'grade', 'user_id')
+      }
     }
 
     for (const member of members) {
