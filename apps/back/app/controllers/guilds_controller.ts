@@ -51,7 +51,7 @@ export default class GuildsController {
           const monsterData = await Monster
             .query()
             .where('unit_master_id', monster.monster_id)
-            .select('name', 'element', 'natural_grade', 'is_fusion_shop')
+            .select('id', 'name', 'element', 'natural_grade', 'is_fusion_shop')
             .first()
 
           if(!monsterData) {
@@ -71,6 +71,7 @@ export default class GuildsController {
             monsterData.is_fusion_shop === 0
           ) {
             lds.push({
+              id: monsterData.id,
               name: monsterData.name,
               element: monsterData.element,
               quantity: monster.quantity,

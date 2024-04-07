@@ -1,11 +1,13 @@
 @use '../../partials/functions';
 
 .badge {
+  position: relative;
   display: flex;
   width: fit-content;
   padding: 3.5px 7.5px 5.5px 7.5px;
   border-radius: 15px;
   text-align: center;
+  cursor: pointer;
 
   &__name {
     font-size: functions.rem(12) !important;

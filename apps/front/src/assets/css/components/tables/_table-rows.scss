@@ -13,19 +13,19 @@
     td {
       padding: 0 15px;
 
-      img {
-        border-radius: 50%;
-        object-fit: cover;
-        min-width: 28px;
-        width: 28px;
-        min-height: 28px;
-        height: 28px;
-      }
-
       span {
         font-size: functions.rem(16);
       }
     }
+  }
+
+  &__image {
+    border-radius: 50%;
+    object-fit: cover;
+    min-width: 28px;
+    width: 28px;
+    min-height: 28px;
+    height: 28px;
   }
 
   &__actions {

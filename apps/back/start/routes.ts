@@ -31,10 +31,17 @@ router.group(() => {
   })
 }).prefix('api/auth')
 
-router.get('/uploads/:filename', async ({ params, response }) => {
-  const { filename } = params
-  response.download(app.makePath('uploads', filename))
-})
+router.group(() => {
+  router.get('/:filename', async ({params, response}) => {
+    const {filename} = params
+    response.download(app.makePath('uploads', filename))
+  })
+
+  router.get('/monsters/:filename', async ({params, response}) => {
+    const {filename} = params
+    response.download(app.makePath('uploads/monsters', filename))
+  })
+}).prefix('uploads')
 
 router.group(() => {
   const guildsController = new GuildsController()
@@ -65,6 +72,10 @@ router.group(() => {
 
   router.put('/', async (data) => {
     return monstersController.create(data)
+  });
+
+  router.get('/:id', async (data) => {
+    return monstersController.show(data)
   });
 }).prefix('api/monsters')
 

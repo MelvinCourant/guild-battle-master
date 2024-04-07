@@ -45,7 +45,8 @@ function placeholderSrc() {
             >
               <Badge
                   v-if="index < 3"
-                  :key="monster.name"
+                  :key="monster.id"
+                  :monsterId="monster.id"
                   :name="monster.name"
                   :element="monster.element"
               />
@@ -62,6 +63,7 @@ function placeholderSrc() {
               key === 'image' &&
               info !== 'placeholder.jpg'
             "
+            class="table-rows__image"
             :src="`${env.VITE_URL}/uploads/${info}`"
             alt="avatar"
             loading="lazy"
@@ -71,6 +73,7 @@ function placeholderSrc() {
               key === 'image' &&
               info === 'placeholder.jpg'
             "
+            class="table-rows__image"
             :src="placeholderSrc()"
             alt="avatar"
             loading="lazy"
