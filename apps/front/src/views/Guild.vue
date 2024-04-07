@@ -16,7 +16,7 @@ const fields = [
   {
     type: "search",
     name: "search",
-    placeholder: "Grade, pseudo ...etc",
+    placeholder: "Grade, pseudo ou ld",
   }
 ];
 const displayModes = reactive([
@@ -254,6 +254,51 @@ async function dialogResponse(name: string) {
 function closeDialog() {
   dialogIsOpen.value = false;
 }
+
+async function madeSearch(inputName: string, value: string) {
+  if(value === '') {
+    await getMembers();
+    return;
+  }
+
+  const result = await fetch(`${env.VITE_URL}/api/guilds/${user.guild_id}/members/${value}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    }
+  });
+
+  if(result.ok) {
+    const resultJson = await result.json();
+    data.value = {
+      rows: resultJson.members,
+      badges: ['lds'],
+      actions: [
+        {
+          name: 'update',
+          label: 'Mettre à jour',
+          danger: false
+        },
+        {
+          name: 'exclude',
+          label: 'Exclure',
+          danger: true
+        }
+      ]
+    };
+    members.value = resultJson.members;
+    actualSort.value = 'grade';
+
+    columns.forEach((column) => {
+      if(column.key === actualSort.value) {
+        column.sortOrder = 'asc';
+      } else {
+        column.sortOrder = '';
+      }
+    });
+  }
+}
 </script>
 
 <template>
@@ -265,6 +310,7 @@ function closeDialog() {
     <Members
       @sort="sort"
       @actionSelected="actionSelected"
+      @sendValue="madeSearch"
     />
   </main>
   <Dialog
