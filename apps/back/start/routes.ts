@@ -53,6 +53,10 @@ router.group(() => {
   router.put('/', async (data) => {
     return guildsController.create(data)
   });
+
+  router.get('/:id/members/:keyword', async (data) => {
+    return guildsController.search(data)
+  })
 }).prefix('api/guilds')
 
 router.group(() => {

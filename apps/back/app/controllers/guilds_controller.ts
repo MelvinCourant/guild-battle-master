@@ -223,4 +223,116 @@ export default class GuildsController {
       members: membersNumber,
     })
   }
+
+  public async search({ auth, params, response }: HttpContext) {
+    const user = await auth.authenticate()
+    const keyword = decodeURIComponent(params.keyword)
+    const memberGuild = await Member
+      .query()
+      .where('user_id', user.id)
+      .select('guild_id')
+      .firstOrFail()
+    const memberGuildId = memberGuild.guild_id
+    const guildId = parseInt(params.id)
+
+    if(guildId !== memberGuildId) {
+      return response.status(403).json({ error: 'Guilde invalide' })
+    }
+
+    let members: any;
+    let membersInformations = [];
+
+    if(!keyword) {
+      members = await Member
+        .query()
+        .where('guild_id', guildId)
+        .select('id', 'pseudo', 'grade', 'user_id')
+    } else {
+      members = await Member
+        .query()
+        .where('guild_id', guildId)
+        .where('pseudo', 'like', `%${keyword}%`)
+        .orWhere('grade', 'like', `%${keyword}%`)
+        .select('id', 'pseudo', 'grade', 'user_id')
+    }
+
+    for (const member of members) {
+      const user = await User
+        .query()
+        .where('id', member.user_id)
+        .select('image')
+        .first()
+      const memberBox = await Box
+        .query()
+        .where('member_id', member.id)
+      let lds: any = [];
+
+      async function addLds(memberBox: any) {
+        for (const monster of memberBox) {
+          const monsterData = await Monster
+            .query()
+            .where('unit_master_id', monster.monster_id)
+            .select('id', 'name', 'element', 'natural_grade', 'is_fusion_shop')
+            .first()
+
+          if(!monsterData) {
+            continue;
+          }
+
+          if(
+            // @ts-ignore
+            monsterData.natural_grade === '5' &&
+            monsterData.element === 'light' &&
+            // @ts-ignore
+            monsterData.is_fusion_shop === 0 ||
+            // @ts-ignore
+            monsterData.natural_grade === '5' &&
+            monsterData.element === 'dark' &&
+            // @ts-ignore
+            monsterData.is_fusion_shop === 0
+          ) {
+            lds.push({
+              id: monsterData.id,
+              name: monsterData.name,
+              element: monsterData.element,
+              quantity: monster.quantity,
+            });
+          }
+        }
+      }
+
+      if(memberBox.length !== 0) {
+        await addLds(memberBox);
+      }
+
+      if(
+        user &&
+        user.image
+      ) {
+        membersInformations.push({
+          id: member.id,
+          image: user.image,
+          pseudo: member.pseudo,
+          grade: member.grade,
+          lds: lds,
+        });
+      } else {
+        membersInformations.push({
+          id: member.id,
+          image: 'placeholder.jpg',
+          pseudo: member.pseudo,
+          grade: member.grade,
+          lds: lds,
+        });
+      }
+    }
+
+    const gradeOrder = ['leader', 'vice-leader', 'senior', 'member']
+
+    membersInformations = membersInformations.sort((a: any, b: any) => {
+      return gradeOrder.indexOf(a.grade) - gradeOrder.indexOf(b.grade)
+    })
+
+    return response.json({ members: membersInformations })
+  }
 }
