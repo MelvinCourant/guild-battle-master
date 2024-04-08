@@ -1,6 +1,7 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Member from "#models/member";
 import Guild from "#models/guild";
+import User from "#models/user";
 
 export default class MembersController {
   public async update({ auth, params, request, response }: HttpContext) {
@@ -64,13 +65,18 @@ export default class MembersController {
       .where('id', params.id)
       .firstOrFail()
     const memberGuildId = member.guild_id
+    const memberRole = await User
+      .query()
+      .where('id', member.user_id)
+      .select('role')
 
     if(
-      user.role !== 'admin' &&
-      user.role !== 'leader' &&
-      user.role !== 'moderator' ||
+      user.role !== 'admin' && user.role !== 'leader' && user.role !== 'moderator' ||
       leadGuildId !== memberGuildId ||
-      userMember.id === member.id
+      userMember.id === member.id ||
+      user.role === 'moderator' && memberRole.role === 'moderator' ||
+      user.role === 'moderator' && memberRole.role === 'leader' ||
+      user.role === 'leader' && memberRole.role === 'leader'
     ) {
       return response.status(403).json({ error: 'Vous n\'avez pas les droits' })
     }
