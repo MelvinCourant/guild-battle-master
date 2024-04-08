@@ -37,7 +37,6 @@ async function getMonsterFromDb(id: number) {
 }
 
 async function getMonsters(monstersIds: any) {
-  console.log(monsters.value);
   if(monsters.value.length === 0) {
     for (const id of monstersIds) {
       await getMonsterFromDb(id).then((monster) => {

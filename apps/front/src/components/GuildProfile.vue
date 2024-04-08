@@ -32,6 +32,7 @@ function onImageLoad() {
       class="guild-profile__image"
       @load="onImageLoad"
       v-show="imageLoaded"
+      v-if="image"
     />
     <SkeletonLoader
         circle
