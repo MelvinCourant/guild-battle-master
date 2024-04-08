@@ -1,17 +1,20 @@
 <script setup lang="ts">
 import '../../assets/css/components/utils/_display-modes.scss';
-import {inject, reactive} from "vue";
+import {inject, reactive, ref, watch} from "vue";
+
+const emit = defineEmits(['modeSelected']);
 
 const modes = reactive(inject('displayModes'));
+const modeSelected = ref(modes.find(mode => mode.isSelected));
 
-function updateModes(modeSelected) {
-  modes.forEach((mode) => {
-    if(mode.name === modeSelected) {
-      mode.isSelected = true;
-    } else {
-      mode.isSelected = false;
-    }
-  });
+watch(modes, () => {
+  modeSelected.value = modes.find(mode => mode.isSelected);
+});
+
+function updateModes(mode) {
+  if(modeSelected.value.name !== mode) {
+    emit('modeSelected', mode);
+  }
 }
 </script>
 

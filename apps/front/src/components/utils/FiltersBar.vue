@@ -4,7 +4,7 @@ import Field from "./Field.vue";
 import DisplayModes from "./DisplayModes.vue";
 import {inject} from "vue";
 
-defineEmits(['sendValue']);
+defineEmits(['sendValue', 'modeSelected']);
 
 const fields = inject('fields');
 </script>
@@ -19,6 +19,8 @@ const fields = inject('fields');
           @sendValue="(inputName: string, value: string) => $emit('sendValue', inputName, value)"
       />
     </div>
-    <DisplayModes/>
+    <DisplayModes
+        @modeSelected="$emit('modeSelected', $event)"
+    />
   </div>
 </template>

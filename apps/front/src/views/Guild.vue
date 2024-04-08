@@ -321,6 +321,16 @@ async function madeSearch(inputName: string, value: string) {
     });
   }
 }
+
+function updateDisplayMode(mode: string) {
+  displayModes.forEach((displayMode) => {
+    if(displayMode.name === mode) {
+      displayMode.isSelected = true;
+    } else {
+      displayMode.isSelected = false;
+    }
+  });
+}
 </script>
 
 <template>
@@ -334,6 +344,7 @@ async function madeSearch(inputName: string, value: string) {
       @sort="sort"
       @actionSelected="actionSelected"
       @sendValue="madeSearch"
+      @modeSelected="updateDisplayMode"
     />
   </main>
   <Dialog

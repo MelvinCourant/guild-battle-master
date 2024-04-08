@@ -11,13 +11,14 @@ defineProps({
   }
 });
 
-defineEmits(['sort', 'actionSelected', 'sendValue']);
+defineEmits(['sort', 'actionSelected', 'sendValue', 'modeSelected']);
 </script>
 
 <template>
   <div class="members">
     <FiltersBar
         @sendValue="(inputName: string, value: string) => $emit('sendValue', inputName, value)"
+        @modeSelected="$emit('modeSelected', $event)"
     />
     <Table
         v-show="displayModes[0].isSelected"
