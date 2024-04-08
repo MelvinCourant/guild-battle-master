@@ -62,6 +62,21 @@ const columns = reactive([
     class: 'table__actions'
   }
 ]);
+const sortOptions = [
+  {
+    value: 'pseudo',
+    text: 'Pseudo'
+  },
+  {
+    value: 'grade',
+    text: 'Grade'
+  },
+  {
+    value: 'lds',
+    text: '5 nats lumière et ténèbre'
+  }
+];
+const sortValue = ref('grade');
 const data = ref({});
 const members = ref([]);
 const memberSelected = ref({});
@@ -100,6 +115,8 @@ const loading = ref(true);
 provide('fields', fields);
 provide('displayModes', displayModes);
 provide('columns', columns);
+provide('sortOptions', sortOptions);
+provide('sortValue', sortValue);
 provide('data', data);
 provide('loading', loading);
 
@@ -346,6 +363,11 @@ function updateDisplayMode(mode: string) {
     }
   });
 }
+
+function sortGrid(key: string) {
+  sort(key);
+  sortValue.value = key;
+}
 </script>
 
 <template>
@@ -360,6 +382,7 @@ function updateDisplayMode(mode: string) {
       @actionSelected="actionSelected"
       @sendValue="madeSearch"
       @modeSelected="updateDisplayMode"
+      @sortGrid="sortGrid"
     />
   </main>
   <Dialog

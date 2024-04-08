@@ -11,7 +11,7 @@ defineProps({
   }
 });
 
-defineEmits(['sort', 'actionSelected', 'sendValue', 'modeSelected']);
+defineEmits(['sort', 'actionSelected', 'sendValue', 'modeSelected', 'sortGrid']);
 </script>
 
 <template>
@@ -28,6 +28,7 @@ defineEmits(['sort', 'actionSelected', 'sendValue', 'modeSelected']);
     <Grid
         v-show="displayModes[1].isSelected"
         @actionSelected="$emit('actionSelected', $event)"
+        @sortGrid="$emit('sortGrid', $event)"
     />
   </div>
 </template>

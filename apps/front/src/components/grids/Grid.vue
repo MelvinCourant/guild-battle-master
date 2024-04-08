@@ -3,8 +3,9 @@ import '../../assets/css/components/grids/_grid.scss'
 import {inject, nextTick, onMounted, ref, watch} from "vue";
 import GridCard from "./GridCard.vue";
 import Loader from "../utils/Loader.vue";
+import SortGrid from "./SortGrid.vue";
 
-defineEmits(['actionSelected'])
+defineEmits(['actionSelected', 'sortGrid'])
 
 const data = ref(inject('data'))
 const columns = inject('columns')
@@ -48,6 +49,9 @@ window.addEventListener('resize', updateGrid)
 </script>
 
 <template>
+  <SortGrid
+      @sortGrid="$emit('sortGrid', $event)"
+  />
   <div
       :class="[
           'grid',
