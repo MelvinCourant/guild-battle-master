@@ -25,6 +25,8 @@ defineProps(
   }
 )
 
+defineEmits(['actionSelected'])
+
 const env = import.meta.env;
 
 function placeholderSrc() {
