@@ -100,6 +100,11 @@ provide('columns', columns);
 provide('data', data);
 provide('loading', loading)
 
+if(window.innerWidth <= 768) {
+  displayModes[0].isSelected = false;
+  displayModes[1].isSelected = true;
+}
+
 async function getMembers() {
   const result = await fetch(`${env.VITE_URL}/api/guilds/${user.guild_id}`, {
     method: 'GET',
@@ -311,6 +316,7 @@ async function madeSearch(inputName: string, value: string) {
       :image="guild.image"
     />
     <Members
+      :displayModes="displayModes"
       @sort="sort"
       @actionSelected="actionSelected"
       @sendValue="madeSearch"

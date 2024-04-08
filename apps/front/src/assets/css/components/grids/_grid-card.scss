@@ -1,0 +1,18 @@
+.grid-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 190px;
+  min-height: 202px;
+  background: var(--system);
+  border-radius: 15px;
+  padding: 20px;
+
+  &__actions {
+    position: absolute;
+    top: calc(-5.83px + 20px);
+    right: calc(-10.83px + 20px);
+  }
+}

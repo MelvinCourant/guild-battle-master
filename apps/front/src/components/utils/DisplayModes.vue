@@ -1,8 +1,18 @@
 <script setup lang="ts">
 import '../../assets/css/components/utils/_display-modes.scss';
-import {inject} from "vue";
+import {inject, reactive} from "vue";
 
-const modes = inject('displayModes');
+const modes = reactive(inject('displayModes'));
+
+function updateModes(modeSelected) {
+  modes.forEach((mode) => {
+    if(mode.name === modeSelected) {
+      mode.isSelected = true;
+    } else {
+      mode.isSelected = false;
+    }
+  });
+}
 </script>
 
 <template>
@@ -17,6 +27,7 @@ const modes = inject('displayModes');
             'display-modes__mode',
             {'display-modes__mode--selected': mode.isSelected}
         ]"
+        @click="updateModes(mode.name)"
     >
       <svg
           v-if="mode.name === 'list'"
