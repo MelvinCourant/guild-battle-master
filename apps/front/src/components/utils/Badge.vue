@@ -37,15 +37,16 @@ async function getMonsterFromDb(id: number) {
 }
 
 async function getMonsters(monstersIds: any) {
-  if(!monsters.value) {
+  console.log(monsters.value);
+  if(monsters.value.length === 0) {
     for (const id of monstersIds) {
-      await getMonsterFromDb(id).then((data) => {
-        monsters.value = data;
-        monstersStore.setMonster(monsters.value);
-      });
-      monstersImages.value.push({
-        src: `${env.VITE_URL}/uploads/${monsters.value.image}`,
-        alt: monsters.name
+      await getMonsterFromDb(id).then((monster) => {
+        monsters.value.push(monster);
+        monstersStore.setMonster(monster);
+        monstersImages.value.push({
+          src: `${env.VITE_URL}/uploads/${monster.image}`,
+          alt: monster.name
+        });
       });
     }
   } else {
@@ -61,7 +62,11 @@ async function getMonsters(monstersIds: any) {
 onMounted(async () => {
   if(props.monstersIds) {
     for (const id of props.monstersIds) {
-      monsters.value.push(monstersStore.getMonster(id));
+      const monster = monstersStore.getMonster(id);
+
+      if(monster) {
+        monsters.value.push(monster);
+      }
     }
 
     await getMonsters(props.monstersIds);

@@ -16,7 +16,14 @@ watch(data, () => {
 </script>
 
 <template>
-  <table class="table">
+  <table
+      :class="[
+          'table',
+          {
+            'table--loading': rows.length === 0
+          }
+      ]"
+  >
     <TableHead @sort="$emit('sort', $event)"/>
     <TableRows @actionSelected="$emit('actionSelected', $event)"/>
     <Loader v-if="rows.length === 0"/>

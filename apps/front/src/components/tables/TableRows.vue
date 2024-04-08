@@ -2,7 +2,7 @@
 import '../../assets/css/components/tables/_table-rows.scss'
 import Badge from "../utils/Badge.vue";
 import Grade from "../utils/Grade.vue";
-import {inject, ref, watch} from "vue";
+import {inject, ref, watch, computed} from "vue";
 import More from "../utils/More.vue";
 
 defineEmits(["actionSelected"]);
@@ -21,6 +21,12 @@ watch(data, () => {
 function placeholderSrc() {
   return new URL('../../assets/imgs/placeholder.jpg', import.meta.url).href;
 }
+
+const othersMonsters = computed(() => {
+  return rows.value.map(row => {
+    return row.monsters.slice(3).map(monster => monster.id);
+  });
+});
 </script>
 
 <template>
