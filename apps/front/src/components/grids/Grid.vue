@@ -40,7 +40,9 @@ watch(displayModes.value, () => {
   updateGrid()
 });
 
-onMounted(() => updateGrid)
+onMounted(() => {
+  updateGrid()
+})
 
 window.addEventListener('resize', updateGrid)
 </script>

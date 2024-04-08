@@ -3,6 +3,7 @@ import '../assets/css/views/_guild.scss';
 import Members from "../components/Members.vue";
 import {provide, reactive, ref} from "vue";
 import {useUserStore} from "../stores/user.ts";
+import {usePreferencesStore} from "../stores/preferences.ts";
 import GuildProfile from "../components/GuildProfile.vue";
 import Dialog from "../components/utils/Dialog.vue";
 import Alert from "../components/utils/Alert.vue";
@@ -11,6 +12,8 @@ import {IAlert} from "../models/alert.ts";
 const userStore = useUserStore();
 const user = userStore.user;
 const token = userStore.token;
+const preferencesStore = usePreferencesStore();
+const preferences = preferencesStore.preferences;
 const env = import.meta.env;
 const fields = [
   {
@@ -99,6 +102,17 @@ provide('displayModes', displayModes);
 provide('columns', columns);
 provide('data', data);
 provide('loading', loading);
+
+if(preferences.displayMode) {
+  displayModes.forEach((displayMode) => {
+    if(displayMode.name === preferences.displayMode) {
+      displayMode.isSelected = true;
+      preferencesStore.updatePreferences('displayMode', displayMode.name);
+    } else {
+      displayMode.isSelected = false;
+    }
+  });
+}
 
 function toggleModeSelectedMobile() {
   if(
@@ -326,6 +340,7 @@ function updateDisplayMode(mode: string) {
   displayModes.forEach((displayMode) => {
     if(displayMode.name === mode) {
       displayMode.isSelected = true;
+      preferencesStore.updatePreferences('displayMode', displayMode.name);
     } else {
       displayMode.isSelected = false;
     }
