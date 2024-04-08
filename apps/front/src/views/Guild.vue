@@ -92,11 +92,13 @@ const alert: IAlert = reactive({
   type: '',
   message: '',
 });
+const loading = ref(true);
 
 provide('fields', fields);
 provide('displayModes', displayModes);
 provide('columns', columns);
 provide('data', data);
+provide('loading', loading)
 
 async function getMembers() {
   const result = await fetch(`${env.VITE_URL}/api/guilds/${user.guild_id}`, {
@@ -127,6 +129,7 @@ async function getMembers() {
     };
     members.value = resultJson.members;
     guild.value = resultJson.guild;
+    loading.value = false;
   }
 }
 

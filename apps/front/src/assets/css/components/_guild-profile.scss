@@ -51,7 +51,7 @@
     font-weight: 700;
     line-height: 0.85714;
 
-    @media screen {
+    @media screen and (max-width: 768px) {
       font-size: functions.rem(12);
     }
 

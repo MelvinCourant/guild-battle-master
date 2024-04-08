@@ -9,6 +9,7 @@ defineEmits(['sort', 'actionSelected']);
 
 const data = ref(inject('data'))
 const rows = ref([])
+const loading = ref(inject('loading'))
 
 watch(data, () => {
   rows.value = data.value.rows
@@ -20,12 +21,12 @@ watch(data, () => {
       :class="[
           'table',
           {
-            'table--loading': rows.length === 0
+            'table--loading': loading
           }
       ]"
   >
     <TableHead @sort="$emit('sort', $event)"/>
     <TableRows @actionSelected="$emit('actionSelected', $event)"/>
-    <Loader v-if="rows.length === 0"/>
+    <Loader v-if="loading"/>
   </table>
 </template>

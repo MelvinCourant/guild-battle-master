@@ -31,7 +31,10 @@ function onImageLoad() {
       alt="Guild Image"
       class="guild-profile__image"
       @load="onImageLoad"
-      v-show="imageLoaded"
+      v-show="
+        imageLoaded &&
+        name
+      "
       v-if="image"
     />
     <SkeletonLoader
@@ -42,7 +45,10 @@ function onImageLoad() {
 
     <h1
         class="guild-profile__name"
-        v-if="name"
+        v-if="
+          imageLoaded &&
+          name
+        "
     >
       {{ name }}
     </h1>
@@ -54,8 +60,17 @@ function onImageLoad() {
     <router-link
       to="/upload-json"
       class="guild-profile__update"
+      v-if="
+          imageLoaded &&
+          name
+      "
     >
       Mettre à jour
     </router-link>
+    <SkeletonLoader
+        width="90"
+        height="12"
+        v-else
+    />
   </div>
 </template>
