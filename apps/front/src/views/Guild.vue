@@ -98,12 +98,26 @@ provide('fields', fields);
 provide('displayModes', displayModes);
 provide('columns', columns);
 provide('data', data);
-provide('loading', loading)
+provide('loading', loading);
 
-if(window.innerWidth <= 768) {
-  displayModes[0].isSelected = false;
-  displayModes[1].isSelected = true;
+function toggleModeSelectedMobile() {
+  if(
+      window.innerWidth <= 768 &&
+      displayModes[0].isSelected
+  ) {
+    displayModes[0].isSelected = false;
+    displayModes[1].isSelected = true;
+  }
 }
+
+if(
+    window.innerWidth <= 768 &&
+    displayModes[0].isSelected
+) {
+  toggleModeSelectedMobile()
+}
+
+window.addEventListener('resize', toggleModeSelectedMobile);
 
 async function getMembers() {
   const result = await fetch(`${env.VITE_URL}/api/guilds/${user.guild_id}`, {

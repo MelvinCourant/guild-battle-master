@@ -20,7 +20,6 @@ defineEmits(['sort', 'actionSelected', 'sendValue']);
         @sendValue="(inputName: string, value: string) => $emit('sendValue', inputName, value)"
     />
     <Table
-        v-if="!inMobile"
         v-show="displayModes[0].isSelected"
         @sort="$emit('sort', $event)"
         @actionSelected="$emit('actionSelected', $event)"

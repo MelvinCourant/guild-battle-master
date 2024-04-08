@@ -4,6 +4,10 @@
   display: flex;
   gap: 10px;
 
+  @media screen and (max-width: 991px) {
+    display: none;
+  }
+
   &__mode {
     @include mixins.resetButton(var(--border), var(--background));
     display: flex;
