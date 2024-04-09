@@ -86,5 +86,10 @@ document.addEventListener('click', (event) => {
         {{ option.text }}
       </li>
     </ul>
+    <div
+        class="select__trigger"
+        @click="isOpen = false"
+        v-show="isOpen"
+    ></div>
   </div>
 </template>
