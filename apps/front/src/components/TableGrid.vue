@@ -36,7 +36,7 @@ if(preferences.displayMode) {
 
 function toggleModeSelectedMobile() {
   if(
-      window.innerWidth <= 768 &&
+      window.innerWidth <= 991 &&
       displayModes[0].isSelected
   ) {
     displayModes[0].isSelected = false;

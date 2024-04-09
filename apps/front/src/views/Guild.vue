@@ -73,6 +73,11 @@ const actions = [
     danger: false
   },
   {
+    name: 'role',
+    label: 'Attribuer un rôle',
+    danger: false
+  },
+  {
     name: 'exclude',
     label: 'Exclure',
     danger: true
