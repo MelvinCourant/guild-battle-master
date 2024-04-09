@@ -66,6 +66,18 @@ const sortOptions = [
 ];
 const sortValue = ref('grade');
 const data = ref({});
+const actions = [
+  {
+    name: 'update',
+    label: 'Mettre à jour',
+    danger: false
+  },
+  {
+    name: 'exclude',
+    label: 'Exclure',
+    danger: true
+  }
+];
 const members = ref([]);
 const memberSelected = ref({});
 const guild = ref({});
@@ -121,18 +133,7 @@ async function getMembers() {
     data.value = {
       rows: resultJson.members,
       badges: ['lds'],
-      actions: [
-        {
-          name: 'update',
-          label: 'Mettre à jour',
-          danger: false
-        },
-        {
-          name: 'exclude',
-          label: 'Exclure',
-          danger: true
-        }
-      ]
+      actions: actions
     };
     members.value = resultJson.members;
     guild.value = resultJson.guild;
