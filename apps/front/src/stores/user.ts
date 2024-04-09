@@ -25,6 +25,7 @@ export const useUserStore = defineStore("user", () => {
     let imageName: string = "";
     let image: string = assetImgSrc("placeholder.jpg");
     let guild_id: any = null;
+    let member_id: any = null;
 
     if(localStorageUser) {
         id = localStorageUser.id;
@@ -32,6 +33,7 @@ export const useUserStore = defineStore("user", () => {
         pseudo = localStorageUser.pseudo;
         grade = localStorageUser.grade;
         guild_id = localStorageUser.guild_id;
+        member_id = localStorageUser.member_id;
 
         if(localStorageUser.image) {
             imageName = localStorageUser.image;
@@ -46,6 +48,7 @@ export const useUserStore = defineStore("user", () => {
         grade: grade,
         image: image,
         guild_id: guild_id,
+        member_id: member_id,
     })
 
     const token = ref(localStorage.getItem("token") || "");
@@ -80,6 +83,7 @@ export const useUserStore = defineStore("user", () => {
             grade: "",
             image: assetImgSrc("placeholder.jpg"),
             guild_id: null,
+            member_id: null,
         };
         token.value = "";
         localStorage.removeItem("user");

@@ -9,6 +9,7 @@ defineEmits(["actionSelected"]);
 
 const data = ref(inject("data"));
 const columns = inject("columns");
+const hideActionsId = inject("hideActionsId");
 const rows = ref([]);
 const badges = ref([]);
 const env = import.meta.env;
@@ -104,7 +105,10 @@ function othersText(numberMonsters: number) {
         class="table-rows__actions"
       >
         <More
-          v-if="data.actions"
+          v-if="
+            data.actions &&
+            row.id !== hideActionsId
+          "
           :actions="data.actions"
           @actionSelected="$emit('actionSelected', {
             action: $event,

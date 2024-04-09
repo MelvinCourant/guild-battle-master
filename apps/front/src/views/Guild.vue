@@ -127,6 +127,7 @@ const alert: IAlert = reactive({
   message: '',
 });
 const loading = ref(true);
+const hideActionsId = user.member_id;
 
 provide('fields', fields);
 provide('columns', columns);
@@ -134,6 +135,7 @@ provide('sortOptions', sortOptions);
 provide('sortValue', actualSort);
 provide('data', data);
 provide('loading', loading);
+provide('hideActionsId', hideActionsId);
 
 async function getMembers() {
   const result = await fetch(`${env.VITE_URL}/api/guilds/${user.guild_id}`, {

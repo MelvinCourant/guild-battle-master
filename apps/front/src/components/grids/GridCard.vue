@@ -3,6 +3,7 @@ import '../../assets/css/components/grids/_grid-card.scss';
 import More from "../utils/More.vue";
 import Grade from "../utils/Grade.vue";
 import Badge from "../utils/Badge.vue";
+import {inject} from "vue";
 
 defineProps(
   {
@@ -27,6 +28,7 @@ defineProps(
 
 defineEmits(['actionSelected'])
 
+const hideActionsId = inject("hideActionsId");
 const env = import.meta.env;
 
 function placeholderSrc() {
@@ -45,6 +47,10 @@ function othersText(numberMonsters: number) {
 <template>
   <li class="grid-card">
     <div
+        v-if="
+          hideActionsId !== content.id &&
+          actions
+        "
         class="grid-card__actions-container"
     >
       <div
@@ -54,9 +60,9 @@ function othersText(numberMonsters: number) {
             v-if="actions"
             :actions="actions"
             @actionSelected="$emit('actionSelected', {
-            action: $event,
-            id: content.id
-        })"
+                action: $event,
+                id: content.id
+            })"
         />
       </div>
     </div>

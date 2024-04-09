@@ -326,7 +326,7 @@ export default class AuthController {
       const member: any = await Member
         .query()
         .where('user_id', user.id)
-        .select('pseudo', 'grade')
+        .select('id', 'pseudo', 'grade')
         .first()
       const guild: any = await Guild
         .query()
@@ -342,6 +342,7 @@ export default class AuthController {
           "pseudo": member.pseudo,
           "grade": member.grade,
           "image": user.image,
+          "member_id": member.id,
           "guild_id": guild.id,
         },
         token
