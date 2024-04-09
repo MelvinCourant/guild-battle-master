@@ -6,7 +6,7 @@ import GuildProfile from "../components/GuildProfile.vue";
 import Dialog from "../components/utils/Dialog.vue";
 import Alert from "../components/utils/Alert.vue";
 import {IAlert} from "../models/alert.ts";
-import TableGrid from "../components/TableGrid.vue";
+import TableGrid from "../components/utils/TableGrid.vue";
 import {s} from "vite/dist/node/types.d-FdqQ54oU";
 
 const userStore = useUserStore();
@@ -327,7 +327,7 @@ async function madeSearch(inputName: string, value: string) {
 
 function sortGrid(key: string) {
   sort(key);
-  sortValue.value = key;
+  actualSort.value = key;
 }
 </script>
 

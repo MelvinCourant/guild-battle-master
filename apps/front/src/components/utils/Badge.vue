@@ -58,7 +58,7 @@ async function getMonsters(monstersIds: any) {
   }
 }
 
-onMounted(async () => {
+async function getMonstersImages() {
   if(props.monstersIds) {
     for (const id of props.monstersIds) {
       const monster = monstersStore.getMonster(id);
@@ -70,7 +70,9 @@ onMounted(async () => {
 
     await getMonsters(props.monstersIds);
   }
-});
+}
+
+getMonstersImages();
 </script>
 
 <template>

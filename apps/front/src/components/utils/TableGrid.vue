@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import '../assets/css/components/_table-grid.scss';
-import Table from "./tables/Table.vue";
-import FiltersBar from "./utils/FiltersBar.vue";
-import Grid from "./grids/Grid.vue";
+import '../../assets/css/components/_table-grid.scss';
+import Table from "../tables/Table.vue";
+import FiltersBar from "./FiltersBar.vue";
+import Grid from "../grids/Grid.vue";
 import {provide, reactive} from "vue";
-import {usePreferencesStore} from "../stores/preferences.ts";
+import {usePreferencesStore} from "../../stores/preferences.ts";
 
 defineEmits(['sort', 'actionSelected', 'sendValue', 'modeSelected', 'sortGrid']);
 
