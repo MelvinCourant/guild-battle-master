@@ -1,19 +1,17 @@
 <script setup lang="ts">
 import '../assets/css/views/_guild.scss';
-import Members from "../components/Members.vue";
 import {provide, reactive, ref} from "vue";
 import {useUserStore} from "../stores/user.ts";
-import {usePreferencesStore} from "../stores/preferences.ts";
 import GuildProfile from "../components/GuildProfile.vue";
 import Dialog from "../components/utils/Dialog.vue";
 import Alert from "../components/utils/Alert.vue";
 import {IAlert} from "../models/alert.ts";
+import TableGrid from "../components/TableGrid.vue";
 
 const userStore = useUserStore();
 const user = userStore.user;
 const token = userStore.token;
-const preferencesStore = usePreferencesStore();
-const preferences = preferencesStore.preferences;
+
 const env = import.meta.env;
 const fields = [
   {
@@ -22,38 +20,28 @@ const fields = [
     placeholder: "Grade, pseudo ou ld",
   }
 ];
-const displayModes = reactive([
-  {
-    name: 'list',
-    isSelected: true
-  },
-  {
-    name: 'grid',
-    isSelected: false
-  }
-]);
 const columns = reactive([
   {
     name: '',
     key: 'picture',
-    class: 'members__picture'
+    class: 'table-grid__picture'
   },
   {
     name: 'Pseudo',
     key: 'pseudo',
-    class: 'members__pseudo',
+    class: 'table-grid__pseudo',
     sortOrder: ''
   },
   {
     name: 'Grade',
     key: 'grade',
-    class: 'members__grade',
+    class: 'table-grid__grade',
     sortOrder: 'asc'
   },
   {
     name: '5 nats lumière et ténèbre',
     key: 'lds',
-    class: 'members__lds',
+    class: 'table-grid__lds',
     sortOrder: ''
   },
   {
@@ -113,42 +101,11 @@ const alert: IAlert = reactive({
 const loading = ref(true);
 
 provide('fields', fields);
-provide('displayModes', displayModes);
 provide('columns', columns);
 provide('sortOptions', sortOptions);
 provide('sortValue', sortValue);
 provide('data', data);
 provide('loading', loading);
-
-if(preferences.displayMode) {
-  displayModes.forEach((displayMode) => {
-    if(displayMode.name === preferences.displayMode) {
-      displayMode.isSelected = true;
-      preferencesStore.updatePreferences('displayMode', displayMode.name);
-    } else {
-      displayMode.isSelected = false;
-    }
-  });
-}
-
-function toggleModeSelectedMobile() {
-  if(
-      window.innerWidth <= 768 &&
-      displayModes[0].isSelected
-  ) {
-    displayModes[0].isSelected = false;
-    displayModes[1].isSelected = true;
-  }
-}
-
-if(
-    window.innerWidth <= 768 &&
-    displayModes[0].isSelected
-) {
-  toggleModeSelectedMobile()
-}
-
-window.addEventListener('resize', toggleModeSelectedMobile);
 
 async function getMembers() {
   const result = await fetch(`${env.VITE_URL}/api/guilds/${user.guild_id}`, {
@@ -353,17 +310,6 @@ async function madeSearch(inputName: string, value: string) {
   }
 }
 
-function updateDisplayMode(mode: string) {
-  displayModes.forEach((displayMode) => {
-    if(displayMode.name === mode) {
-      displayMode.isSelected = true;
-      preferencesStore.updatePreferences('displayMode', displayMode.name);
-    } else {
-      displayMode.isSelected = false;
-    }
-  });
-}
-
 function sortGrid(key: string) {
   sort(key);
   sortValue.value = key;
@@ -376,12 +322,10 @@ function sortGrid(key: string) {
       :name="guild.name"
       :image="guild.image"
     />
-    <Members
-      :displayModes="displayModes"
+    <TableGrid
       @sort="sort"
       @actionSelected="actionSelected"
       @sendValue="madeSearch"
-      @modeSelected="updateDisplayMode"
       @sortGrid="sortGrid"
     />
   </main>

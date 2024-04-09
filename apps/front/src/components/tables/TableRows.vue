@@ -89,7 +89,7 @@ function othersText(numberMonsters: number) {
           />
           <div
               v-else-if="key === 'grade'"
-              class="members__grade-name"
+              class="table-grid__grade-name"
           >
             <Grade
                 v-if="info !== 'member'"

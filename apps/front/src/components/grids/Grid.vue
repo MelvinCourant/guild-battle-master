@@ -49,31 +49,33 @@ window.addEventListener('resize', updateGrid)
 </script>
 
 <template>
-  <SortGrid
-      @sortGrid="$emit('sortGrid', $event)"
-  />
-  <div
-      :class="[
+  <div class="grid-container">
+    <SortGrid
+        @sortGrid="$emit('sortGrid', $event)"
+    />
+    <div
+        :class="[
           'grid',
           {
             'grid--loading': loading
           }
       ]"
-  >
-    <ul
-        class="grid__list"
-        :style="styleGrid"
     >
-      <GridCard
-          v-for="(row, index) in rows"
-          :key="index"
-          :badges="data.badges"
-          :columns="columns"
-          :content="row"
-          :actions="data.actions"
-          @actionSelected="$emit('actionSelected', $event)"
-      />
-    </ul>
-    <Loader v-if="loading"/>
+      <ul
+          class="grid__list"
+          :style="styleGrid"
+      >
+        <GridCard
+            v-for="(row, index) in rows"
+            :key="index"
+            :badges="data.badges"
+            :columns="columns"
+            :content="row"
+            :actions="data.actions"
+            @actionSelected="$emit('actionSelected', $event)"
+        />
+      </ul>
+      <Loader v-if="loading"/>
+    </div>
   </div>
 </template>

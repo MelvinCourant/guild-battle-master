@@ -1,16 +1,18 @@
-.grid {
-  position: relative;
+.grid-container {
+  .grid {
+    position: relative;
 
-  &--loading {
-    flex: 1;
-  }
+    &--loading {
+      flex: 1;
+    }
 
-  &__list {
-    display: grid;
-    gap: 10px;
+    &__list {
+      display: grid;
+      gap: 10px;
 
-    @media screen and (max-width: 768px) {
-      grid-template-columns: repeat(2, 1fr);
+      @media screen and (max-width: 768px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
   }
 }
