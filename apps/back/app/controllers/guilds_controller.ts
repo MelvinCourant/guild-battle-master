@@ -39,12 +39,20 @@ export default class GuildsController {
       const user = await User
         .query()
         .where('id', member.user_id)
-        .select('image')
+        .select('image', 'role')
         .first()
       const memberBox = await Box
         .query()
         .where('member_id', member.id)
       let lds: any = [];
+      let memberInformations: any = {
+        id: member.id,
+        image: 'placeholder.jpg',
+        pseudo: member.pseudo,
+        grade: member.grade,
+        role: '',
+        lds: [],
+      };
 
       async function addLds(memberBox: any) {
         for (const monster of memberBox) {
@@ -84,26 +92,20 @@ export default class GuildsController {
         await addLds(memberBox);
       }
 
-      if(
-        user &&
-        user.image
-      ) {
-        membersInformations.push({
-          id: member.id,
-          image: user.image,
-          pseudo: member.pseudo,
-          grade: member.grade,
-          lds: lds,
-        });
-      } else {
-        membersInformations.push({
-          id: member.id,
-          image: 'placeholder.jpg',
-          pseudo: member.pseudo,
-          grade: member.grade,
-          lds: lds,
-        });
+      if(user) {
+        if(user.image) {
+          memberInformations.image = user.image;
+        }
+
+        if(
+          user.role &&
+          user.role !== 'member'
+        ) {
+          memberInformations.role = user.role;
+        }
       }
+
+      membersInformations.push(memberInformations);
     }
 
     const gradeOrder = ['leader', 'vice-leader', 'senior', 'member']
