@@ -45,16 +45,20 @@ function othersText(numberMonsters: number) {
 <template>
   <li class="grid-card">
     <div
-        class="grid-card__actions"
+        class="grid-card__actions-container"
     >
-      <More
-          v-if="actions"
-          :actions="actions"
-          @actionSelected="$emit('actionSelected', {
+      <div
+          class="grid-card__actions"
+      >
+        <More
+            v-if="actions"
+            :actions="actions"
+            @actionSelected="$emit('actionSelected', {
             action: $event,
             id: content.id
         })"
-      />
+        />
+      </div>
     </div>
     <template
         v-for="(info, key, index) in content"

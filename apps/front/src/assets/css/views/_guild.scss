@@ -1,3 +1,5 @@
+@use '../partials/functions.scss';
+
 .guild {
   position: relative;
   display: flex;
@@ -20,5 +22,94 @@
   @media screen and (max-width: 768px) {
     gap: 40px;
     padding: 30px 20px;
+  }
+
+  .table {
+    .table-grid {
+      &__picture {
+        width: 70px;
+      }
+
+      &__pseudo {
+        width: 130px;
+      }
+
+      &__grade {
+        width: 160px;
+
+        &-name {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          text-transform: capitalize;
+        }
+      }
+
+      &__role {
+        width: 180px;
+        text-transform: capitalize;
+      }
+
+      &__lds {
+        padding: 27.5px 15px;
+
+        ul {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+        }
+      }
+    }
+  }
+
+  .grid {
+    .table-grid {
+      &__picture {
+        min-width: 60px;
+        width: 60px;
+        min-height: 60px;
+        height: 60px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 5px;
+      }
+
+      &__pseudo {
+        font-size: functions.rem(16);
+        font-weight: 700;
+        line-height: 0.875;
+      }
+
+      &__grade {
+        &-name {
+          margin-top: 5px;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          text-transform: capitalize;
+          font-size: functions.rem(14);
+          line-height: 1.28571;
+
+          .grade {
+            width: 16px;
+            height: 11px;
+          }
+        }
+      }
+
+      &__role {
+          margin-top: 5px;
+          text-transform: capitalize;
+          font-size: functions.rem(14);
+          line-height: 1.28571;
+      }
+
+      &__lds {
+        margin-top: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+    }
   }
 }

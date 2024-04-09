@@ -86,6 +86,8 @@ export default class GuildsController {
             });
           }
         }
+
+        memberInformations.lds = lds;
       }
 
       if(memberBox.length !== 0) {
@@ -267,10 +269,22 @@ export default class GuildsController {
           .whereIn('monster_id', monsters.map((monster: any) => monster.unit_master_id))
           .select('member_id')
 
-        members = await Member
-          .query()
-          .whereIn('id', boxes.map((box: any) => box.member_id))
-          .select('id', 'pseudo', 'grade', 'user_id')
+        if(monsters.length === 0) {
+          const users = await User
+            .query()
+            .where('role', 'like', `%${keyword}%`)
+            .select('id')
+
+          members = await Member
+            .query()
+            .whereIn('user_id', users.map((user: any) => user.id))
+            .select('id', 'pseudo', 'grade', 'user_id')
+        } else {
+          members = await Member
+            .query()
+            .whereIn('id', boxes.map((box: any) => box.member_id))
+            .select('id', 'pseudo', 'grade', 'user_id')
+        }
       }
     }
 
@@ -278,12 +292,20 @@ export default class GuildsController {
       const user = await User
         .query()
         .where('id', member.user_id)
-        .select('image')
+        .select('image', 'role')
         .first()
       const memberBox = await Box
         .query()
         .where('member_id', member.id)
       let lds: any = [];
+      let memberInformations: any = {
+        id: member.id,
+        image: 'placeholder.jpg',
+        pseudo: member.pseudo,
+        grade: member.grade,
+        role: '',
+        lds: [],
+      };
 
       async function addLds(memberBox: any) {
         for (const monster of memberBox) {
@@ -317,32 +339,28 @@ export default class GuildsController {
             });
           }
         }
+
+        memberInformations.lds = lds;
       }
 
       if(memberBox.length !== 0) {
         await addLds(memberBox);
       }
 
-      if(
-        user &&
-        user.image
-      ) {
-        membersInformations.push({
-          id: member.id,
-          image: user.image,
-          pseudo: member.pseudo,
-          grade: member.grade,
-          lds: lds,
-        });
-      } else {
-        membersInformations.push({
-          id: member.id,
-          image: 'placeholder.jpg',
-          pseudo: member.pseudo,
-          grade: member.grade,
-          lds: lds,
-        });
+      if(user) {
+        if(user.image) {
+          memberInformations.image = user.image;
+        }
+
+        if(
+          user.role &&
+          user.role !== 'member'
+        ) {
+          memberInformations.role = user.role;
+        }
       }
+
+      membersInformations.push(memberInformations);
     }
 
     const gradeOrder = ['leader', 'vice-leader', 'senior', 'member']

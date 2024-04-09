@@ -1,6 +1,4 @@
 .tooltip {
-  display: flex;
-  gap: 5px;
   position: absolute;
   z-index: 2;
   top: -12px;
@@ -22,6 +20,11 @@
     border-left: 9px solid transparent;
     border-right: 9px solid transparent;
     border-top: 10px solid var(--system);
+  }
+
+  &__images {
+    display: flex;
+    gap: 5px;
   }
 
   &__image {

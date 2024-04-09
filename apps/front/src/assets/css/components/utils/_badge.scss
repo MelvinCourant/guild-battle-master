@@ -60,40 +60,31 @@
   }
 
   &--dark-light {
-    background: var(--dark-light-transparent);
+    background: var(--dark-light);
+    border-radius: 15px;
+    padding: 1px;
 
-    &:before {
-      content: '';
-      display: block;
-      position: absolute;
-      top: -1px;
-      left: -1px;
-      right: -1px;
-      bottom: -1px;
-      z-index: -2;
-      border-radius: 15px;
-      background: var(--dark-light);
-    }
+    .badge {
+      &__wrapper {
+        display: flex;
+        border-radius: 15px;
+        background: var(--background);
+      }
 
-    &:after {
-      content: '';
-      display: block;
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: -1;
-      border-radius: 15px;
-      background: var(--background);
-    }
+      &__container {
+        display: flex;
+        border-radius: 15px;
+        background: var(--dark-light-transparent);
+        padding: calc(3.5px - 1.25px) 7.5px calc(5.5px - 1.25px) 7.5px;
+      }
 
-    .badge__name {
-      background: var(--dark-light);
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      line-height: normal;
-      margin: -4.25px 0;
+      &__name {
+        background: var(--dark-light);
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        line-height: normal;
+        margin: -4.25px 0;
+      }
     }
   }
 }

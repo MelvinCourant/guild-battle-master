@@ -7,6 +7,7 @@ import Dialog from "../components/utils/Dialog.vue";
 import Alert from "../components/utils/Alert.vue";
 import {IAlert} from "../models/alert.ts";
 import TableGrid from "../components/TableGrid.vue";
+import {s} from "vite/dist/node/types.d-FdqQ54oU";
 
 const userStore = useUserStore();
 const user = userStore.user;
@@ -17,7 +18,7 @@ const fields = [
   {
     type: "search",
     name: "search",
-    placeholder: "Grade, pseudo ou ld",
+    placeholder: "Grade, pseudo, etc.",
   }
 ];
 const columns = reactive([
@@ -39,7 +40,13 @@ const columns = reactive([
     sortOrder: 'asc'
   },
   {
-    name: '5 nats lumière et ténèbre',
+    name: 'Rôle',
+    key: 'role',
+    class: 'table-grid__role',
+    sortOrder: ''
+  },
+  {
+    name: '5 nats lds',
     key: 'lds',
     class: 'table-grid__lds',
     sortOrder: ''
@@ -60,11 +67,15 @@ const sortOptions = [
     text: 'Grade'
   },
   {
+    value: 'role',
+    text: 'Rôle'
+  },
+  {
     value: 'lds',
-    text: '5 nats lumière et ténèbre'
+    text: '5 nats lds'
   }
 ];
-const sortValue = ref('grade');
+const actualSort = ref('grade');
 const data = ref({});
 const actions = [
   {
@@ -120,7 +131,7 @@ const loading = ref(true);
 provide('fields', fields);
 provide('columns', columns);
 provide('sortOptions', sortOptions);
-provide('sortValue', sortValue);
+provide('sortValue', actualSort);
 provide('data', data);
 provide('loading', loading);
 
@@ -147,8 +158,6 @@ async function getMembers() {
 }
 
 getMembers();
-
-const actualSort = ref('grade');
 
 function sort(key: string) {
   function ascendingSort(a: any, b: any) {

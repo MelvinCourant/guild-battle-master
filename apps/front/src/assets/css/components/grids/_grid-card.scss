@@ -1,6 +1,4 @@
 .grid-card {
-  position: relative;
-  z-index: 1g;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -16,7 +14,14 @@
 
   &__actions {
     position: absolute;
-    top: calc(-5.83px + 20px);
-    right: calc(-10.83px + 20px);
+    top: -5.83px;
+    right: -10.83px;
+
+    &-container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 0;
+    }
   }
 }

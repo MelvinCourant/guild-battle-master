@@ -1,8 +1,11 @@
 .grid-container {
-  .grid {
-    position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 
+  .grid {
     &--loading {
+      position: relative;
       flex: 1;
     }
 

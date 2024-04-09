@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import '../../assets/css/components/utils/_badge.scss'
-import {onMounted, reactive, ref} from 'vue'
+import {onMounted, ref} from 'vue'
 import { useMonstersStore } from "../../stores/monsters.ts";
 import Tooltip from "./Tooltip.vue";
 
@@ -82,7 +82,20 @@ onMounted(async () => {
     @mouseover="tooltipIsDisplayed = true"
     @mouseleave="tooltipIsDisplayed = false"
   >
-    <span class="badge__name">
+    <div
+        v-if="element === 'dark-light'"
+        class="badge__wrapper"
+    >
+      <div class="badge__container">
+        <span class="badge__name">
+        {{ name }}
+      </span>
+      </div>
+    </div>
+    <span
+        v-else
+        class="badge__name"
+    >
       {{ name }}
     </span>
     <Tooltip
