@@ -4,6 +4,7 @@ import More from "../utils/More.vue";
 import Grade from "../utils/Grade.vue";
 import Badge from "../utils/Badge.vue";
 import {inject} from "vue";
+import Avatar from "../utils/Avatar.vue";
 
 defineProps(
   {
@@ -29,10 +30,6 @@ defineProps(
 defineEmits(['actionSelected'])
 
 const env = import.meta.env;
-
-function placeholderSrc() {
-  return new URL('../../assets/imgs/placeholder.jpg', import.meta.url).href;
-}
 
 function othersText(numberMonsters: number) {
   if(numberMonsters - 3 > 1) {
@@ -70,25 +67,11 @@ function othersText(numberMonsters: number) {
       <template
           v-if="key !== 'id'"
       >
-        <img
-          v-if="
-            key === 'image' &&
-            info !== 'placeholder.jpg'
-          "
+        <Avatar
+            v-if="key === 'image'"
             :class="columns[index - 1].class"
-            :src="`${env.VITE_URL}/uploads/${content.image}`"
-            alt="avatar"
-            loading="lazy"
-        />
-        <img
-            v-else-if="
-              key === 'image' &&
-              info === 'placeholder.jpg'
-            "
-            :class="columns[index - 1].class"
-            :src="placeholderSrc()"
-            alt="avatar"
-            loading="lazy"
+            :src="content.image"
+            :alt="content.pseudo"
         />
         <div
             v-else-if="key === 'grade'"

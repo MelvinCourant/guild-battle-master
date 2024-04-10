@@ -4,6 +4,7 @@ import Badge from "../utils/Badge.vue";
 import Grade from "../utils/Grade.vue";
 import {inject, ref, watch} from "vue";
 import More from "../utils/More.vue";
+import Avatar from "../utils/Avatar.vue";
 
 defineEmits(["actionSelected"]);
 
@@ -17,10 +18,6 @@ watch(data, () => {
   rows.value = data.value.rows;
   badges.value = data.value.badges;
 });
-
-function placeholderSrc() {
-  return new URL('../../assets/imgs/placeholder.jpg', import.meta.url).href;
-}
 
 function othersText(numberMonsters: number) {
   if(numberMonsters - 3 > 1) {
@@ -67,25 +64,11 @@ function othersText(numberMonsters: number) {
                 element="dark-light"
             />
           </ul>
-          <img
-            v-else-if="
-              key === 'image' &&
-              info !== 'placeholder.jpg'
-            "
-            class="table-rows__image"
-            :src="`${env.VITE_URL}/uploads/${info}`"
-            alt="avatar"
-            loading="lazy"
-          />
-          <img
-            v-else-if="
-              key === 'image' &&
-              info === 'placeholder.jpg'
-            "
-            class="table-rows__image"
-            :src="placeholderSrc()"
-            alt="avatar"
-            loading="lazy"
+          <Avatar
+            v-else-if="key === 'image'"
+            :class="'table-rows__image'"
+            :src="info"
+            :alt="row.pseudo"
           />
           <div
               v-else-if="key === 'grade'"

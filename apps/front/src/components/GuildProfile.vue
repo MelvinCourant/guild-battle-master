@@ -4,6 +4,7 @@ import {ref} from 'vue';
 import "vue3-loading-skeleton/dist/style.css";
 import { SkeletonLoader } from "vue3-loading-skeleton";
 import { useUserStore } from "../stores/user.ts";
+import Avatar from "./utils/Avatar.vue";
 
 const userStore = useUserStore();
 const user = userStore.user;
@@ -29,10 +30,10 @@ function onImageLoad() {
 
 <template>
   <div class="guild-profile">
-    <img
-      :src="`${env.VITE_URL}/uploads/${image}`"
-      alt="Guild Image"
-      class="guild-profile__image"
+    <Avatar
+      :src="image"
+      :alt="name"
+      :class="'guild-profile__image'"
       @load="onImageLoad"
       v-show="
         imageLoaded &&
@@ -64,10 +65,8 @@ function onImageLoad() {
       to="/upload-json"
       class="guild-profile__update"
       v-if="
-          imageLoaded &&
-          name &&
-          user.role === 'leader' ||
-          user.role === 'moderator'
+          imageLoaded && name && user.role === 'leader' ||
+          imageLoaded && name && user.role === 'moderator'
       "
     >
       Mettre à jour

@@ -3,6 +3,7 @@
   import Submenu from "../../components/menus/Submenu.vue";
   import SubmenuMobile from "../../components/menus/mobile/SubmenuMobile.vue";
   import { ref, inject } from "vue";
+  import Avatar from "../utils/Avatar.vue";
 
   defineProps({
     userImage: {
@@ -34,11 +35,11 @@
         title="Ouvrir le menu de compte"
         @click.stop="submenuIsOpen = !submenuIsOpen"
     >
-      <img
-          class="account-menu__avatar"
+      <Avatar
+          :className="'account-menu__avatar'"
           :src="userImage"
-          alt="User image"
-      >
+          :alt="'User avatar'"
+      />
     </button>
     <Submenu
         :isOpened="submenuIsOpen"

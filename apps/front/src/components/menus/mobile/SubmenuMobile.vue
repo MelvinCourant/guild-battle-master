@@ -3,6 +3,7 @@
   import { ISubmenuLink } from "../../../models/navbar.ts";
   import '../../../assets/css/components/menus/mobile/_submenu-mobile.scss'
   import Grade from "../../../components/utils/Grade.vue";
+  import Avatar from "../../utils/Avatar.vue";
 
   defineProps({
     isOpened: {
@@ -26,11 +27,11 @@
       :class="isOpened ? 'submenu-mobile--open' : ''"
   >
     <li class="user-profile">
-      <img
-          class="user-profile__avatar"
+      <Avatar
+          :className="'user-profile__avatar'"
           :src="userProfile.image"
           :alt="userProfile.pseudo"
-      >
+      />
       <div class="user-profile__identity">
         <Grade
             :grade="userProfile.grade"

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import '../../assets/css/components/utils/_dialog.scss';
 import Field from "./Field.vue";
+import Avatar from "./Avatar.vue";
 
 defineProps({
   dialog: {
@@ -28,7 +29,7 @@ defineEmits(['close', 'click']);
           class="dialog__image"
           v-if="dialog.image.src"
       >
-        <img
+        <Avatar
             :src="dialog.image.src"
             :alt="dialog.image.alt"
         />

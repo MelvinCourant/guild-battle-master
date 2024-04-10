@@ -1,17 +1,7 @@
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import { defineStore } from "pinia";
 
-const env = import.meta.env;
-
 export const useUserStore = defineStore("user", () => {
-    function assetImgSrc(src: string) {
-        return new URL(`../assets/imgs/${src}`, import.meta.url).href;
-    }
-
-    function getUploadsUrl(imageName: string) {
-        return `${env.VITE_URL}/uploads/${imageName}`;
-    }
-
     let localStorageUser: any = null;
 
     if(localStorage.getItem("user")) {
@@ -20,8 +10,7 @@ export const useUserStore = defineStore("user", () => {
 
     let pseudo: string = "";
     let grade: string = "";
-    let imageName: string = "";
-    let image: string = assetImgSrc("placeholder.jpg");
+    let image: string = "";
     const user = ref({})
 
     user.value = {
@@ -33,11 +22,7 @@ export const useUserStore = defineStore("user", () => {
     if(localStorageUser) {
         pseudo = localStorageUser.pseudo;
         grade = localStorageUser.grade;
-
-        if(localStorageUser.image) {
-            imageName = localStorageUser.image;
-            image = getUploadsUrl(imageName);
-        }
+        image = localStorageUser.image;
 
         user.value = {
             pseudo: pseudo,
@@ -53,13 +38,6 @@ export const useUserStore = defineStore("user", () => {
 
         if(isLoginPage) {
             localStorage.setItem('user', JSON.stringify(newUser));
-        }
-
-        const newImage = newUser.image;
-        if(newImage) {
-            user.value.image = getUploadsUrl(newImage);
-        } else {
-            user.value.image = assetImgSrc("placeholder.jpg");
         }
     }
 

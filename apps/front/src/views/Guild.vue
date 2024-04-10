@@ -241,10 +241,6 @@ function sort(key: string) {
   toggleSortOrder(columns);
 }
 
-function placeholderSrc() {
-  return new URL('../assets/imgs/placeholder.jpg', import.meta.url).href;
-}
-
 function actionSelected(selection: any) {
   const action = selection.action;
   const memberId = selection.id;
@@ -252,18 +248,10 @@ function actionSelected(selection: any) {
   if (action === 'update') {
     console.log('update', memberId);
   } else if (action === 'exclude') {
-    let memberImage;
-
     memberSelected.value = members.value.find((member) => member.id === memberId);
 
-    if(memberSelected.value.image === 'placeholder.jpg') {
-      memberImage = placeholderSrc();
-    } else {
-      memberImage = `${env.VITE_URL}/uploads/${memberSelected.value.image}`;
-    }
-
     dialog.image = {
-      src: memberImage,
+      src: memberSelected.value.image,
       alt: memberSelected.value.pseudo
     };
     dialog.content = {
