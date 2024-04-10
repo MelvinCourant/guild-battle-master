@@ -9,7 +9,6 @@ defineEmits(["actionSelected"]);
 
 const data = ref(inject("data"));
 const columns = inject("columns");
-const hideActionsId = inject("hideActionsId");
 const rows = ref([]);
 const badges = ref([]);
 const env = import.meta.env;
@@ -40,7 +39,7 @@ function othersText(numberMonsters: number) {
     >
       <template
         v-for="(info, key, index) in row"
-        :key="key"
+        :key="row.id"
       >
         <td
           v-if="key !== 'id'"
@@ -100,22 +99,20 @@ function othersText(numberMonsters: number) {
           </div>
           <span v-else>{{ info }}</span>
         </td>
+        <td
+            class="table-rows__actions"
+            v-if="index === Object.keys(row).length - 1"
+        >
+          <More
+              :actions="data.actions"
+              :memberRole="row.role"
+              @actionSelected="$emit('actionSelected', {
+                action: $event,
+                id: row.id
+              })"
+          />
+        </td>
       </template>
-      <td
-        class="table-rows__actions"
-      >
-        <More
-          v-if="
-            data.actions &&
-            row.id !== hideActionsId
-          "
-          :actions="data.actions"
-          @actionSelected="$emit('actionSelected', {
-            action: $event,
-            id: row.id
-          })"
-        />
-      </td>
     </tr>
   </tbody>
 </template>

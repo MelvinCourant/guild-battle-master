@@ -1,11 +1,16 @@
 <script setup lang="ts">
 import '../../assets/css/components/utils/_more.scss';
 import { ref } from 'vue';
+import { useUserStore } from "../../stores/user.ts";
 
-defineProps({
+const props = defineProps({
   actions: {
     type: Array,
     required: true
+  },
+  memberRole: {
+    type: String,
+    default: ''
   },
   orientation: {
     type: String,
@@ -15,6 +20,9 @@ defineProps({
 
 defineEmits(['actionSelected']);
 
+const userStore = useUserStore();
+const user = userStore.user;
+const actionsToDisplay: any = ref([]);
 const isOpened = ref(false);
 
 function closeActions(event) {
@@ -24,10 +32,35 @@ function closeActions(event) {
 }
 
 document.addEventListener('click', closeActions);
+
+function getActions() {
+  props.actions.forEach((action: any) => {
+    action.permissions.forEach((permission: any) => {
+      if (
+          permission.role === user.role &&
+          (
+              permission.canModify.includes('all') ||
+              permission.canModify.includes(props.memberRole)
+          )
+      ) {
+        actionsToDisplay.value.push({
+          name: action.name,
+          label: action.label,
+          danger: action.danger
+        });
+      }
+    });
+  });
+}
+
+getActions();
 </script>
 
 <template>
-  <div class="more">
+  <div
+      class="more"
+      v-if="actionsToDisplay.length > 0"
+  >
     <button
       class="more__button"
       @click="isOpened = !isOpened"
@@ -41,7 +74,7 @@ document.addEventListener('click', closeActions);
       :class="['more__actions', `more__actions--${orientation}`]"
     >
       <li
-          v-for="action in actions"
+          v-for="action in actionsToDisplay"
           :key="action.id"
           class="more__item"
       >
@@ -55,7 +88,3 @@ document.addEventListener('click', closeActions);
     </ul>
   </div>
 </template>
-
-<style scoped>
-
-</style>

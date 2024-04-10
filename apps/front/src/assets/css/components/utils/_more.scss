@@ -20,6 +20,7 @@
     box-shadow: var(--shadow);
     border-radius: var(--input-text-radius);
     overflow: hidden;
+    background: var(--background);
 
     &--left {
       left: 0;

@@ -28,7 +28,6 @@ defineProps(
 
 defineEmits(['actionSelected'])
 
-const hideActionsId = inject("hideActionsId");
 const env = import.meta.env;
 
 function placeholderSrc() {
@@ -47,10 +46,7 @@ function othersText(numberMonsters: number) {
 <template>
   <li class="grid-card">
     <div
-        v-if="
-          hideActionsId !== content.id &&
-          actions
-        "
+        v-if="actions"
         class="grid-card__actions-container"
     >
       <div
@@ -59,6 +55,7 @@ function othersText(numberMonsters: number) {
         <More
             v-if="actions"
             :actions="actions"
+            :memberRole="content.role"
             @actionSelected="$emit('actionSelected', {
                 action: $event,
                 id: content.id

@@ -7,7 +7,6 @@ import Dialog from "../components/utils/Dialog.vue";
 import Alert from "../components/utils/Alert.vue";
 import {IAlert} from "../models/alert.ts";
 import TableGrid from "../components/utils/TableGrid.vue";
-import {s} from "vite/dist/node/types.d-FdqQ54oU";
 
 const userStore = useUserStore();
 const user = userStore.user;
@@ -81,16 +80,46 @@ const actions = [
   {
     name: 'update',
     label: 'Mettre à jour',
+    permissions: [
+      {
+        role: 'leader',
+        canModify: ['all']
+      },
+      {
+        role: 'moderator',
+        canModify: ['all']
+      }
+    ],
     danger: false
   },
   {
     name: 'role',
     label: 'Attribuer un rôle',
+    permissions: [
+      {
+        role: 'leader',
+        canModify: ['all']
+      },
+      {
+        role: 'moderator',
+        canModify: ['']
+      }
+    ],
     danger: false
   },
   {
     name: 'exclude',
     label: 'Exclure',
+    permissions: [
+      {
+        role: 'leader',
+        canModify: ['all']
+      },
+      {
+        role: 'moderator',
+        canModify: ['']
+      }
+    ],
     danger: true
   }
 ];
@@ -127,7 +156,6 @@ const alert: IAlert = reactive({
   message: '',
 });
 const loading = ref(true);
-const hideActionsId = user.member_id;
 
 provide('fields', fields);
 provide('columns', columns);
@@ -135,7 +163,6 @@ provide('sortOptions', sortOptions);
 provide('sortValue', actualSort);
 provide('data', data);
 provide('loading', loading);
-provide('hideActionsId', hideActionsId);
 
 async function getMembers() {
   const result = await fetch(`${env.VITE_URL}/api/guilds/${user.guild_id}`, {
