@@ -6,7 +6,7 @@ import Box from "#models/box";
 import Member from "#models/member";
 import User from "#models/user";
 import Monster from "#models/monster";
-import {fileValidator} from "#validators/box";
+import {fileValidator} from "#validators/file";
 
 export default class BoxesController {
   public async create({ auth, params, request, response }: HttpContext) {

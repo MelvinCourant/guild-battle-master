@@ -84,6 +84,10 @@ router
       return membersController.update(data)
     })
 
+    router.put('/:id', async (data) => {
+      return membersController.store(data)
+    });
+
     router.patch('/:id/exclude', async (data) => {
       return membersController.destroy(data)
     })

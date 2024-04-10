@@ -169,21 +169,25 @@ export default class AuthController {
           const monsterExists: any = await Monster.query()
             .where('unit_master_id', monster.unit_master_id)
             .first()
+          const numberOfMonsters = monsters.filter(
+            (m: any) => m.unit_master_id === monster.unit_master_id
+          ).length
 
           if (!monsterExists) {
             continue
           }
 
-          if (box) {
-            box.quantity = monsters.filter(
-              (m: any) => m.unit_master_id === monster.unit_master_id
-            ).length
+          if (
+            box &&
+            box.quantity !== numberOfMonsters
+          ) {
+            box.quantity = numberOfMonsters
             await box.save()
           } else {
             await Box.create({
               monster_id: monster.unit_master_id,
               member_id: memberId,
-              quantity: 1,
+              quantity: numberOfMonsters,
               monsters_assigned: 0,
             })
           }
