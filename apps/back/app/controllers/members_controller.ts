@@ -93,7 +93,7 @@ export default class MembersController {
     const jsonParsed: any = JSON.parse(data)
     const wizardId: number = jsonParsed.wizard_info.wizard_id
     const wizardName: string = jsonParsed.wizard_info.wizard_name
-    let profilUpdated = ''
+    let profileUpdated = ''
 
     if(wizardId !== member.wizard_id) {
       return response.status(400).json({ error: 'Le fichier ne correspond pas à votre compte' })
@@ -102,7 +102,7 @@ export default class MembersController {
     if(wizardName !== member.pseudo) {
       member.pseudo = wizardName
       await member.save()
-      profilUpdated = ', profil mis à jour'
+      profileUpdated = ', profil mis à jour'
     }
 
     let monstersAdded = 0;
@@ -169,7 +169,7 @@ export default class MembersController {
     }
 
     return response.json({
-      message: `Le fichier a bien été traité. ${monsterAddedMessage}, ${monsterUpdatedMessage} mis à jour ${profilUpdated}`
+      message: `Le fichier a bien été traité. ${monsterAddedMessage}, ${monsterUpdatedMessage} mis à jour ${profileUpdated}`
     })
   }
 
