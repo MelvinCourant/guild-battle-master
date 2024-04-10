@@ -26,35 +26,27 @@ export const useUserStore = defineStore("user", () => {
     let image: string = assetImgSrc("placeholder.jpg");
     let guild_id: any = null;
     let member_id: any = null;
+    const user = ref({})
 
     if(localStorageUser) {
-        id = localStorageUser.id;
-        email = localStorageUser.email;
         pseudo = localStorageUser.pseudo;
         grade = localStorageUser.grade;
-        guild_id = localStorageUser.guild_id;
-        member_id = localStorageUser.member_id;
 
         if(localStorageUser.image) {
             imageName = localStorageUser.image;
             image = getUploadsUrl(imageName);
         }
-    }
 
-    const user = ref({
-        id: id,
-        email: email,
-        pseudo: pseudo,
-        grade: grade,
-        image: image,
-        guild_id: guild_id,
-        member_id: member_id,
-    })
+        user.value = {
+            pseudo: pseudo,
+            grade: grade,
+            image: image,
+        }
+    }
 
     const token = ref(localStorage.getItem("token") || "");
 
     function updateUser(newUser: any) {
-        newUser = JSON.parse(newUser);
         user.value = newUser;
         localStorage.setItem('user', JSON.stringify(newUser));
 
@@ -71,20 +63,8 @@ export const useUserStore = defineStore("user", () => {
         localStorage.setItem('token', newToken);
     }
 
-    const isLogged = computed(() => {
-        return token.value !== "";
-    });
-
     function logout() {
-        user.value = {
-            id: null,
-            email: "",
-            pseudo: "",
-            grade: "",
-            image: assetImgSrc("placeholder.jpg"),
-            guild_id: null,
-            member_id: null,
-        };
+        user.value = {};
         token.value = "";
         localStorage.removeItem("user");
         localStorage.removeItem("token");
@@ -95,7 +75,6 @@ export const useUserStore = defineStore("user", () => {
         token,
         updateUser,
         updateToken,
-        isLogged,
         logout,
     }
 });
