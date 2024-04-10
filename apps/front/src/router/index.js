@@ -4,6 +4,7 @@ import Map from '../views/Map.vue';
 import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
 import Logout from "../views/Logout.vue";
+import UploadJson from "../views/UploadJson.vue";
 
 const router = createRouter(
 {
@@ -28,6 +29,10 @@ const router = createRouter(
         {
             path: '/logout',
             component: Logout
+        },
+        {
+            path: '/upload-json',
+            component: UploadJson
         }
     ]
 });

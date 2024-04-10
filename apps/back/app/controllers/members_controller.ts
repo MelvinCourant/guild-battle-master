@@ -165,11 +165,11 @@ export default class MembersController {
     } else if(monstersUpdated === 1) {
       monsterUpdatedMessage = '1 monstre mis à jour'
     } else {
-      monsterUpdatedMessage = 'Aucun monstre mis à jour'
+      monsterUpdatedMessage = 'aucun monstre mis à jour'
     }
 
     return response.json({
-      message: `Le fichier a bien été traité. ${monsterAddedMessage}, ${monsterUpdatedMessage} mis à jour ${profileUpdated}`
+      message: `Le fichier a bien été traité. ${monsterAddedMessage}, ${monsterUpdatedMessage} ${profileUpdated}`
     })
   }
 
