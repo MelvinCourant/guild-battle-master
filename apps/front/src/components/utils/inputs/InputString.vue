@@ -1,7 +1,6 @@
-<script setup lang="ts">
+<script setup>
   import "../../../assets/css/components/utils/inputs/_input-string.scss";
-  import { IAttributes } from "../../../models/form.ts";
-  import { PropType, ref } from "vue";
+  import { ref } from "vue";
 
   const props = defineProps({
     label: {
@@ -12,7 +11,7 @@
       type: String,
     },
     attributes: {
-      type: Object as PropType<IAttributes>,
+      type: Object,
       required: true,
     }
   })

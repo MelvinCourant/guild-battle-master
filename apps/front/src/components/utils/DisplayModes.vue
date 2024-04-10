@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import '../../assets/css/components/utils/_display-modes.scss';
 import {inject, reactive, ref, watch} from "vue";
 

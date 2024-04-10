@@ -1,7 +1,7 @@
-<script setup lang="ts">
+<script setup>
 import '../../assets/css/components/utils/_badge.scss'
-import {onMounted, ref} from 'vue'
-import { useMonstersStore } from "../../stores/monsters.ts";
+import {ref} from 'vue'
+import { useMonstersStore } from "../../stores/monsters.js";
 import Tooltip from "./Tooltip.vue";
 
 const env = import.meta.env;
@@ -20,10 +20,10 @@ const props = defineProps({
 });
 const monstersStore = useMonstersStore();
 const monsters = ref([]);
-const monstersImages = ref([]) as any;
+const monstersImages = ref([]);
 const tooltipIsDisplayed = ref(false);
 
-async function getMonsterFromDb(id: number) {
+async function getMonsterFromDb(id) {
   const result = await fetch(`${env.VITE_URL}/api/monsters/${id}`,
     {
       method: 'GET',
@@ -36,7 +36,7 @@ async function getMonsterFromDb(id: number) {
   return await result.json();
 }
 
-async function getMonsters(monstersIds: any) {
+async function getMonsters(monstersIds) {
   if(monsters.value.length === 0) {
     for (const id of monstersIds) {
       await getMonsterFromDb(id).then((monster) => {
@@ -49,7 +49,7 @@ async function getMonsters(monstersIds: any) {
       });
     }
   } else {
-    monsters.value.forEach((monster: any) => {
+    monsters.value.forEach((monster) => {
       monstersImages.value.push({
         src: `${env.VITE_URL}/uploads/${monster.image}`,
         alt: monster.name

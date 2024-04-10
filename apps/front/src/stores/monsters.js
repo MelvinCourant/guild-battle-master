@@ -2,8 +2,8 @@ import {ref} from "vue";
 import { defineStore } from "pinia";
 
 export const useMonstersStore = defineStore("monsters", () => {
-    const monsters: any = ref([]);
-    let localStorageMonsters: any = null;
+    const monsters = ref([]);
+    let localStorageMonsters = null;
 
     if(localStorage.getItem("monsters")) {
         localStorageMonsters = JSON.parse(localStorage.getItem("monsters") || "[]");
@@ -13,11 +13,11 @@ export const useMonstersStore = defineStore("monsters", () => {
         monsters.value = localStorageMonsters;
     }
 
-    function getMonster(id: number) {
-        return monsters.value.find((monster: any) => monster.id === id);
+    function getMonster(id) {
+        return monsters.value.find((monster) => monster.id === id);
     }
 
-    function setMonster(newMonsters: any) {
+    function setMonster(newMonsters) {
         monsters.value.push(newMonsters);
         localStorage.setItem("monsters", JSON.stringify(monsters.value));
     }

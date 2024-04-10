@@ -1,7 +1,6 @@
-<script setup lang="ts">
+<script setup>
   import '../../assets/css/components/menus/_submenu.scss';
   import { inject, watch } from "vue";
-  import { ISubmenuLink } from "../../models/navbar.ts";
 
   const props = defineProps({
     isOpened: {
@@ -11,14 +10,14 @@
   });
   const emit = defineEmits(['closeSubmenu']);
 
-  const submenu: Array<ISubmenuLink> | undefined = inject('submenu');
+  const submenu = inject('submenu');
 
-  function generateIconPath(icon: string): string {
+  function generateIconPath(icon) {
     return new URL(`../../assets/imgs/icons/${icon}.svg`, import.meta.url).href;
   }
 
-  function closeSubmenu(event: Event) {
-    if (!(event.target as HTMLElement).closest('.submenu')) {
+  function closeSubmenu(event) {
+    if (!(event.target).closest('.submenu')) {
       emit('closeSubmenu');
       document.removeEventListener('click', closeSubmenu);
     }

@@ -1,14 +1,13 @@
-<script setup lang="ts">
+<script setup>
 import '../assets/css/components/_guild-profile.scss';
 import {ref} from 'vue';
 import "vue3-loading-skeleton/dist/style.css";
 import { SkeletonLoader } from "vue3-loading-skeleton";
-import { useUserStore } from "../stores/user.ts";
+import { useUserStore } from "../stores/user.js";
 import Avatar from "./utils/Avatar.vue";
 
 const userStore = useUserStore();
 const user = userStore.user;
-const env = import.meta.env;
 
 defineProps({
     name: {

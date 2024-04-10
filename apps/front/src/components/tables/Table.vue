@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import '../../assets/css/components/tables/_table.scss'
 import TableHead from "./TableHead.vue";
 import TableRows from "./TableRows.vue";

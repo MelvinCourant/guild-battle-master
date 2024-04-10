@@ -1,20 +1,18 @@
-<script setup lang="ts">
+<script setup>
   import "../assets/css/components/_form-page.scss";
   import Form from "../components/utils/Form.vue";
   import Stepper from "../components/utils/Stepper.vue";
-  import type { PropType } from "vue";
-  import type { IStep, IImage } from "../models/form.ts";
 
   defineProps({
     steps: {
-      type: Array as PropType<Array<IStep>>,
+      type: Array,
     },
     currentStep: {
       type: Number,
       default: 1,
     },
     image: {
-      type: Object as PropType<IImage>,
+      type: Object,
     }
   })
   defineEmits(["sendValue", "nextStep"]);
@@ -36,7 +34,7 @@
       <Form
           :currentStep="currentStep"
           @nextStep="$emit('nextStep')"
-          @sendValue="(inputName: string, value: string) => $emit('sendValue', inputName, value)"
+          @sendValue="(inputName, value) => $emit('sendValue', inputName, value)"
       />
     </div>
   </section>

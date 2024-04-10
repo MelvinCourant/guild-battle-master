@@ -2,15 +2,15 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 
 export const useUserStore = defineStore("user", () => {
-    let localStorageUser: any = null;
+    let localStorageUser = null;
 
     if(localStorage.getItem("user")) {
         localStorageUser = JSON.parse(localStorage.getItem("user") || "{}");
     }
 
-    let pseudo: string = "";
-    let grade: string = "";
-    let image: string = "";
+    let pseudo = "";
+    let grade = "";
+    let image = "";
     const user = ref({})
 
     user.value = {
@@ -33,7 +33,7 @@ export const useUserStore = defineStore("user", () => {
 
     const token = ref(localStorage.getItem("token") || "");
 
-    function updateUser(newUser: any, isLoginPage: boolean = false) {
+    function updateUser(newUser, isLoginPage = false) {
         user.value = newUser;
 
         if(isLoginPage) {
@@ -41,7 +41,7 @@ export const useUserStore = defineStore("user", () => {
         }
     }
 
-    function updateToken(newToken: string) {
+    function updateToken(newToken) {
         token.value = newToken;
         localStorage.setItem('token', newToken);
     }

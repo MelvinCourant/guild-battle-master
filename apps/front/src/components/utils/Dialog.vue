@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import '../../assets/css/components/utils/_dialog.scss';
 import Field from "./Field.vue";
 import Avatar from "./Avatar.vue";

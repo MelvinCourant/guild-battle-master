@@ -1,26 +1,24 @@
-<script setup lang="ts">
+<script setup>
   import '../assets/css/views/_login-register.scss';
   import FormPage from "../components/FormPage.vue";
   import Alert from "../components/utils/Alert.vue";
-  import { IImage, IFormContainer } from "../models/form.ts";
-  import { IAlert } from "../models/alert.ts";
   import { provide, reactive } from "vue";
-  import { useUserStore } from "../stores/user.ts";
+  import { useUserStore } from "../stores/user.js";
   import { useRouter } from "vue-router";
 
   const env = import.meta.env;
   const userStore = useUserStore();
   const router = useRouter();
 
-  function generateImgSrc(src: string) {
+  function generateImgSrc(src) {
     return new URL(`../assets/imgs/${src}`, import.meta.url).href;
   }
 
-  const image: IImage = {
+  const image = {
     src: generateImgSrc("camilla.jpg"),
     alt: 'Login image',
   }
-  const loginForm: IFormContainer = reactive({
+  const loginForm = reactive({
     title: 'Guild battle Master',
     forms: [
       {
@@ -69,14 +67,14 @@
     email: '',
     password: '',
   });
-  const alert: IAlert = reactive({
+  const alert = reactive({
     display: false,
     message: '',
   });
 
   provide('formContainer', loginForm);
 
-  function updateValue(inputName: string, value: string) {
+  function updateValue(inputName, value) {
     if(inputName === 'email') {
       formValues.email = value;
     } else {
@@ -84,9 +82,9 @@
     }
   }
 
-  function displayError(resultJson: any) {
-    let errorsFields: any;
-    let globalError: any;
+  function displayError(resultJson) {
+    let errorsFields;
+    let globalError;
 
     if(resultJson.errors) {
       errorsFields = resultJson.errors;
@@ -95,8 +93,8 @@
     }
 
     if(errorsFields) {
-      errorsFields.forEach((error: any) => {
-        fields.forEach((field: any) => {
+      errorsFields.forEach((error) => {
+        fields.forEach((field) => {
           if (field.attributes.name === error.field) {
             field.error = error.message;
           }
@@ -130,10 +128,10 @@
     const resultJson = await result.json();
 
     if (result.ok) {
-      const user: any = resultJson.user;
+      const user = resultJson.user;
       userStore.updateUser(user, true);
 
-      const tokenObject: any = resultJson.token;
+      const tokenObject = resultJson.token;
       const tokenValue = tokenObject.token;
       userStore.updateToken(tokenValue);
 

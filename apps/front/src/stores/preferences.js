@@ -8,7 +8,7 @@ export const usePreferencesStore = defineStore("preferences", () => {
         preferences.value = JSON.parse(localStorage.getItem("preferences") || "[]");
     }
 
-    function updatePreferences(key: string, value: string) {
+    function updatePreferences(key, value) {
         if(preferences.value[key]) {
             preferences.value[key] = value;
         } else {

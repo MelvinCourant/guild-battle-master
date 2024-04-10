@@ -1,15 +1,13 @@
-<script setup lang="ts">
+<script setup>
   import '../../../assets/css/components/utils/inputs/_button.scss';
-  import { IAttributes } from "../../../models/form.ts";
-  import { PropType } from "vue";
 
   defineProps({
     loading: {
-      type: String as PropType<string>,
+      type: String,
       default: '',
     },
     attributes: {
-      type: Object as PropType<IAttributes>,
+      type: Object,
       required: true,
     },
   });

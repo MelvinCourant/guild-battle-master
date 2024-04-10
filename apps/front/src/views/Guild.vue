@@ -1,11 +1,10 @@
-<script setup lang="ts">
+<script setup>
 import '../assets/css/views/_guild.scss';
 import {provide, reactive, ref} from "vue";
-import {useUserStore} from "../stores/user.ts";
+import {useUserStore} from "../stores/user.js";
 import GuildProfile from "../components/GuildProfile.vue";
 import Dialog from "../components/utils/Dialog.vue";
 import Alert from "../components/utils/Alert.vue";
-import {IAlert} from "../models/alert.ts";
 import TableGrid from "../components/utils/TableGrid.vue";
 
 const userStore = useUserStore();
@@ -150,7 +149,7 @@ const dialog = reactive({
   ]
 });
 const dialogIsOpen = ref(false);
-const alert: IAlert = reactive({
+const alert = reactive({
   display: false,
   type: '',
   message: '',
@@ -188,8 +187,8 @@ async function getMembers() {
 
 getMembers();
 
-function sort(key: string) {
-  function ascendingSort(a: any, b: any) {
+function sort(key) {
+  function ascendingSort(a, b) {
     if (a[key] < b[key]) {
       return -1;
     }
@@ -199,7 +198,7 @@ function sort(key: string) {
     return 0;
   }
 
-  function toggleSortOrder(columns: any) {
+  function toggleSortOrder(columns) {
     columns.forEach((column) => {
       if (
           column.key === key &&
@@ -229,7 +228,7 @@ function sort(key: string) {
   } else if(key === 'grade') {
     const gradeOrder = ['leader', 'vice-leader', 'senior', 'member'];
 
-    members.value = members.value.sort((a: any, b: any) => {
+    members.value = members.value.sort((a, b) => {
       return gradeOrder.indexOf(a.grade) - gradeOrder.indexOf(b.grade);
     });
     actualSort.value = key;
@@ -241,7 +240,7 @@ function sort(key: string) {
   toggleSortOrder(columns);
 }
 
-function actionSelected(selection: any) {
+function actionSelected(selection) {
   const action = selection.action;
   const memberId = selection.id;
 
@@ -262,7 +261,7 @@ function actionSelected(selection: any) {
   }
 }
 
-async function dialogResponse(name: string) {
+async function dialogResponse(name) {
   if(name === 'exclude') {
     const result = await fetch(`${env.VITE_URL}/api/members/${memberSelected.value.id}/exclude`, {
       method: 'PATCH',
@@ -297,7 +296,7 @@ function closeDialog() {
   dialogIsOpen.value = false;
 }
 
-async function madeSearch(inputName: string, value: string) {
+async function madeSearch(inputName, value) {
   if(value === '') {
     await getMembers();
     return;
@@ -342,7 +341,7 @@ async function madeSearch(inputName: string, value: string) {
   }
 }
 
-function sortGrid(key: string) {
+function sortGrid(key) {
   sort(key);
   actualSort.value = key;
 }

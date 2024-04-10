@@ -1,6 +1,5 @@
-<script setup lang="ts">
+<script setup>
   import { inject } from "vue";
-  import { ISubmenuLink } from "../../../models/navbar.ts";
   import '../../../assets/css/components/menus/mobile/_submenu-mobile.scss'
   import Grade from "../../../components/utils/Grade.vue";
   import Avatar from "../../utils/Avatar.vue";
@@ -13,10 +12,10 @@
   });
   defineEmits(['closeSubmenu']);
 
-  const userProfile: any = inject('userProfile');
-  const submenu: Array<ISubmenuLink> | undefined = inject('submenu');
+  const userProfile = inject('userProfile');
+  const submenu= inject('submenu');
 
-  function generateIconPath(icon: string): string {
+  function generateIconPath(icon) {
     return new URL(`../../../assets/imgs/icons/${icon}.svg`, import.meta.url).href;
   }
 </script>

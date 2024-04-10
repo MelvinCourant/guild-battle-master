@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
   import '../../assets/css/components/menus/_account-menu.scss';
   import Submenu from "../../components/menus/Submenu.vue";
   import SubmenuMobile from "../../components/menus/mobile/SubmenuMobile.vue";
@@ -12,7 +12,7 @@
   });
 
   const submenuIsOpen = ref(false);
-  const onMobile: boolean | undefined = inject('onMobile');
+  const onMobile = inject('onMobile');
 
   function closeSubmenuOnResize() {
     if(

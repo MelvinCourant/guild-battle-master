@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import '../../assets/css/components/grids/_grid.scss'
 import {inject, nextTick, onMounted, ref, watch} from "vue";
 import GridCard from "./GridCard.vue";
@@ -12,7 +12,7 @@ const columns = inject('columns')
 const rows = ref([])
 const loading = ref(inject('loading'))
 const displayModes = ref(inject('displayModes'))
-const gridTemplateColumns: number | null = ref(null)
+const gridTemplateColumns  = ref(null)
 const cardWidth = 190
 const styleGrid = ref('')
 

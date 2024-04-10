@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import '../../../assets/css/components/utils/inputs/_select.scss';
 import {ref} from 'vue';
 
@@ -23,7 +23,7 @@ const isOpen = ref(false);
 
 document.addEventListener('click', (event) => {
   if (
-      !(event.target as HTMLElement).closest('.select') &&
+      !(event.target).closest('.select') &&
       isOpen.value
   ) {
     isOpen.value = false;

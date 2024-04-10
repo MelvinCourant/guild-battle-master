@@ -1,16 +1,16 @@
 import { createApp } from 'vue';
 import { createPinia } from "pinia";
 import App from './App.vue';
-import router from './router';
-import { useUserStore } from "./stores/user";
+import router from './router/index.js';
+import { useUserStore } from "./stores/user.js";
 
 const env = import.meta.env;
 const app = createApp(App);
 app.use(router).use(createPinia()).mount('#app');
 
-router.beforeEach(async (to: any, from: any, next: any) => {
+router.beforeEach(async (to, from, next) => {
     const userStore = useUserStore();
-    let isLogged: boolean = false;
+    let isLogged = false;
 
     async function verifyUser() {
         const result = await fetch(`${env.VITE_URL}/api/users/verify`, {

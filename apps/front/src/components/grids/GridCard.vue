@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import '../../assets/css/components/grids/_grid-card.scss';
 import More from "../utils/More.vue";
 import Grade from "../utils/Grade.vue";
@@ -31,7 +31,7 @@ defineEmits(['actionSelected'])
 
 const env = import.meta.env;
 
-function othersText(numberMonsters: number) {
+function othersText(numberMonsters) {
   if(numberMonsters - 3 > 1) {
     return `+${numberMonsters - 3} autres`;
   } else {

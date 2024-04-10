@@ -1,23 +1,21 @@
-<script setup lang="ts">
+<script setup>
   import "../assets/css/views/_login-register.scss";
   import FormPage from "../components/FormPage.vue";
   import Alert from "../components/utils/Alert.vue";
-  import { IStep, IFormContainer } from "../models/form.ts";
-  import { IAlert } from "../models/alert.ts";
   import { reactive, ref, provide } from "vue";
   import { useRouter } from "vue-router";
 
   const env = import.meta.env;
   const router = useRouter();
 
-  function generateImgSrc(src: string) {
+  function generateImgSrc(src) {
     return new URL(`../assets/imgs/${src}`, import.meta.url).href;
   }
 
   const placeholderImage = generateImgSrc('placeholder.jpg');
   const leaderImage = generateImgSrc('roles/leader.svg');
   const membersImage = generateImgSrc('members.svg');
-  const steps: IStep[] = [
+  const steps = [
       {
         level: 1,
         label: 'Compte',
@@ -34,7 +32,7 @@
         active: false,
       },
   ];
-  const registerForm: IFormContainer = reactive({
+  const registerForm = reactive({
     forms: [
       {
         id: 1,
@@ -162,7 +160,7 @@
       href: '/login',
     }
   });
-  const alert: IAlert = reactive({
+  const alert = reactive({
     display: false,
     message: '',
   });
@@ -174,36 +172,36 @@
     username: '',
     json: null,
   });
-  const memberImage = ref<File | null>();
+  const memberImage = ref();
   const formStepOne = registerForm.forms[0];
   const formFieldsStepOne = formStepOne.fields;
   const formStepTwo = registerForm.forms[1];
   const formFieldsStepTwo = formStepTwo.fields;
   const resume = registerForm.resume;
-  const resumeContent = resume?.content;
+  const resumeContent = resume.content;
   const canIncrement = ref(false);
 
   provide('formContainer', registerForm);
 
-  function updateValue(inputName: string, value: string | File) {
+  function updateValue(inputName, value) {
     if(inputName === 'image') {
-      memberImage.value = value as File;
+      memberImage.value = value;
     } else if(inputName === 'email') {
-      formValues.email = value as string;
+      formValues.email = value;
     } else if(inputName === 'username') {
-      formValues.username = value as string;
+      formValues.username = value;
     } else if(inputName === 'password') {
-      formValues.password = value as string;
+      formValues.password = value;
     } else if(inputName === 'confirmationPassword') {
-      formValues.confirmationPassword = value as string;
+      formValues.confirmationPassword = value;
     } else if(inputName === 'json') {
-      formValues.json = value as File;
+      formValues.json = value;
     }
   }
 
-  function displayError(fields: any, resultJson: any) {
-    let errorsFields: any;
-    let globalError: any;
+  function displayError(fields, resultJson) {
+    let errorsFields;
+    let globalError;
 
     if(resultJson.errors) {
       errorsFields = resultJson.errors;
@@ -212,8 +210,8 @@
     }
 
     if(errorsFields) {
-      errorsFields.forEach((error: any) => {
-        fields.forEach((field: any) => {
+      errorsFields.forEach((error) => {
+        fields.forEach((field) => {
           if (field.attributes.name === error.field) {
             field.error = error.message;
           }
@@ -230,8 +228,8 @@
     }
   }
 
-  async function register(step: number, fields: any, optionalFiles: any) {
-    fields.forEach((field: any) => {
+  async function register(step, fields, optionalFiles) {
+    fields.forEach((field) => {
       field.error = '';
     });
 
@@ -239,7 +237,7 @@
     submitButton.loading = 'Chargement...';
 
     const image = optionalFiles[0];
-    let jsonFormat: any;
+    let jsonFormat;
     if(step === 1) {
       jsonFormat = {
         email: formValues.email,

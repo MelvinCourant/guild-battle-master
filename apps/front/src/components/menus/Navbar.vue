@@ -1,14 +1,13 @@
-<script setup lang="ts">
+<script setup>
   import { useUserStore } from "../../stores/user.js";
   import '../../assets/css/components/menus/_navbar.scss';
   import { useRoute } from "vue-router";
   import logo from '../../assets/imgs/logo.svg';
-  import type { ILink } from "../../models/navbar.js";
   import AccountMenu from "../../components/menus/AccountMenu.vue";
   import NavbarMobile from "../../components/menus/mobile/NavbarMobile.vue";
   import { provide, ref } from "vue";
 
-  const desktopLinks: Array<ILink> = [
+  const desktopLinks = [
     {
       name: 'Guilde',
       path: '/guild',
@@ -25,7 +24,7 @@
       selected: false
     }
   ];
-  const mobileLinks: Array<ILink> = [
+  const mobileLinks = [
     {
       name: 'Guilde',
       path: '/guild',

@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import '../../assets/css/components/utils/_filters-bar.scss';
 import Field from "./Field.vue";
 import DisplayModes from "./DisplayModes.vue";
@@ -16,7 +16,7 @@ const fields = inject('fields');
           v-for="field in fields"
           :key="field.name"
           :attributes="field"
-          @sendValue="(inputName: string, value: string) => $emit('sendValue', inputName, value)"
+          @sendValue="(inputName, value) => $emit('sendValue', inputName, value)"
       />
     </div>
     <DisplayModes

@@ -1,7 +1,7 @@
-<script setup lang="ts">
+<script setup>
 import '../../assets/css/components/utils/_more.scss';
 import { ref } from 'vue';
-import { useUserStore } from "../../stores/user.ts";
+import { useUserStore } from "../../stores/user.js";
 
 const props = defineProps({
   actions: {
@@ -22,7 +22,7 @@ defineEmits(['actionSelected']);
 
 const userStore = useUserStore();
 const user = userStore.user;
-const actionsToDisplay: any = ref([]);
+const actionsToDisplay = ref([]);
 const isOpened = ref(false);
 
 function closeActions(event) {
@@ -34,8 +34,8 @@ function closeActions(event) {
 document.addEventListener('click', closeActions);
 
 function getActions() {
-  props.actions.forEach((action: any) => {
-    action.permissions.forEach((permission: any) => {
+  props.actions.forEach((action) => {
+    action.permissions.forEach((permission) => {
       if (
           permission.role === user.role &&
           (

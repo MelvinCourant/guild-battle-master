@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import '../../assets/css/components/tables/_table-rows.scss'
 import Badge from "../utils/Badge.vue";
 import Grade from "../utils/Grade.vue";
@@ -19,7 +19,7 @@ watch(data, () => {
   badges.value = data.value.badges;
 });
 
-function othersText(numberMonsters: number) {
+function othersText(numberMonsters) {
   if(numberMonsters - 3 > 1) {
     return `+${numberMonsters - 3} autres`;
   } else {

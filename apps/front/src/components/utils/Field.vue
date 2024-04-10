@@ -1,16 +1,14 @@
-<script setup lang="ts">
+<script setup>
   import InputString from "../../components/utils/inputs/InputString.vue";
   import InputFile from "../../components/utils/inputs/InputFile.vue";
   import Button from "../../components/utils/inputs/Button.vue";
-  import type { IAttributes, IImage } from "../../models/form.ts";
-  import type { PropType } from "vue";
 
   defineProps({
     error: {
       type: String,
     },
     image: {
-      type: Object as PropType<IImage>,
+      type: Object,
     },
     label: {
       type: String,
@@ -21,7 +19,7 @@
       default: "",
     },
     attributes: {
-      type: Object as PropType<IAttributes>,
+      type: Object,
       required: true,
     }
   });
@@ -35,7 +33,7 @@
     :label="label"
     :attributes="attributes"
     v-if="attributes.type === 'file'"
-    @sendValue="(inputName: string, value: string) => $emit('sendValue', inputName, value)"
+    @sendValue="(inputName, value) => $emit('sendValue', inputName, value)"
   />
 
   <InputString
@@ -48,7 +46,7 @@
       attributes.type === 'password' ||
       attributes.type === 'search'
     "
-    @sendValue="(inputName: string, value: string) => $emit('sendValue', inputName, value)"
+    @sendValue="(inputName, value) => $emit('sendValue', inputName, value)"
   />
 
   <Button

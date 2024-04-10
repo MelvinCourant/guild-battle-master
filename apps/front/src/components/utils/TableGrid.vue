@@ -1,10 +1,10 @@
-<script setup lang="ts">
+<script setup>
 import '../../assets/css/components/_table-grid.scss';
 import Table from "../tables/Table.vue";
 import FiltersBar from "./FiltersBar.vue";
 import Grid from "../grids/Grid.vue";
 import {provide, reactive} from "vue";
-import {usePreferencesStore} from "../../stores/preferences.ts";
+import {usePreferencesStore} from "../../stores/preferences.js";
 
 defineEmits(['sort', 'actionSelected', 'sendValue', 'modeSelected', 'sortGrid']);
 
@@ -53,7 +53,7 @@ if(
 
 window.addEventListener('resize', toggleModeSelectedMobile);
 
-function updateDisplayMode(mode: string) {
+function updateDisplayMode(mode) {
   displayModes.forEach((displayMode) => {
     if(displayMode.name === mode) {
       displayMode.isSelected = true;
@@ -68,7 +68,7 @@ function updateDisplayMode(mode: string) {
 <template>
   <div class="table-grid">
     <FiltersBar
-        @sendValue="(inputName: string, value: string) => $emit('sendValue', inputName, value)"
+        @sendValue="(inputName, value) => $emit('sendValue', inputName, value)"
         @modeSelected="updateDisplayMode"
     />
     <Table

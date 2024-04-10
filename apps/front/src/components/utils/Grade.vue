@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
   import '../../assets/css/components/utils/_grade.scss'
 
   defineProps({

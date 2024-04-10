@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import '../../assets/css/components/grids/_sort-grid.scss';
 import Select from "../utils/inputs/Select.vue";
 import {inject, ref} from "vue";
