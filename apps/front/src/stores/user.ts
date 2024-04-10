@@ -18,15 +18,17 @@ export const useUserStore = defineStore("user", () => {
         localStorageUser = JSON.parse(localStorage.getItem("user") || "{}");
     }
 
-    let id: any = null;
-    let email: string = "";
     let pseudo: string = "";
     let grade: string = "";
     let imageName: string = "";
     let image: string = assetImgSrc("placeholder.jpg");
-    let guild_id: any = null;
-    let member_id: any = null;
     const user = ref({})
+
+    user.value = {
+        pseudo: pseudo,
+        grade: grade,
+        image: image,
+    }
 
     if(localStorageUser) {
         pseudo = localStorageUser.pseudo;
@@ -46,9 +48,12 @@ export const useUserStore = defineStore("user", () => {
 
     const token = ref(localStorage.getItem("token") || "");
 
-    function updateUser(newUser: any) {
+    function updateUser(newUser: any, isLoginPage: boolean = false) {
         user.value = newUser;
-        localStorage.setItem('user', JSON.stringify(newUser));
+
+        if(isLoginPage) {
+            localStorage.setItem('user', JSON.stringify(newUser));
+        }
 
         const newImage = newUser.image;
         if(newImage) {

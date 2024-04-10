@@ -99,10 +99,7 @@
 </script>
 
 <template>
-  <header
-      class="navbar"
-      v-if="userStore.isLogged"
-  >
+  <header class="navbar">
     <nav class="navbar__nav">
       <ul class="navbar__list">
         <li class="navbar__left">

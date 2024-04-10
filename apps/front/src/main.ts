@@ -23,7 +23,7 @@ router.beforeEach(async (to: any, from: any, next: any) => {
 
         if(result.status === 200) {
             const data = await result.json();
-            userStore.updateUser(data.user);
+            userStore.updateUser(data.user, false);
             isLogged = true;
         } else {
             userStore.logout();

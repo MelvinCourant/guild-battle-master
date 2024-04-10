@@ -131,7 +131,7 @@
 
     if (result.ok) {
       const user: any = resultJson.user;
-      userStore.updateUser(user);
+      userStore.updateUser(user, true);
 
       const tokenObject: any = resultJson.token;
       const tokenValue = tokenObject.token;
