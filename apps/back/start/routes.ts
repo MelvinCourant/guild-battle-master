@@ -80,13 +80,17 @@ router
   .group(() => {
     const membersController = new MembersController()
 
+    router.get('/:id/verify-upload-permissions', async (data) => {
+      return membersController.verifyUploadPermissions(data)
+    })
+
     router.patch('/:id', async (data) => {
       return membersController.update(data)
     })
 
     router.put('/:id', async (data) => {
       return membersController.store(data)
-    });
+    })
 
     router.patch('/:id/exclude', async (data) => {
       return membersController.destroy(data)

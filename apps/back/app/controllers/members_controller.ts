@@ -1,49 +1,80 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import Member from "#models/member";
-import {fileValidator} from "#validators/file";
-import app from "@adonisjs/core/services/app";
-import {cuid} from "@adonisjs/core/helpers";
-import fs from "fs";
-import Box from "#models/box";
-import Monster from "#models/monster";
-import Guild from "#models/guild";
-import User from "#models/user";
+import Member from '#models/member'
+import { fileValidator } from '#validators/file'
+import app from '@adonisjs/core/services/app'
+import { cuid } from '@adonisjs/core/helpers'
+import fs from 'node:fs'
+import Box from '#models/box'
+import Monster from '#models/monster'
+import Guild from '#models/guild'
+import User from '#models/user'
 
 export default class MembersController {
-  public async update({ auth, params, request, response }: HttpContext) {
+  async verifyUploadPermissions({ auth, params, response }: HttpContext) {
     const user = await auth.authenticate()
-    const leadGuild = await Guild
-      .query()
-      .where('leader_id', user.id)
-      .select('id')
+    const userMember = await Member.query()
+      .where('user_id', user.id)
+      .select('id', 'guild_id')
       .firstOrFail()
-    const leadGuildId = leadGuild.id
-    const member = await Member
-      .query()
+    const memberParams = await Member.query()
       .where('id', params.id)
+      .select('id', 'pseudo', 'user_id', 'guild_id')
       .firstOrFail()
+    const userMemberParams = await User.query().where('id', memberParams.user_id).select('role')
+
+    function returnError() {
+      return response.status(403).json({ error: "Vous n'avez pas les droits" })
+    }
+
+    if (user.role !== 'admin' && userMember.guild_id !== memberParams.guild_id) {
+      return returnError()
+    } else if (
+      user.role === 'moderator' &&
+      userMemberParams.role === 'moderator' &&
+      userMember.id !== memberParams.id
+    ) {
+      return returnError()
+    } else if (user.role === 'moderator' && userMemberParams.role === 'leader') {
+      return returnError()
+    } else if (
+      user.role === 'leader' &&
+      userMemberParams.role === 'leader' &&
+      userMember.id !== memberParams.id
+    ) {
+      return returnError()
+    } else if (user.role === 'member' && userMember.id !== memberParams.id) {
+      return returnError()
+    }
+
+    const pseudo = memberParams.pseudo
+    return response.json({
+      message: `Vous avez les droits pour uploader le fichier`,
+      pseudo: pseudo,
+    })
+  }
+
+  async update({ auth, params, request, response }: HttpContext) {
+    const user = await auth.authenticate()
+    const leadGuild = await Guild.query().where('leader_id', user.id).select('id').firstOrFail()
+    const leadGuildId = leadGuild.id
+    const member = await Member.query().where('id', params.id).firstOrFail()
     const memberGuildId = member.guild_id
 
-    if(
-      user.role !== 'admin' &&
-      user.role !== 'leader' &&
-      user.role !== 'moderator' ||
+    if (
+      (user.role !== 'admin' && user.role !== 'leader' && user.role !== 'moderator') ||
       leadGuildId !== memberGuildId
     ) {
-      return response.status(403).json({ error: 'Vous n\'avez pas les droits' })
+      return response.status(403).json({ error: "Vous n'avez pas les droits" })
     }
 
     const grade = request.input('grade')
 
-    if(
-      grade !== 'leader' &&
-      grade !== 'vice-leader' &&
-      grade !== 'senior' &&
-      grade !== 'member'
-    ) {
-      return response.status(400).json({ error: 'Ce rôle n\'existe pas' })
-    } else if(grade === member.grade) {
-      return response.status(400).json({ error: `Le membre ${member.pseudo} a déjà le rôle ${grade}` })
+    if (grade !== 'leader' && grade !== 'vice-leader' && grade !== 'senior' && grade !== 'member') {
+      return response.status(400).json({ error: "Ce rôle n'existe pas" })
+    } else if (grade === member.grade) {
+      return response
+        .status(400)
+        .json({ error: `Le membre ${member.pseudo} a déjà le rôle ${grade}` })
     } else {
       // TODO: managing the situation when the leader wants to hand over his role to another member
       // TODO: managing the situation when the member have a account to update his role
@@ -53,27 +84,20 @@ export default class MembersController {
     }
   }
 
-  public async store({ auth, params, request, response }: HttpContext) {
+  async store({ auth, params, request, response }: HttpContext) {
     const user = await auth.authenticate()
     const payload = await request.validateUsing(fileValidator)
-    const member = await Member
-      .query()
+    const member = await Member.query()
       .where('id', params.id)
       .select('id', 'wizard_id', 'pseudo', 'user_id')
       .firstOrFail()
-    const userId = await User
-      .query()
-      .where('id', member.user_id)
-      .select('id')
-      .firstOrFail()
+    const userId = await User.query().where('id', member.user_id).select('id').firstOrFail()
 
-    if(
+    if (
       userId.id !== user.id ||
-      user.role !== 'admin' &&
-      user.role !== 'leader' &&
-      user.role !== 'moderator'
+      (user.role !== 'admin' && user.role !== 'leader' && user.role !== 'moderator')
     ) {
-      return response.status(403).json({ error: 'Vous n\'avez pas les droits' })
+      return response.status(403).json({ error: "Vous n'avez pas les droits" })
     }
 
     const json = payload.json
@@ -95,18 +119,18 @@ export default class MembersController {
     const wizardName: string = jsonParsed.wizard_info.wizard_name
     let profileUpdated = ''
 
-    if(wizardId !== member.wizard_id) {
+    if (wizardId !== member.wizard_id) {
       return response.status(400).json({ error: 'Le fichier ne correspond pas à votre compte' })
     }
 
-    if(wizardName !== member.pseudo) {
+    if (wizardName !== member.pseudo) {
       member.pseudo = wizardName
       await member.save()
       profileUpdated = ', profil mis à jour'
     }
 
-    let monstersAdded = 0;
-    let monstersUpdated = 0;
+    let monstersAdded = 0
+    let monstersUpdated = 0
 
     async function updateBoxes(memberId: number, monsters: any) {
       for (const monster of monsters) {
@@ -125,14 +149,11 @@ export default class MembersController {
           continue
         }
 
-        if (
-          box &&
-          box.quantity !== numberOfMonsters
-        ) {
+        if (box && box.quantity !== numberOfMonsters) {
           box.quantity = numberOfMonsters
           await box.save()
           monstersUpdated += numberOfMonsters
-        } else if(!box) {
+        } else if (!box) {
           await Box.create({
             monster_id: monster.unit_master_id,
             member_id: memberId,
@@ -152,59 +173,45 @@ export default class MembersController {
     let monsterAddedMessage = ''
     let monsterUpdatedMessage = ''
 
-    if(monstersAdded > 1) {
+    if (monstersAdded > 1) {
       monsterAddedMessage = `${monstersAdded} monstres ajoutés`
-    } else if(monstersAdded === 1) {
+    } else if (monstersAdded === 1) {
       monsterAddedMessage = '1 monstre ajouté'
     } else {
       monsterAddedMessage = 'Aucun monstre ajouté'
     }
 
-    if(monstersUpdated > 1) {
+    if (monstersUpdated > 1) {
       monsterUpdatedMessage = `${monstersUpdated} monstres mis à jour`
-    } else if(monstersUpdated === 1) {
+    } else if (monstersUpdated === 1) {
       monsterUpdatedMessage = '1 monstre mis à jour'
     } else {
       monsterUpdatedMessage = 'aucun monstre mis à jour'
     }
 
     return response.json({
-      message: `Le fichier a bien été traité. ${monsterAddedMessage}, ${monsterUpdatedMessage} ${profileUpdated}`
+      message: `Le fichier a bien été traité. ${monsterAddedMessage}, ${monsterUpdatedMessage} ${profileUpdated}`,
     })
   }
 
-  public async destroy({ auth, params, response }: HttpContext) {
+  async destroy({ auth, params, response }: HttpContext) {
     const user = await auth.authenticate()
-    const userMember = await Member
-      .query()
-      .where('user_id', user.id)
-      .select('id')
-      .firstOrFail()
-    const leadGuild = await Guild
-      .query()
-      .where('leader_id', user.id)
-      .select('id')
-      .firstOrFail()
+    const userMember = await Member.query().where('user_id', user.id).select('id').firstOrFail()
+    const leadGuild = await Guild.query().where('leader_id', user.id).select('id').firstOrFail()
     const leadGuildId = leadGuild.id
-    const member = await Member
-      .query()
-      .where('id', params.id)
-      .firstOrFail()
+    const member = await Member.query().where('id', params.id).firstOrFail()
     const memberGuildId = member.guild_id
-    const memberRole = await User
-      .query()
-      .where('id', member.user_id)
-      .select('role')
+    const memberRole = await User.query().where('id', member.user_id).select('role')
 
-    if(
-      user.role !== 'admin' && user.role !== 'leader' && user.role !== 'moderator' ||
+    if (
+      (user.role !== 'admin' && user.role !== 'leader' && user.role !== 'moderator') ||
       leadGuildId !== memberGuildId ||
       userMember.id === member.id ||
-      user.role === 'moderator' && memberRole.role === 'moderator' ||
-      user.role === 'moderator' && memberRole.role === 'leader' ||
-      user.role === 'leader' && memberRole.role === 'leader'
+      (user.role === 'moderator' && memberRole.role === 'moderator') ||
+      (user.role === 'moderator' && memberRole.role === 'leader') ||
+      (user.role === 'leader' && memberRole.role === 'leader')
     ) {
-      return response.status(403).json({ error: 'Vous n\'avez pas les droits' })
+      return response.status(403).json({ error: "Vous n'avez pas les droits" })
     }
 
     // @ts-ignore

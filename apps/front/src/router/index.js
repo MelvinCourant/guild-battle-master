@@ -33,6 +33,10 @@ const router = createRouter(
         {
             path: '/upload-json',
             component: UploadJson
+        },
+        {
+            path: '/upload-json/:id',
+            component: UploadJson
         }
     ]
 });

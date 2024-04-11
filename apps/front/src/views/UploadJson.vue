@@ -4,6 +4,7 @@ import FormPage from "../components/FormPage.vue";
 import Alert from "../components/utils/Alert.vue";
 import {provide, reactive, ref} from "vue";
 import { useUserStore } from "../stores/user.js";
+import { useRoute, useRouter } from 'vue-router';
 
 const uploadJsonForm = reactive({
   title: 'Met à jour ton profil',
@@ -39,6 +40,9 @@ const userStore = useUserStore();
 const token = userStore.token;
 const user = userStore.user;
 const memberId = user.member_id;
+const route = useRoute();
+const router = useRouter();
+const id = route.params.id;
 const json = ref(null);
 const alert = reactive({
   display: false,
