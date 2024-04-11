@@ -8,6 +8,7 @@ import { useRoute, useRouter } from 'vue-router';
 
 const uploadJsonForm = reactive({
   title: 'Met à jour ton profil',
+  highlight: '',
   forms: [
     {
       id: 1,
@@ -39,15 +40,41 @@ const env = import.meta.env;
 const userStore = useUserStore();
 const token = userStore.token;
 const user = userStore.user;
-const memberId = user.member_id;
+const memberId = ref(user.member_id);
 const route = useRoute();
 const router = useRouter();
-const id = route.params.id;
+const params = route.params;
+const id = parseInt(params.id);
 const json = ref(null);
 const alert = reactive({
   display: false,
   message: '',
 });
+
+async function verifyUploadPermissions() {
+  const result = await fetch(`${env.VITE_URL}/api/members/${memberId.value}/verify-upload-permissions`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
+  const resultJson = await result.json();
+
+  if (result.ok) {
+    uploadJsonForm.title = 'Mettre à jour';
+    uploadJsonForm.highlight = resultJson.pseudo;
+  } else {
+    await router.push('/upload-json');
+  }
+}
+
+if(
+    id &&
+    memberId.value !== id
+) {
+  memberId.value = id;
+  verifyUploadPermissions();
+}
 
 function updateValue(inputName, value) {
   json.value = value;
@@ -70,7 +97,7 @@ async function uploadJson() {
   formData.append('json', json.value);
 
   uploadJsonForm.forms[0].fields[1].loading = 'Chargement...';
-  const result = await fetch(`${env.VITE_URL}/api/members/${memberId}`, {
+  const result = await fetch(`${env.VITE_URL}/api/members/${memberId.value}`, {
     method: 'PUT',
     headers: {
       'Authorization': `Bearer ${token}`
@@ -93,8 +120,8 @@ async function uploadJson() {
     alert.display = true;
     alert.type = 'error';
 
-    if (resultJson.message) {
-      alert.message = resultJson.message;
+    if (resultJson.error) {
+      alert.message = resultJson.error;
     } else {
       alert.message = resultJson.errors[0].message;
     }

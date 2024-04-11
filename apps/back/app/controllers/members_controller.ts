@@ -87,17 +87,38 @@ export default class MembersController {
   async store({ auth, params, request, response }: HttpContext) {
     const user = await auth.authenticate()
     const payload = await request.validateUsing(fileValidator)
-    const member = await Member.query()
-      .where('id', params.id)
-      .select('id', 'wizard_id', 'pseudo', 'user_id')
+    const userMember = await Member.query()
+      .where('user_id', user.id)
+      .select('id', 'guild_id')
       .firstOrFail()
-    const userId = await User.query().where('id', member.user_id).select('id').firstOrFail()
+    const memberParams = await Member.query()
+      .where('id', params.id)
+      .select('id', 'wizard_id', 'pseudo', 'user_id', 'guild_id')
+      .firstOrFail()
+    const userMemberParams = await User.query().where('id', memberParams.user_id).select('role')
 
-    if (
-      userId.id !== user.id ||
-      (user.role !== 'admin' && user.role !== 'leader' && user.role !== 'moderator')
-    ) {
+    function returnError() {
       return response.status(403).json({ error: "Vous n'avez pas les droits" })
+    }
+
+    if (user.role !== 'admin' && userMember.guild_id !== memberParams.guild_id) {
+      return returnError()
+    } else if (
+      user.role === 'moderator' &&
+      userMemberParams.role === 'moderator' &&
+      userMember.id !== memberParams.id
+    ) {
+      return returnError()
+    } else if (user.role === 'moderator' && userMemberParams.role === 'leader') {
+      return returnError()
+    } else if (
+      user.role === 'leader' &&
+      userMemberParams.role === 'leader' &&
+      userMember.id !== memberParams.id
+    ) {
+      return returnError()
+    } else if (user.role === 'member' && userMember.id !== memberParams.id) {
+      return returnError()
     }
 
     const json = payload.json
@@ -119,13 +140,13 @@ export default class MembersController {
     const wizardName: string = jsonParsed.wizard_info.wizard_name
     let profileUpdated = ''
 
-    if (wizardId !== member.wizard_id) {
+    if (wizardId !== memberParams.wizard_id) {
       return response.status(400).json({ error: 'Le fichier ne correspond pas à votre compte' })
     }
 
-    if (wizardName !== member.pseudo) {
-      member.pseudo = wizardName
-      await member.save()
+    if (wizardName !== memberParams.pseudo) {
+      memberParams.pseudo = wizardName
+      await memberParams.save()
       profileUpdated = ', profil mis à jour'
     }
 
@@ -166,7 +187,7 @@ export default class MembersController {
     }
 
     const monsters: any = jsonParsed.unit_list
-    await updateBoxes(member.id, monsters)
+    await updateBoxes(memberParams.id, monsters)
 
     fs.unlinkSync(jsonLink)
 

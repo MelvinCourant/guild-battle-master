@@ -126,10 +126,19 @@
         :style="formStyle"
     >
       <h2
-          class="form__title"
+          :class="[
+              'form__title',
+              {'form__title--highlight': formContainer.highlight}
+          ]"
           v-if="formContainer.title"
       >
         {{ formContainer.title }}
+        <span
+            v-if="formContainer.highlight"
+            class="highlight"
+        >
+          {{ formContainer.highlight }}
+        </span>
       </h2>
       <form
           class="form__fields"
