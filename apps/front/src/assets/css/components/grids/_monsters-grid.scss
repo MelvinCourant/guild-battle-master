@@ -2,14 +2,19 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  padding-bottom: 70px;
+
+  @media screen and (max-width: 768px) {
+    padding-bottom: 30px;
+  }
+
+  &--loading {
+    position: relative;
+    flex: 1;
+  }
 
   &__list {
     display: grid;
     gap: 20px;
-
-    &--loading {
-      position: relative;
-      flex: 1;
-    }
   }
 }

@@ -43,6 +43,7 @@ function onImageLoad() {
     <SkeletonLoader
         circle
         size="100"
+        class="guild-profile__skeleton-image"
         v-if="!imageLoaded"
     />
 
@@ -58,6 +59,7 @@ function onImageLoad() {
     <SkeletonLoader
         width="100"
         height="20"
+        class="guild-profile__skeleton-name"
         v-else
     />
     <router-link
@@ -73,6 +75,7 @@ function onImageLoad() {
     <SkeletonLoader
         width="90"
         height="12"
+        class="guild-profile__skeleton-update"
         v-else
     />
   </div>

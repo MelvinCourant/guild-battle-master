@@ -7,14 +7,26 @@ import MonsterCard from "../MonsterCard.vue";
 const monsters = inject('monsters')
 const loading = ref(inject('loading'))
 const gridTemplateColumns  = ref(null)
-const cardWidth = 100
+const cardWidth = ref(100)
 const styleGrid = ref('')
 
 async function updateGrid() {
   await nextTick();
   const grid = document.querySelector('.monsters-grid')
 
-  gridTemplateColumns.value = Math.floor((grid.clientWidth / cardWidth))
+  if(
+      window.innerWidth < 768 &&
+      cardWidth.value === 100
+  ) {
+    cardWidth.value = 80;
+  } else if(
+      window.innerWidth > 768 &&
+      cardWidth.value === 80
+  ) {
+    cardWidth.value = 100;
+  }
+
+  gridTemplateColumns.value = Math.floor((grid.clientWidth / cardWidth.value))
   styleGrid.value = `grid-template-columns: repeat(${gridTemplateColumns.value}, 1fr);`
 }
 
@@ -26,14 +38,16 @@ window.addEventListener('resize', updateGrid)
 </script>
 
 <template>
-  <div class="monsters-grid">
-    <ul
-        :class="[
-          'monsters-grid__list',
+  <div
+      :class="[
+          'monsters-grid',
           {
-            'monsters-grid__list--loading': loading
+            'monsters-grid--loading': loading
           }
-        ]"
+      ]"
+  >
+    <ul
+        class="monsters-grid__list"
         :style="styleGrid"
     >
       <MonsterCard

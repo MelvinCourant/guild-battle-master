@@ -57,4 +57,21 @@
       color: var(--primary-darkened);
     }
   }
+
+  &__skeleton {
+    &-image {
+      width: 80px !important;
+      height: 80px !important;
+    }
+
+    &-name {
+      width: 90px !important;
+      height: 18px !important;
+    }
+
+    &-update {
+      width: 76px !important;
+      height: 11px !important;
+    }
+  }
 }

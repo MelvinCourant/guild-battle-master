@@ -20,6 +20,8 @@
   }
 
   @media screen and (max-width: 768px) {
+    min-height: calc(100vh - 114px);
+    max-height: calc(100vh - 114px);
     gap: 40px;
     padding: 30px 20px;
   }

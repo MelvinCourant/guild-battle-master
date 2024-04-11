@@ -21,7 +21,7 @@ const fields = [
     placeholder: "Nom, grade naturel, etc.",
   }
 ];
-const loading = ref(false);
+const loading = ref(true);
 
 provide('monsters', monsters);
 provide('fields', fields);

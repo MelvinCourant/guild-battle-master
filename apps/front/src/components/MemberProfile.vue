@@ -52,6 +52,7 @@ function onImageLoad() {
     <SkeletonLoader
         circle
         size="100"
+        class="member-profile__skeleton-image"
         v-if="!imageLoaded"
     />
 
@@ -67,6 +68,7 @@ function onImageLoad() {
     <SkeletonLoader
         width="100"
         height="20"
+        class="member-profile__skeleton-pseudo"
         v-else
     />
 
