@@ -92,10 +92,6 @@ async function uploadJson() {
     alert.message = 'Veuillez sélectionner un fichier JSON';
     alert.type = 'error';
 
-    setTimeout(() => {
-      alert.display = false;
-    }, 3000);
-
     return;
   }
 
@@ -104,7 +100,7 @@ async function uploadJson() {
 
   uploadJsonForm.forms[0].fields[1].loading = 'Chargement...';
 
-  let url = `${env.VITE_URL}/api/members/${memberId.value}/upload-json`;
+  let url = `${env.VITE_URL}/api/members/${memberId.value}`;
 
   if(isGuildUpload.value) {
     url = `${env.VITE_URL}/api/guilds`;
@@ -126,13 +122,11 @@ async function uploadJson() {
     alert.message = resultJson.message;
     alert.type = 'success';
 
-    setTimeout(() => {
-      if(isGuildUpload.value) {
+    if(isGuildUpload.value) {
+      setTimeout(() => {
         router.push('/guild');
-      } else {
-        alert.display = false;
-      }
-    }, 3000);
+      }, 3000);
+    }
   } else {
     alert.display = true;
     alert.type = 'error';
@@ -142,10 +136,6 @@ async function uploadJson() {
     } else {
       alert.message = resultJson.errors[0].message;
     }
-
-    setTimeout(() => {
-      alert.display = false;
-    }, 3000);
   }
 }
 </script>

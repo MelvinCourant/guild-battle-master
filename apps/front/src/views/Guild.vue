@@ -284,10 +284,6 @@ async function dialogResponse(name) {
       alert.type = 'error';
       alert.message = resultJson.error;
     }
-
-    setTimeout(() => {
-      alert.display = false;
-    }, 3000);
   } else {
     closeDialog();
   }

@@ -63,7 +63,7 @@ export default class AuthController {
         // User exists and already registered
         return response
           .status(400)
-          .send({ message: 'Un compte existe déjà avec cette adresse email' })
+          .send({ error: 'Un compte existe déjà avec cette adresse email' })
       } else if (user && user.pending === 1) {
         // User exists but not completed registration
         await deletePreviousData(user)
@@ -93,7 +93,7 @@ export default class AuthController {
         .select('id')
         .first()
       if (!user) {
-        return response.status(404).send({ message: 'User not found, back to step 1' })
+        return response.status(404).send({ error: 'User not found, back to step 1' })
       }
 
       const userImage: any = await User.query()
@@ -111,7 +111,7 @@ export default class AuthController {
 
       if (!data) {
         fs.unlinkSync(jsonLink)
-        return response.status(500).send({ message: 'Error reading json file' })
+        return response.status(500).send({ error: 'Error reading json file' })
       }
 
       async function createMembers(wizardId: number, members: any) {
@@ -229,7 +229,7 @@ export default class AuthController {
 
       if (!user && !guild && !member) {
         return response.status(404).send({
-          message: 'User, guild and member not found, go to register page to start registration',
+          error: 'User, guild and member not found, go to register page to start registration',
         })
       } else if (!guild || !member) {
         let modelsNotFound = ''
@@ -242,9 +242,9 @@ export default class AuthController {
           modelsNotFound = 'Member'
         }
 
-        return response.status(404).send({ message: `${modelsNotFound} not found, back to step 2` })
+        return response.status(404).send({ error: `${modelsNotFound} not found, back to step 2` })
       } else if (!user) {
-        return response.status(404).send({ message: 'User not found, back to step 1' })
+        return response.status(404).send({ error: 'User not found, back to step 1' })
       }
 
       // Verify all information
@@ -257,7 +257,7 @@ export default class AuthController {
 
       return response.created({ message: 'Registration successful' })
     } else {
-      return response.status(400).send({ message: 'Invalid step' })
+      return response.status(400).send({ error: 'Invalid step' })
     }
   }
 
@@ -281,7 +281,7 @@ export default class AuthController {
         token,
       })
     } catch (error) {
-      return response.status(400).send({ message: 'Email ou mot de passe incorrect' })
+      return response.status(400).send({ error: 'Email ou mot de passe incorrect' })
     }
   }
 

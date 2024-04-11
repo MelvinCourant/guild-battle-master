@@ -89,7 +89,7 @@
     if(resultJson.errors) {
       errorsFields = resultJson.errors;
     } else {
-      globalError = resultJson.message;
+      globalError = resultJson.error;
     }
 
     if(errorsFields) {
@@ -104,10 +104,6 @@
       alert.display = true;
       alert.type = 'error';
       alert.message = globalError;
-
-      setTimeout(() => {
-        alert.display = false;
-      }, 3000);
     }
   }
 
