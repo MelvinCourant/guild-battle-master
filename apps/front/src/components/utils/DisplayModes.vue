@@ -5,7 +5,11 @@ import {inject, reactive, ref, watch} from "vue";
 const emit = defineEmits(['modeSelected']);
 
 const modes = reactive(inject('displayModes'));
-const modeSelected = ref(modes.find(mode => mode.isSelected));
+const modeSelected = ref({});
+
+if(modes) {
+  modeSelected.value = modes.find(mode => mode.isSelected);
+}
 
 watch(modes, () => {
   modeSelected.value = modes.find(mode => mode.isSelected);

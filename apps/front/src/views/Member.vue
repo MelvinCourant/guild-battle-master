@@ -1,7 +1,8 @@
 <script setup>
 import '../assets/css/views/_member.scss';
 import MemberProfile from "../components/MemberProfile.vue";
-import { ref } from "vue";
+import Monsters from "../components/Monsters.vue";
+import {inject, provide, ref} from "vue";
 import { useRoute } from "vue-router";
 import { useUserStore } from "../stores/user.js";
 
@@ -12,6 +13,19 @@ const route = useRoute();
 const params = route.params;
 const memberId = parseInt(params.id);
 const member = ref({});
+const monsters = ref([]);
+const fields = [
+  {
+    type: "search",
+    name: "search",
+    placeholder: "Nom, grade naturel, etc.",
+  }
+];
+const loading = ref(false);
+
+provide('monsters', monsters);
+provide('fields', fields);
+provide('loading', loading);
 
 async function getMember() {
   const result = await fetch(`${env.VITE_URL}/api/members/${memberId}`, {
@@ -25,6 +39,7 @@ async function getMember() {
   if (result.ok) {
     const resultJson = await result.json();
     member.value = resultJson.member;
+    monsters.value = resultJson.monsters;
   }
 }
 
@@ -39,5 +54,6 @@ getMember();
         :grade="member.grade"
         :image="member.image"
     />
+    <Monsters/>
   </main>
 </template>

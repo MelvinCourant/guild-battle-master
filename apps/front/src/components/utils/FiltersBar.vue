@@ -19,8 +19,6 @@ const fields = inject('fields');
           @sendValue="(inputName, value) => $emit('sendValue', inputName, value)"
       />
     </div>
-    <DisplayModes
-        @modeSelected="$emit('modeSelected', $event)"
-    />
+    <DisplayModes @modeSelected="$emit('modeSelected', $event)"/>
   </div>
 </template>

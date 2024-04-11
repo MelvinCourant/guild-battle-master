@@ -1,0 +1,14 @@
+.monsters-grid {
+  display: flex;
+  flex-direction: column;
+
+  &__list {
+    display: grid;
+    gap: 10px;
+
+    &--loading {
+      position: relative;
+      flex: 1;
+    }
+  }
+}
