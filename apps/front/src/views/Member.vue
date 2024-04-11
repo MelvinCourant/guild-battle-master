@@ -2,16 +2,18 @@
 import '../assets/css/views/_member.scss';
 import MemberProfile from "../components/MemberProfile.vue";
 import Monsters from "../components/Monsters.vue";
-import {inject, provide, ref} from "vue";
-import { useRoute } from "vue-router";
+import {provide, ref, watch} from "vue";
+import {useRoute, useRouter} from "vue-router";
 import { useUserStore } from "../stores/user.js";
 
 const env = import.meta.env;
 const userStore = useUserStore();
 const token = userStore.token;
+const user = userStore.user;
+const memberId = ref(user.member_id);
 const route = useRoute();
 const params = route.params;
-const memberId = parseInt(params.id);
+const id = parseInt(params.id);
 const member = ref({});
 const monsters = ref([]);
 const fields = [
@@ -27,8 +29,28 @@ provide('monsters', monsters);
 provide('fields', fields);
 provide('loading', loading);
 
+function initPage() {
+  if(
+      id &&
+      memberId.value !== id
+  ) {
+    memberId.value = id;
+  } else if(
+      id &&
+      memberId.value === id
+  ) {
+    memberId.value = user.member_id;
+  }
+}
+
+initPage();
+
+watch(() => route.path, () => {
+  initPage();
+});
+
 async function getMember() {
-  const result = await fetch(`${env.VITE_URL}/api/members/${memberId}`, {
+  const result = await fetch(`${env.VITE_URL}/api/members/${memberId.value}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -40,6 +62,7 @@ async function getMember() {
     const resultJson = await result.json();
     member.value = resultJson.member;
     monsters.value = resultJson.monsters;
+    loading.value = false;
   }
 }
 

@@ -44,6 +44,10 @@ const router = createRouter(
             component: UploadJson
         },
         {
+            path: '/member',
+            component: Member
+        },
+        {
             path: '/member/:id',
             component: Member
         }

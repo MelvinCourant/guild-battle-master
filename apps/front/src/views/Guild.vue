@@ -177,6 +177,7 @@ async function getMembers() {
     const resultJson = await result.json();
     data.value = {
       rows: resultJson.members,
+      link: '/member/',
       badges: ['lds'],
       actions: actions
     };

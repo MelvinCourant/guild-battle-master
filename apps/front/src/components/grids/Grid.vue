@@ -68,6 +68,7 @@ window.addEventListener('resize', updateGrid)
         <GridCard
             v-for="(row, index) in rows"
             :key="rows[index].id"
+            :link="data.link"
             :badges="data.badges"
             :columns="columns"
             :content="row"

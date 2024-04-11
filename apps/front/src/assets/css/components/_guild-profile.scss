@@ -60,18 +60,24 @@
 
   &__skeleton {
     &-image {
-      width: 80px !important;
-      height: 80px !important;
+      @media screen and (max-width: 768px) {
+        width: 80px !important;
+        height: 80px !important;
+      }
     }
 
     &-name {
-      width: 90px !important;
-      height: 18px !important;
+      @media screen and (max-width: 768px) {
+        width: 90px !important;
+        height: 18px !important;
+      }
     }
 
     &-update {
-      width: 76px !important;
-      height: 11px !important;
+      @media screen and (max-width: 768px) {
+        width: 76px !important;
+        height: 11px !important;
+      }
     }
   }
 }

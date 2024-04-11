@@ -12,11 +12,13 @@ const data = ref(inject("data"));
 const columns = inject("columns");
 const rows = ref([]);
 const badges = ref([]);
+const link = ref('');
 const env = import.meta.env;
 
 watch(data, () => {
   rows.value = data.value.rows;
   badges.value = data.value.badges;
+  link.value = data.value.link;
 });
 
 function othersText(numberMonsters) {
@@ -64,12 +66,16 @@ function othersText(numberMonsters) {
                 element="dark-light"
             />
           </ul>
-          <Avatar
-            v-else-if="key === 'image'"
-            :class="'table-rows__image'"
-            :src="info"
-            :alt="row.pseudo"
-          />
+          <router-link
+              :to="link + row.id"
+              v-else-if="key === 'image'"
+          >
+            <Avatar
+                :class="'table-rows__image'"
+                :src="info"
+                :alt="row.pseudo"
+            />
+          </router-link>
           <div
               v-else-if="key === 'grade'"
               class="table-grid__grade-name"
@@ -80,6 +86,12 @@ function othersText(numberMonsters) {
             />
             <span>{{ info }}</span>
           </div>
+          <router-link
+              :to="link + row.id"
+              v-else-if="key === 'pseudo'"
+          >
+            <span>{{ info }}</span>
+          </router-link>
           <span v-else>{{ info }}</span>
         </td>
         <td

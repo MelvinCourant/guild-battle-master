@@ -56,6 +56,11 @@
   }
   const submenu = [
     {
+      icon: 'profile',
+      text: 'Profil de membre',
+      path: '/member'
+    },
+    {
       icon: 'settings',
       text: 'Paramètres',
       path: '/settings'

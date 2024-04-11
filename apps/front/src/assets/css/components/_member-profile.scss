@@ -43,6 +43,9 @@
   }
 
   &__grade {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     font-size: functions.rem(16);
     text-transform: capitalize;
 
@@ -69,18 +72,24 @@
 
   &__skeleton {
     &-image {
-      width: 80px !important;
-      height: 80px !important;
+      @media screen and (max-width: 768px) {
+        width: 80px !important;
+        height: 80px !important;
+      }
     }
 
     &-pseudo {
-      width: 90px !important;
-      height: 18px !important;
+      @media screen and (max-width: 768px) {
+        width: 90px !important;
+        height: 18px !important;
+      }
     }
 
     &-update {
-      width: 76px !important;
-      height: 11px !important;
+      @media screen and (max-width: 768px) {
+        width: 76px !important;
+        height: 11px !important;
+      }
     }
   }
 }

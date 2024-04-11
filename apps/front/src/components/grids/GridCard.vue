@@ -8,6 +8,10 @@ import Avatar from "../utils/Avatar.vue";
 
 defineProps(
   {
+    link: {
+      type: String,
+      required: true
+    },
     badges: {
       type: Object,
       required: true
@@ -67,12 +71,16 @@ function othersText(numberMonsters) {
       <template
           v-if="key !== 'id'"
       >
-        <Avatar
+        <router-link
             v-if="key === 'image'"
-            :class="columns[index - 1].class"
-            :src="content.image"
-            :alt="content.pseudo"
-        />
+            :to="link + content.id"
+        >
+          <Avatar
+              :class="columns[index - 1].class"
+              :src="content.image"
+              :alt="content.pseudo"
+          />
+        </router-link>
         <div
             v-else-if="key === 'grade'"
             :class="columns[index - 1].class + '-name'"
@@ -106,6 +114,14 @@ function othersText(numberMonsters) {
               element="dark-light"
           />
         </ul>
+        <router-link
+            :to="link + content.id"
+            v-else-if="key === 'pseudo'"
+        >
+          <span :class="columns[index - 1].class">
+            {{ info }}
+          </span>
+        </router-link>
         <span
             v-else
             :class="columns[index - 1].class"
