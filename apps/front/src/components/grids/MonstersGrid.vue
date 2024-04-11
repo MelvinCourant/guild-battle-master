@@ -14,7 +14,7 @@ async function updateGrid() {
   await nextTick();
   const grid = document.querySelector('.monsters-grid')
 
-  gridTemplateColumns.value = Math.floor(grid.clientWidth / cardWidth)
+  gridTemplateColumns.value = Math.floor((grid.clientWidth / cardWidth))
   styleGrid.value = `grid-template-columns: repeat(${gridTemplateColumns.value}, 1fr);`
 }
 

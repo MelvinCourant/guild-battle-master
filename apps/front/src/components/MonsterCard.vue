@@ -5,7 +5,7 @@ import Avatar from "./utils/Avatar.vue";
 defineProps({
   name: {
     type: String,
-    required: true
+    required: true,
   },
   image: {
     type: String,
@@ -20,9 +20,6 @@ defineProps({
 
 <template>
   <li class="monster-card">
-    <div class="monster-card__name">
-      {{ name }}
-    </div>
     <Avatar
         :className="'monster-card__avatar'"
         :src="image"
