@@ -6,11 +6,11 @@ import GuildProfile from "../components/GuildProfile.vue";
 import Dialog from "../components/utils/Dialog.vue";
 import Alert from "../components/utils/Alert.vue";
 import TableGrid from "../components/utils/TableGrid.vue";
+import { useRouter } from "vue-router";
 
 const userStore = useUserStore();
 const user = userStore.user;
 const token = userStore.token;
-
 const env = import.meta.env;
 const fields = [
   {
@@ -155,6 +155,7 @@ const alert = reactive({
   message: '',
 });
 const loading = ref(true);
+const router = useRouter();
 
 provide('fields', fields);
 provide('columns', columns);
@@ -245,7 +246,7 @@ function actionSelected(selection) {
   const memberId = selection.id;
 
   if (action === 'update') {
-    console.log('update', memberId);
+    router.push(`/upload-json/${memberId}`);
   } else if (action === 'exclude') {
     memberSelected.value = members.value.find((member) => member.id === memberId);
 
@@ -315,18 +316,7 @@ async function madeSearch(inputName, value) {
     data.value = {
       rows: resultJson.members,
       badges: ['lds'],
-      actions: [
-        {
-          name: 'update',
-          label: 'Mettre à jour',
-          danger: false
-        },
-        {
-          name: 'exclude',
-          label: 'Exclure',
-          danger: true
-        }
-      ]
+      actions: actions
     };
     members.value = resultJson.members;
     actualSort.value = 'grade';
