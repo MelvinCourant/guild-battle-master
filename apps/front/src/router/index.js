@@ -37,6 +37,10 @@ const router = createRouter(
         {
             path: '/upload-json/:id',
             component: UploadJson
+        },
+        {
+            path: '/upload-json/guild',
+            component: UploadJson
         }
     ]
 });

@@ -41,6 +41,7 @@ const userStore = useUserStore();
 const token = userStore.token;
 const user = userStore.user;
 const memberId = ref(user.member_id);
+const isGuildUpload = ref(false);
 const route = useRoute();
 const router = useRouter();
 const params = route.params;
@@ -69,11 +70,16 @@ async function verifyUploadPermissions() {
 }
 
 if(
+    route.path !== '/upload-json/guild' &&
     id &&
     memberId.value !== id
 ) {
   memberId.value = id;
   verifyUploadPermissions();
+} else if (route.path === '/upload-json/guild') {
+  isGuildUpload.value = true;
+  uploadJsonForm.title = 'Mettre à jour' ;
+  uploadJsonForm.highlight = 'la guilde';
 }
 
 function updateValue(inputName, value) {
@@ -97,7 +103,14 @@ async function uploadJson() {
   formData.append('json', json.value);
 
   uploadJsonForm.forms[0].fields[1].loading = 'Chargement...';
-  const result = await fetch(`${env.VITE_URL}/api/members/${memberId.value}`, {
+
+  let url = `${env.VITE_URL}/api/members/${memberId.value}/upload-json`;
+
+  if(isGuildUpload.value) {
+    url = `${env.VITE_URL}/api/guilds`;
+  }
+
+  const result = await fetch(url, {
     method: 'PUT',
     headers: {
       'Authorization': `Bearer ${token}`
@@ -114,7 +127,11 @@ async function uploadJson() {
     alert.type = 'success';
 
     setTimeout(() => {
-      alert.display = false;
+      if(isGuildUpload.value) {
+        router.push('/guild');
+      } else {
+        alert.display = false;
+      }
     }, 3000);
   } else {
     alert.display = true;

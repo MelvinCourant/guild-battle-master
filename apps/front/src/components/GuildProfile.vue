@@ -61,7 +61,7 @@ function onImageLoad() {
         v-else
     />
     <router-link
-      to="/upload-json"
+      to="/upload-json/guild"
       class="guild-profile__update"
       v-if="
           imageLoaded && name && user.role === 'leader' ||
