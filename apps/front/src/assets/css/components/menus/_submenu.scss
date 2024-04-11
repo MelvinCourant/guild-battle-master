@@ -30,7 +30,9 @@
   }
 
   &__icon {
+    display: flex;
     width: 32px;
+    height: fit-content;
   }
 
   &__text {

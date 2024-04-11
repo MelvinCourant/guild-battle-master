@@ -80,6 +80,10 @@ router
   .group(() => {
     const membersController = new MembersController()
 
+    router.get('/:id', async (data) => {
+      return membersController.show(data)
+    })
+
     router.get('/:id/verify-upload-permissions', async (data) => {
       return membersController.verifyUploadPermissions(data)
     })

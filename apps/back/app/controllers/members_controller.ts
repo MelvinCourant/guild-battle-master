@@ -10,6 +10,49 @@ import Guild from '#models/guild'
 import User from '#models/user'
 
 export default class MembersController {
+  async show({ auth, params, response }: HttpContext) {
+    await auth.authenticate()
+
+    const member = await Member.query()
+      .where('id', params.id)
+      .select('pseudo', 'grade')
+      .firstOrFail()
+    const box = await Box.query().where('member_id', params.id).select('monster_id', 'quantity')
+    const monsters = await Monster.query()
+      .whereIn(
+        'unit_master_id',
+        box.map((b) => b.monster_id)
+      )
+      .select('unit_master_id', 'name', 'element', 'natural_grade', 'image', 'is_fusion_shop')
+    let monstersWithQuantity: any[] = []
+
+    for (const monster of monsters) {
+      // @ts-ignore
+      const quantity = box.find((b) => b.monster_id === monster.unit_master_id).quantity
+      monstersWithQuantity.push({
+        name: monster.name,
+        element: monster.element,
+        natural_grade: monster.natural_grade,
+        image: monster.image,
+        is_fusion_shop: monster.is_fusion_shop,
+        quantity: quantity,
+      })
+    }
+
+    const elementsOrder = ['fire', 'water', 'wind', 'light', 'dark']
+    monstersWithQuantity = monstersWithQuantity.sort((a, b) => {
+      if (a.element === b.element) {
+        return b.natural_grade - a.natural_grade
+      }
+      return elementsOrder.indexOf(a.element) - elementsOrder.indexOf(b.element)
+    })
+
+    return response.json({
+      member,
+      monsters: monstersWithQuantity,
+    })
+  }
+
   async verifyUploadPermissions({ auth, params, response }: HttpContext) {
     const user = await auth.authenticate()
     const userMember = await Member.query()
