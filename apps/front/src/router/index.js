@@ -5,6 +5,7 @@ import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
 import Logout from "../views/Logout.vue";
 import UploadJson from "../views/UploadJson.vue";
+import Member from "../views/Member.vue";
 
 const router = createRouter(
 {
@@ -41,6 +42,10 @@ const router = createRouter(
         {
             path: '/upload-json/guild',
             component: UploadJson
+        },
+        {
+            path: '/member/:id',
+            component: Member
         }
     ]
 });

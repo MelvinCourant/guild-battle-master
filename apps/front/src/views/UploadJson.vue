@@ -2,7 +2,7 @@
 import '../assets/css/views/_upload-json.scss';
 import FormPage from "../components/FormPage.vue";
 import Alert from "../components/utils/Alert.vue";
-import {provide, reactive, ref} from "vue";
+import {provide, reactive, ref, watch} from "vue";
 import { useUserStore } from "../stores/user.js";
 import { useRoute, useRouter } from 'vue-router';
 
@@ -69,18 +69,31 @@ async function verifyUploadPermissions() {
   }
 }
 
-if(
-    route.path !== '/upload-json/guild' &&
-    id &&
-    memberId.value !== id
-) {
-  memberId.value = id;
-  verifyUploadPermissions();
-} else if (route.path === '/upload-json/guild') {
-  isGuildUpload.value = true;
-  uploadJsonForm.title = 'Mettre à jour' ;
-  uploadJsonForm.highlight = 'la guilde';
+function initPage() {
+  if(
+      route.path !== '/upload-json/guild' &&
+      id &&
+      memberId.value !== id
+  ) {
+    memberId.value = id;
+    verifyUploadPermissions();
+  } else if (route.path === '/upload-json/guild') {
+    isGuildUpload.value = true;
+    uploadJsonForm.title = 'Mettre à jour' ;
+    uploadJsonForm.highlight = 'la guilde';
+  } else {
+    isGuildUpload.value = false;
+    memberId.value = user.member_id;
+    uploadJsonForm.title = 'Met à jour ton profil';
+    uploadJsonForm.highlight = '';
+  }
 }
+
+initPage();
+
+watch(() => route.path, () => {
+  initPage();
+});
 
 function updateValue(inputName, value) {
   json.value = value;

@@ -15,8 +15,9 @@ export default class MembersController {
 
     const member = await Member.query()
       .where('id', params.id)
-      .select('pseudo', 'grade')
+      .select('pseudo', 'grade', 'user_id')
       .firstOrFail()
+    const userImage = await User.query().where('id', member.user_id).select('image').first()
     const box = await Box.query().where('member_id', params.id).select('monster_id', 'quantity')
     const monsters = await Monster.query()
       .whereIn(
@@ -48,7 +49,11 @@ export default class MembersController {
     })
 
     return response.json({
-      member,
+      member: {
+        pseudo: member.pseudo,
+        grade: member.grade,
+        image: userImage.image,
+      },
       monsters: monstersWithQuantity,
     })
   }

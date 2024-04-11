@@ -1,0 +1,26 @@
+@use '../partials/functions.scss';
+
+.member {
+  position: relative;
+  display: flex;
+  gap: 70px;
+  width: 100%;
+  min-height: calc(100vh - 70px);
+  height: 100%;
+  max-height: calc(100vh - 70px);
+  overflow: auto;
+  padding: 80px 70px;
+
+  @media screen and (max-width: 1399px) {
+    gap: 50px;
+  }
+
+  @media screen and (max-width: 1199px) {
+    flex-direction: column;
+  }
+
+  @media screen and (max-width: 768px) {
+    gap: 40px;
+    padding: 30px 20px;
+  }
+}
