@@ -1,3 +1,5 @@
+@use "../../partials/functions";
+
 .monsters-grid {
   display: flex;
   flex-direction: column;
@@ -8,7 +10,8 @@
     padding-bottom: 30px;
   }
 
-  &--loading {
+  &--loading,
+  &--empty{
     position: relative;
     flex: 1;
   }
@@ -16,5 +19,14 @@
   &__list {
     display: grid;
     gap: 20px;
+  }
+
+  &__empty {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: functions.rem(20);
+    color: var(--text-grey);
   }
 }

@@ -35,11 +35,13 @@ function initPage() {
       memberId.value !== id
   ) {
     memberId.value = id;
+    getMember();
   } else if(
       id &&
       memberId.value === id
   ) {
     memberId.value = user.member_id;
+    getMember();
   }
 }
 
@@ -60,13 +62,12 @@ async function getMember() {
 
   if (result.ok) {
     const resultJson = await result.json();
+
     member.value = resultJson.member;
     monsters.value = resultJson.monsters;
     loading.value = false;
   }
 }
-
-getMember();
 </script>
 
 <template>
