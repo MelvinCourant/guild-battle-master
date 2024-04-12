@@ -24,9 +24,19 @@
     labelClass.value = 'input-string--label';
   }
 
-  async function updateValue() {
-    emit("sendValue", props.attributes.name, props.attributes.value);
+  function debounce(func, delay) {
+    let debounceTimer;
+    return function() {
+      const context = this;
+      const args = arguments;
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => func.apply(context, args), delay);
+    }
   }
+
+  const updateValue = debounce(async () => {
+    emit("sendValue", props.attributes.name, props.attributes.value);
+  }, 300);
 </script>
 
 <template>
