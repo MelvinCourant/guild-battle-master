@@ -93,10 +93,14 @@ async function searchMonsters(inputName, value) {
     return;
   }
 
-  let body = {
-    'keyword': keyword.value,
-  };
-  let filters = {};
+  let body;
+  let filters;
+
+  if(keyword.value) {
+    body = {
+      keyword: keyword.value
+    };
+  }
 
   if(!isFusionShop.value) {
     filters = {
@@ -107,7 +111,7 @@ async function searchMonsters(inputName, value) {
   if(filters) {
     body = {
       ...body,
-      ...filters
+      filters: filters
     };
   }
 
