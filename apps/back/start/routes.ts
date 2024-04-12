@@ -124,7 +124,7 @@ router
       return boxesController.create(data)
     })
 
-    router.get('/:memberId/search/:keyword', async (data) => {
+    router.post('/:memberId/search', async (data) => {
       return boxesController.search(data)
     })
   })

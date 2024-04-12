@@ -75,12 +75,15 @@ async function searchMonsters(inputName, value) {
     return;
   }
 
-  const result = await fetch(`${env.VITE_URL}/api/boxes/${memberId.value}/search/${value}`, {
-    method: 'GET',
+  const result = await fetch(`${env.VITE_URL}/api/boxes/${memberId.value}/search`, {
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`
-    }
+    },
+    body: JSON.stringify({
+      'keyword': value,
+    })
   });
 
   if (result.ok) {

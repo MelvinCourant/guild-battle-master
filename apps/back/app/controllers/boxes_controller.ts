@@ -78,18 +78,34 @@ export default class BoxesController {
     return response.status(201).json(memberBoxes)
   }
 
-  async search({ auth, params, response }: HttpContext) {
+  async search({ auth, params, request, response }: HttpContext) {
     await auth.authenticate()
     const memberId = params.memberId
-    const keyword = params.keyword
+    const keyword = request.input('keyword')
+    const filters = request.input('filters')
     const boxes = await Box.query().where('member_id', memberId).select('monster_id', 'quantity')
     let monsters = []
 
-    if (!keyword) {
+    if (!keyword && !filters) {
       monsters = await Monster.query().whereIn(
         'unit_master_id',
         boxes.map((box: any) => box.monster_id)
       )
+    } else if (keyword && filters) {
+      monsters = await Monster.query()
+        .whereIn(
+          'unit_master_id',
+          boxes.map((box: any) => box.monster_id)
+        )
+        .andWhere('name', 'LIKE', `%${keyword}%`)
+        .andWhere('is_fusion_shop', filters.is_fusion_shop)
+    } else if (!keyword && filters) {
+      monsters = await Monster.query()
+        .whereIn(
+          'unit_master_id',
+          boxes.map((box: any) => box.monster_id)
+        )
+        .andWhere('is_fusion_shop', filters.is_fusion_shop)
     } else {
       monsters = await Monster.query()
         .whereIn(
