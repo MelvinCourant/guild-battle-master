@@ -15,6 +15,7 @@ const fields = inject('fields');
       <Field
           v-for="field in fields"
           :key="field.name"
+          :label="field.label"
           :attributes="field"
           @sendValue="(inputName, value) => $emit('sendValue', inputName, value)"
       />

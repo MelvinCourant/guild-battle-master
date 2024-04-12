@@ -2,6 +2,7 @@
   import InputString from "../../components/utils/inputs/InputString.vue";
   import InputFile from "../../components/utils/inputs/InputFile.vue";
   import Button from "../../components/utils/inputs/Button.vue";
+  import Checkbox from "./inputs/Checkbox.vue";
 
   defineProps({
     error: {
@@ -61,5 +62,11 @@
       :attributes="attributes"
       v-if="attributes.type === 'submit'"
       @click="$emit('click')"
+  />
+
+  <Checkbox
+      :label="label"
+      :attributes="attributes"
+      v-if="attributes.type === 'checkbox'"
   />
 </template>

@@ -21,6 +21,12 @@ const fields = [
     type: "search",
     name: "search",
     placeholder: "Nom du monstre",
+  },
+  {
+    type: "checkbox",
+    name: "is-fusion-shop",
+    label: "Afficher les monstres non-invocable (fusions, Ifrits, etc.)",
+    checked: true,
   }
 ];
 const loading = ref(true);
@@ -70,6 +76,10 @@ async function getMember() {
 }
 
 async function searchMonsters(inputName, value) {
+  if(inputName !== 'search') {
+    return;
+  }
+
   if(value === '') {
     await getMember();
     return;
