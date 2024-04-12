@@ -1,32 +1,24 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import app from "@adonisjs/core/services/app";
-import {cuid} from "@adonisjs/core/helpers";
-import fs from "fs";
-import Box from "#models/box";
-import Member from "#models/member";
-import User from "#models/user";
-import Monster from "#models/monster";
-import {fileValidator} from "#validators/file";
+import app from '@adonisjs/core/services/app'
+import { cuid } from '@adonisjs/core/helpers'
+import fs from 'node:fs'
+import Box from '#models/box'
+import Member from '#models/member'
+import User from '#models/user'
+import Monster from '#models/monster'
+import { fileValidator } from '#validators/file'
 
 export default class BoxesController {
-  public async create({ auth, params, request, response }: HttpContext) {
+  async create({ auth, params, request, response }: HttpContext) {
     const user = await auth.authenticate()
     const payload = await request.validateUsing(fileValidator)
-    const userRole = await User
-      .query()
-      .where('id', user.id)
-      .select('role')
-      .firstOrFail()
+    const userRole = await User.query().where('id', user.id).select('role').firstOrFail()
     const memberId = params.memberId
-    const member = await Member
-      .query()
-      .where('id', memberId)
-      .firstOrFail()
+    const member = await Member.query().where('id', memberId).firstOrFail()
 
-    if(
+    if (
       user.id !== member.user_id ||
-      userRole.role !== 'leader' &&
-      userRole.role !== 'moderator'
+      (userRole.role !== 'leader' && userRole.role !== 'moderator')
     ) {
       return response.status(403).json({ error: 'Membre invalide' })
     }
@@ -50,24 +42,22 @@ export default class BoxesController {
 
     async function createBoxes(monsters: any) {
       for (const monster of monsters) {
-        const box: any = await Box
-          .query()
+        const box: any = await Box.query()
           .where('monster_id', monster.unit_master_id)
           .andWhere('member_id', memberId)
           .first()
-        const monsterExists: any = await Monster
-          .query()
+        const monsterExists: any = await Monster.query()
           .where('unit_master_id', monster.unit_master_id)
           .first()
 
-        if(!monsterExists) {
+        if (!monsterExists) {
           continue
         }
 
-        if(box) {
-          box.quantity =
-            monsters.filter((m: any) => m.unit_master_id === monster.unit_master_id)
-              .length
+        if (box) {
+          box.quantity = monsters.filter(
+            (m: any) => m.unit_master_id === monster.unit_master_id
+          ).length
           await box.save()
         } else {
           await Box.create({
@@ -83,10 +73,55 @@ export default class BoxesController {
     await createBoxes(monsters)
     fs.unlinkSync(jsonLink)
 
-    const memberBoxes = await Box
-      .query()
-      .where('member_id', memberId)
+    const memberBoxes = await Box.query().where('member_id', memberId)
 
     return response.status(201).json(memberBoxes)
+  }
+
+  async search({ auth, params, response }: HttpContext) {
+    await auth.authenticate()
+    const memberId = params.memberId
+    const keyword = params.keyword
+    const boxes = await Box.query().where('member_id', memberId).select('monster_id', 'quantity')
+    let monsters = []
+
+    if (!keyword) {
+      monsters = await Monster.query().whereIn(
+        'unit_master_id',
+        boxes.map((box: any) => box.monster_id)
+      )
+    } else {
+      monsters = await Monster.query()
+        .whereIn(
+          'unit_master_id',
+          boxes.map((box: any) => box.monster_id)
+        )
+        .andWhere('name', 'LIKE', `%${keyword}%`)
+    }
+
+    let monstersWithQuantity: any[] = []
+
+    for (const monster of monsters) {
+      // @ts-ignore
+      const quantity = boxes.find((b) => b.monster_id === monster.unit_master_id).quantity
+      monstersWithQuantity.push({
+        name: monster.name,
+        element: monster.element,
+        natural_grade: monster.natural_grade,
+        image: monster.image,
+        is_fusion_shop: monster.is_fusion_shop,
+        quantity: quantity,
+      })
+    }
+
+    const elementsOrder = ['fire', 'water', 'wind', 'light', 'dark']
+    monstersWithQuantity = monstersWithQuantity.sort((a, b) => {
+      if (a.element === b.element) {
+        return b.natural_grade - a.natural_grade
+      }
+      return elementsOrder.indexOf(a.element) - elementsOrder.indexOf(b.element)
+    })
+
+    return response.status(200).json(monstersWithQuantity)
   }
 }

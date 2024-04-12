@@ -123,5 +123,9 @@ router
     router.put('/:memberId', async (data) => {
       return boxesController.create(data)
     })
+
+    router.get('/:memberId/search/:keyword', async (data) => {
+      return boxesController.search(data)
+    })
   })
   .prefix('api/boxes')
