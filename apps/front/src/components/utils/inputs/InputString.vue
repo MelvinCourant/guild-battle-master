@@ -46,6 +46,7 @@
   >
     <label
         class="input-string__label"
+        :for="props.attributes.name"
         v-if="label"
         v-show="!error"
     >
@@ -59,6 +60,8 @@
     </p>
     <input
       class="input-string__input"
+      :id="props.attributes.name"
+      :name="props.attributes.name"
       :type="props.attributes.type"
       :placeholder="props.attributes.placeholder"
       :value="props.attributes.value"

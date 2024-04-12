@@ -139,6 +139,10 @@ async function uploadJson() {
       setTimeout(() => {
         router.push('/guild');
       }, 3000);
+    } else {
+      setTimeout(() => {
+        router.push('/member/' + memberId.value);
+      }, 3000);
     }
   } else {
     alert.display = true;

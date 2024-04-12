@@ -135,6 +135,7 @@
       />
       <input
           class="input-file__input"
+          :id="attributes.name"
           :name="attributes.name"
           :type="attributes.type"
           :value="attributes.value"
@@ -148,6 +149,7 @@
 
     <label
         class="input-file__label"
+        :for="attributes.name"
         v-if="
           type==='image' &&
           image
@@ -159,6 +161,7 @@
       />
       <input
           class="input-file__input"
+          :id="attributes.name"
           :name="attributes.name"
           :type="attributes.type"
           :value="attributes.value"
