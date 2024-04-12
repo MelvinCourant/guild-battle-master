@@ -9,6 +9,8 @@ defineProps({
     required: true,
   }
 });
+
+defineEmits(['sendValue']);
 </script>
 
 <template>
@@ -18,6 +20,7 @@ defineProps({
       :name="attributes.name"
       :type="attributes.type"
       :checked="attributes.checked"
+      @change="$emit('sendValue', attributes.name, $event.target.checked)"
     />
     <label :for="attributes.name">{{ label }}</label>
   </div>

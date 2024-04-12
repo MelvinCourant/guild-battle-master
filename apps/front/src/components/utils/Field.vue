@@ -68,5 +68,6 @@
       :label="label"
       :attributes="attributes"
       v-if="attributes.type === 'checkbox'"
+      @sendValue="(inputName, value) => $emit('sendValue', inputName, value)"
   />
 </template>

@@ -30,6 +30,8 @@ const fields = [
   }
 ];
 const loading = ref(true);
+const keyword = ref('');
+const isFusionShop = ref(true);
 
 provide('monsters', monsters);
 provide('fields', fields);
@@ -76,13 +78,34 @@ async function getMember() {
 }
 
 async function searchMonsters(inputName, value) {
-  if(inputName !== 'search') {
+  if(inputName === 'is-fusion-shop') {
+    isFusionShop.value = value;
+  } else {
+    keyword.value = value;
+  }
+
+  if(
+      inputName === 'search' &&
+      isFusionShop.value &&
+      value === ''
+  ) {
+    await getMember();
     return;
   }
 
-  if(value === '') {
-    await getMember();
-    return;
+  let body = {
+    'keyword': keyword.value,
+  };
+  let filters = {};
+
+  if(!isFusionShop.value) {
+    filters = {
+      'is_fusion_shop': isFusionShop.value,
+    };
+    body = {
+      ...body,
+      filters : filters,
+    };
   }
 
   const result = await fetch(`${env.VITE_URL}/api/boxes/${memberId.value}/search`, {
@@ -91,9 +114,7 @@ async function searchMonsters(inputName, value) {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`
     },
-    body: JSON.stringify({
-      'keyword': value,
-    })
+    body: JSON.stringify(body)
   });
 
   if (result.ok) {
