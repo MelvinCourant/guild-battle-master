@@ -102,9 +102,12 @@ async function searchMonsters(inputName, value) {
     filters = {
       'is_fusion_shop': isFusionShop.value,
     };
+  }
+
+  if(filters) {
     body = {
       ...body,
-      filters : filters,
+      ...filters
     };
   }
 
