@@ -35,14 +35,14 @@ function initPage() {
       memberId.value !== id
   ) {
     memberId.value = id;
-    getMember();
   } else if(
       id &&
       memberId.value === id
   ) {
     memberId.value = user.member_id;
-    getMember();
   }
+
+  getMember();
 }
 
 initPage();
