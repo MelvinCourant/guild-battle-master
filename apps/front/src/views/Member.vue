@@ -20,7 +20,7 @@ const fields = [
   {
     type: "search",
     name: "search",
-    placeholder: "Nom, grade naturel, etc.",
+    placeholder: "Nom du monstre",
   }
 ];
 const loading = ref(true);
@@ -68,6 +68,25 @@ async function getMember() {
     loading.value = false;
   }
 }
+
+async function searchMonsters(inputName, value) {
+  if(value === '') {
+    await getMember();
+    return;
+  }
+
+  const result = await fetch(`${env.VITE_URL}/api/boxes/${memberId.value}/search/${value}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    }
+  });
+
+  if (result.ok) {
+    monsters.value = await result.json();
+  }
+}
 </script>
 
 <template>
@@ -78,6 +97,8 @@ async function getMember() {
         :grade="member.grade"
         :image="member.image"
     />
-    <Monsters/>
+    <Monsters
+        @sendValue="searchMonsters"
+    />
   </main>
 </template>
