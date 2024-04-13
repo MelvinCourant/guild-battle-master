@@ -3,6 +3,7 @@ import '../../assets/css/components/utils/_filters-bar.scss';
 import Field from "./Field.vue";
 import DisplayModes from "./DisplayModes.vue";
 import {inject} from "vue";
+import Filters from "./Filters.vue";
 
 defineEmits(['sendValue', 'modeSelected']);
 
@@ -20,6 +21,7 @@ const fields = inject('fields');
           @sendValue="(inputName, value) => $emit('sendValue', inputName, value)"
       />
     </div>
+    <Filters/>
     <DisplayModes @modeSelected="$emit('modeSelected', $event)"/>
   </div>
 </template>

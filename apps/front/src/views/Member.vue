@@ -21,12 +21,102 @@ const fields = [
     type: "search",
     name: "search",
     placeholder: "Nom du monstre",
+  }
+];
+const filters = [
+  {
+    fields: [
+      {
+        label: "Afficher les monstres non-invocable par des vélins (fusions, Ifrits, etc.)",
+        attributes: {
+          type: "checkbox",
+          name: "is-fusion-shop",
+          checked: true
+        }
+      }
+    ]
   },
   {
-    type: "checkbox",
-    name: "is-fusion-shop",
-    label: "Afficher les monstres non-invocable (fusions, Ifrits, etc.)",
-    checked: true,
+    title: "Élements",
+    fields: [
+      {
+        label: "Feu",
+        attributes: {
+          type: "checkbox",
+          name: "fire",
+          checked: true
+        }
+      },
+      {
+        label: "Eau",
+        attributes: {
+          type: "checkbox",
+          name: "water",
+          checked: true
+        }
+      },
+      {
+        label: "Vent",
+        attributes: {
+          type: "checkbox",
+          name: "wind",
+          checked: true
+        }
+      },
+      {
+        label: "Lumière",
+        attributes: {
+          type: "checkbox",
+          name: "light",
+          checked: true
+        }
+      },
+      {
+        label: "Ténèbres",
+        attributes: {
+          type: "checkbox",
+          name: "dark",
+          checked: true
+        }
+      }
+    ]
+  },
+  {
+    title: "Grade naturel",
+    fields: [
+      {
+        label: "2 étoiles",
+        attributes: {
+          type: "checkbox",
+          name: "2-stars",
+          checked: true
+        }
+      },
+      {
+        label: "3 étoiles",
+        attributes: {
+          type: "checkbox",
+          name: "3-stars",
+          checked: true
+        }
+      },
+      {
+        label: "4 étoiles",
+        attributes: {
+          type: "checkbox",
+          name: "4-stars",
+          checked: true
+        }
+      },
+      {
+        label: "5 étoiles",
+        attributes: {
+          type: "checkbox",
+          name: "5-stars",
+          checked: true
+        }
+      }
+    ]
   }
 ];
 const loading = ref(true);
@@ -35,6 +125,7 @@ const isFusionShop = ref(true);
 
 provide('monsters', monsters);
 provide('fields', fields);
+provide('filters', filters);
 provide('loading', loading);
 
 function initPage() {
