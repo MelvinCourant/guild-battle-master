@@ -23,7 +23,7 @@ const fields = [
     placeholder: "Nom du monstre",
   }
 ];
-const filters = [
+const filters = reactive([
   {
     fields: [
       {
@@ -118,7 +118,7 @@ const filters = [
       }
     ]
   }
-];
+]);
 const filtersValues = ref({});
 const loading = ref(true);
 const keyword = ref('');
@@ -126,6 +126,7 @@ const keyword = ref('');
 provide('monsters', monsters);
 provide('fields', fields);
 provide('filters', filters);
+provide('filtersValues', filtersValues);
 provide('loading', loading);
 
 function initPage() {
@@ -173,6 +174,19 @@ async function searchMonsters(inputName, value) {
     keyword.value = value;
   } else {
     filtersValues.value = value;
+    filters.forEach(filter => {
+      filter.fields.forEach(field => {
+        for(const key in filtersValues.value) {
+          if(field.attributes.name === key) {
+            field.attributes.checked = value[key];
+
+            if(value[key] === true) {
+              delete filtersValues.value[key];
+            }
+          }
+        }
+      });
+    });
   }
 
   let body;

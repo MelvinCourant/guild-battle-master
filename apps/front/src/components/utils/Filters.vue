@@ -6,7 +6,8 @@ import Field from "./Field.vue";
 const emit = defineEmits(['search']);
 
 const filters = inject('filters');
-const filtersValues = ref({});
+const filtersValues = ref(inject('filtersValues'));
+const filtersValuesSearch = ref({});
 const buttons = [
   {
     type: 'button',
@@ -22,21 +23,20 @@ const buttons = [
 ];
 const filtersOpen = ref(false);
 
-function addFilter(name, value) {
-  filtersValues.value = {
-    ...filtersValues.value,
+function updateFilter(name, value) {
+  filtersValuesSearch.value = {
+    ...filtersValuesSearch.value,
     [name]: value,
   };
 }
 
 function actionButton(name) {
   if(name === 'cancel') {
-    filtersValues.value = {};
     filtersOpen.value = false;
+    filtersValuesSearch.value = filtersValues.value;
   } else {
-    emit('search', 'filters', filtersValues.value);
+    emit('search', 'filters', filtersValuesSearch.value);
     filtersOpen.value = false;
-    filtersValues.value = {};
   }
 }
 </script>
@@ -85,7 +85,7 @@ function actionButton(name) {
                 :key="index"
                 :label="field.label"
                 :attributes="field.attributes"
-                @sendValue="(inputName, value) => addFilter(inputName, value)"
+                @sendValue="(inputName, value) => updateFilter(inputName, value)"
             />
           </div>
         </div>
