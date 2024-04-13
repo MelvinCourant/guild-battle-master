@@ -2,8 +2,8 @@
 import '../assets/css/views/_member.scss';
 import MemberProfile from "../components/MemberProfile.vue";
 import Monsters from "../components/Monsters.vue";
-import {provide, ref, watch} from "vue";
-import {useRoute, useRouter} from "vue-router";
+import {provide, ref, reactive, watch} from "vue";
+import {useRoute} from "vue-router";
 import { useUserStore } from "../stores/user.js";
 
 const env = import.meta.env;
@@ -30,7 +30,7 @@ const filters = [
         label: "Afficher les monstres non-invocable par des vélins (fusions, Ifrits, etc.)",
         attributes: {
           type: "checkbox",
-          name: "is-fusion-shop",
+          name: "is_fusion_shop",
           checked: true
         }
       }
@@ -88,7 +88,7 @@ const filters = [
         label: "2 étoiles",
         attributes: {
           type: "checkbox",
-          name: "2-stars",
+          name: "2_stars",
           checked: true
         }
       },
@@ -96,7 +96,7 @@ const filters = [
         label: "3 étoiles",
         attributes: {
           type: "checkbox",
-          name: "3-stars",
+          name: "3_stars",
           checked: true
         }
       },
@@ -104,7 +104,7 @@ const filters = [
         label: "4 étoiles",
         attributes: {
           type: "checkbox",
-          name: "4-stars",
+          name: "4_stars",
           checked: true
         }
       },
@@ -112,16 +112,16 @@ const filters = [
         label: "5 étoiles",
         attributes: {
           type: "checkbox",
-          name: "5-stars",
+          name: "5_stars",
           checked: true
         }
       }
     ]
   }
 ];
+const filtersValues = ref({});
 const loading = ref(true);
 const keyword = ref('');
-const isFusionShop = ref(true);
 
 provide('monsters', monsters);
 provide('fields', fields);
@@ -169,23 +169,13 @@ async function getMember() {
 }
 
 async function searchMonsters(inputName, value) {
-  if(inputName === 'is-fusion-shop') {
-    isFusionShop.value = value;
-  } else {
+  if(inputName === 'search') {
     keyword.value = value;
-  }
-
-  if(
-      inputName === 'search' &&
-      isFusionShop.value &&
-      value === ''
-  ) {
-    await getMember();
-    return;
+  } else {
+    filtersValues.value = value;
   }
 
   let body;
-  let filters;
 
   if(keyword.value) {
     body = {
@@ -193,16 +183,10 @@ async function searchMonsters(inputName, value) {
     };
   }
 
-  if(!isFusionShop.value) {
-    filters = {
-      'is_fusion_shop': isFusionShop.value,
-    };
-  }
-
-  if(filters) {
+  if(Object.keys(filtersValues.value).length > 0){
     body = {
       ...body,
-      filters: filters
+      filters: filtersValues.value
     };
   }
 
@@ -230,7 +214,7 @@ async function searchMonsters(inputName, value) {
         :image="member.image"
     />
     <Monsters
-        @sendValue="searchMonsters"
+        @search="searchMonsters"
     />
   </main>
 </template>

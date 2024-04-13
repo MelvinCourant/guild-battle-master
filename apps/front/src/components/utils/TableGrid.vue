@@ -6,7 +6,7 @@ import Grid from "../grids/Grid.vue";
 import {provide, reactive} from "vue";
 import {usePreferencesStore} from "../../stores/preferences.js";
 
-defineEmits(['sort', 'actionSelected', 'sendValue', 'modeSelected', 'sortGrid']);
+defineEmits(['sort', 'actionSelected', 'search', 'modeSelected', 'sortGrid']);
 
 const preferencesStore = usePreferencesStore();
 const preferences = preferencesStore.preferences;
@@ -68,7 +68,7 @@ function updateDisplayMode(mode) {
 <template>
   <div class="table-grid">
     <FiltersBar
-        @sendValue="(inputName, value) => $emit('sendValue', inputName, value)"
+        @search="(inputName, value) => $emit('search', inputName, value)"
         @modeSelected="updateDisplayMode"
     />
     <Table

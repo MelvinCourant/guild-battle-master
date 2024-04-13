@@ -5,7 +5,7 @@ import DisplayModes from "./DisplayModes.vue";
 import {inject} from "vue";
 import Filters from "./Filters.vue";
 
-defineEmits(['sendValue', 'modeSelected']);
+defineEmits(['search', 'modeSelected']);
 
 const fields = inject('fields');
 </script>
@@ -18,10 +18,12 @@ const fields = inject('fields');
           :key="field.name"
           :label="field.label"
           :attributes="field"
-          @sendValue="(inputName, value) => $emit('sendValue', inputName, value)"
+          @sendValue="(inputName, value) => $emit('search', inputName, value)"
       />
     </div>
-    <Filters/>
+    <Filters
+        @search="(inputName, value) => $emit('search', inputName, value)"
+    />
     <DisplayModes @modeSelected="$emit('modeSelected', $event)"/>
   </div>
 </template>

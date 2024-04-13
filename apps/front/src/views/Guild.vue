@@ -343,7 +343,7 @@ function sortGrid(key) {
     <TableGrid
       @sort="sort"
       @actionSelected="actionSelected"
-      @sendValue="madeSearch"
+      @search="madeSearch"
       @sortGrid="sortGrid"
     />
   </main>

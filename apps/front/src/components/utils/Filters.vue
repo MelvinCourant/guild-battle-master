@@ -1,9 +1,12 @@
 <script setup>
 import '../../assets/css/components/utils/_filters.scss';
-import { ref, inject } from 'vue';
+import {ref, inject} from 'vue';
 import Field from "./Field.vue";
 
-const filters = ref(inject('filters'));
+const emit = defineEmits(['search']);
+
+const filters = inject('filters');
+const filtersValues = ref({});
 const buttons = [
   {
     type: 'button',
@@ -18,6 +21,24 @@ const buttons = [
   }
 ];
 const filtersOpen = ref(false);
+
+function addFilter(name, value) {
+  filtersValues.value = {
+    ...filtersValues.value,
+    [name]: value,
+  };
+}
+
+function actionButton(name) {
+  if(name === 'cancel') {
+    filtersValues.value = {};
+    filtersOpen.value = false;
+  } else {
+    emit('search', 'filters', filtersValues.value);
+    filtersOpen.value = false;
+    filtersValues.value = {};
+  }
+}
 </script>
 
 <template>
@@ -40,10 +61,13 @@ const filtersOpen = ref(false);
     </button>
     <div
         class="filters__dialog"
-        v-show="filtersOpen"
+        v-if="filtersOpen"
     >
       <p class="filters__title">Filtres</p>
-      <form class="filters__categories">
+      <form
+          class="filters__categories"
+          @submit.prevent
+      >
         <div
             v-for="(filter, index) in filters"
             :key="index"
@@ -61,6 +85,7 @@ const filtersOpen = ref(false);
                 :key="index"
                 :label="field.label"
                 :attributes="field.attributes"
+                @sendValue="(inputName, value) => addFilter(inputName, value)"
             />
           </div>
         </div>
@@ -69,6 +94,7 @@ const filtersOpen = ref(false);
               v-for="(button, index) in buttons"
               :key="index"
               :attributes="button"
+              @click="(name) => actionButton(name)"
           />
         </div>
       </form>
