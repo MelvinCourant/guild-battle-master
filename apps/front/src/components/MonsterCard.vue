@@ -1,5 +1,5 @@
 <script setup>
-import '../assets/css/components/_monster-card.scss';
+import '../assets/css/components/grids/_monster-card.scss';
 import Avatar from "./utils/Avatar.vue";
 
 defineProps({

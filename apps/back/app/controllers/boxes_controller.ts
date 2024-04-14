@@ -86,48 +86,91 @@ export default class BoxesController {
     const boxes = await Box.query().where('member_id', memberId).select('monster_id', 'quantity')
     let monsters = []
 
-    if (!keyword && !filters) {
-      monsters = await Monster.query().whereIn(
+    let query = Monster.query()
+      .whereIn(
         'unit_master_id',
         boxes.map((box: any) => box.monster_id)
       )
-    } else if (keyword && filters) {
-      monsters = await Monster.query()
-        .whereIn(
-          'unit_master_id',
-          boxes.map((box: any) => box.monster_id)
-        )
-        .andWhere('name', 'LIKE', `%${keyword}%`)
-        .andWhere('is_fusion_shop', filters.is_fusion_shop)
-    } else if (!keyword && filters) {
-      monsters = await Monster.query()
-        .whereIn(
-          'unit_master_id',
-          boxes.map((box: any) => box.monster_id)
-        )
-        .andWhere('is_fusion_shop', filters.is_fusion_shop)
-    } else {
-      monsters = await Monster.query()
-        .whereIn(
-          'unit_master_id',
-          boxes.map((box: any) => box.monster_id)
-        )
-        .andWhere('name', 'LIKE', `%${keyword}%`)
+
+    if (keyword) {
+      query = query.andWhere('name', 'LIKE', `%${keyword}%`)
     }
+
+    if (filters) {
+      let elements = ['fire', 'water', 'wind', 'light', 'dark']
+      let naturalGrades = [2, 3, 4, 5]
+
+      for (const filter in filters) {
+        if(
+          filter === 'fire' ||
+          filter === 'water' ||
+          filter === 'wind' ||
+          filter === 'light' ||
+          filter === 'dark'
+        ) {
+          elements = elements.filter((e) => e !== filter)
+        } else if(
+          filter === '2_stars' ||
+          filter === '3_stars' ||
+          filter === '4_stars' ||
+          filter === '5_stars'
+        ) {
+          const stars = parseInt(filter.split('_')[0])
+          naturalGrades = naturalGrades.filter((n) => n !== stars)
+        } else if(filters.hasOwnProperty(filter)) {
+          query = query.andWhere(filter, filters[filter])
+        }
+      }
+
+      if (
+        elements.length < 5 &&
+        elements.length > 0
+      ) {
+        query = query.andWhere((builder) => {
+          elements.forEach((element, index) => {
+            if (index === 0) {
+              builder.where('element', element);
+            } else {
+              builder.orWhere('element', element);
+            }
+          });
+        });
+      }
+
+      if (
+        naturalGrades.length < 4 &&
+        naturalGrades.length > 0
+      ) {
+        query = query.andWhere((builder) => {
+          naturalGrades.forEach((grade, index) => {
+            if (index === 0) {
+              builder.where('natural_grade', grade - 1);
+            } else {
+              builder.orWhere('natural_grade', grade - 1);
+            }
+          });
+        });
+      }
+    }
+
+    monsters = await query
 
     let monstersWithQuantity: any[] = []
 
     for (const monster of monsters) {
-      // @ts-ignore
-      const quantity = boxes.find((b) => b.monster_id === monster.unit_master_id).quantity
-      monstersWithQuantity.push({
-        name: monster.name,
-        element: monster.element,
-        natural_grade: monster.natural_grade,
-        image: monster.image,
-        is_fusion_shop: monster.is_fusion_shop,
-        quantity: quantity,
-      })
+      const box = boxes.find((b) => b.monster_id === monster.unit_master_id)
+      const quantity = box ? box.quantity : 0
+
+      if(quantity !== 0) {
+        monstersWithQuantity.push({
+          name: monster.name,
+          element: monster.element,
+          natural_grade: monster.natural_grade,
+          image: monster.image,
+          is_fusion_shop: monster.is_fusion_shop,
+          quantity: quantity,
+        })
+      }
     }
 
     const elementsOrder = ['fire', 'water', 'wind', 'light', 'dark']
