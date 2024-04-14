@@ -83,6 +83,7 @@ export default class BoxesController {
     const memberId = params.memberId
     const keyword = request.input('keyword')
     const filters = request.input('filters')
+    const sort = request.input('sort')
     const boxes = await Box.query().where('member_id', memberId).select('monster_id', 'quantity')
     let monsters = []
 
@@ -173,13 +174,24 @@ export default class BoxesController {
       }
     }
 
-    const elementsOrder = ['fire', 'water', 'wind', 'light', 'dark']
-    monstersWithQuantity = monstersWithQuantity.sort((a, b) => {
-      if (a.element === b.element) {
-        return b.natural_grade - a.natural_grade
+    if(
+      sort ||
+      sort !== 'element'
+    ) {
+      if(sort === 'quantity') {
+        monstersWithQuantity = monstersWithQuantity.sort((a, b) => b.quantity - a.quantity)
+      } else if (sort === 'grade') {
+        monstersWithQuantity = monstersWithQuantity.sort((a, b) => b.natural_grade - a.natural_grade)
       }
-      return elementsOrder.indexOf(a.element) - elementsOrder.indexOf(b.element)
-    })
+    } else {
+      const elementsOrder = ['fire', 'water', 'wind', 'light', 'dark']
+      monstersWithQuantity = monstersWithQuantity.sort((a, b) => {
+        if (a.element === b.element) {
+          return b.natural_grade - a.natural_grade
+        }
+        return elementsOrder.indexOf(a.element) - elementsOrder.indexOf(b.element)
+      })
+    }
 
     return response.status(200).json(monstersWithQuantity)
   }
