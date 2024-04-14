@@ -122,12 +122,33 @@ const filters = reactive([
 const filtersValues = ref({});
 const loading = ref(true);
 const keyword = ref('');
+const sortOptions = [
+  {
+    value: 'element',
+    text: 'Élément'
+  },
+  {
+    value: 'quantity',
+    text: 'Quantité'
+  },
+  {
+    value: 'grade',
+    text: 'Grade naturel'
+  },
+  {
+    value: 'name',
+    text: 'Nom'
+  }
+];
+const actualSort = ref('element');
 
 provide('monsters', monsters);
 provide('fields', fields);
 provide('filters', filters);
 provide('filtersValues', filtersValues);
 provide('loading', loading);
+provide('sortOptions', sortOptions);
+provide('sortValue', actualSort);
 
 function initPage() {
   if(
@@ -172,6 +193,8 @@ async function getMember() {
 async function searchMonsters(inputName, value) {
   if(inputName === 'search') {
     keyword.value = value;
+  } else if(inputName === 'sortGrid') {
+    actualSort.value = value;
   } else {
     filtersValues.value = value;
     filters.forEach(filter => {
@@ -204,6 +227,11 @@ async function searchMonsters(inputName, value) {
     };
   }
 
+  body = {
+    ...body,
+    sort: actualSort.value
+  };
+
   const result = await fetch(`${env.VITE_URL}/api/boxes/${memberId.value}/search`, {
     method: 'POST',
     headers: {
@@ -229,6 +257,7 @@ async function searchMonsters(inputName, value) {
     />
     <Monsters
         @search="searchMonsters"
+        @sortGrid="searchMonsters('sortGrid', $event)"
     />
   </main>
 </template>

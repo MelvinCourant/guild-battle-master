@@ -174,14 +174,13 @@ export default class BoxesController {
       }
     }
 
-    if(
-      sort ||
-      sort !== 'element'
-    ) {
+    if(sort !== 'element') {
       if(sort === 'quantity') {
         monstersWithQuantity = monstersWithQuantity.sort((a, b) => b.quantity - a.quantity)
       } else if (sort === 'grade') {
         monstersWithQuantity = monstersWithQuantity.sort((a, b) => b.natural_grade - a.natural_grade)
+      } else if(sort === 'name') {
+        monstersWithQuantity = monstersWithQuantity.sort((a, b) => a.name.localeCompare(b.name))
       }
     } else {
       const elementsOrder = ['fire', 'water', 'wind', 'light', 'dark']
