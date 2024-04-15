@@ -86,7 +86,7 @@
           },
           {
             attributes: {
-              type: 'button',
+              type: 'submit',
               value: 'Continuer',
               style: 'primary',
             }
@@ -107,7 +107,7 @@
           },
           {
             attributes: {
-              type: 'button',
+              type: 'submit',
               value: 'Continuer',
               style: 'primary',
             }
@@ -148,7 +148,7 @@
       ],
       submit: {
         attributes: {
-          type: 'button',
+          type: 'submit',
           value: 'Valider',
           style: 'primary',
         }

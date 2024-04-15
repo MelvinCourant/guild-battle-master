@@ -170,7 +170,6 @@
               :image="form.fields[form.fields.length - 1].image"
               :loading="form.fields[form.fields.length - 1].loading"
               :attributes="form.fields[form.fields.length - 1].attributes"
-              @click="$emit('nextStep')"
           />
           <p
               class="form__text"
@@ -185,8 +184,9 @@
           </p>
         </div>
       </form>
-      <div
+      <form
           class="resume"
+          @submit.prevent="$emit('nextStep')"
           :style="formsTransform[resume.id - 1]"
           :data-active="currentStep >= resume.id"
           v-if="resume"
@@ -228,10 +228,9 @@
           <Field
               :loading="resume.submit.loading"
               :attributes="resume.submit.attributes"
-              @click="$emit('nextStep')"
           />
         </div>
-      </div>
+      </form>
     </div>
     <router-link
         v-if="formContainer.passwordForgotten"
