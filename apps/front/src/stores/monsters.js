@@ -18,8 +18,10 @@ export const useMonstersStore = defineStore("monsters", () => {
     }
 
     function setMonster(newMonsters) {
-        monsters.value.push(newMonsters);
-        localStorage.setItem("monsters", JSON.stringify(monsters.value));
+        if(!getMonster(newMonsters.id)) {
+            monsters.value.push(newMonsters);
+            localStorage.setItem("monsters", JSON.stringify(monsters.value));
+        }
     }
 
     return {

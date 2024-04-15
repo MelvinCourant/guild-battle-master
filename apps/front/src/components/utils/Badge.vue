@@ -36,28 +36,6 @@ async function getMonsterFromDb(id) {
   return await result.json();
 }
 
-async function getMonsters(monstersIds) {
-  if(monsters.value.length === 0) {
-    for (const id of monstersIds) {
-      await getMonsterFromDb(id).then((monster) => {
-        monsters.value.push(monster);
-        monstersStore.setMonster(monster);
-        monstersImages.value.push({
-          src: `${env.VITE_URL}/uploads/${monster.image}`,
-          alt: monster.name
-        });
-      });
-    }
-  } else {
-    monsters.value.forEach((monster) => {
-      monstersImages.value.push({
-        src: `${env.VITE_URL}/uploads/${monster.image}`,
-        alt: monster.name
-      });
-    });
-  }
-}
-
 async function getMonstersImages() {
   if(props.monstersIds) {
     for (const id of props.monstersIds) {
@@ -65,10 +43,21 @@ async function getMonstersImages() {
 
       if(monster) {
         monsters.value.push(monster);
+        monstersImages.value.push({
+          src: `${env.VITE_URL}/uploads/${monster.image}`,
+          alt: monster.name
+        });
+      } else {
+        await getMonsterFromDb(id).then((monster) => {
+          monsters.value.push(monster);
+          monstersStore.setMonster(monster);
+          monstersImages.value.push({
+            src: `${env.VITE_URL}/uploads/${monster.image}`,
+            alt: monster.name
+          });
+        });
       }
     }
-
-    await getMonsters(props.monstersIds);
   }
 }
 
