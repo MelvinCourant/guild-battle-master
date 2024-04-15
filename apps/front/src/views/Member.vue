@@ -245,6 +245,32 @@ async function searchMonsters(inputName, value) {
     monsters.value = await result.json();
   }
 }
+
+async function sort(key) {
+  if(key === actualSort.value) {
+    return;
+  }
+
+  actualSort.value = key;
+
+  if(key !== 'element') {
+    if(key === 'quantity') {
+      monsters.value = monsters.value.sort((a, b) => b.quantity - a.quantity)
+    } else if (key === 'grade') {
+      monsters.value = monsters.value.sort((a, b) => b.natural_grade - a.natural_grade)
+    } else if(key === 'name') {
+      monsters.value = monsters.value.sort((a, b) => a.name.localeCompare(b.name))
+    }
+  } else {
+    const elementsOrder = ['fire', 'water', 'wind', 'light', 'dark']
+    monsters.value = monsters.value.sort((a, b) => {
+      if (a.element === b.element) {
+        return b.natural_grade - a.natural_grade
+      }
+      return elementsOrder.indexOf(a.element) - elementsOrder.indexOf(b.element)
+    })
+  }
+}
 </script>
 
 <template>
@@ -257,7 +283,7 @@ async function searchMonsters(inputName, value) {
     />
     <Monsters
         @search="searchMonsters"
-        @sortGrid="searchMonsters('sortGrid', $event)"
+        @sortGrid="sort"
     />
   </main>
 </template>
