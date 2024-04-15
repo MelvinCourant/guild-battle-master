@@ -29,7 +29,6 @@
     :type="attributes.type"
     :value="loading || attributes.value"
     class="button"
-    @click="$emit('click')"
     :class="attributes.style"
     :disabled="attributes.disabled"
     v-else
