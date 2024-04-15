@@ -8,7 +8,8 @@ export default class extends BaseSchema {
       table.increments('id').primary()
       table.string('email', 254).notNullable().unique()
       table.string('password').notNullable()
-      table.enu('role', ['admin', 'leader', 'member']).notNullable().defaultTo('member')
+      table.string('username').notNullable()
+      table.enu('role', ['admin', 'leader', 'moderator', 'member']).notNullable().defaultTo('member')
       table.string('image').nullable()
       table.boolean('pending').notNullable().defaultTo(true)
 

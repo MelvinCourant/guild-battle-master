@@ -1,0 +1,66 @@
+@use "../../../partials/functions";
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  height: 25px;
+  padding-left: calc(25px + 15px);
+  position: relative;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: pointer;
+
+  &__input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+
+    &:checked ~ .checkbox__checkmark {
+      background-color: var(--primary);
+      border-color: var(--primary);
+
+      > svg {
+        display: block;
+      }
+    }
+
+    &:disabled {
+      & ~ .checkbox {
+        &__checkmark {
+          opacity: 50%;
+        }
+
+        &__label {
+          opacity: 50%;
+        }
+      }
+    }
+  }
+
+  &__checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 25px;
+    width: 25px;
+    background-color: var(--background);
+    border: var(--border);
+    border-radius: 4px;
+
+    > svg {
+      display: none;
+    }
+  }
+
+  &__label {
+    font-size: functions.rem(13);
+    line-height: normal;
+  }
+}

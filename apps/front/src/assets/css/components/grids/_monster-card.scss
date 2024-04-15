@@ -1,0 +1,33 @@
+@use '../../partials/functions';
+
+.monster-card {
+  position: relative;
+
+  &__avatar {
+    width: 100%;
+    max-width: 100px;
+    border-radius: var(--input-text-radius);
+
+    @media screen and (max-width: 768px){
+      max-width: initial;
+    }
+  }
+
+  &__quantity {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(30%, -30%);
+    background: var(--primary);
+    border-radius: 50%;
+    box-shadow: var(--shadow);
+    width: 25px;
+    height: 25px;
+    padding-top: 2px;
+    font-size: functions.rem(14);
+    font-weight: 700;
+    line-height: 1.28571;
+  }
+}

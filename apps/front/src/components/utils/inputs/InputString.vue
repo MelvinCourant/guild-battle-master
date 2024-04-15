@@ -1,7 +1,6 @@
-<script setup lang="ts">
+<script setup>
   import "../../../assets/css/components/utils/inputs/_input-string.scss";
-  import { IAttributes } from "../../../models/form.ts";
-  import { PropType, ref } from "vue";
+  import { ref } from "vue";
 
   const props = defineProps({
     label: {
@@ -12,18 +11,32 @@
       type: String,
     },
     attributes: {
-      type: Object as PropType<IAttributes>,
+      type: Object,
       required: true,
     }
   })
   const emit = defineEmits(["sendValue"]);
 
   const typeClass = ref(`input-string--${props.attributes.type}`);
-  const labelClass = ref("input-string--label");
+  const labelClass = ref('');
 
-  async function updateValue() {
-    emit("sendValue", props.attributes.name, props.attributes.value);
+  if(props.label) {
+    labelClass.value = 'input-string--label';
   }
+
+  function debounce(func, delay) {
+    let debounceTimer;
+    return function() {
+      const context = this;
+      const args = arguments;
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => func.apply(context, args), delay);
+    }
+  }
+
+  const updateValue = debounce(async () => {
+    emit("sendValue", props.attributes.name, props.attributes.value);
+  }, 300);
 </script>
 
 <template>
@@ -33,6 +46,7 @@
   >
     <label
         class="input-string__label"
+        :for="props.attributes.name"
         v-if="label"
         v-show="!error"
     >
@@ -46,6 +60,8 @@
     </p>
     <input
       class="input-string__input"
+      :id="props.attributes.name"
+      :name="props.attributes.name"
       :type="props.attributes.type"
       :placeholder="props.attributes.placeholder"
       :value="props.attributes.value"

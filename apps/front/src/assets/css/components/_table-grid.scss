@@ -1,0 +1,15 @@
+@use '../partials/functions.scss';
+
+.table-grid {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+
+  a {
+    &:hover {
+      span {
+        color: var(--primary-darkened);
+      }
+    }
+  }
+}

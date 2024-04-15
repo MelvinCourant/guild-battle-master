@@ -18,10 +18,13 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare email: string
 
   @column()
+  declare username: string
+
+  @column()
   declare password: string
 
   @column()
-  declare role: 'admin' | 'leader' | 'member'
+  declare role: 'admin' | 'leader' | 'moderator' | 'member'
 
   @column()
   declare image: string | null

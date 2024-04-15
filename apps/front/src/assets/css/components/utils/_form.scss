@@ -25,6 +25,17 @@
       font-size: functions.rem(24);
       line-height: normal;
       margin-bottom: 10px;
+
+      &--highlight {
+        color: var(--white);
+
+        .highlight {
+          @include mixins.font(title);
+          color: var(--primary);
+          font-size: functions.rem(24);
+          line-height: normal;
+        }
+      }
     }
 
     &__fields,

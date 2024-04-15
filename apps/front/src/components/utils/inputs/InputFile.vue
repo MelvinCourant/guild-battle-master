@@ -1,17 +1,16 @@
-<script setup lang="ts">
+<script setup>
   import "../../../assets/css/components/utils/inputs/_input-file.scss";
-  import { IImage, IAttributes } from "../../../models/form.js";
-  import {PropType, ref, nextTick} from "vue";
+  import {ref, nextTick} from "vue";
 
   const props = defineProps({
     image: {
-      type: Object as PropType<IImage>,
+      type: Object,
     },
     label: {
       type: String,
     },
     attributes: {
-      type: Object as PropType<IAttributes>,
+      type: Object,
       required: true,
     }
   });
@@ -20,9 +19,9 @@
   const type = ref("");
   const typeClass = ref("");
   const onDragOver = ref(false);
-  const files: any = ref(null);
+  const files = ref(null);
 
-  if(props.attributes.accept?.match(/image/)) {
+  if(props.attributes.accept.match(/image/)) {
     type.value = "image";
     typeClass.value = `input-file--image`;
   } else {
@@ -31,46 +30,46 @@
   }
 
   const image = ref(props.image);
-  const fileName: any = ref("");
+  const fileName = ref("");
 
   function triggerInputFile() {
-    const input = document.querySelector(`input[name="${props.attributes.name}"]`) as HTMLInputElement;
+    const input = document.querySelector(`input[name="${props.attributes.name}"]`);
     input.click();
   }
 
-  function dropFile(event: Event) {
+  function dropFile(event) {
     event.preventDefault();
 
-    files.value = (event as DragEvent).dataTransfer?.files;
+    files.value = event.dataTransfer.files;
     changeFile(event, true);
 
     onDragOver.value = false;
   }
 
-  async function changeFile(event: Event, drop = false) {
+  async function changeFile(event, drop = false) {
     await nextTick();
 
-    const input = event.target as HTMLInputElement;
-    let file: File | undefined = undefined;
+    const input = event.target;
+    let file;
 
     if(drop) {
       file = files.value[0];
     } else {
-      file = input.files?.[0];
+      file = input.files[0];
     }
 
     if(type.value === "image") {
-      fileName.value = file?.name;
+      fileName.value = file.name;
 
       if(file) {
         const reader = new FileReader();
 
         reader.addEventListener("load", function (e) {
           const readerTarget = e.target;
-          let srcTarget: string = "";
+          let srcTarget = "";
 
           if(readerTarget) {
-            srcTarget = readerTarget.result as string;
+            srcTarget = readerTarget.result;
           }
 
           image.value = {
@@ -82,7 +81,7 @@
         reader.readAsDataURL(file);
       }
     } else {
-      fileName.value = file?.name;
+      fileName.value = file.name;
     }
 
     emit("sendValue", props.attributes.name, file);
@@ -136,6 +135,7 @@
       />
       <input
           class="input-file__input"
+          :id="attributes.name"
           :name="attributes.name"
           :type="attributes.type"
           :value="attributes.value"
@@ -149,6 +149,7 @@
 
     <label
         class="input-file__label"
+        :for="attributes.name"
         v-if="
           type==='image' &&
           image
@@ -160,6 +161,7 @@
       />
       <input
           class="input-file__input"
+          :id="attributes.name"
           :name="attributes.name"
           :type="attributes.type"
           :value="attributes.value"

@@ -93,7 +93,7 @@ export default class MonstersController {
         name: monsterName,
         element: monsterElement,
         natural_grade: monster.natural_stars - 1, // -1 to fix natural_grade is 1 star higher than it should be
-        image: `/monsters/${monsterFileName}`,
+        image: `monsters/${monsterFileName}`,
         is_fusion_shop: isFusionOrShop
       }
       // @ts-ignore
@@ -103,5 +103,16 @@ export default class MonstersController {
     }
 
     return response.status(200).json({ message: 'Monsters created successfully' })
+  }
+
+  public async show({ params, response }: HttpContext) {
+    const { id } = params
+    const monster = await Monster.find(id)
+
+    if (!monster) {
+      return response.status(404).json({ message: 'Monster not found' })
+    }
+
+    return response.status(200).json(monster)
   }
 }

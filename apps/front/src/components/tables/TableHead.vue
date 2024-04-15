@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import '../../assets/css/components/tables/_table-head.scss'
 import {inject} from "vue";
 

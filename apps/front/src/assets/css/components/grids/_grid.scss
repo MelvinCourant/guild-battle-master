@@ -1,0 +1,21 @@
+.grid-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+
+  .grid {
+    &--loading {
+      position: relative;
+      flex: 1;
+    }
+
+    &__list {
+      display: grid;
+      gap: 10px;
+
+      @media screen and (max-width: 768px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  }
+}

@@ -1,8 +1,8 @@
-<script setup lang="ts">
+<script setup>
   import { inject } from "vue";
-  import { ISubmenuLink } from "../../../models/navbar.ts";
   import '../../../assets/css/components/menus/mobile/_submenu-mobile.scss'
   import Grade from "../../../components/utils/Grade.vue";
+  import Avatar from "../../utils/Avatar.vue";
 
   defineProps({
     isOpened: {
@@ -12,10 +12,10 @@
   });
   defineEmits(['closeSubmenu']);
 
-  const userProfile: any = inject('userProfile');
-  const submenu: Array<ISubmenuLink> | undefined = inject('submenu');
+  const userProfile = inject('userProfile');
+  const submenu= inject('submenu');
 
-  function generateIconPath(icon: string): string {
+  function generateIconPath(icon) {
     return new URL(`../../../assets/imgs/icons/${icon}.svg`, import.meta.url).href;
   }
 </script>
@@ -26,11 +26,11 @@
       :class="isOpened ? 'submenu-mobile--open' : ''"
   >
     <li class="user-profile">
-      <img
-          class="user-profile__avatar"
+      <Avatar
+          :className="'user-profile__avatar'"
           :src="userProfile.image"
           :alt="userProfile.pseudo"
-      >
+      />
       <div class="user-profile__identity">
         <Grade
             :grade="userProfile.grade"

@@ -9,6 +9,9 @@ export default class Member extends BaseModel {
   declare id: number
 
   @column()
+  declare wizard_id: number
+
+  @column()
   declare pseudo: string
 
   @column()

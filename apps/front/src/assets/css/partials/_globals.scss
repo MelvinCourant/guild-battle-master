@@ -8,6 +8,11 @@
   box-sizing: border-box;
   color: var(--white);
   font-family: fonts.$marianne;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 html {

@@ -1,11 +1,9 @@
-<script setup lang="ts">
+<script setup>
   import "../../assets/css/components/utils/_stepper.scss";
-  import type { IStep } from "../../models/form.ts";
-  import type { PropType } from "vue";
 
   defineProps({
     steps: {
-      type: Array as PropType<IStep[]>,
+      type: Array,
       required: true,
     },
     currentStep: {
@@ -25,7 +23,7 @@
     >
       <div
           class="stepper__line"
-          v-if="index != 0"
+          v-if="index !== 0"
       >
       </div>
       <div class="stepper__circle">

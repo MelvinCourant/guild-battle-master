@@ -1,7 +1,6 @@
-<script setup lang="ts">
+<script setup>
   import '../../assets/css/components/utils/_form.scss';
   import Field from "../../components/utils/Field.vue";
-  import type { IFormContainer, IResume } from "../../models/form.ts";
   import gsap from "gsap";
   import { inject, ref, onMounted, watch, nextTick } from "vue";
 
@@ -14,12 +13,12 @@
 
   defineEmits(['nextStep', 'sendValue']);
 
-  const formContainer = inject('formContainer') as IFormContainer;
-  const forms: any = formContainer.forms;
-  const formsTransform: any = ref([]);
-  const resume: IResume | undefined = formContainer.resume;
-  const formStyle = ref<string>('');
-  let formLength: number;
+  const formContainer = inject('formContainer');
+  const forms = formContainer.forms;
+  const formsTransform = ref([]);
+  const resume = formContainer.resume;
+  const formStyle = ref('');
+  let formLength;
 
   if(resume) {
     formLength = forms.length + 1;
@@ -29,9 +28,9 @@
 
   function initTranslations() {
     for(let i = 0; i < formLength; i++) {
-      let translate: string = '';
-      let translateValue: string = '';
-      let position: string = 'initial';
+      let translate = '';
+      let translateValue = '';
+      let position = 'initial';
 
       if(i === 0) {
         translateValue = '0';
@@ -62,9 +61,9 @@
 
   function updateTranslations() {
     for(let formIndex = 0; formIndex < formLength; formIndex++) {
-      let translate: string = '';
-      let translateValue: string = '';
-      let position: string = 'initial';
+      let translate = '';
+      let translateValue = '';
+      let position = 'initial';
 
       if(formIndex === props.currentStep - 1) {
         translateValue = '0';
@@ -91,7 +90,7 @@
     const newFieldActive = document.querySelector(`.form [data-active="true"]:nth-child(${props.currentStep})`);
 
     if(newFieldActive) {
-      const height: string = `${newFieldActive.clientHeight}px`;
+      const height = `${newFieldActive.clientHeight}px`;
 
       updateTranslations();
 
@@ -101,7 +100,7 @@
       });
 
       setTimeout(() => {
-        const firstInput = newFieldActive.querySelector('input:first-of-type') as HTMLInputElement;
+        const firstInput = newFieldActive.querySelector('input:first-of-type');
         firstInput.focus();
       }, 500);
     }
@@ -127,10 +126,19 @@
         :style="formStyle"
     >
       <h2
-          class="form__title"
+          :class="[
+              'form__title',
+              {'form__title--highlight': formContainer.highlight}
+          ]"
           v-if="formContainer.title"
       >
         {{ formContainer.title }}
+        <span
+            v-if="formContainer.highlight"
+            class="highlight"
+        >
+          {{ formContainer.highlight }}
+        </span>
       </h2>
       <form
           class="form__fields"
@@ -151,7 +159,7 @@
                 :image="field.image"
                 :attributes="field.attributes"
                 v-if="index !== form.fields.length - 1"
-                @sendValue="(inputName: string, value: string) => $emit('sendValue', inputName, value)"
+                @sendValue="(inputName, value) => $emit('sendValue', inputName, value)"
             />
           </template>
         </div>

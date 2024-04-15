@@ -1,23 +1,32 @@
-<script setup lang="ts">
+<script setup>
 import '../../assets/css/components/tables/_table-rows.scss'
 import Badge from "../utils/Badge.vue";
 import Grade from "../utils/Grade.vue";
 import {inject, ref, watch} from "vue";
 import More from "../utils/More.vue";
+import Avatar from "../utils/Avatar.vue";
+
+defineEmits(["actionSelected"]);
 
 const data = ref(inject("data"));
 const columns = inject("columns");
 const rows = ref([]);
 const badges = ref([]);
+const link = ref('');
 const env = import.meta.env;
 
 watch(data, () => {
   rows.value = data.value.rows;
   badges.value = data.value.badges;
+  link.value = data.value.link;
 });
 
-function placeholderSrc() {
-  return new URL('../../assets/imgs/placeholder.jpg', import.meta.url).href;
+function othersText(numberMonsters) {
+  if(numberMonsters - 3 > 1) {
+    return `+${numberMonsters - 3} autres`;
+  } else {
+    return `+1 autre`;
+  }
 }
 </script>
 
@@ -27,73 +36,78 @@ function placeholderSrc() {
       v-for="(row, index) in rows"
       :key="index"
     >
-      <td
+      <template
         v-for="(info, key, index) in row"
-        :key="key"
-        :class="columns[index].class"
+        :key="row.id"
       >
-        <ul
-          v-if="badges.includes(key)"
+        <td
+          v-if="key !== 'id'"
+          :class="columns[index - 1].class"
         >
-          <template
-            v-for="(monster, index) in info"
+          <ul
+              v-if="badges.includes(key)"
           >
+            <template
+                v-for="(monster, index) in info"
+            >
+              <Badge
+                  v-if="index < 3"
+                  :key="monster.id"
+                  :monstersIds="[monster.id]"
+                  :name="monster.name"
+                  :element="monster.element"
+              />
+            </template>
             <Badge
-              v-if="index < 7"
-              :key="monster.name"
-              :name="monster.name"
-              :element="monster.element"
+                v-if="info.length > 3"
+                :key="'others'"
+                :monstersIds="info.slice(3).map(monster => monster.id)"
+                :name="othersText(info.length)"
+                element="dark-light"
             />
-          </template>
-          <Badge
-            v-if="info.length > 7"
-            :key="'others'"
-            :name="'+' + (info.length - 7) + ' autres'"
-            element="dark-light"
-          />
-        </ul>
-        <img
-          v-else-if="
-            key === 'image' &&
-            info !== 'placeholder.jpg'
-          "
-          :src="`${env.VITE_URL}/uploads/${info}`"
-          alt="avatar"
-        />
-        <img
-          v-else-if="
-            key === 'image' &&
-            info === 'placeholder.jpg'
-          "
-          :src="placeholderSrc()"
-          alt="avatar"
-        />
-        <div
-          v-else-if="key === 'grade'"
-          class="members__grade-name"
-        >
-          <Grade
-            v-if="info !== 'member'"
-            :grade="info"
-          />
-          <span
-            v-else
-            class="members__grade--member"
+          </ul>
+          <router-link
+              :to="link + row.id"
+              v-else-if="key === 'image'"
           >
-                  💩
-          </span>
-          <span>{{ info }}</span>
-        </div>
-        <span v-else>{{ info }}</span>
-      </td>
-      <td
-        class="table-rows__actions"
-      >
-        <More
-          v-if="data.actions"
-          :actions="data.actions"
-        />
-      </td>
+            <Avatar
+                :class="'table-rows__image'"
+                :src="info"
+                :alt="row.pseudo"
+            />
+          </router-link>
+          <div
+              v-else-if="key === 'grade'"
+              class="table-grid__grade-name"
+          >
+            <Grade
+                v-if="info !== 'member'"
+                :grade="info"
+            />
+            <span>{{ info }}</span>
+          </div>
+          <router-link
+              :to="link + row.id"
+              v-else-if="key === 'pseudo'"
+          >
+            <span>{{ info }}</span>
+          </router-link>
+          <span v-else>{{ info }}</span>
+        </td>
+        <td
+            class="table-rows__actions"
+            v-if="index === Object.keys(row).length - 1"
+        >
+          <More
+              :actions="data.actions"
+              :memberRole="row.role"
+              @actionSelected="$emit('actionSelected', {
+                action: $event,
+                id: row.id
+              })"
+          />
+        </td>
+      </template>
     </tr>
   </tbody>
 </template>

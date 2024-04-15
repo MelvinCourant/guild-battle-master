@@ -6,8 +6,8 @@ export default class extends BaseSchema {
   async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
+      table.integer('wizard_id').unsigned().notNullable()
       table.string('pseudo').notNullable()
-      table.unique(['pseudo'])
       table.enu('grade', ['leader', 'vice-leader', 'senior', 'member']).notNullable().defaultTo('member')
       table.integer('user_id').unsigned().references('users.id').nullable()
       table.integer('guild_id').unsigned().references('guilds.id').nullable()

@@ -1,14 +1,12 @@
-<script setup lang="ts">
+<script setup>
   import '../../../assets/css/components/menus/mobile/_navbar-mobile.scss';
-  import type { ILink } from "../../../models/navbar.js";
-  import { PropType } from "vue";
   import { useRoute } from "vue-router";
 
   const route = useRoute();
 
   defineProps({
     mobileLinks: {
-      type: Array as PropType<Array<ILink>>,
+      type: Array,
       required: true
     }
   });
