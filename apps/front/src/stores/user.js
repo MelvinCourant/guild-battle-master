@@ -10,7 +10,7 @@ export const useUserStore = defineStore("user", () => {
 
     let pseudo = "";
     let grade = "";
-    let image = "";
+    let image = "placeholder.jpg";
     const user = ref({})
 
     user.value = {

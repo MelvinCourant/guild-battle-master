@@ -116,8 +116,17 @@ export default class GuildsController {
       return gradeOrder.indexOf(a.grade) - gradeOrder.indexOf(b.grade)
     })
 
+    let guildImage = 'placeholder.jpg'
+
+    if(guild.image) {
+      guildImage = guild.image
+    }
+
     return response.json({
-      guild,
+      guild: {
+        name: guild.name,
+        image: guildImage,
+      },
       members: membersInformations
     })
   }
