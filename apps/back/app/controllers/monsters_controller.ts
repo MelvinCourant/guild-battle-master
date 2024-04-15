@@ -49,57 +49,64 @@ export default class MonstersController {
         fs.mkdirSync(dirPath, { recursive: true });
       }
 
-      const monsterExists = fs.existsSync(`${dirPath}/${monsterFileName}`)
+      const imageExists = fs.existsSync(`${dirPath}/${monsterFileName}`)
 
-      if (monsterExists) {
-        return
+      if (!imageExists) {
+        await streamPipeline(result.body, fs.createWriteStream(`${dirPath}/${monsterFileName}`))
       }
 
-      await streamPipeline(result.body, fs.createWriteStream(`${dirPath}/${monsterFileName}`))
+      const monsterExists = await Monster.findBy('unit_master_id', monster.com2us_id)
 
-      let isFusionOrShop = false
+      if (!monsterExists) {
+        let isFusionOrShop = false
 
-      const fusionOrShopMonsters = [
-        'water-ifrit',
-        'fire-ifrit',
-        'wind-ifrit',
-        'dark-ifrit',
-        'light-ifrit',
-        'water-phoenix',
-        'fire-panda-warrior',
-        'light-paladin',
-        'dark-dokkaebi-lord',
-        'light-fairy-queen',
-        'dark-vampire-lord',
-        'homunculus',
-        'fire-ken',
-        'light-dual-blade',
-        'fire-shadow-claw',
-        'light-altaïr',
-        'light-magical-archer-fami',
-        'wind-lollipop-warrior',
-        'wind-gingerbrave',
-        'cow-girl',
-        'wind-totemist',
-        'wind-valkyrja'
-      ]
+        const fusionOrShopMonsters = [
+          'water-ifrit',
+          'fire-ifrit',
+          'wind-ifrit',
+          'dark-ifrit',
+          'light-ifrit',
+          'water-phoenix',
+          'fire-panda-warrior',
+          'light-paladin',
+          'dark-dokkaebi-lord',
+          'light-fairy-queen',
+          'dark-vampire-lord',
+          'homunculus',
+          'fire-ken',
+          'light-dual-blade',
+          'fire-shadow-claw',
+          'light-altaïr',
+          'light-magical-archer-fami',
+          'wind-lollipop-warrior',
+          'wind-gingerbrave',
+          'cow-girl',
+          'wind-totemist',
+          'wind-valkyrja'
+        ]
 
-      if (fusionOrShopMonsters.some(slug => monster.bestiary_slug.includes(slug))) {
-        isFusionOrShop = true;
+        if (fusionOrShopMonsters.some(slug => monster.bestiary_slug.includes(slug))) {
+          isFusionOrShop = true;
+        }
+
+        const monsterData = {
+          unit_master_id: monster.com2us_id,
+          name: monsterName,
+          element: monsterElement,
+          natural_grade: monster.natural_stars - 1, // -1 to fix natural_grade is 1 star higher than it should be
+          image: `monsters/${monsterFileName}`,
+          is_fusion_shop: isFusionOrShop
+        }
+        // @ts-ignore
+        await Monster.create(monsterData)
       }
 
-      const monsterData = {
-        unit_master_id: monster.com2us_id,
-        name: monsterName,
-        element: monsterElement,
-        natural_grade: monster.natural_stars - 1, // -1 to fix natural_grade is 1 star higher than it should be
-        image: `monsters/${monsterFileName}`,
-        is_fusion_shop: isFusionOrShop
+      if(
+        !imageExists ||
+        !monsterExists
+      ) {
+        console.log(`Monster ${monsterName} created successfully`)
       }
-      // @ts-ignore
-      await Monster.create(monsterData)
-
-      console.log(`Monster ${monsterName} created successfully`)
     }
 
     return response.status(200).json({ message: 'Monsters created successfully' })
