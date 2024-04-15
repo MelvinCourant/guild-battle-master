@@ -272,11 +272,17 @@ export default class AuthController {
         .firstOrFail()
       const token = await User.accessTokens.create(user)
 
+      let userImage = 'placeholder.jpg'
+
+      if (user.image) {
+        userImage = user.image
+      }
+
       return response.status(200).send({
         user: {
           pseudo: member.pseudo,
           grade: member.grade,
-          image: user.image,
+          image: userImage,
         },
         token,
       })

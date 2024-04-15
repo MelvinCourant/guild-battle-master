@@ -16,12 +16,18 @@ export default class UsersController {
         .select('id', 'pseudo', 'guild_id')
         .firstOrFail()
 
+      let userImage = 'placeholder.jpg'
+
+      if (userInfos.image) {
+        userImage = userInfos.image
+      }
+
       return response.status(200).send({
         user: {
           email: userInfos.email,
           username: userInfos.username,
           role: userInfos.role,
-          image: userInfos.image,
+          image: userImage,
           member_id: member.id,
           guild_id: member.guild_id,
         },
