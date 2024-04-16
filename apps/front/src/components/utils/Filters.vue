@@ -15,7 +15,7 @@ const buttons = [
     value: 'Annuler',
   },
   {
-    type: 'submit',
+    type: 'button',
     name: 'filter',
     value: 'Filtrer',
     style: 'primary'
