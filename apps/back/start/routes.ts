@@ -70,7 +70,7 @@ router
       return guildsController.create(data)
     })
 
-    router.get('/:id/members/:keyword', async (data) => {
+    router.post('/:id/members', async (data) => {
       return guildsController.search(data)
     })
   })

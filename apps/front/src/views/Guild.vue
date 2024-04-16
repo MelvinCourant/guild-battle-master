@@ -300,12 +300,19 @@ async function madeSearch(inputName, value) {
     return;
   }
 
-  const result = await fetch(`${env.VITE_URL}/api/guilds/${user.guild_id}/members/${value}`, {
-    method: 'GET',
+  const result = await fetch(`${env.VITE_URL}/api/guilds/${user.guild_id}/members`, {
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`
-    }
+    },
+    body: JSON.stringify({
+      keyword: value,
+      sort: {
+        name: actualSort.value,
+        order: columns.find((column) => column.key === actualSort.value).sortOrder
+      }
+    })
   });
 
   if(result.ok) {
@@ -316,15 +323,6 @@ async function madeSearch(inputName, value) {
       actions: actions
     };
     members.value = resultJson.members;
-    actualSort.value = 'grade';
-
-    columns.forEach((column) => {
-      if(column.key === actualSort.value) {
-        column.sortOrder = 'asc';
-      } else {
-        column.sortOrder = '';
-      }
-    });
   }
 }
 
