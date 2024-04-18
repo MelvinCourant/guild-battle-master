@@ -9,7 +9,7 @@ export default class extends BaseSchema {
       table.integer('wizard_id').unsigned().notNullable()
       table.string('pseudo').notNullable()
       table.enu('grade', ['leader', 'vice-leader', 'senior', 'member']).notNullable().defaultTo('member')
-      table.integer('user_id').unsigned().references('users.id').nullable()
+      table.integer('user_id').unsigned().references('users.id').nullable().onDelete('CASCADE')
       table.integer('guild_id').unsigned().references('guilds.id').nullable()
       table.unique(['id', 'guild_id'])
 
