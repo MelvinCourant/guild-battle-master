@@ -194,4 +194,106 @@ export default class BoxesController {
 
     return response.status(200).json(monstersWithQuantity)
   }
+
+  async compositions({ auth, params, request, response }: HttpContext) {
+    const user = await auth.authenticate()
+
+    if(
+      user.role !== 'admin' &&
+      user.role !== 'leader' &&
+      user.role !== 'moderator'
+    ) {
+      return response.forbidden()
+    }
+
+    const guildId = params.guildId
+    const members = await Member.query().where('guild_id', guildId).select('id')
+    const leaderMonsters = request.input('leader_monsters')
+    const secondMonsters = request.input('second_monsters')
+    const thirdMonsters = request.input('third_monsters')
+
+    let compositions = []
+
+    for (const member of members) {
+      const boxes = await Box.query().where('member_id', member.id)
+      const monsters = await Monster.query().whereIn(
+        'unit_master_id',
+        boxes.map((box) => box.monster_id)
+      )
+
+      for (const leader of leaderMonsters) {
+        let leaderBox
+        /*if (
+          leader === 'light' ||
+          leader === 'dark'
+        ) {
+          leaderBox = boxes.find((box) => {
+            const monster = monsters.find((monster) => monster.unit_master_id === box.monster_id)
+            return monster.element === leader
+          })
+        } else if (leader === 'light-dark') {
+          leaderBox = boxes.find((box) => {
+            const monster = monsters.find((monster) => monster.element === 'light' || monster.element === 'dark')
+            return monster.unit_master_id === box.monster_id
+          })
+        } else {*/
+          leaderBox = boxes.find(box => box.monster_id === leader)
+        /*}*/
+        if (!leaderBox || leaderBox.monsters_assigned >= leaderBox.quantity) continue
+
+        for (const second of secondMonsters) {
+          if (second === leader) continue
+          let secondBox
+          /*if (
+            leader === 'light' ||
+            leader === 'dark'
+          ) {
+            secondBox = boxes.find((box) => {
+              const monster = monsters.find((monster) => monster.unit_master_id === box.monster_id)
+              return monster.element === second
+            })
+          } else if (leader === 'light-dark') {
+            secondBox = boxes.find((box) => {
+              const monster = monsters.find((monster) => monster.element === 'light' || monster.element === 'dark')
+              return monster.unit_master_id === box.monster_id
+            })
+          } else {*/
+            secondBox = boxes.find(box => box.monster_id === second)
+          /*}*/
+          if (!secondBox || secondBox.monsters_assigned >= secondBox.quantity) continue
+
+          for (const third of thirdMonsters) {
+            if (third === leader || third === second) continue
+            let thirdBox
+            /*if (
+              leader === 'light' ||
+              leader === 'dark'
+            ) {
+              thirdBox = boxes.find((box) => {
+                const monster = monsters.find((monster) => monster.unit_master_id === box.monster_id)
+                return monster.element === third
+              })
+            } else if (leader === 'light-dark') {
+              secondBox = boxes.find((box) => {
+                const monster = monsters.find((monster) => monster.element === 'light' || monster.element === 'dark')
+                return monster.unit_master_id === box.monster_id
+              })
+            } else {*/
+              thirdBox = boxes.find(box => box.monster_id === third)
+            /*}*/
+            if (!thirdBox || thirdBox.monsters_assigned >= thirdBox.quantity) continue
+
+            compositions.push({
+              member_id: member.id,
+              leader: leader,
+              second: second,
+              third: third
+            })
+          }
+        }
+      }
+    }
+
+    return response.status(200).json(compositions)
+  }
 }

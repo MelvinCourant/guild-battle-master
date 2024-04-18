@@ -128,6 +128,10 @@ router
     router.post('/:memberId/search', async (data) => {
       return boxesController.search(data)
     })
+
+    router.post('/:guildId/search-compositions', async (data) => {
+      return boxesController.compositions(data)
+    });
   })
   .prefix('api/boxes')
 
