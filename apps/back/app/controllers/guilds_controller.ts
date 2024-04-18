@@ -237,9 +237,9 @@ export default class GuildsController {
     })
   }
 
-  public async search({ auth, params, response }: HttpContext) {
+  public async search({ auth, params, request, response }: HttpContext) {
     const user = await auth.authenticate()
-    const keyword = decodeURIComponent(params.keyword)
+    const keyword = decodeURIComponent(request.input('keyword'))
     const memberGuild = await Member
       .query()
       .where('user_id', user.id)
@@ -247,6 +247,7 @@ export default class GuildsController {
       .firstOrFail()
     const memberGuildId = memberGuild.guild_id
     const guildId = parseInt(params.id)
+    const sort = request.input('sort')
 
     if(guildId !== memberGuildId) {
       return response.status(403).json({ error: 'Guilde invalide' })
@@ -372,11 +373,41 @@ export default class GuildsController {
       membersInformations.push(memberInformations);
     }
 
-    const gradeOrder = ['leader', 'vice-leader', 'senior', 'member']
+    if(sort.name !== 'grade') {
+      if(sort.name === 'pseudo') {
+        if(sort.order === 'desc') {
+          membersInformations = membersInformations.sort((a: any, b: any) => {
+            return b.pseudo.localeCompare(a.pseudo)
+          })
+        } else {
+          membersInformations = membersInformations.sort((a: any, b: any) => {
+            return a.pseudo.localeCompare(b.pseudo)
+          })
+        }
+      } else if(sort.name === 'lds') {
+        if(sort.order === 'desc') {
+          membersInformations = membersInformations.sort((a: any, b: any) => {
+            return b.lds.length - a.lds.length
+          })
+        } else {
+          membersInformations = membersInformations.sort((a: any, b: any) => {
+            return a.lds.length - b.lds.length
+          })
+        }
+      }
+    } else {
+      const gradeOrder = ['leader', 'vice-leader', 'senior', 'member']
 
-    membersInformations = membersInformations.sort((a: any, b: any) => {
-      return gradeOrder.indexOf(a.grade) - gradeOrder.indexOf(b.grade)
-    })
+      if(sort.order === 'desc') {
+        membersInformations = membersInformations.sort((a: any, b: any) => {
+          return gradeOrder.indexOf(b.grade) - gradeOrder.indexOf(a.grade)
+        })
+      } else {
+        membersInformations = membersInformations.sort((a: any, b: any) => {
+          return gradeOrder.indexOf(a.grade) - gradeOrder.indexOf(b.grade)
+        })
+      }
+    }
 
     return response.json({ members: membersInformations })
   }
