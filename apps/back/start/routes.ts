@@ -138,5 +138,9 @@ router
     router.post('/', async (data) => {
       return compositionsController.create(data)
     })
+
+    router.delete('/:id', async (data) => {
+      return compositionsController.destroy(data)
+    })
   })
   .prefix('api/compositions')

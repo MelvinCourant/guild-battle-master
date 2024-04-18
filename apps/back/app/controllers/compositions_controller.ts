@@ -33,4 +33,24 @@ export default class CompositionsController {
 
     return response.created(composition)
   }
+
+  public async destroy({ auth, params, response }: HttpContext) {
+    const user = await auth.authenticate()
+
+    if(
+      user.role !== 'admin' &&
+      user.role !== 'leader' &&
+      user.role !== 'moderator'
+    ) {
+      return response.forbidden()
+    }
+
+    const composition = await Composition.query()
+      .where('id', params.id)
+      .firstOrFail()
+
+    await composition.delete()
+
+    return response.noContent()
+  }
 }
