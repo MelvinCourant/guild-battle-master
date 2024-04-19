@@ -36,7 +36,9 @@ function updateValues(value) {
   }
 
   emit('updateValues', values.value);
-  document.querySelector('.combobox__input').value = '';
+  document.querySelectorAll('.combobox__input').forEach((input) => {
+    input.value = '';
+  });
   props.options.forEach((option) => {
     option.display = true;
   });

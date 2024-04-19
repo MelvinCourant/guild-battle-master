@@ -7,7 +7,9 @@ import { useUserStore } from "../stores/user.js";
 
 const env = import.meta.env;
 const userStore = useUserStore();
-const guildId = userStore.guild_id;
+const user = userStore.user;
+const token = userStore.token;
+const guildId = user.guild_id;
 const fields = [
   {
     type: "search",
@@ -91,10 +93,13 @@ const comboboxOptions = ref([
 const leaderMonsters = ref([]);
 const secondMonsters = ref([]);
 const thirdMonsters = ref([]);
+const keyword = ref('');
+const compositions = ref([]);
 
 provide("fields", fields);
 provide("filters", filters);
 provide('filtersValues', filtersValues);
+provide('compositions', compositions);
 
 async function getAllMonsters() {
   const result = await fetch(`${env.VITE_URL}/api/monsters`);
@@ -115,22 +120,32 @@ async function getAllMonsters() {
 
 getAllMonsters();
 
-async function getCompositions(label, values) {
-  if (label === 'Monstre leader') {
-    leaderMonsters.value = values;
-  } else if (label === '2ème monstre') {
-    secondMonsters.value = values;
-  } else if (label === '3ème monstre') {
-    thirdMonsters.value = values;
+async function getCompositions(name, values) {
+  let ids;
+
+  if(name === 'search') {
+    keyword.value = values;
+  } else {
+    ids = values.map((value) => value.value);
+  }
+
+  if (name === 'Monstre leader') {
+    leaderMonsters.value = ids;
+  } else if (name === '2ème monstre') {
+    secondMonsters.value = ids;
+  } else if (name === '3ème monstre') {
+    thirdMonsters.value = ids;
   }
 
   if(leaderMonsters.value.length > 0 && secondMonsters.value.length > 0 && thirdMonsters.value.length > 0) {
     const result = await fetch(`${env.VITE_URL}/api/boxes/${guildId}/search-compositions`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
       },
       body: JSON.stringify({
+        keyword: keyword.value,
         leader_monsters: leaderMonsters.value,
         second_monsters: secondMonsters.value,
         third_monsters: thirdMonsters.value
@@ -138,8 +153,7 @@ async function getCompositions(label, values) {
     });
 
     if (result.ok) {
-      const data = await result.json();
-      console.log(data);
+      compositions.value = await result.json();
     }
   }
 }
@@ -151,6 +165,7 @@ async function getCompositions(label, values) {
       :comboboxLabels="comboboxLabels"
       :comboboxOptions="comboboxOptions"
       @updateValues="getCompositions"
+      @search="getCompositions"
     />
     <ActualComposition/>
   </main>

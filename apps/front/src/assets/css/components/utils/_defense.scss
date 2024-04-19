@@ -1,0 +1,20 @@
+@use '../../partials/functions';
+
+.defense {
+  &__member {
+    font-size: functions.rem(20);
+    line-height: normal;
+    font-weight: 700;
+    margin-bottom: 5px;
+  }
+
+  &__monsters {
+    display: flex;
+    gap: 15px;
+  }
+
+  &__image {
+    border-radius: var(--input-text-radius);
+    overflow: hidden;
+  }
+}
