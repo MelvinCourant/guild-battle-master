@@ -1,8 +1,9 @@
 <script setup>
 import '../../../assets/css/components/utils/inputs/_combobox.scss';
 import { ref } from 'vue';
+import Badge from "../Badge.vue";
 
-defineProps({
+const props = defineProps({
   label: {
     type: String,
     default: ''
@@ -24,6 +25,14 @@ document.addEventListener('click', (event) => {
     isOpen.value = false;
   }
 });
+
+function updateValues(value) {
+  if(!values.value.find((v) => v.value === value)) {
+    values.value.push(props.options.find((option) => option.value === value));
+  } else {
+    values.value = values.value.filter((v) => v.value !== value);
+  }
+}
 </script>
 
 <template>
@@ -53,9 +62,25 @@ document.addEventListener('click', (event) => {
           aria-expanded="false"
           @focus="isOpen = true"
         >
-        <svg xmlns="http://www.w3.org/2000/svg" width="9" height="6" viewBox="0 0 9 6" fill="none">
-          <path d="M0.666672 0.916668L4.83334 5.08333L9 0.916668H0.666672Z" fill="var(--white)"/>
-        </svg>
+        <div class="combobox__arrow">
+          <svg xmlns="http://www.w3.org/2000/svg" width="9" height="6" viewBox="0 0 9 6" fill="none">
+            <path d="M0.666672 0.916668L4.83334 5.08333L9 0.916668H0.666672Z" fill="var(--white)"/>
+          </svg>
+        </div>
+        <ul
+          v-if="values.length > 0"
+          class="combobox__values"
+        >
+          <Badge
+            v-for="value in values"
+            :key="value.value"
+            :monstersIds="[value.value]"
+            :name="value.text"
+            :element="value.element"
+            :canBeDeleted="true"
+            @deleteBadge="updateValues(value.value)"
+          />
+        </ul>
       </div>
       <ul
         role="listbox"
@@ -73,7 +98,7 @@ document.addEventListener('click', (event) => {
           role="option"
           :tabindex="index"
           class="combobox__option"
-          @click="isOpen = false; $emit('change', option.value)"
+          @click="isOpen = false; updateValues(option.value)"
         >
           {{ option.text }}
         </li>

@@ -68,15 +68,18 @@ const comboboxLabels = ref(['Monstre leader', '2ème monstre', '3ème monstre'])
 const comboboxOptions = ref([
   {
     value: 'light',
-    text: 'Light'
+    text: 'Light',
+    element: 'light'
   },
   {
     value: 'dark',
-    text: 'Dark'
+    text: 'Dark',
+    element: 'dark'
   },
   {
     value: 'light-dark',
-    text: 'Light/dark'
+    text: 'Light/dark',
+    element: 'dark-light'
   }
 ])
 
@@ -94,7 +97,8 @@ async function getAllMonsters() {
     data.forEach((monster) => {
       comboboxOptions.value.push({
         value: monster.unitMasterId,
-        text: monster.name
+        text: monster.name,
+        element: monster.element
       });
     });
   }
