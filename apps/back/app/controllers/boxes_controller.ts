@@ -227,7 +227,7 @@ export default class BoxesController {
       const boxes = await Box.query().where('member_id', member.id).whereRaw('monsters_assigned < quantity')
       let monsters: any[] = [];
 
-      if(filters.length > 0) {
+      if(filters) {
         monsters = await Monster
           .query()
           .whereIn(

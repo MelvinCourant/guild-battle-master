@@ -84,10 +84,33 @@ async function getAllMonsters() {
 getAllMonsters();
 
 async function getCompositions(name, values) {
+  let body;
   let ids;
 
   if(name === 'search') {
     keyword.value = values;
+    body = {
+      keyword: keyword.value
+    };
+  } else if(name === 'filters') {
+    filtersValues.value = values;
+    filters.forEach(filter => {
+      filter.fields.forEach(field => {
+        for(const key in filtersValues.value) {
+          if(field.attributes.name === key) {
+            field.attributes.checked = values[key];
+
+            if(values[key] === true) {
+              delete filtersValues.value[key];
+            }
+          }
+        }
+      });
+    });
+    body = {
+      ...body,
+      filters: filtersValues.value
+    };
   } else {
     ids = values.map((value) => value.value);
   }
@@ -100,6 +123,13 @@ async function getCompositions(name, values) {
     thirdMonsters.value = ids;
   }
 
+  body = {
+    ...body,
+    leader_monsters: leaderMonsters.value,
+    second_monsters: secondMonsters.value,
+    third_monsters: thirdMonsters.value
+  };
+
   if(leaderMonsters.value.length > 0 && secondMonsters.value.length > 0 && thirdMonsters.value.length > 0) {
     const result = await fetch(`${env.VITE_URL}/api/boxes/${guildId}/search-compositions`, {
       method: 'POST',
@@ -107,12 +137,7 @@ async function getCompositions(name, values) {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
       },
-      body: JSON.stringify({
-        keyword: keyword.value,
-        leader_monsters: leaderMonsters.value,
-        second_monsters: secondMonsters.value,
-        third_monsters: thirdMonsters.value
-      })
+      body: JSON.stringify(body)
     });
 
     if (result.ok) {
