@@ -15,7 +15,7 @@ defineProps({
   }
 });
 
-defineEmits(['search']);
+defineEmits(['search', 'updateValues']);
 </script>
 
 <template>
@@ -29,6 +29,7 @@ defineEmits(['search']);
         :key="index"
         :label="combobox"
         :options="comboboxOptions"
+        @updateValues="(values) => $emit('updateValues', comboboxLabels[index], values)"
       />
     </div>
     <Compositions/>

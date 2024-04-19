@@ -124,7 +124,14 @@ export default class MonstersController {
   }
 
   public async index({response}: HttpContext) {
-    const monsters = await Monster.all()
+    const monsters = await Monster.query()
+      .where('name', 'not like', '%Fire %')
+      .andWhere('name', 'not like', '%Water %')
+      .andWhere('name', 'not like', '%Wind %')
+      .andWhere('name', 'not like', '%Light %')
+      .andWhere('name', 'not like', '%Dark %')
+      .orderBy('name', 'asc')
+
     return response.status(200).json(monsters)
   }
 }

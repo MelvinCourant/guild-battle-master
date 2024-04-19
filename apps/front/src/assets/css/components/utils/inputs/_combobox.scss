@@ -9,16 +9,18 @@
   &__label {
     font-size: functions.rem(15);
     line-height: 0.86667;
-    margin-bottom: 5px;
   }
 
   &__entries {
+    position: relative;
     display: flex;
+    flex-direction: column;
     width: 250px;
     border: var(--border);
     border-radius: var(--input-text-radius);
     overflow: hidden;
     padding: 0 14px;
+    margin-top: 5px;
 
     &--open {
       border-radius: var(--input-text-radius) var(--input-text-radius) 0 0 !important;
@@ -34,7 +36,7 @@
   }
 
   &__input {
-    flex: 1;
+    width: 100%;
     @include mixins.resetButton(0, var(--background));
     font-weight: 500;
     padding: 10px 0;
@@ -42,6 +44,24 @@
     &:focus {
       outline: none;
     }
+  }
+
+  &__arrow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 13px;
+    right: 0;
+    height: 14px;
+    padding: 0 14px;
+  }
+
+  &__values {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px 14px 10px 0;
   }
 
   &__list {
@@ -83,6 +103,11 @@
     align-items: center;
     background: var(--background);
     cursor: pointer;
+    height: 34px;
+    padding: 10px 14px;
+    font-size: functions.rem(14);
+    font-weight: 500;
+    line-height: 1;
 
     @media screen and (max-width: 768px) {
       height: 60px;
