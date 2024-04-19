@@ -261,9 +261,18 @@ export default class BoxesController {
 
             compositions.push({
               member,
-              leaderBox,
-              secondBox,
-              thirdBox,
+              leader: {
+                unit_master_id: leaderBox.unit_master_id,
+                image: leaderBox.image,
+              },
+              second: {
+                unit_master_id: secondBox.unit_master_id,
+                image: secondBox.image,
+              },
+              third: {
+                unit_master_id: thirdBox.unit_master_id,
+                image: thirdBox.image,
+              }
             })
           }
         }
