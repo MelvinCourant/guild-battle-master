@@ -63,6 +63,7 @@ const filters = reactive([
   }
 ]);
 const filtersValues = ref({});
+const comboboxLabels = ref(['Monstre leader', '2ème monstre', '3ème monstre']);
 
 provide("fields", fields);
 provide("filters", filters);
@@ -71,7 +72,9 @@ provide('filtersValues', filtersValues);
 
 <template>
   <main class="composition">
-    <SearchComposition/>
+    <SearchComposition
+      :comboboxLabels="comboboxLabels"
+    />
     <ActualComposition/>
   </main>
 </template>
