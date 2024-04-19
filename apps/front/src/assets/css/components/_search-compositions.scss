@@ -1,0 +1,9 @@
+.search-compositions {
+  overflow-y: auto;
+  padding: 0 70px;
+  flex: 1;
+
+  @media screen and (max-width: 768px) {
+    padding: 0;
+  }
+}
