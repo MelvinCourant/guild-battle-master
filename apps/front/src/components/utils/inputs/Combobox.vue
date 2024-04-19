@@ -14,6 +14,8 @@ const props = defineProps({
   }
 });
 
+const emit = defineEmits(['updateValues']);
+
 const values = ref([]);
 const isOpen = ref(false);
 
@@ -32,6 +34,18 @@ function updateValues(value) {
   } else {
     values.value = values.value.filter((v) => v.value !== value);
   }
+
+  emit('updateValues', values.value);
+  document.querySelector('.combobox__input').value = '';
+  props.options.forEach((option) => {
+    option.display = true;
+  });
+}
+
+function search(value) {
+  props.options.forEach((option) => {
+    option.display = option.text.toLowerCase().includes(value.toLowerCase());
+  });
 }
 </script>
 
@@ -60,6 +74,8 @@ function updateValues(value) {
           aria-controls="listbox"
           aria-haspopup="listbox"
           aria-expanded="false"
+          autocomplete="off"
+          @input="search($event.target.value)"
           @focus="isOpen = true"
         >
         <div class="combobox__arrow">
@@ -97,7 +113,13 @@ function updateValues(value) {
           :key="option.value"
           role="option"
           :tabindex="index"
-          class="combobox__option"
+          :class="[
+              'combobox__option',
+              {
+                'combobox__option--selected': values.find((v) => v.value === option.value)
+              }
+          ]"
+          v-show="option.display"
           @click="isOpen = false; updateValues(option.value)"
         >
           {{ option.text }}

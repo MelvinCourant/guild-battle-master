@@ -130,7 +130,19 @@
   }
 
   &--deletable {
-    padding: 3.5px 19.5px 5.5px 7.5px;
+    &.badge--water,
+    &.badge--fire,
+    &.badge--wind,
+    &.badge--dark,
+    &.badge--light {
+      padding: 3.5px 19.5px 5.5px 7.5px;
+    }
+
+    &.badge--dark-light {
+      .badge__container {
+        padding: calc(3.5px - 1.25px) 19.5px calc(5.5px - 1.25px) 7.5px;
+      }
+    }
 
     .badge {
       &__cross {
