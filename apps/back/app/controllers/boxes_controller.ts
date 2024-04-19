@@ -207,7 +207,7 @@ export default class BoxesController {
     }
 
     const guildId = params.guildId
-    const members = await Member.query().where('guild_id', guildId).select('id')
+    const members = await Member.query().where('guild_id', guildId).select('id', 'pseudo')
     const leaderMonsters = request.input('leader_monsters')
     const secondMonsters = request.input('second_monsters')
     const thirdMonsters = request.input('third_monsters')
@@ -215,79 +215,55 @@ export default class BoxesController {
     let compositions = []
 
     for (const member of members) {
-      const boxes = await Box.query().where('member_id', member.id)
+      const boxes = await Box.query().where('member_id', member.id).whereRaw('monsters_assigned < quantity')
       const monsters = await Monster.query().whereIn(
         'unit_master_id',
         boxes.map((box) => box.monster_id)
-      )
+      ).select('unit_master_id', 'image', 'element', 'natural_grade', 'name')
 
-      for (const leader of leaderMonsters) {
-        let leaderBox
-        /*if (
-          leader === 'light' ||
-          leader === 'dark'
-        ) {
-          leaderBox = boxes.find((box) => {
-            const monster = monsters.find((monster) => monster.unit_master_id === box.monster_id)
-            return monster.element === leader
-          })
-        } else if (leader === 'light-dark') {
-          leaderBox = boxes.find((box) => {
-            const monster = monsters.find((monster) => monster.element === 'light' || monster.element === 'dark')
-            return monster.unit_master_id === box.monster_id
-          })
-        } else {*/
-          leaderBox = boxes.find(box => box.monster_id === leader)
-        /*}*/
-        if (!leaderBox || leaderBox.monsters_assigned >= leaderBox.quantity) continue
+      function findPossibilities(requestMonsters: any) {
+        let possibilities: any[] = []
 
-        for (const second of secondMonsters) {
-          if (second === leader) continue
-          let secondBox
-          /*if (
-            leader === 'light' ||
-            leader === 'dark'
-          ) {
-            secondBox = boxes.find((box) => {
-              const monster = monsters.find((monster) => monster.unit_master_id === box.monster_id)
-              return monster.element === second
-            })
-          } else if (leader === 'light-dark') {
-            secondBox = boxes.find((box) => {
-              const monster = monsters.find((monster) => monster.element === 'light' || monster.element === 'dark')
-              return monster.unit_master_id === box.monster_id
-            })
-          } else {*/
-            secondBox = boxes.find(box => box.monster_id === second)
-          /*}*/
-          if (!secondBox || secondBox.monsters_assigned >= secondBox.quantity) continue
+        if(requestMonsters.includes('light')) {
+          // @ts-ignore
+          possibilities = possibilities.concat(monsters.filter((monster) => monster.element === 'light' && monster.natural_grade === '5'))
+        } else if(requestMonsters.includes('dark')) {
+          // @ts-ignore
+          possibilities = possibilities.concat(monsters.filter((monster) => monster.element === 'dark' && monster.natural_grade === '5'))
+        } else if(requestMonsters.includes('light-dark')) {
+          // @ts-ignore
+          possibilities = possibilities.concat(monsters.filter((monster) => (monster.element === 'light' || monster.element === 'dark') && monster.natural_grade === '5'))
+        } else {
+          possibilities = possibilities.concat(monsters.filter((monster) => requestMonsters.includes(monster.unit_master_id)))
+        }
 
-          for (const third of thirdMonsters) {
-            if (third === leader || third === second) continue
-            let thirdBox
-            /*if (
-              leader === 'light' ||
-              leader === 'dark'
-            ) {
-              thirdBox = boxes.find((box) => {
-                const monster = monsters.find((monster) => monster.unit_master_id === box.monster_id)
-                return monster.element === third
-              })
-            } else if (leader === 'light-dark') {
-              secondBox = boxes.find((box) => {
-                const monster = monsters.find((monster) => monster.element === 'light' || monster.element === 'dark')
-                return monster.unit_master_id === box.monster_id
-              })
-            } else {*/
-              thirdBox = boxes.find(box => box.monster_id === third)
-            /*}*/
-            if (!thirdBox || thirdBox.monsters_assigned >= thirdBox.quantity) continue
+        return possibilities
+      }
+
+      let leaderBoxesPossibilities: any[] = findPossibilities(leaderMonsters)
+      let secondBoxesPossibilities: any[] = findPossibilities(secondMonsters)
+      let thirdBoxesPossibilities: any[] = findPossibilities(thirdMonsters)
+
+      if(
+        leaderBoxesPossibilities.length === 0 ||
+        secondBoxesPossibilities.length === 0 ||
+        thirdBoxesPossibilities.length === 0
+      ) {
+        continue
+      }
+
+      for (const leaderBox of leaderBoxesPossibilities) {
+        for (const secondBox of secondBoxesPossibilities) {
+          if (secondBox.unit_master_id === leaderBox.unit_master_id) continue
+
+          for (const thirdBox of thirdBoxesPossibilities) {
+            if (thirdBox.unit_master_id === leaderBox.unit_master_id || thirdBox.unit_master_id === secondBox.unit_master_id) continue
 
             compositions.push({
-              member_id: member.id,
-              leader: leader,
-              second: second,
-              third: third
+              member,
+              leaderBox,
+              secondBox,
+              thirdBox,
             })
           }
         }
