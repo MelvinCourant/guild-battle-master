@@ -42,6 +42,7 @@ document.addEventListener('click', (event) => {
               'combobox__entries--open': isOpen
             }
         ]"
+
       >
         <input
           role="combobox"
@@ -71,12 +72,7 @@ document.addEventListener('click', (event) => {
           :key="option.value"
           role="option"
           :tabindex="index"
-          :class="[
-                'combobox__option',
-                {
-                  'combobox__option--comboboxed': option.value === value
-                }
-            ]"
+          class="combobox__option"
           @click="isOpen = false; $emit('change', option.value)"
         >
           {{ option.text }}

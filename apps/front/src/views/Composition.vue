@@ -4,6 +4,7 @@ import {provide, reactive, ref} from "vue";
 import SearchComposition from "../components/SearchCompositions.vue";
 import ActualComposition from "../components/utils/ActualComposition.vue";
 
+const env = import.meta.env;
 const fields = [
   {
     type: "search",
@@ -64,16 +65,49 @@ const filters = reactive([
 ]);
 const filtersValues = ref({});
 const comboboxLabels = ref(['Monstre leader', '2ème monstre', '3ème monstre']);
+const comboboxOptions = ref([
+  {
+    value: 'light',
+    text: 'Light'
+  },
+  {
+    value: 'dark',
+    text: 'Dark'
+  },
+  {
+    value: 'light-dark',
+    text: 'Light/dark'
+  }
+])
 
 provide("fields", fields);
 provide("filters", filters);
 provide('filtersValues', filtersValues);
+
+async function getAllMonsters() {
+  const result = await fetch(`${env.VITE_URL}/api/monsters`);
+
+  if (result.ok) {
+    let data = await result.json();
+    data = data.sort((a, b) => a.name.localeCompare(b.name));
+
+    data.forEach((monster) => {
+      comboboxOptions.value.push({
+        value: monster.unitMasterId,
+        text: monster.name
+      });
+    });
+  }
+}
+
+getAllMonsters();
 </script>
 
 <template>
   <main class="composition">
     <SearchComposition
       :comboboxLabels="comboboxLabels"
+      :comboboxOptions="comboboxOptions"
     />
     <ActualComposition/>
   </main>
