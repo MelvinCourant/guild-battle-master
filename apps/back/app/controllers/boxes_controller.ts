@@ -207,7 +207,15 @@ export default class BoxesController {
     }
 
     const guildId = params.guildId
-    const members = await Member.query().where('guild_id', guildId).select('id', 'pseudo')
+    const keyword = request.input('keyword')
+    let members;
+
+    if(keyword) {
+      members = await Member.query().where('guild_id', guildId).andWhere('pseudo', 'LIKE', `%${keyword}%`).select('id', 'pseudo')
+    } else {
+      members = await Member.query().where('guild_id', guildId).select('id', 'pseudo')
+    }
+
     const leaderMonsters = request.input('leader_monsters')
     const secondMonsters = request.input('second_monsters')
     const thirdMonsters = request.input('third_monsters')
