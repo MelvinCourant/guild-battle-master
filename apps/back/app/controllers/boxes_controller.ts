@@ -208,6 +208,7 @@ export default class BoxesController {
 
     const guildId = params.guildId
     const keyword = request.input('keyword')
+    const filters = request.input('filters')
     let members;
 
     if(keyword) {
@@ -224,10 +225,26 @@ export default class BoxesController {
 
     for (const member of members) {
       const boxes = await Box.query().where('member_id', member.id).whereRaw('monsters_assigned < quantity')
-      const monsters = await Monster.query().whereIn(
-        'unit_master_id',
-        boxes.map((box) => box.monster_id)
-      ).select('unit_master_id', 'image', 'element', 'natural_grade', 'name')
+      let monsters: any[] = [];
+
+      if(filters.length > 0) {
+        monsters = await Monster
+          .query()
+          .whereIn(
+            'unit_master_id',
+            boxes.map((box) => box.monster_id)
+          )
+          .andWhere('is_fusion_shop', filters.is_fusion_shop)
+          .select('unit_master_id', 'image', 'element', 'natural_grade', 'name')
+      } else {
+        monsters = await Monster
+          .query()
+          .whereIn(
+            'unit_master_id',
+            boxes.map((box) => box.monster_id)
+          )
+          .select('unit_master_id', 'image', 'element', 'natural_grade', 'name')
+      }
 
       function findPossibilities(requestMonsters: any) {
         let possibilities: any[] = []

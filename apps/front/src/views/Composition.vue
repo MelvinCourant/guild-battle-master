@@ -29,43 +29,6 @@ const filters = reactive([
         }
       }
     ]
-  },
-  {
-    title: "Grade naturel",
-    fields: [
-      {
-        label: "2 étoiles",
-        attributes: {
-          type: "checkbox",
-          name: "2_stars",
-          checked: true
-        }
-      },
-      {
-        label: "3 étoiles",
-        attributes: {
-          type: "checkbox",
-          name: "3_stars",
-          checked: true
-        }
-      },
-      {
-        label: "4 étoiles",
-        attributes: {
-          type: "checkbox",
-          name: "4_stars",
-          checked: true
-        }
-      },
-      {
-        label: "5 étoiles",
-        attributes: {
-          type: "checkbox",
-          name: "5_stars",
-          checked: true
-        }
-      }
-    ]
   }
 ]);
 const filtersValues = ref({});
