@@ -1,12 +1,10 @@
 @use "../../../partials/functions";
 @use "../../../partials/mixins";
 
-.select {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin-bottom: 15px;
+.combobox {
+  &__container {
+    position: relative;
+  }
 
   &__label {
     font-size: functions.rem(15);
@@ -14,25 +12,13 @@
     margin-bottom: 5px;
   }
 
-  &__button,
-  &__option {
-    height: 34px;
-    padding: 10px 14px;
-    font-size: functions.rem(14);
-    font-weight: 500;
-    line-height: 1;
-  }
-
-
-  &__button {
+  &__entries {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    @include mixins.resetButton(var(--border), var(--background));
-    border-radius: var(--input-text-radius);
     width: 250px;
-    font-weight: 500;
-    line-height: 1;
+    border: var(--border);
+    border-radius: var(--input-text-radius);
+    overflow: hidden;
+    padding: 0 14px;
 
     &--open {
       border-radius: var(--input-text-radius) var(--input-text-radius) 0 0 !important;
@@ -47,12 +33,24 @@
     }
   }
 
+  &__input {
+    flex: 1;
+    @include mixins.resetButton(0, var(--background));
+    font-weight: 500;
+    padding: 10px 0;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
   &__list {
     display: none;
     position: absolute;
     z-index: 2;
-    top: calc(21px + 34px);
     left: 0;
+    bottom: 0;
+    transform: translateY(100%);
     width: 250px;
     max-height: 137px;
     border-left: var(--border);
@@ -99,21 +97,6 @@
 
     &--selected {
       background: var(--system);
-    }
-  }
-
-  &__trigger {
-    display: none;
-    position: fixed;
-    z-index: 9998;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    background: rgba(21, 22, 25, 0.70);
-
-    @media screen and (max-width: 768px) {
-      display: initial;
     }
   }
 }

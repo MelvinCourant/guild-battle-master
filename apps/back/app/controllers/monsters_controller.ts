@@ -25,7 +25,7 @@ export default class MonstersController {
       const monsters = pageResults.results
 
       for (const monster of monsters) {
-        const notKorean = new RegExp(/^[a-zA-Z]+$/)
+        const notKorean = new RegExp(/^[a-z A-Z]+$/)
 
         if (notKorean.test(monster.name)) {
           await insertMonsterIntoDb(monster)
@@ -121,5 +121,10 @@ export default class MonstersController {
     }
 
     return response.status(200).json(monster)
+  }
+
+  public async index({response}: HttpContext) {
+    const monsters = await Monster.all()
+    return response.status(200).json(monsters)
   }
 }

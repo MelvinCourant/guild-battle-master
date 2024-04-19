@@ -1,0 +1,11 @@
+.actual-composition {
+  width: 670px;
+  padding: 20px 50px 0;
+  border-left: var(--border);
+
+  @media screen and (max-width: 768px) {
+    width: 100%;
+    padding: 20px 20px 0;
+    border-left: none;
+  }
+}

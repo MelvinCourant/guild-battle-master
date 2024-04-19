@@ -1,0 +1,20 @@
+.composition {
+  display: flex;
+  position: relative;
+  width: 100%;
+  min-height: calc(100vh - 70px);
+  height: 100%;
+  max-height: calc(100vh - 70px);
+  overflow: auto;
+  padding: 80px 0;
+
+  @media screen and (max-width: 1199px) {
+    flex-direction: column;
+  }
+
+  @media screen and (max-width: 768px) {
+    min-height: calc(100vh - 114px);
+    max-height: calc(100vh - 114px);
+    padding: 30px 20px;
+  }
+}

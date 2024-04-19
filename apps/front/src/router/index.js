@@ -6,6 +6,7 @@ import Register from "../views/Register.vue";
 import Logout from "../views/Logout.vue";
 import UploadJson from "../views/UploadJson.vue";
 import Member from "../views/Member.vue";
+import Composition from "../views/Composition.vue";
 
 const router = createRouter(
 {
@@ -50,6 +51,14 @@ const router = createRouter(
         {
             path: '/member/:id',
             component: Member
+        },
+        {
+            path: '/composition',
+            component: Composition
+        },
+        {
+            path: '/composition/:id',
+            component: Composition
         }
     ]
 });

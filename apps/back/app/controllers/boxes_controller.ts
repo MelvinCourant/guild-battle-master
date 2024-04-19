@@ -194,4 +194,99 @@ export default class BoxesController {
 
     return response.status(200).json(monstersWithQuantity)
   }
+
+  async compositions({ auth, params, request, response }: HttpContext) {
+    const user = await auth.authenticate()
+
+    if(
+      user.role !== 'admin' &&
+      user.role !== 'leader' &&
+      user.role !== 'moderator'
+    ) {
+      return response.forbidden()
+    }
+
+    const guildId = params.guildId
+    const keyword = request.input('keyword')
+    let members;
+
+    if(keyword) {
+      members = await Member.query().where('guild_id', guildId).andWhere('pseudo', 'LIKE', `%${keyword}%`).select('id', 'pseudo')
+    } else {
+      members = await Member.query().where('guild_id', guildId).select('id', 'pseudo')
+    }
+
+    const leaderMonsters = request.input('leader_monsters')
+    const secondMonsters = request.input('second_monsters')
+    const thirdMonsters = request.input('third_monsters')
+
+    let compositions = []
+
+    for (const member of members) {
+      const boxes = await Box.query().where('member_id', member.id).whereRaw('monsters_assigned < quantity')
+      const monsters = await Monster.query().whereIn(
+        'unit_master_id',
+        boxes.map((box) => box.monster_id)
+      ).select('unit_master_id', 'image', 'element', 'natural_grade', 'name')
+
+      function findPossibilities(requestMonsters: any) {
+        let possibilities: any[] = []
+
+        if(requestMonsters.includes('light')) {
+          // @ts-ignore
+          possibilities = possibilities.concat(monsters.filter((monster) => monster.element === 'light' && monster.natural_grade === '5'))
+        } else if(requestMonsters.includes('dark')) {
+          // @ts-ignore
+          possibilities = possibilities.concat(monsters.filter((monster) => monster.element === 'dark' && monster.natural_grade === '5'))
+        } else if(requestMonsters.includes('light-dark')) {
+          // @ts-ignore
+          possibilities = possibilities.concat(monsters.filter((monster) => (monster.element === 'light' || monster.element === 'dark') && monster.natural_grade === '5'))
+        } else {
+          possibilities = possibilities.concat(monsters.filter((monster) => requestMonsters.includes(monster.unit_master_id)))
+        }
+
+        return possibilities
+      }
+
+      let leaderBoxesPossibilities: any[] = findPossibilities(leaderMonsters)
+      let secondBoxesPossibilities: any[] = findPossibilities(secondMonsters)
+      let thirdBoxesPossibilities: any[] = findPossibilities(thirdMonsters)
+
+      if(
+        leaderBoxesPossibilities.length === 0 ||
+        secondBoxesPossibilities.length === 0 ||
+        thirdBoxesPossibilities.length === 0
+      ) {
+        continue
+      }
+
+      for (const leaderBox of leaderBoxesPossibilities) {
+        for (const secondBox of secondBoxesPossibilities) {
+          if (secondBox.unit_master_id === leaderBox.unit_master_id) continue
+
+          for (const thirdBox of thirdBoxesPossibilities) {
+            if (thirdBox.unit_master_id === leaderBox.unit_master_id || thirdBox.unit_master_id === secondBox.unit_master_id) continue
+
+            compositions.push({
+              member,
+              leader: {
+                unit_master_id: leaderBox.unit_master_id,
+                image: leaderBox.image,
+              },
+              second: {
+                unit_master_id: secondBox.unit_master_id,
+                image: secondBox.image,
+              },
+              third: {
+                unit_master_id: thirdBox.unit_master_id,
+                image: thirdBox.image,
+              }
+            })
+          }
+        }
+      }
+    }
+
+    return response.status(200).json(compositions)
+  }
 }
