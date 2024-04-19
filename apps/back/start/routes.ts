@@ -114,6 +114,10 @@ router
     router.get('/:id', async (data) => {
       return monstersController.show(data)
     })
+
+    router.get('/', async (data) => {
+      return monstersController.index(data)
+    })
   })
   .prefix('api/monsters')
 

@@ -115,4 +115,9 @@ export default class MonstersController {
 
     return response.status(200).json(monster)
   }
+
+  public async index({response}: HttpContext) {
+    const monsters = await Monster.all()
+    return response.status(200).json(monsters)
+  }
 }
