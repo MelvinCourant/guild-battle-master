@@ -16,6 +16,10 @@ const props = defineProps({
   element: {
     type: String,
     required: true
+  },
+  canBeDeleted: {
+    type: Boolean,
+    default: false
   }
 });
 const monstersStore = useMonstersStore();
@@ -68,7 +72,8 @@ getMonstersImages();
   <li
     :class="[
       'badge',
-      `badge--${element}`
+      `badge--${element}`,
+      {'badge--deletable': canBeDeleted},
     ]"
     @mouseover="tooltipIsDisplayed = true"
     @mouseleave="tooltipIsDisplayed = false"
@@ -79,8 +84,20 @@ getMonstersImages();
     >
       <div class="badge__container">
         <span class="badge__name">
-        {{ name }}
-      </span>
+          {{ name }}
+        </span>
+        <svg
+          class="badge__cross"
+          v-if="canBeDeleted"
+          xmlns="http://www.w3.org/2000/svg" width="8" height="7" viewBox="0 0 8 7" fill="none">
+          <path d="M7.5 0.705L6.795 0L4 2.795L1.205 0L0.5 0.705L3.295 3.5L0.5 6.295L1.205 7L4 4.205L6.795 7L7.5 6.295L4.705 3.5L7.5 0.705Z" fill="url(#paint0_linear_790_3407)"/>
+          <defs>
+            <linearGradient id="paint0_linear_790_3407" x1="16" y1="3.5" x2="-71" y2="3.5" gradientUnits="userSpaceOnUse">
+              <stop stop-color="white"/>
+              <stop offset="1" stop-color="#7C00DE"/>
+            </linearGradient>
+          </defs>
+        </svg>
       </div>
     </div>
     <span
@@ -89,6 +106,13 @@ getMonstersImages();
     >
       {{ name }}
     </span>
+    <svg
+      class="badge__cross"
+      v-if="element !== 'dark-light' && canBeDeleted"
+      xmlns="http://www.w3.org/2000/svg" width="8" height="7" viewBox="0 0 8 7" fill="none"
+    >
+      <path d="M7.5 0.705L6.795 0L4 2.795L1.205 0L0.5 0.705L3.295 3.5L0.5 6.295L1.205 7L4 4.205L6.795 7L7.5 6.295L4.705 3.5L7.5 0.705Z" fill="white"/>
+    </svg>
     <Tooltip
         v-show="
           monstersImages &&

@@ -18,8 +18,16 @@
     border: 1px solid var(--water);
     background: var(--water-transparent);
 
-    .badge__name {
-      color: var(--water);
+    .badge {
+      &__name {
+        color: var(--water);
+      }
+
+      &__cross {
+        path {
+          fill: var(--water);
+        }
+      }
     }
   }
 
@@ -27,8 +35,16 @@
     border: 1px solid var(--fire);
     background: var(--fire-transparent);
 
-    .badge__name {
-      color: var(--fire);
+    .badge {
+      &__name {
+        color: var(--fire);
+      }
+
+      &__cross {
+        path {
+          fill: var(--fire);
+        }
+      }
     }
   }
 
@@ -36,8 +52,16 @@
     border: 1px solid var(--wind);
     background: var(--wind-transparent);
 
-    .badge__name {
-      color: var(--wind);
+    .badge {
+      &__name {
+        color: var(--wind);
+      }
+
+      &__cross {
+        path {
+          fill: var(--wind);
+        }
+      }
     }
   }
 
@@ -45,8 +69,16 @@
     border: 1px solid var(--dark);
     background: var(--dark-transparent);
 
-    .badge__name {
-      color: var(--dark);
+    .badge {
+      &__name {
+        color: var(--dark);
+      }
+
+      &__cross {
+        path {
+          fill: var(--dark);
+        }
+      }
     }
   }
 
@@ -54,8 +86,16 @@
     border: 1px solid var(--white);
     background: var(--light-transparent);
 
-    .badge__name {
-      color: var(--white);
+    .badge {
+      &__name {
+        color: var(--white);
+      }
+
+      &__cross {
+        path {
+          fill: var(--white);
+        }
+      }
     }
   }
 
@@ -84,6 +124,19 @@
         -webkit-text-fill-color: transparent;
         line-height: normal;
         margin: -4.25px 0;
+      }
+    }
+  }
+
+  &--deletable {
+    padding: 3.5px 19.5px 5.5px 7.5px;
+
+    .badge {
+      &__cross {
+        position: absolute;
+        top: 50%;
+        right: 7.5px;
+        transform: translateY(-50%);
       }
     }
   }
