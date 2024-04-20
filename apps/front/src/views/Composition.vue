@@ -2,7 +2,7 @@
 import '../assets/css/views/_composition.scss';
 import {provide, reactive, ref} from "vue";
 import SearchComposition from "../components/SearchCompositions.vue";
-import ActualComposition from "../components/utils/ActualComposition.vue";
+import ActualComposition from "../components/ActualComposition.vue";
 import { useUserStore } from "../stores/user.js";
 
 const env = import.meta.env;

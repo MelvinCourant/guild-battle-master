@@ -1,3 +1,5 @@
+@use '../partials/functions';
+
 .actual-composition {
   width: 670px;
   padding: 20px 50px 0;
@@ -7,5 +9,40 @@
     width: 100%;
     padding: 20px 20px 0;
     border-left: none;
+  }
+
+  &__form {
+    .select {
+      margin-bottom: 5px;
+    }
+
+    .input-string {
+      width: 100%;
+
+      &__input {
+        font-size: functions.rem(32);
+        font-weight: 700;
+        line-height: normal;
+        border: none;
+        padding: 0;
+        height: 44px;
+      }
+    }
+  }
+
+  &__defenses {
+    margin-top: 30px;
+
+    .input-string {
+      width: 100%;
+
+      &__input {
+        width: 100%;
+      }
+    }
+
+    .compositions {
+      margin-top: 15px;
+    }
   }
 }

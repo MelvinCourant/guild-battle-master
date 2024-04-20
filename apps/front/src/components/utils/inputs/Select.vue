@@ -36,6 +36,7 @@ document.addEventListener('click', (event) => {
     <label
         for="select"
         class="select__label"
+        v-if="label"
     >
       {{ label }}
     </label>
