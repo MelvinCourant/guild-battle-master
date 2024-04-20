@@ -29,26 +29,26 @@ const filters = reactive([
         }
       }
     ]
-  }
+  },
 ]);
 const filtersValues = ref({});
 const comboboxLabels = ref(['Monstre leader', '2ème monstre', '3ème monstre']);
 const comboboxOptions = ref([
   {
     value: 'light',
-    text: 'Light',
+    text: 'Light 5*',
     element: 'light',
     display: true
   },
   {
     value: 'dark',
-    text: 'Dark',
+    text: 'Dark 5*',
     element: 'dark',
     display: true
   },
   {
     value: 'light-dark',
-    text: 'Light/dark',
+    text: 'Light/dark 5*',
     element: 'dark-light',
     display: true
   }
@@ -89,9 +89,6 @@ async function getCompositions(name, values) {
 
   if(name === 'search') {
     keyword.value = values;
-    body = {
-      keyword: keyword.value
-    };
   } else if(name === 'filters') {
     filtersValues.value = values;
     filters.forEach(filter => {
@@ -107,10 +104,6 @@ async function getCompositions(name, values) {
         }
       });
     });
-    body = {
-      ...body,
-      filters: filtersValues.value
-    };
   } else {
     ids = values.map((value) => value.value);
   }
@@ -121,6 +114,19 @@ async function getCompositions(name, values) {
     secondMonsters.value = ids;
   } else if (name === '3ème monstre') {
     thirdMonsters.value = ids;
+  }
+
+  if(keyword.value.length > 0) {
+    body = {
+      keyword: keyword.value,
+      ...filtersValues.value
+    };
+  }
+
+  if(Object.keys(filtersValues.value).length > 0){
+    body = {
+      filters: filtersValues.value
+    };
   }
 
   body = {

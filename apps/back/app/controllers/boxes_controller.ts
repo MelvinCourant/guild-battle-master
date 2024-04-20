@@ -250,13 +250,10 @@ export default class BoxesController {
         let possibilities: any[] = []
 
         if(requestMonsters.includes('light')) {
-          // @ts-ignore
           possibilities = possibilities.concat(monsters.filter((monster) => monster.element === 'light' && monster.natural_grade === '5'))
         } else if(requestMonsters.includes('dark')) {
-          // @ts-ignore
           possibilities = possibilities.concat(monsters.filter((monster) => monster.element === 'dark' && monster.natural_grade === '5'))
         } else if(requestMonsters.includes('light-dark')) {
-          // @ts-ignore
           possibilities = possibilities.concat(monsters.filter((monster) => (monster.element === 'light' || monster.element === 'dark') && monster.natural_grade === '5'))
         } else {
           possibilities = possibilities.concat(monsters.filter((monster) => requestMonsters.includes(monster.unit_master_id)))
