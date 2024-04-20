@@ -150,5 +150,9 @@ router
     router.delete('/:id', async (data) => {
       return compositionsController.destroy(data)
     })
+
+    router.post('/:guildId/search', async (data) => {
+      return compositionsController.search(data)
+    })
   })
   .prefix('api/compositions')
