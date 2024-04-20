@@ -1,3 +1,5 @@
+@use '../partials/functions';
+
 .guild-compositions {
   flex: 1;
   display: flex;
@@ -11,5 +13,14 @@
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+  }
+
+  &__empty {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: functions.rem(20);
+    color: var(--text-grey);
   }
 }

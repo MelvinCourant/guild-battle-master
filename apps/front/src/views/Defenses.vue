@@ -86,5 +86,14 @@ getAllCompositions();
       :actions="actions"
       :loading="loading"
     />
+    <router-link
+        to="/composition"
+        title="Ajouter une composition"
+        class="defenses__add-composition"
+    >
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M17.8235 10.2605H10.2605V17.8235H7.73948V10.2605H0.176453V7.7395H7.73948V0.176472H10.2605V7.7395H17.8235V10.2605Z" fill="var(--white)"/>
+      </svg>
+    </router-link>
   </main>
 </template>

@@ -32,6 +32,15 @@ defineProps({
           :composition="composition"
           :actions="actions"
       />
+      <p
+          class="guild-compositions__empty"
+          v-if="
+          compositions.length === 0 &&
+          !loading
+        "
+      >
+        Aucune composition disponible.
+      </p>
       <Loader v-if="loading" />
     </div>
   </div>
