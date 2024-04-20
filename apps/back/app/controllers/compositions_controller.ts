@@ -102,22 +102,26 @@ export default class CompositionsController {
       for (const defense of defenses) {
         const leaderMonster = await Monster.query()
           .where('unit_master_id', defense.leader_monster)
+          .select('unit_master_id', 'image')
           .firstOrFail()
         const secondMonster = await Monster.query()
           .where('unit_master_id', defense.second_monster)
+          .select('unit_master_id', 'image')
           .firstOrFail()
         const thirdMonster = await Monster.query()
           .where('unit_master_id', defense.third_monster)
+          .select('unit_master_id', 'image')
           .firstOrFail()
         const member = await Member.query()
           .where('id', defense.member_id)
+          .select('id', 'pseudo')
           .firstOrFail()
 
         defensesData.push({
           id: defense.id,
-          leaderMonster: leaderMonster,
-          secondMonster: secondMonster,
-          thirdMonster: thirdMonster,
+          leader: leaderMonster,
+          second: secondMonster,
+          third: thirdMonster,
           member: member
         })
       }

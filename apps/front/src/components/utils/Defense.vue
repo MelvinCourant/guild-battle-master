@@ -4,7 +4,7 @@ import '../../assets/css/components/utils/_defense.scss';
 defineProps({
   member: {
     type: String,
-    required: true
+    required: ''
   },
   leader: {
     type: Object,
@@ -25,7 +25,12 @@ const env = import.meta.env;
 
 <template>
   <div class="defense">
-    <div class="defense__member">{{ member }}</div>
+    <div
+        class="defense__member"
+        v-if="member"
+    >
+      {{ member }}
+    </div>
     <ul class="defense__monsters">
       <li class="defense__leader">
         <img
