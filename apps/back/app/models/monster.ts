@@ -20,5 +20,8 @@ export default class Monster extends BaseModel {
   declare image: string
 
   @column()
+  declare is_fully_awakened: boolean
+
+  @column()
   declare is_fusion_shop: boolean
 }

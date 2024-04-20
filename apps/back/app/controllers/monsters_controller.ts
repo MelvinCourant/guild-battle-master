@@ -26,8 +26,27 @@ export default class MonstersController {
 
       for (const monster of monsters) {
         const notKorean = new RegExp(/^[a-z A-Z]+$/)
+        const monstersNotReleased = [
+          'unit_icon_0019_0_3.png',
+          'unit_icon_0019_0_4.png',
+          'unit_icon_0019_1_3.png',
+          'unit_icon_0019_1_4.png',
+          'unit_icon_0019_2_3.png',
+          'unit_icon_0019_2_4.png',
+          'unit_icon_0019_3_3.png',
+          'unit_icon_0019_3_4.png',
+          'unit_icon_0019_4_3.png',
+          'unit_icon_0019_4_4.png'
+        ]
 
-        if (notKorean.test(monster.name)) {
+        if (
+          notKorean.test(monster.name) &&
+          !monstersNotReleased.includes(monster.image_filename) &&
+          (
+            monster.transforms_to > monster.id ||
+            !monster.transforms_to
+          )
+        ) {
           await insertMonsterIntoDb(monster)
         }
       }
@@ -36,8 +55,29 @@ export default class MonstersController {
     async function insertMonsterIntoDb(monster: any) {
       let monsterName: string = monster.name
       const monsterElement: string = monster.element.toLowerCase()
+      const collabMonsters = [
+        'RYU',
+        'CHUN-LI',
+        'DHALSIM',
+        'M. BISON',
+        'Madeleine Cookie',
+        'Espresso Cookie',
+        'Hollyberry Cookie',
+        'Pure Vanilla Cookie',
+        'Eivor',
+        'Kassandra',
+        'Ezio',
+        'Bayek',
+        'Geralt',
+        'Ciri',
+        'Yennefer',
+        'Triss'
+      ]
 
-      if(monster.awakens_to) {
+      if (
+        monster.awakens_to ||
+        collabMonsters.includes(monsterName)
+      ) {
         monsterName = `${monster.element} ${monsterName}`
       }
 
@@ -58,6 +98,7 @@ export default class MonstersController {
       const monsterExists = await Monster.findBy('unit_master_id', monster.com2us_id)
 
       if (!monsterExists) {
+        let isFullyAwakened = false
         let isFusionOrShop = false
 
         const fusionOrShopMonsters = [
@@ -85,6 +126,16 @@ export default class MonstersController {
           'wind-valkyrja'
         ]
 
+        if(
+          (
+            monster.awakens_from &&
+            !monster.awakens_to
+          ) ||
+          collabMonsters.includes(monster.name)
+        ) {
+          isFullyAwakened = true
+        }
+
         if (fusionOrShopMonsters.some(slug => monster.bestiary_slug.includes(slug))) {
           isFusionOrShop = true;
         }
@@ -95,6 +146,7 @@ export default class MonstersController {
           element: monsterElement,
           natural_grade: monster.natural_stars - 1, // -1 to fix natural_grade is 1 star higher than it should be
           image: `monsters/${monsterFileName}`,
+          is_fully_awakened: isFullyAwakened,
           is_fusion_shop: isFusionOrShop
         }
         // @ts-ignore
@@ -125,11 +177,7 @@ export default class MonstersController {
 
   public async index({response}: HttpContext) {
     const monsters = await Monster.query()
-      .where('name', 'not like', '%Fire %')
-      .andWhere('name', 'not like', '%Water %')
-      .andWhere('name', 'not like', '%Wind %')
-      .andWhere('name', 'not like', '%Light %')
-      .andWhere('name', 'not like', '%Dark %')
+      .where('is_fully_awakened', true)
       .orderBy('name', 'asc')
 
     return response.status(200).json(monsters)
