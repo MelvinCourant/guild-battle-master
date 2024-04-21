@@ -1,6 +1,27 @@
 @use '../../partials/functions';
 
 .defense {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+
+  &__add,
+  &__remove {
+    content: '';
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(21, 22, 25, 0.70);
+  }
+
   &__member {
     font-size: functions.rem(20);
     line-height: normal;

@@ -1,12 +1,21 @@
 @use '../partials/functions';
 
 .actual-composition {
-  width: 670px;
+  max-width: 671px;
   padding: 20px 50px 0;
+  margin: 0 70px 80px 0;
   border-left: var(--border);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+
+  @media screen and (max-width: 1199px) {
+    width: 100%;
+    max-width: initial;
+    margin-right: 0;
+  }
 
   @media screen and (max-width: 768px) {
-    width: 100%;
     padding: 20px 20px 0;
     border-left: none;
   }
@@ -31,7 +40,10 @@
   }
 
   &__defenses {
+    display: flex;
+    flex-direction: column;
     margin-top: 30px;
+    flex: 1;
 
     .input-string {
       width: 100%;
@@ -42,7 +54,18 @@
     }
 
     .compositions {
+      flex: 1;
       margin-top: 15px;
+      padding-bottom: 0;
+      overflow-y: auto;
+      max-height: calc(100vh - 70px - 160px - 20px - 34px - 5px - 44px - 30px - 34px - 15px - 30px - 34px);
     }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    width: 100%;
   }
 }

@@ -1,7 +1,7 @@
 <script setup>
 import '../../assets/css/components/utils/_defense.scss';
 
-defineProps({
+const props = defineProps({
   member: {
     type: String,
     required: ''
@@ -20,16 +20,40 @@ defineProps({
   }
 })
 
+const emits = defineEmits(['defenseHover', 'defenseLeave', 'clickOnDefense']);
+
 const env = import.meta.env;
+
+function defenseHover(event) {
+  emits('defenseHover', event.target);
+}
+
+function defenseLeave(event) {
+  emits('defenseLeave', event.target);
+}
+
+function clickOnDefense() {
+  emits('clickOnDefense', {
+    member: props.member,
+    leader: props.leader,
+    second: props.second,
+    third: props.third
+  });
+}
 </script>
 
 <template>
-  <div class="defense">
+  <div
+      class="defense"
+      @mouseenter="defenseHover"
+      @mouseleave="defenseLeave"
+      @click="clickOnDefense"
+  >
     <div
         class="defense__member"
         v-if="member"
     >
-      {{ member }}
+      {{ member.pseudo }}
     </div>
     <ul class="defense__monsters">
       <li class="defense__leader">

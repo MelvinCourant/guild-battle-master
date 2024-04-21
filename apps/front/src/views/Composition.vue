@@ -58,11 +58,11 @@ const secondMonsters = ref([]);
 const thirdMonsters = ref([]);
 const keyword = ref('');
 const compositions = ref([]);
+const actualComposition = ref([]);
 
 provide("fields", fields);
 provide("filters", filters);
 provide('filtersValues', filtersValues);
-provide('compositions', compositions);
 
 async function getAllMonsters() {
   const result = await fetch(`${env.VITE_URL}/api/monsters`);
@@ -151,16 +151,31 @@ async function getCompositions(name, values) {
     }
   }
 }
+
+function addDefense(index, defense) {
+  actualComposition.value.push(defense);
+  compositions.value.splice(index, 1);
+}
+
+function removeDefense(index, defense) {
+  compositions.value.push(defense);
+  actualComposition.value.splice(index, 1);
+}
 </script>
 
 <template>
   <main class="composition">
     <SearchComposition
+      :compositions="compositions"
       :comboboxLabels="comboboxLabels"
       :comboboxOptions="comboboxOptions"
       @updateValues="getCompositions"
       @search="getCompositions"
+      @clickOnDefense="addDefense"
     />
-    <ActualComposition/>
+    <ActualComposition
+      :compositions="actualComposition"
+      @clickOnDefense="removeDefense"
+    />
   </main>
 </template>
