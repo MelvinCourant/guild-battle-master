@@ -27,7 +27,7 @@ defineEmits(['close', 'click']);
     <div class="dialog__content">
       <div
           class="dialog__image"
-          v-if="dialog.image.src"
+          v-if="dialog.image"
       >
         <Avatar
             :src="dialog.image.src"

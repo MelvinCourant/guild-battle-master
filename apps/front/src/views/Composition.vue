@@ -3,6 +3,7 @@ import '../assets/css/views/_composition.scss';
 import {provide, reactive, ref} from "vue";
 import SearchComposition from "../components/SearchCompositions.vue";
 import ActualComposition from "../components/ActualComposition.vue";
+import Dialog from "../components/utils/Dialog.vue";
 import { useUserStore } from "../stores/user.js";
 import { useRouter } from "vue-router";
 
@@ -63,6 +64,26 @@ const compositions = ref([]);
 const compositionGrade = ref('5');
 const compositionName = ref('');
 const actualComposition = ref([]);
+const dialog = ref({
+  content: {
+    title: 'Est-vous sûr de vouloir annuler ?',
+    description: 'Les modifications non sauvegardées seront perdues.',
+  },
+  fields: [
+    {
+      type: 'button',
+      name: 'back',
+      value: 'Revenir',
+    },
+    {
+      type: 'button',
+      name: 'cancel',
+      value: 'Annuler',
+      style: 'danger'
+    }
+  ]
+});
+const dialogIsOpen = ref(false);
 
 provide("fields", fields);
 provide("filters", filters);
@@ -209,6 +230,14 @@ async function saveComposition() {
     await router.push('/defenses');
   }
 }
+
+function dialogResponse(name) {
+  if(name === 'back') {
+    dialogIsOpen.value = false;
+  } else {
+    router.push('/defenses');
+  }
+}
 </script>
 
 <template>
@@ -227,6 +256,13 @@ async function saveComposition() {
       @updateCompositionGrade="updateCompositionGrade"
       @updateCompositionName="updateCompositionName"
       @saveComposition="saveComposition"
+      @cancel="dialogIsOpen = true"
     />
   </main>
+  <Dialog
+    :dialog="dialog"
+    :isOpen="dialogIsOpen"
+    @click="dialogResponse"
+    @close="dialogIsOpen = false"
+  />
 </template>

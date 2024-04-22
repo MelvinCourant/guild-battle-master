@@ -12,7 +12,7 @@ const props = defineProps({
   },
 })
 
-const emits = defineEmits(['clickOnDefense', 'updateCompositionGrade', 'updateCompositionName', 'saveComposition']);
+const emits = defineEmits(['clickOnDefense', 'updateCompositionGrade', 'updateCompositionName', 'saveComposition', 'cancel']);
 
 const actualCompositions = ref(props.compositions);
 
@@ -78,7 +78,7 @@ function defenseLeave(event) {
 
 function actionButton(name) {
   if(name === 'cancel') {
-    actualCompositions.value = props.compositions;
+    emits('cancel')
   }
 }
 </script>
