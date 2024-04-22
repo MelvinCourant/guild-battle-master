@@ -129,6 +129,21 @@ async function getCompositions(name, values) {
         }
       });
     });
+  } else if(name === 'defense-selected') {
+    let defenses = [];
+
+    actualComposition.value.forEach((composition) => {
+      defenses.push({
+        member: composition.member.id,
+        leader: composition.leader.unit_master_id,
+        second: composition.second.unit_master_id,
+        third: composition.third.unit_master_id
+      });
+    });
+
+    body = {
+      defenses_selected: defenses
+    };
   } else {
     ids = values.map((value) => value.value);
   }
@@ -143,6 +158,7 @@ async function getCompositions(name, values) {
 
   if(keyword.value.length > 0) {
     body = {
+      ...body,
       keyword: keyword.value,
       ...filtersValues.value
     };
@@ -150,6 +166,7 @@ async function getCompositions(name, values) {
 
   if(Object.keys(filtersValues.value).length > 0){
     body = {
+      ...body,
       filters: filtersValues.value
     };
   }
@@ -177,14 +194,14 @@ async function getCompositions(name, values) {
   }
 }
 
-function addDefense(index, defense) {
+function addDefense(defense) {
   actualComposition.value.push(defense);
-  compositions.value.splice(index, 1);
+  getCompositions('defense-selected');
 }
 
-function removeDefense(index, defense) {
-  compositions.value.push(defense);
+function removeDefense(defense) {
   actualComposition.value.splice(index, 1);
+  getCompositions('defense-selected');
 }
 
 function updateCompositionGrade(value) {

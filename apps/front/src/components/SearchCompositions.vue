@@ -66,7 +66,7 @@ function defenseLeave(event) {
     <Compositions
         @defenseHover="defenseHover"
         @defenseLeave="defenseLeave"
-        @clickOnDefense="(index, defense) => $emit('clickOnDefense', index, defense)"
+        @clickOnDefense="$emit('clickOnDefense', $event)"
     />
   </div>
 </template>
