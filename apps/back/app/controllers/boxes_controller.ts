@@ -220,11 +220,48 @@ export default class BoxesController {
     const leaderMonsters = request.input('leader_monsters')
     const secondMonsters = request.input('second_monsters')
     const thirdMonsters = request.input('third_monsters')
+    const defensesSelected = request.input('defenses_selected')
 
     let compositions = []
 
+    async function getBoxes(memberId: any, defensesSelected: any = []) {
+      let boxes = await Box.query().where('member_id', memberId).whereRaw('monsters_assigned < quantity').select('monster_id', 'quantity', 'monsters_assigned')
+
+      if(boxes.length === 0) {
+        return boxes
+      }
+
+      let memberDefensesSelected: any[] = [];
+
+      defensesSelected.forEach((defense: any) => {
+        if(defense.member === memberId) {
+          memberDefensesSelected.push(defense)
+        }
+      })
+
+      if(memberDefensesSelected.length > 0) {
+        for (let defense of memberDefensesSelected) {
+          for (let box of boxes) {
+            if (
+              box.monster_id === defense.leader ||
+              box.monster_id === defense.second ||
+              box.monster_id === defense.third
+            ) {
+              box.monsters_assigned += 1;
+              if (box.monsters_assigned >= box.quantity) {
+                boxes = boxes.filter(b => b !== box);
+              }
+            }
+          }
+        }
+      }
+
+      return boxes
+    }
+
     for (const member of members) {
-      const boxes = await Box.query().where('member_id', member.id).whereRaw('monsters_assigned < quantity')
+      const boxes = await getBoxes(member.id, defensesSelected)
+
       let monsters: any[] = [];
 
       if(filters) {
