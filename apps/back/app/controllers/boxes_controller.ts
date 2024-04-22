@@ -221,6 +221,7 @@ export default class BoxesController {
     const secondMonsters = request.input('second_monsters')
     const thirdMonsters = request.input('third_monsters')
     const defensesSelected = request.input('defenses_selected')
+    const grade = request.input('grade')
 
     let compositions = []
 
@@ -263,40 +264,45 @@ export default class BoxesController {
       const boxes = await getBoxes(member.id, defensesSelected)
 
       let monsters: any[] = [];
+      let query = Monster.query()
+        .whereIn(
+          'unit_master_id',
+          boxes.map((box) => box.monster_id)
+        )
 
       if(filters) {
-        monsters = await Monster
-          .query()
-          .whereIn(
-            'unit_master_id',
-            boxes.map((box) => box.monster_id)
-          )
-          .andWhere('is_fusion_shop', filters.is_fusion_shop)
-          .select('unit_master_id', 'image', 'element', 'natural_grade', 'name')
-      } else {
-        monsters = await Monster
-          .query()
-          .whereIn(
-            'unit_master_id',
-            boxes.map((box) => box.monster_id)
-          )
-          .select('unit_master_id', 'image', 'element', 'natural_grade', 'name')
+        query = query.andWhere('is_fusion_shop', filters.is_fusion_shop)
       }
+
+      if(grade === '5') {
+        query = query.select('unit_master_id', 'image', 'element', 'natural_grade', 'name')
+      } else {
+        query = query.select('unit_master_id', 'image', 'element', 'natural_grade', 'name')
+          .whereRaw('natural_grade < 4')
+      }
+
+      monsters = await query
 
       function findPossibilities(requestMonsters: any) {
         let possibilities: any[] = []
 
-        requestMonsters.forEach((monster: any) => {
-          if(monster === 'light') {
-            possibilities = possibilities.concat(monsters.filter((monster) => monster.element === 'light' && monster.natural_grade === '5'))
-          } else if(monster === 'dark') {
-            possibilities = possibilities.concat(monsters.filter((monster) => monster.element === 'dark' && monster.natural_grade === '5'))
-          } else if(monster === 'light-dark') {
-            possibilities = possibilities.concat(monsters.filter((monster) => (monster.element === 'light' || monster.element === 'dark') && monster.natural_grade === '5'))
-          } else {
+        if(grade === '5') {
+          requestMonsters.forEach((monster: any) => {
+            if(monster === 'light') {
+              possibilities = possibilities.concat(monsters.filter((monster) => monster.element === 'light' && monster.natural_grade === '5'))
+            } else if(monster === 'dark') {
+              possibilities = possibilities.concat(monsters.filter((monster) => monster.element === 'dark' && monster.natural_grade === '5'))
+            } else if(monster === 'light-dark') {
+              possibilities = possibilities.concat(monsters.filter((monster) => (monster.element === 'light' || monster.element === 'dark') && monster.natural_grade === '5'))
+            } else {
+              possibilities = possibilities.concat(monsters.filter((m) => m.unit_master_id === monster))
+            }
+          })
+        } else {
+          requestMonsters.forEach((monster: any) => {
             possibilities = possibilities.concat(monsters.filter((m) => m.unit_master_id === monster))
-          }
-        })
+          })
+        }
 
         return possibilities
       }
