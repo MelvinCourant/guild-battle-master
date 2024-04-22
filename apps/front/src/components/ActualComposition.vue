@@ -81,6 +81,11 @@ function actionButton(name) {
     emits('cancel')
   }
 }
+
+function updateCompositionGrade(value) {
+  optionValue.value = value;
+  emits('updateCompositionGrade', value)
+}
 </script>
 
 <template>
@@ -92,7 +97,7 @@ function actionButton(name) {
       <Select
           :options="options"
           :value="optionValue"
-          @change="$emit('updateCompositionGrade', $event)"
+          @change="updateCompositionGrade"
       />
       <Field
         :attributes="nameField"
@@ -104,7 +109,7 @@ function actionButton(name) {
       <Compositions
           @defenseHover="defenseHover"
           @defenseLeave="defenseLeave"
-          @clickOnDefense="$emit('clickOnDefense', $event)"
+          @clickOnDefense="(index, defense) => $emit('clickOnDefense', index, defense)"
       />
     </div>
     <div class="actual-composition__actions">

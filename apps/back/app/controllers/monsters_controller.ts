@@ -175,10 +175,20 @@ export default class MonstersController {
     return response.status(200).json(monster)
   }
 
-  public async index({response}: HttpContext) {
-    const monsters = await Monster.query()
-      .where('is_fully_awakened', true)
-      .orderBy('name', 'asc')
+  public async index({request, response}: HttpContext) {
+    let monsters;
+    const grade = request.input('grade')
+
+    if (grade === 'all') {
+      monsters = await Monster.query()
+        .where('is_fully_awakened', true)
+        .orderBy('name', 'asc')
+    } else if(grade === 4) {
+      monsters = await Monster.query()
+        .where('is_fully_awakened', true)
+        .whereRaw('natural_grade < ?', [grade])
+        .orderBy('name', 'asc')
+    }
 
     return response.status(200).json(monsters)
   }

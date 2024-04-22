@@ -19,7 +19,7 @@ const compositions = ref(inject('compositions'));
       :third="composition.third"
       @defenseHover="$emit('defenseHover', $event)"
       @defenseLeave="$emit('defenseLeave', $event)"
-      @clickOnDefense="$emit('clickOnDefense', $event)"
+      @clickOnDefense="(defense) => $emit('clickOnDefense', index, defense)"
     />
   </div>
 </template>

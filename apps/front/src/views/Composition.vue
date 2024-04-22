@@ -90,11 +90,42 @@ provide("filters", filters);
 provide('filtersValues', filtersValues);
 
 async function getAllMonsters() {
-  const result = await fetch(`${env.VITE_URL}/api/monsters`);
+  const result = await fetch(`${env.VITE_URL}/api/monsters`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        grade: "all"
+      })
+    }
+  );
 
   if (result.ok) {
     const data = await result.json();
 
+    comboboxOptions.value = [
+      {
+        value: 'light',
+        text: 'Light 5*',
+        element: 'light',
+        display: true
+      },
+      {
+        value: 'dark',
+        text: 'Dark 5*',
+        element: 'dark',
+        display: true
+      },
+      {
+        value: 'light-dark',
+        text: 'Light/dark 5*',
+        element: 'dark-light',
+        display: true
+      }
+    ];
     data.forEach((monster) => {
       comboboxOptions.value.push({
         value: monster.unitMasterId,
@@ -107,6 +138,35 @@ async function getAllMonsters() {
 }
 
 getAllMonsters();
+
+async function getLessFiveStarsMonsters() {
+  const result = await fetch(`${env.VITE_URL}/api/monsters`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          grade: 4
+        })
+      }
+  );
+
+  if (result.ok) {
+    const data = await result.json();
+
+    comboboxOptions.value = [];
+    data.forEach((monster) => {
+      comboboxOptions.value.push({
+        value: monster.unitMasterId,
+        text: monster.name,
+        element: monster.element,
+        display: true
+      });
+    });
+  }
+}
 
 async function getCompositions(name, values) {
   let body;
@@ -194,18 +254,24 @@ async function getCompositions(name, values) {
   }
 }
 
-function addDefense(defense) {
+function addDefense(index, defense) {
   actualComposition.value.push(defense);
   getCompositions('defense-selected');
 }
 
-function removeDefense(defense) {
+function removeDefense(index) {
   actualComposition.value.splice(index, 1);
   getCompositions('defense-selected');
 }
 
 function updateCompositionGrade(value) {
   compositionGrade.value = value;
+
+  if(value === '4') {
+    getLessFiveStarsMonsters();
+  } else {
+    getAllMonsters();
+  }
 }
 
 function updateCompositionName(name, value) {

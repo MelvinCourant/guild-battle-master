@@ -115,7 +115,7 @@ router
       return monstersController.show(data)
     })
 
-    router.get('/', async (data) => {
+    router.post('/', async (data) => {
       return monstersController.index(data)
     })
   })
