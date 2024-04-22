@@ -5,6 +5,7 @@ import Guild from "#models/guild";
 import Composition from "#models/composition";
 import Defense from "#models/defense";
 import Monster from "#models/monster";
+import Box from "#models/box";
 
 export default class CompositionsController {
   public async create({ auth, request, response }: HttpContext) {
@@ -34,12 +35,25 @@ export default class CompositionsController {
     })
 
     for (const defense of payload.defenses) {
-      await Defense.create({
+      const memberAssigned = await Member.query()
+        .where('id', defense.member)
+        .firstOrFail()
+      const defenseAssigned = await Defense.create({
         composition_id: composition.id,
         member_id: defense.member,
         leader_monster: defense.leader,
         second_monster: defense.second,
         third_monster: defense.third
+      })
+      let boxMemberAssigned = await Box.query()
+        .where('member_id', memberAssigned.id)
+        .andWhere('monster_id', defenseAssigned.leader_monster)
+        .orWhere('monster_id', defenseAssigned.second_monster)
+        .orWhere('monster_id', defenseAssigned.third_monster)
+
+      boxMemberAssigned.forEach((box) => {
+        box.monsters_assigned++
+        box.save()
       })
     }
 
