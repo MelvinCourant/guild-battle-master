@@ -12,7 +12,7 @@ const props = defineProps({
   },
 })
 
-defineEmits(['clickOnDefense']);
+const emits = defineEmits(['clickOnDefense', 'updateCompositionGrade', 'updateCompositionName', 'saveComposition']);
 
 const actualCompositions = ref(props.compositions);
 
@@ -75,19 +75,29 @@ function defenseLeave(event) {
     document.body.style.cursor = 'default';
   }
 }
+
+function actionButton(name) {
+  if(name === 'cancel') {
+    actualCompositions.value = props.compositions;
+  }
+}
 </script>
 
 <template>
   <form
       class="actual-composition"
-      @submit.prevent
+      @submit.prevent="$emit('saveComposition')"
   >
     <div class="actual-composition__form">
       <Select
           :options="options"
           :value="optionValue"
+          @change="$emit('updateCompositionGrade', $event)"
       />
-      <Field :attributes="nameField" />
+      <Field
+        :attributes="nameField"
+        @sendValue="(name, value) => $emit('updateCompositionName', name, value)"
+      />
     </div>
     <div class="actual-composition__defenses">
       <Field :attributes="searchField"/>

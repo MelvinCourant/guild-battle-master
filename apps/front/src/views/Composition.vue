@@ -4,12 +4,14 @@ import {provide, reactive, ref} from "vue";
 import SearchComposition from "../components/SearchCompositions.vue";
 import ActualComposition from "../components/ActualComposition.vue";
 import { useUserStore } from "../stores/user.js";
+import { useRouter } from "vue-router";
 
 const env = import.meta.env;
 const userStore = useUserStore();
 const user = userStore.user;
 const token = userStore.token;
 const guildId = user.guild_id;
+const router = useRouter();
 const fields = [
   {
     type: "search",
@@ -58,6 +60,8 @@ const secondMonsters = ref([]);
 const thirdMonsters = ref([]);
 const keyword = ref('');
 const compositions = ref([]);
+const compositionGrade = ref('5');
+const compositionName = ref('');
 const actualComposition = ref([]);
 
 provide("fields", fields);
@@ -161,6 +165,50 @@ function removeDefense(index, defense) {
   compositions.value.push(defense);
   actualComposition.value.splice(index, 1);
 }
+
+function updateCompositionGrade(value) {
+  compositionGrade.value = value;
+}
+
+function updateCompositionName(name, value) {
+  compositionName.value = value;
+}
+
+async function saveComposition() {
+  if(!compositionName.value) {
+    return;
+  }
+
+  let defenses = [];
+
+  actualComposition.value.forEach((composition) => {
+    defenses.push({
+      member: composition.member.id,
+      leader: composition.leader.unit_master_id,
+      second: composition.second.unit_master_id,
+      third: composition.third.unit_master_id
+    });
+  });
+
+  const body = {
+    name: compositionName.value,
+    grade: parseInt(compositionGrade.value),
+    defenses: defenses
+  };
+
+  const result = await fetch(`${env.VITE_URL}/api/compositions`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify(body)
+  });
+
+  if (result.ok) {
+    await router.push('/defenses');
+  }
+}
 </script>
 
 <template>
@@ -176,6 +224,9 @@ function removeDefense(index, defense) {
     <ActualComposition
       :compositions="actualComposition"
       @clickOnDefense="removeDefense"
+      @updateCompositionGrade="updateCompositionGrade"
+      @updateCompositionName="updateCompositionName"
+      @saveComposition="saveComposition"
     />
   </main>
 </template>
