@@ -10,7 +10,7 @@ export default class extends BaseSchema {
       table.integer('second_monster').unsigned().references('monsters.unit_master_id').notNullable()
       table.integer('third_monster').unsigned().references('monsters.unit_master_id').notNullable()
       table.integer('member_id').unsigned().references('members.id').notNullable()
-      table.integer('composition_id').unsigned().references('compositions.id').notNullable()
+      table.integer('composition_id').unsigned().references('compositions.id').notNullable().onDelete('CASCADE')
       table.integer('tower_id')
 
       table.timestamp('created_at')
