@@ -35,7 +35,7 @@ const filters = reactive([
   },
 ]);
 const filtersValues = ref({});
-const comboboxLabels = ref(['Monstre leader', '2ème monstre', '3ème monstre']);
+const comboboxLabels = ['Monstre leader', '2ème monstre', '3ème monstre'];
 const comboboxOptions = ref([
   {
     value: 'light',
@@ -64,7 +64,7 @@ const compositions = ref([]);
 const compositionGrade = ref('5');
 const compositionName = ref('');
 const actualComposition = ref([]);
-const dialog = ref({
+const dialog = {
   content: {
     title: 'Est-vous sûr de vouloir annuler ?',
     description: 'Les modifications non sauvegardées seront perdues.',
@@ -82,7 +82,7 @@ const dialog = ref({
       style: 'danger'
     }
   ]
-});
+};
 const dialogIsOpen = ref(false);
 
 provide("fields", fields);
