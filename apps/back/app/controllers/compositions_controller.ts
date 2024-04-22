@@ -33,7 +33,29 @@ export default class CompositionsController {
       guild_id: guild.id,
     })
 
-    return response.created(composition)
+    for (const defense of payload.defenses) {
+      const defenseExists = await Defense.query()
+        .where('composition_id', composition.id)
+        .where('member_id', defense.member)
+        .andWhere('leader_monster', defense.leader)
+        .andWhere('second_monster', defense.second)
+        .andWhere('third_monster', defense.third)
+        .first()
+
+      if(defenseExists) {
+        return response.status(400).send({ error: 'La défense existe déjà' })
+      }
+
+      await Defense.create({
+        composition_id: composition.id,
+        member_id: defense.member,
+        leader_monster: defense.leader,
+        second_monster: defense.second,
+        third_monster: defense.third
+      })
+    }
+
+    return response.created({ message: 'Composition créée avec succès' })
   }
 
   public async destroy({ auth, params, response }: HttpContext) {
