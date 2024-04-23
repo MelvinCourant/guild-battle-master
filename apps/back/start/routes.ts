@@ -154,5 +154,9 @@ router
     router.post('/:guildId/search', async (data) => {
       return compositionsController.search(data)
     })
+
+    router.put('/:id', async (data) => {
+      return compositionsController.update(data)
+    })
   })
   .prefix('api/compositions')

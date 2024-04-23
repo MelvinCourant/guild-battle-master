@@ -160,4 +160,109 @@ export default class CompositionsController {
 
     return response.ok(compositionsData)
   }
+
+  public async update({ auth, params, request, response }: HttpContext) {
+    const user = await auth.authenticate()
+    const payload = await request.validateUsing(createCompositionValidator)
+    const composition = await Composition.query()
+      .where('id', params.id)
+      .firstOrFail()
+    const member = await Member.query()
+      .where('user_id', user.id)
+      .firstOrFail()
+    const guild = await Guild.query()
+      .where('id', member.guild_id)
+      .firstOrFail()
+
+    if(
+      user.role !== 'admin' &&
+      user.role !== 'leader' &&
+      user.role !== 'moderator' &&
+      guild.id !== composition.guild_id
+    ) {
+      return response.forbidden()
+    }
+
+    if(payload.name !== composition.name) {
+      composition.name = payload.name
+    }
+
+    const grade = payload.grade.toString()
+
+    if(grade !== composition.grade) {
+      // @ts-ignore
+      composition.grade = grade
+    }
+
+    await composition.save()
+
+    const actualDefenses = await Defense.query()
+      .where('composition_id', composition.id)
+      .select('id', 'leader_monster', 'second_monster', 'third_monster', 'member_id')
+    let defensesData = payload.defenses
+
+    for (const actualDefense of actualDefenses) {
+      const boxMemberAssigned = await Box.query()
+        .where('member_id', actualDefense.member_id)
+        .andWhere('monster_id', actualDefense.leader_monster)
+        .orWhere('monster_id', actualDefense.second_monster)
+        .orWhere('monster_id', actualDefense.third_monster)
+      const defensesAssignedInPayload = payload.defenses.filter((defense) =>
+        defense.member === actualDefense.member_id &&
+        defense.leader === actualDefense.leader_monster &&
+        defense.second === actualDefense.second_monster &&
+        defense.third === actualDefense.third_monster
+      )
+
+      if(
+        defensesAssignedInPayload &&
+        boxMemberAssigned.length === defensesAssignedInPayload.length
+      ) {
+        defensesData = defensesData.filter((defense) =>
+          defense.member !== actualDefense.member_id &&
+          defense.leader !== actualDefense.leader_monster &&
+          defense.second !== actualDefense.second_monster &&
+          defense.third !== actualDefense.third_monster
+        )
+      } else if(
+        boxMemberAssigned.length !== 0 &&
+        (
+          defensesAssignedInPayload &&
+          boxMemberAssigned.length !== defensesAssignedInPayload.length
+        )
+      ) {
+        boxMemberAssigned.forEach((box) => {
+          box.monsters_assigned--
+          box.save()
+        })
+
+        await actualDefense.delete()
+      }
+    }
+
+    for (const defense of defensesData) {
+      const memberAssigned = await Member.query()
+        .where('id', defense.member)
+        .firstOrFail()
+      const defenseAssigned = await Defense.create({
+        composition_id: composition.id,
+        member_id: defense.member,
+        leader_monster: defense.leader,
+        second_monster: defense.second,
+        third_monster: defense.third
+      })
+      let boxMemberAssigned = await Box.query()
+        .where('member_id', memberAssigned.id)
+        .andWhere('monster_id', defenseAssigned.leader_monster)
+        .orWhere('monster_id', defenseAssigned.second_monster)
+        .orWhere('monster_id', defenseAssigned.third_monster)
+
+      boxMemberAssigned.forEach((box) => {
+        box.monsters_assigned++
+        box.save()
+      })
+    }
+
+    return response.created({ message: 'Composition mis à jour avec succès' })
+  }
 }

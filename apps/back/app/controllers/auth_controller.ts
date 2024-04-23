@@ -183,7 +183,7 @@ export default class AuthController {
           ) {
             box.quantity = numberOfMonsters
             await box.save()
-          } else {
+          } else if(!box){
             await Box.create({
               monster_id: monster.unit_master_id,
               member_id: memberId,
