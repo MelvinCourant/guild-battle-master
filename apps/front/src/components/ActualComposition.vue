@@ -38,12 +38,6 @@ const nameField = {
   name: 'name',
   placeholder: 'Nom de la composition',
 }
-const searchField = {
-  type: 'search',
-  name: 'search',
-  placeholder: 'Membre, monstre .etc',
-}
-const searchValue = ref('')
 const buttons = [
   {
     type: 'button',
@@ -105,7 +99,6 @@ function updateCompositionGrade(value) {
       />
     </div>
     <div class="actual-composition__defenses">
-      <Field :attributes="searchField"/>
       <Compositions
           @defenseHover="defenseHover"
           @defenseLeave="defenseLeave"
