@@ -158,5 +158,9 @@ router
     router.put('/:id', async (data) => {
       return compositionsController.update(data)
     })
+
+    router.get('/:id', async (data) => {
+      return compositionsController.show(data)
+    })
   })
   .prefix('api/compositions')

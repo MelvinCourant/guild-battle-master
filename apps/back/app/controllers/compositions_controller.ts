@@ -265,4 +265,59 @@ export default class CompositionsController {
 
     return response.created({ message: 'Composition mis à jour avec succès' })
   }
+
+  public async show({ auth, params, response }: HttpContext) {
+    const user = await auth.authenticate()
+    const userMember = await Member.query()
+      .where('user_id', user.id)
+      .select('guild_id')
+      .firstOrFail()
+    const composition = await Composition.query()
+      .where('id', params.id)
+      .select('id', 'name', 'grade', 'guild_id')
+      .firstOrFail()
+
+    if(composition.guild_id !== userMember.guild_id) {
+      return response.forbidden()
+    }
+
+    const defenses = await Defense.query()
+      .where('composition_id', composition.id)
+      .select('id', 'leader_monster', 'second_monster', 'third_monster', 'member_id')
+    let defensesData = []
+
+    for (const defense of defenses) {
+      const leaderMonster = await Monster.query()
+        .where('unit_master_id', defense.leader_monster)
+        .select('unit_master_id', 'image')
+        .firstOrFail()
+      const secondMonster = await Monster.query()
+        .where('unit_master_id', defense.second_monster)
+        .select('unit_master_id', 'image')
+        .firstOrFail()
+      const thirdMonster = await Monster.query()
+        .where('unit_master_id', defense.third_monster)
+        .select('unit_master_id', 'image')
+        .firstOrFail()
+      const member = await Member.query()
+        .where('id', defense.member_id)
+        .select('id', 'pseudo')
+        .firstOrFail()
+
+      defensesData.push({
+        id: defense.id,
+        leader: leaderMonster,
+        second: secondMonster,
+        third: thirdMonster,
+        member: member
+      })
+    }
+
+    return response.ok({
+      id: composition.id,
+      name: composition.name,
+      grade: composition.grade,
+      defenses: defensesData
+    })
+  }
 }
