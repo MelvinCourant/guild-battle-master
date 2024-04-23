@@ -1,7 +1,7 @@
 <script setup>
 import '../assets/css/components/_actual-composition.scss';
 import Select from "./utils/inputs/Select.vue";
-import {provide, ref, watch} from 'vue';
+import {provide, reactive, ref, watch} from 'vue';
 import Field from "./utils/Field.vue";
 import Compositions from "./utils/Compositions.vue";
 
@@ -10,6 +10,10 @@ const props = defineProps({
     type: Array,
     required: true
   },
+  compositionName: {
+    type: String,
+    default: ''
+  }
 })
 
 const emits = defineEmits(['clickOnDefense', 'updateCompositionGrade', 'updateCompositionName', 'saveComposition', 'cancel']);
@@ -33,11 +37,12 @@ const options = [
   }
 ]
 const optionValue = ref('5')
-const nameField = {
+const nameField = reactive({
   type: 'text',
   name: 'name',
   placeholder: 'Nom de la composition',
-}
+  value: props.compositionName
+})
 const buttons = [
   {
     type: 'button',
@@ -51,6 +56,10 @@ const buttons = [
     style: 'primary'
   }
 ];
+
+watch(() => props.compositionName, (newName) => {
+  nameField.value = newName;
+});
 
 function defenseHover(event) {
   const defenseRemove = document.createElement('div');

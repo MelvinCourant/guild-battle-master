@@ -210,7 +210,7 @@ export default class CompositionsController {
 
     for (const actualDefense of actualDefenses) {
       const boxMemberAssigned = await Box.query()
-        .where('member_id', actualDefense.id)
+        .where('member_id', actualDefense.member_id)
         .andWhere((builder) => {
           builder
             .where('monster_id', actualDefense.leader_monster)
@@ -265,11 +265,18 @@ export default class CompositionsController {
         second_monster: defense.second,
         third_monster: defense.third
       })
-      let boxMemberAssigned = await Box.query()
+      const boxMemberAssigned = await Box.query()
         .where('member_id', memberAssigned.id)
-        .andWhere('monster_id', defenseAssigned.leader_monster)
-        .orWhere('monster_id', defenseAssigned.second_monster)
-        .orWhere('monster_id', defenseAssigned.third_monster)
+        .andWhere((builder) => {
+          builder
+            .where('monster_id', defenseAssigned.leader_monster)
+            .orWhere('monster_id', defenseAssigned.second_monster)
+            .orWhere('monster_id', defenseAssigned.third_monster)
+        })
+
+      if(boxMemberAssigned.length === 0) {
+        return response.status(404).send({ error: 'Un des membres n\'a pas les monstres indiqués' })
+      }
 
       boxMemberAssigned.forEach((box) => {
         box.monsters_assigned++
@@ -320,15 +327,23 @@ export default class CompositionsController {
 
       defensesData.push({
         id: defense.id,
-        leader: leaderMonster,
-        second: secondMonster,
-        third: thirdMonster,
+        leader: {
+          unit_master_id: leaderMonster.unit_master_id,
+          image: leaderMonster.image
+        },
+        second: {
+          unit_master_id: secondMonster.unit_master_id,
+          image: secondMonster.image
+        },
+        third: {
+          unit_master_id: thirdMonster.unit_master_id,
+          image: thirdMonster.image
+        },
         member: member
       })
     }
 
     return response.ok({
-      id: composition.id,
       name: composition.name,
       grade: composition.grade,
       defenses: defensesData

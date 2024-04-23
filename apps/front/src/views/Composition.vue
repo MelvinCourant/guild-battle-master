@@ -5,7 +5,7 @@ import SearchComposition from "../components/SearchCompositions.vue";
 import ActualComposition from "../components/ActualComposition.vue";
 import Dialog from "../components/utils/Dialog.vue";
 import { useUserStore } from "../stores/user.js";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 
 const env = import.meta.env;
 const userStore = useUserStore();
@@ -60,10 +60,38 @@ const leaderMonsters = ref([]);
 const secondMonsters = ref([]);
 const thirdMonsters = ref([]);
 const keyword = ref('');
+const route = useRoute();
+const compositionId = route.params.id;
 const compositions = ref([]);
 const compositionGrade = ref('5');
 const compositionName = ref('');
 const actualComposition = ref([]);
+
+async function getActualComposition() {
+  const result = await fetch(`${env.VITE_URL}/api/compositions/${compositionId}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      }
+  );
+
+  if (result.ok) {
+    const resultJson = await result.json();
+    compositionName.value = resultJson.name;
+    compositionGrade.value = resultJson.grade;
+    actualComposition.value = resultJson.defenses;
+  } else {
+    await router.push('/composition');
+  }
+}
+
+if(compositionId) {
+  getActualComposition();
+}
+
 const dialog = {
   content: {
     title: 'Est-vous sûr de vouloir annuler ?',
@@ -304,14 +332,27 @@ async function saveComposition() {
     defenses: defenses
   };
 
-  const result = await fetch(`${env.VITE_URL}/api/compositions`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    },
-    body: JSON.stringify(body)
-  });
+  let result;
+
+  if(compositionId) {
+    result = await fetch(`${env.VITE_URL}/api/compositions/${compositionId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(body)
+    });
+  } else {
+    result = await fetch(`${env.VITE_URL}/api/compositions`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(body)
+    });
+  }
 
   if (result.ok) {
     await router.push('/defenses');
@@ -339,6 +380,7 @@ function dialogResponse(name) {
     />
     <ActualComposition
       :compositions="actualComposition"
+      :compositionName="compositionName"
       @clickOnDefense="removeDefense"
       @updateCompositionGrade="updateCompositionGrade"
       @updateCompositionName="updateCompositionName"
