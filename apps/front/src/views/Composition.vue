@@ -233,6 +233,7 @@ async function getCompositions(name, values) {
 
   body = {
     ...body,
+    grade: compositionGrade.value,
     leader_monsters: leaderMonsters.value,
     second_monsters: secondMonsters.value,
     third_monsters: thirdMonsters.value
@@ -272,6 +273,9 @@ function updateCompositionGrade(value) {
   } else {
     getAllMonsters();
   }
+
+  compositions.value = [];
+  actualComposition.value = [];
 }
 
 function updateCompositionName(name, value) {

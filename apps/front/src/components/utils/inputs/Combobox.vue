@@ -11,6 +11,10 @@ const props = defineProps({
   options: {
     type: Array,
     required: true
+  },
+  resetValues: {
+    type: Boolean,
+    default: false
   }
 });
 

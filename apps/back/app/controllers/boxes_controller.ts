@@ -228,7 +228,10 @@ export default class BoxesController {
     async function getBoxes(memberId: any, defensesSelected: any = []) {
       let boxes = await Box.query().where('member_id', memberId).whereRaw('monsters_assigned < quantity').select('monster_id', 'quantity', 'monsters_assigned')
 
-      if(boxes.length === 0) {
+      if(
+        boxes.length === 0 ||
+        defensesSelected.length === 0
+      ) {
         return boxes
       }
 
