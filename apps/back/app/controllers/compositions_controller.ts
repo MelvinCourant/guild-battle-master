@@ -45,11 +45,18 @@ export default class CompositionsController {
         second_monster: defense.second,
         third_monster: defense.third
       })
-      let boxMemberAssigned = await Box.query()
+      const boxMemberAssigned = await Box.query()
         .where('member_id', memberAssigned.id)
-        .andWhere('monster_id', defenseAssigned.leader_monster)
-        .orWhere('monster_id', defenseAssigned.second_monster)
-        .orWhere('monster_id', defenseAssigned.third_monster)
+        .andWhere((builder) => {
+          builder
+            .where('monster_id', defenseAssigned.leader_monster)
+            .orWhere('monster_id', defenseAssigned.second_monster)
+            .orWhere('monster_id', defenseAssigned.third_monster)
+        })
+
+      if(boxMemberAssigned.length === 0) {
+        return response.status(404).send({ error: 'Un des membres n\'a pas les monstres indiqués' })
+      }
 
       boxMemberAssigned.forEach((box) => {
         box.monsters_assigned++
@@ -203,16 +210,23 @@ export default class CompositionsController {
 
     for (const actualDefense of actualDefenses) {
       const boxMemberAssigned = await Box.query()
-        .where('member_id', actualDefense.member_id)
-        .andWhere('monster_id', actualDefense.leader_monster)
-        .orWhere('monster_id', actualDefense.second_monster)
-        .orWhere('monster_id', actualDefense.third_monster)
+        .where('member_id', actualDefense.id)
+        .andWhere((builder) => {
+          builder
+            .where('monster_id', actualDefense.leader_monster)
+            .orWhere('monster_id', actualDefense.second_monster)
+            .orWhere('monster_id', actualDefense.third_monster)
+        })
       const defensesAssignedInPayload = payload.defenses.filter((defense) =>
         defense.member === actualDefense.member_id &&
         defense.leader === actualDefense.leader_monster &&
         defense.second === actualDefense.second_monster &&
         defense.third === actualDefense.third_monster
       )
+
+      if(boxMemberAssigned.length === 0) {
+        return response.status(404).send({ error: 'Un des membres n\'a pas les monstres indiqués' })
+      }
 
       if(
         defensesAssignedInPayload &&
