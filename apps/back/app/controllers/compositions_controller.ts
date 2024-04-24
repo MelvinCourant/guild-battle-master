@@ -81,6 +81,22 @@ export default class CompositionsController {
     const composition = await Composition.query()
       .where('id', params.id)
       .firstOrFail()
+    const defenses = await Defense.query()
+      .where('composition_id', composition.id)
+      .select('id', 'leader_monster', 'second_monster', 'third_monster', 'member_id')
+    const monstersAssigned = await Box.query()
+      .where('member_id', 'in', defenses.map((defense) => defense.member_id))
+      .andWhere((builder) => {
+        builder
+          .where('monster_id', 'in', defenses.map((defense) => defense.leader_monster))
+          .orWhere('monster_id', 'in', defenses.map((defense) => defense.second_monster))
+          .orWhere('monster_id', 'in', defenses.map((defense) => defense.third_monster))
+      })
+
+    monstersAssigned.forEach((box) => {
+      box.monsters_assigned--
+      box.save()
+    })
 
     await composition.delete()
 
