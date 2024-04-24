@@ -14,7 +14,7 @@ const props = defineProps({
   },
   orientation: {
     type: String,
-    default: 'right'
+    default: 'left'
   }
 });
 

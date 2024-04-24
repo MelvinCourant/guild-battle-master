@@ -57,6 +57,7 @@ function othersText(numberMonsters) {
             v-if="actions"
             :actions="actions"
             :memberRole="content.role"
+            orientation="right"
             @actionSelected="$emit('actionSelected', {
                 action: $event,
                 id: content.id

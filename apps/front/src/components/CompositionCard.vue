@@ -29,6 +29,7 @@ defineEmits(['actionSelected'])
           <More
             :actions="actions"
             :memberRole="memberRole"
+            orientation="right"
             @actionSelected="$emit('actionSelected', $event)"
           />
         </div>
