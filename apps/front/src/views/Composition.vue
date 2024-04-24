@@ -66,6 +66,7 @@ const compositions = ref([]);
 const compositionGrade = ref('5');
 const compositionName = ref('');
 const actualComposition = ref([]);
+const defensesSelected = ref([]);
 
 async function getActualComposition() {
   const result = await fetch(`${env.VITE_URL}/api/compositions/${compositionId}`,
@@ -218,20 +219,16 @@ async function getCompositions(name, values) {
       });
     });
   } else if(name === 'defense-selected') {
-    let defenses = [];
+    defensesSelected.value = [];
 
     actualComposition.value.forEach((composition) => {
-      defenses.push({
+      defensesSelected.value.push({
         member: composition.member.id,
         leader: composition.leader.unit_master_id,
         second: composition.second.unit_master_id,
         third: composition.third.unit_master_id
       });
     });
-
-    body = {
-      defenses_selected: defenses
-    };
   } else {
     ids = values.map((value) => value.value);
   }
@@ -244,11 +241,16 @@ async function getCompositions(name, values) {
     thirdMonsters.value = ids;
   }
 
+  if(defensesSelected.value.length > 0) {
+    body = {
+      defenses_selected: defensesSelected.value
+    };
+  }
+
   if(keyword.value.length > 0) {
     body = {
       ...body,
-      keyword: keyword.value,
-      ...filtersValues.value
+      keyword: keyword.value
     };
   }
 
@@ -266,6 +268,8 @@ async function getCompositions(name, values) {
     second_monsters: secondMonsters.value,
     third_monsters: thirdMonsters.value
   };
+
+  console.log(body);
 
   if(leaderMonsters.value.length > 0 && secondMonsters.value.length > 0 && thirdMonsters.value.length > 0) {
     const result = await fetch(`${env.VITE_URL}/api/boxes/${guildId}/search-compositions`, {
@@ -315,21 +319,10 @@ async function saveComposition() {
     return;
   }
 
-  let defenses = [];
-
-  actualComposition.value.forEach((composition) => {
-    defenses.push({
-      member: composition.member.id,
-      leader: composition.leader.unit_master_id,
-      second: composition.second.unit_master_id,
-      third: composition.third.unit_master_id
-    });
-  });
-
   const body = {
     name: compositionName.value,
     grade: parseInt(compositionGrade.value),
-    defenses: defenses
+    defenses: defensesSelected.value
   };
 
   let result;
