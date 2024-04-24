@@ -13,6 +13,8 @@ defineProps({
     required: true,
   },
 })
+
+defineEmits(['actionSelected'])
 </script>
 
 <template>
@@ -22,6 +24,7 @@ defineProps({
         <div class="composition-card__actions">
           <More
             :actions="actions"
+            @actionSelected="$emit('actionSelected', $event)"
           />
         </div>
       </div>

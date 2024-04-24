@@ -18,6 +18,8 @@ defineProps({
     default: false
   }
 })
+
+defineEmits(['search', 'actionSelected'])
 </script>
 
 <template>
@@ -27,10 +29,14 @@ defineProps({
     />
     <div class="guild-compositions__cards">
       <CompositionCard
-          v-for="(composition, index) in compositions"
-          :key="index"
+          v-for="composition in compositions"
+          :key="composition.id"
           :composition="composition"
           :actions="actions"
+          @actionSelected="$emit('actionSelected', {
+                action: $event,
+                id: composition.id
+          })"
       />
       <p
           class="guild-compositions__empty"

@@ -3,6 +3,7 @@ import '../assets/css/views/_defenses.scss';
 import GuildCompositions from "../components/GuildCompositions.vue";
 import {useUserStore} from "../stores/user.js";
 import {provide, ref} from 'vue';
+import {useRouter} from 'vue-router';
 
 const env = import.meta.env;
 const userStore = useUserStore();
@@ -50,6 +51,7 @@ const actions = [
     danger: true
   }
 ];
+const router = useRouter();
 
 provide("fields", fields);
 
@@ -77,6 +79,12 @@ async function getAllCompositions() {
 }
 
 getAllCompositions();
+
+function actionSelected({action, id}) {
+  if(action === 'update') {
+    router.push(`/composition/${id}`);
+  }
+}
 </script>
 
 <template>
@@ -84,6 +92,7 @@ getAllCompositions();
     <GuildCompositions
       :compositions="compositions"
       :actions="actions"
+      @actionSelected="actionSelected"
       :loading="loading"
     />
     <router-link
