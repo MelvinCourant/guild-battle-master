@@ -41,7 +41,8 @@ const nameField = reactive({
   type: 'text',
   name: 'name',
   placeholder: 'Nom de la composition',
-  value: props.compositionName
+  value: props.compositionName,
+  autocomplete: 'off'
 })
 const buttons = [
   {
@@ -92,7 +93,7 @@ function updateCompositionGrade(value) {
 </script>
 
 <template>
-  <form
+  <div
       class="actual-composition"
       @submit.prevent="$emit('saveComposition')"
   >
@@ -122,5 +123,5 @@ function updateCompositionGrade(value) {
           @click="(name) => actionButton(name)"
       />
     </div>
-  </form>
+  </div>
 </template>

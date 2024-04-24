@@ -229,7 +229,7 @@ async function getCompositions(name, values) {
         third: composition.third.unit_master_id
       });
     });
-  } else {
+  } else if(comboboxLabels.includes(name)) {
     ids = values.map((value) => value.value);
   }
 
@@ -304,8 +304,10 @@ function updateCompositionGrade(value) {
     getAllMonsters();
   }
 
-  compositions.value = [];
   actualComposition.value = [];
+  defensesSelected.value = [];
+
+  getCompositions();
 }
 
 function updateCompositionName(name, value) {
