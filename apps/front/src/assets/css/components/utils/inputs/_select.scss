@@ -15,6 +15,10 @@
 
     & ~ .select__list {
       top: calc(22px + 34px) !important;
+
+      @media screen and (max-width: 768px) {
+        top: 50% !important;
+      }
     }
   }
 
