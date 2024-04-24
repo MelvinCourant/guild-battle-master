@@ -8,6 +8,10 @@ defineProps({
     type: Object,
     required: true,
   },
+  memberRole: {
+    type: String,
+    default: ''
+  },
   actions: {
     type: Array,
     required: true,
@@ -24,6 +28,7 @@ defineEmits(['actionSelected'])
         <div class="composition-card__actions">
           <More
             :actions="actions"
+            :memberRole="memberRole"
             @actionSelected="$emit('actionSelected', $event)"
           />
         </div>

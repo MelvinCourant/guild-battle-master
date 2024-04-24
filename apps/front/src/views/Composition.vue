@@ -269,8 +269,6 @@ async function getCompositions(name, values) {
     third_monsters: thirdMonsters.value
   };
 
-  console.log(body);
-
   if(leaderMonsters.value.length > 0 && secondMonsters.value.length > 0 && thirdMonsters.value.length > 0) {
     const result = await fetch(`${env.VITE_URL}/api/boxes/${guildId}/search-compositions`, {
       method: 'POST',

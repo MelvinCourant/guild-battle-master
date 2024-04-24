@@ -13,6 +13,10 @@ defineProps({
     type: Array,
     required: true
   },
+  memberRole: {
+    type: String,
+    default: ''
+  },
   loading: {
     type: Boolean,
     default: false
@@ -33,6 +37,7 @@ defineEmits(['search', 'actionSelected'])
           :key="composition.id"
           :composition="composition"
           :actions="actions"
+          :memberRole="memberRole"
           @actionSelected="$emit('actionSelected', {
                 action: $event,
                 id: composition.id
