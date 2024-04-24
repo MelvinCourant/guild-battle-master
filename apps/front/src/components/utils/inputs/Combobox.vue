@@ -132,5 +132,10 @@ function search(value) {
         </li>
       </ul>
     </div>
+    <div
+      class="combobox__trigger"
+      @click="isOpen = false"
+      v-show="isOpen"
+    ></div>
   </div>
 </template>

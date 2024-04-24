@@ -26,5 +26,9 @@
     &:hover {
       background: var(--primary-darkened);
     }
+
+    @media screen and (max-width: 768px) {
+      right: 20px;
+    }
   }
 }

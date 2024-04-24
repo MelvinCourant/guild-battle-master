@@ -22,8 +22,12 @@
   }
 
   @media screen and (max-width: 768px) {
-    padding: 20px 20px 0;
+    padding: 0;
     border-left: none;
+    flex: initial;
+    overflow: initial;
+    min-height: calc(50vh - 114px - 60px);
+    height: fit-content;
   }
 
   &__form {
@@ -64,6 +68,32 @@
       padding-bottom: 0;
       overflow-y: auto;
       max-height: calc(100vh - 70px - 160px - 20px - 34px - 5px - 44px - 30px - 34px - 30px - 34px);
+
+      @media screen and (max-width: 768px) {
+        flex: initial;
+        overflow: initial;
+        max-height: initial;
+      }
+
+      .defense {
+        @media screen and (max-width: 768px) {
+          width: 100%;
+        }
+
+        &__monsters {
+          & > li {
+            @media screen and (max-width: 768px) {
+              width: calc(100% / 3);
+            }
+          }
+        }
+
+        &__image {
+          @media screen and (max-width: 768px) {
+            width: 100%;
+          }
+        }
+      }
     }
   }
 
@@ -72,5 +102,6 @@
     justify-content: flex-end;
     gap: 10px;
     width: 100%;
+    margin-top: 30px;
   }
 }

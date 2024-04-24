@@ -22,6 +22,10 @@
     padding: 0 14px;
     margin-top: 5px;
 
+    @media screen and (max-width: 768px) {
+      width: 100%;
+    }
+
     &--open {
       border-radius: var(--input-text-radius) var(--input-text-radius) 0 0 !important;
 
@@ -82,11 +86,12 @@
     @media screen and (max-width: 768px) {
       position: fixed;
       z-index: 9999;
-      top: 50%;
+      top: 10%;
       left: 20px;
-      transform: translateY(-50%);
+      transform: initial;
       overflow-y: auto;
       width: calc(100% - 40px);
+      height: fit-content;
       max-height: 80vh;
       border: var(--border);
       border-radius: var(--input-text-radius);
@@ -122,6 +127,21 @@
 
     &--selected {
       background: var(--system);
+    }
+  }
+
+  &__trigger {
+    display: none;
+    position: fixed;
+    z-index: 9998;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: rgba(21, 22, 25, 0.70);
+
+    @media screen and (max-width: 768px) {
+      display: initial;
     }
   }
 }
