@@ -325,6 +325,8 @@ async function saveComposition() {
     defenses: defensesSelected.value
   };
 
+  console.log(body);
+
   let result;
 
   if(compositionId) {

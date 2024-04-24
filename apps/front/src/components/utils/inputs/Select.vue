@@ -41,6 +41,7 @@ document.addEventListener('click', (event) => {
       {{ label }}
     </label>
     <button
+        type="button"
         role="combobox"
         :class="[
             'select__button',

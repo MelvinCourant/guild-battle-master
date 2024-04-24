@@ -93,7 +93,7 @@ function updateCompositionGrade(value) {
 </script>
 
 <template>
-  <div
+  <form
       class="actual-composition"
       @submit.prevent="$emit('saveComposition')"
   >
@@ -123,5 +123,5 @@ function updateCompositionGrade(value) {
           @click="(name) => actionButton(name)"
       />
     </div>
-  </div>
+  </form>
 </template>
