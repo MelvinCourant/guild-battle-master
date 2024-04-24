@@ -1,0 +1,43 @@
+@use '../partials/functions.scss';
+@use '../partials/mixins.scss';
+
+.composition-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 310px;
+  height: fit-content;
+  padding: 20px;
+  background: var(--system);
+  border-radius: 15px;
+
+  &__actions {
+    position: absolute;
+    top: -5.83px;
+    right: -10.83px;
+
+    &-container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 0;
+    }
+  }
+
+  &__grade {
+    color: var(--text-grey);
+    font-size: functions.rem(16);
+    font-weight: 500;
+    line-height: 1.125;
+    margin-bottom: 5px;
+  }
+
+  &__title {
+    @include mixins.font('text');
+    font-size: functions.rem(20);
+    font-weight: 700;
+    line-height: 1.1;
+  }
+}
