@@ -20,7 +20,7 @@ export default class BoxesController {
       user.id !== member.user_id ||
       (userRole.role !== 'leader' && userRole.role !== 'moderator')
     ) {
-      return response.status(403).json({ error: 'Membre invalide' })
+      return response.status(403).json({ message: 'Membre invalide' })
     }
 
     const json = payload.json

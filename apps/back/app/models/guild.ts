@@ -8,6 +8,9 @@ export default class Guild extends BaseModel {
   declare id: number
 
   @column()
+  declare guild_id_json: number
+
+  @column()
   declare name: string
 
   @column()

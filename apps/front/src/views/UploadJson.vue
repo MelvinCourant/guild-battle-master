@@ -149,7 +149,7 @@ async function uploadJson() {
     alert.type = 'error';
 
     if (resultJson.error) {
-      alert.message = resultJson.error;
+      alert.message = resultJson.message;
     } else {
       alert.message = resultJson.errors[0].message;
     }

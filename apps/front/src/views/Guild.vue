@@ -283,7 +283,7 @@ async function dialogResponse(name) {
     } else {
       alert.display = true;
       alert.type = 'error';
-      alert.message = resultJson.error;
+      alert.message = resultJson.message;
     }
   } else {
     closeDialog();

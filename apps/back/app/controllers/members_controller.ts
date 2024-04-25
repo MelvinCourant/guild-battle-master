@@ -78,7 +78,7 @@ export default class MembersController {
     const userMemberParams = await User.query().where('id', memberParams.user_id).select('role')
 
     function returnError() {
-      return response.status(403).json({ error: "Vous n'avez pas les droits" })
+      return response.status(403).json({ message: "Vous n'avez pas les droits" })
     }
 
     if (user.role !== 'admin' && userMember.guild_id !== memberParams.guild_id) {
@@ -119,17 +119,17 @@ export default class MembersController {
       (user.role !== 'admin' && user.role !== 'leader' && user.role !== 'moderator') ||
       leadGuildId !== memberGuildId
     ) {
-      return response.status(403).json({ error: "Vous n'avez pas les droits" })
+      return response.status(403).json({ message: "Vous n'avez pas les droits" })
     }
 
     const grade = request.input('grade')
 
     if (grade !== 'leader' && grade !== 'vice-leader' && grade !== 'senior' && grade !== 'member') {
-      return response.status(400).json({ error: "Ce rôle n'existe pas" })
+      return response.status(400).json({ message: "Ce rôle n'existe pas" })
     } else if (grade === member.grade) {
       return response
         .status(400)
-        .json({ error: `Le membre ${member.pseudo} a déjà le rôle ${grade}` })
+        .json({ message: `Le membre ${member.pseudo} a déjà le rôle ${grade}` })
     } else {
       // TODO: managing the situation when the leader wants to hand over his role to another member
       // TODO: managing the situation when the member have a account to update his role
@@ -153,7 +153,7 @@ export default class MembersController {
     const userMemberParams = await User.query().where('id', memberParams.user_id).select('role')
 
     function returnError() {
-      return response.status(403).json({ error: "Vous n'avez pas les droits" })
+      return response.status(403).json({ message: "Vous n'avez pas les droits" })
     }
 
     if (user.role !== 'admin' && userMember.guild_id !== memberParams.guild_id) {
@@ -196,7 +196,7 @@ export default class MembersController {
     let profileUpdated = ''
 
     if (wizardId !== memberParams.wizard_id) {
-      return response.status(400).json({ error: 'Le fichier ne correspond pas à votre compte' })
+      return response.status(400).json({ message: 'Le fichier ne correspond pas à votre compte' })
     }
 
     if (wizardName !== memberParams.pseudo) {
@@ -287,7 +287,7 @@ export default class MembersController {
       (user.role === 'moderator' && memberRole.role === 'leader') ||
       (user.role === 'leader' && memberRole.role === 'leader')
     ) {
-      return response.status(403).json({ error: "Vous n'avez pas les droits" })
+      return response.status(403).json({ message: "Vous n'avez pas les droits" })
     }
 
     // @ts-ignore

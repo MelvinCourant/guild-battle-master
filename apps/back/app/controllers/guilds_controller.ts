@@ -21,7 +21,7 @@ export default class GuildsController {
     const guildId = parseInt(params.id)
 
     if(guildId !== memberGuildId) {
-      return response.status(403).json({ error: 'Guilde invalide' })
+      return response.status(403).json({ message: 'Guilde invalide' })
     }
 
     const guild = await Guild
@@ -148,11 +148,11 @@ export default class GuildsController {
       userRole.role !== 'leader' &&
       userRole.role !== 'moderator'
     ) {
-      return response.status(403).json({ error: 'Vous n\'avez pas les droits pour effectuer cette action' })
+      return response.status(403).json({ message: 'Vous n\'avez pas les droits pour effectuer cette action' })
     }
 
     if(!guild) {
-      return response.status(404).json({ error: 'Guilde invalide' })
+      return response.status(404).json({ message: 'Guilde invalide' })
     }
 
     const json: any = payload.json;
@@ -250,7 +250,7 @@ export default class GuildsController {
     const sort = request.input('sort')
 
     if(guildId !== memberGuildId) {
-      return response.status(403).json({ error: 'Guilde invalide' })
+      return response.status(403).json({ message: 'Guilde invalide' })
     }
 
     let members: any;

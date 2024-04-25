@@ -89,7 +89,7 @@
     if(resultJson.errors) {
       errorsFields = resultJson.errors;
     } else {
-      globalError = resultJson.error;
+      globalError = resultJson.message;
     }
 
     if(errorsFields) {

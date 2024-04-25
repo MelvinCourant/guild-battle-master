@@ -63,7 +63,7 @@ export default class AuthController {
         // User exists and already registered
         return response
           .status(400)
-          .send({ error: 'Un compte existe déjà avec cette adresse email' })
+          .send({ message: 'Un compte existe déjà avec cette adresse email' })
       } else if (user && user.pending === 1) {
         // User exists but not completed registration
         await deletePreviousData(user)
@@ -78,7 +78,6 @@ export default class AuthController {
         email: payload.email,
         password: payload.password,
         username: payload.username,
-        role: 'moderator',
         image: userImage?.fileName,
       }).catch((error) => {
         throw error
@@ -93,7 +92,7 @@ export default class AuthController {
         .select('id')
         .first()
       if (!user) {
-        return response.status(404).send({ error: 'User not found, back to step 1' })
+        return response.status(404).send({ message: 'User not found, back to step 1' })
       }
 
       const userImage: any = await User.query()
@@ -111,7 +110,7 @@ export default class AuthController {
 
       if (!data) {
         fs.unlinkSync(jsonLink)
-        return response.status(500).send({ error: 'Error reading json file' })
+        return response.status(500).send({ message: 'Error reading json file' })
       }
 
       async function createMembers(wizardId: number, members: any) {
@@ -122,13 +121,7 @@ export default class AuthController {
 
           if (member.grade === 1) {
             grade = 'leader'
-
-            if (member.wizard_id === wizardId) {
-              user.role = 'leader'
-              await user.save()
-            } else {
-              leaderPseudo = member.wizard_name
-            }
+            leaderPseudo = member.wizard_name
           } else if (member.grade === 2) {
             grade = 'member'
           } else if (member.grade === 3) {
@@ -197,8 +190,34 @@ export default class AuthController {
       const jsonParsed: any = JSON.parse(data)
       const wizardId: number = jsonParsed.wizard_info.wizard_id
       let guild: any = null
+
+      const memberExists: any = await Member.query().where('wizard_id', wizardId).first()
+      const guildExists: any = await Guild.query().where('guild_id_json', jsonParsed.guild.guild_info.guild_id).first()
+
+      if (memberExists) {
+        const memberGuild: any = await Guild.query().where('id', memberExists.guild_id).first()
+        const members: any = await Member.query().where('guild_id', memberGuild.id).select('id')
+        const leader = await Member.query().where('wizard_id', jsonParsed.guild.guild_info.master_wizard_id).select('pseudo').first()
+
+        memberExists.user_id = user.id
+        memberExists.save()
+        await createBoxes(memberExists.id, jsonParsed.unit_list)
+
+        return response.created({
+          message: 'User created',
+          guildName: memberGuild.name,
+          leader: leader.pseudo,
+          members: members.length,
+        })
+      }
+
+      if(guildExists) {
+        return response.status(400).send({ message: 'Guild already exists' })
+      }
+
       const guildName: string = jsonParsed.guild.guild_info.name
       guild = await Guild.create({
+        guild_id_json: jsonParsed.guild.guild_info.guild_id,
         name: guildName,
         leader_id: user.id,
         image: userImage.image,
@@ -209,6 +228,9 @@ export default class AuthController {
       const members: any = jsonParsed.guild.guild_members
       let memberId: number = 0
       let leaderPseudo: string = members[wizardId].wizard_name
+
+      user.role = 'leader'
+      user.save()
 
       await createMembers(wizardId, members)
 
@@ -229,7 +251,7 @@ export default class AuthController {
 
       if (!user && !guild && !member) {
         return response.status(404).send({
-          error: 'User, guild and member not found, go to register page to start registration',
+          message: 'User, guild and member not found, go to register page to start registration',
         })
       } else if (!guild || !member) {
         let modelsNotFound = ''
@@ -242,9 +264,9 @@ export default class AuthController {
           modelsNotFound = 'Member'
         }
 
-        return response.status(404).send({ error: `${modelsNotFound} not found, back to step 2` })
+        return response.status(404).send({ message: `${modelsNotFound} not found, back to step 2` })
       } else if (!user) {
-        return response.status(404).send({ error: 'User not found, back to step 1' })
+        return response.status(404).send({ message: 'User not found, back to step 1' })
       }
 
       // Verify all information
@@ -257,7 +279,7 @@ export default class AuthController {
 
       return response.created({ message: 'Registration successful' })
     } else {
-      return response.status(400).send({ error: 'Invalid step' })
+      return response.status(400).send({ message: 'Invalid step' })
     }
   }
 
@@ -287,7 +309,7 @@ export default class AuthController {
         token,
       })
     } catch (error) {
-      return response.status(400).send({ error: 'Email ou mot de passe incorrect' })
+      return response.status(400).send({ message: 'Email ou mot de passe incorrect' })
     }
   }
 

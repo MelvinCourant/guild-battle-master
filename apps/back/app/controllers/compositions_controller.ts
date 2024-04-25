@@ -55,7 +55,7 @@ export default class CompositionsController {
         })
 
       if(boxMemberAssigned.length === 0) {
-        return response.status(404).send({ error: 'Un des membres n\'a pas les monstres indiqués' })
+        return response.status(404).send({ message: 'Un des membres n\'a pas les monstres indiqués' })
       }
 
       boxMemberAssigned.forEach((box) => {
@@ -120,7 +120,7 @@ export default class CompositionsController {
       !guild ||
       userGuild.id !== guild.id
     ) {
-      return response.status(404).send({ error: 'La guilde est invalide ou n\'existe pas' })
+      return response.status(404).send({ message: 'La guilde est invalide ou n\'existe pas' })
     }
 
     const keyword = request.input('keyword')
@@ -261,7 +261,7 @@ export default class CompositionsController {
       )
 
       if(boxMemberAssigned.length === 0) {
-        return response.status(404).send({ error: 'Un des membres n\'a pas les monstres indiqués' })
+        return response.status(404).send({ message: 'Un des membres n\'a pas les monstres indiqués' })
       }
 
       if(
@@ -311,7 +311,7 @@ export default class CompositionsController {
         })
 
       if(boxMemberAssigned.length === 0) {
-        return response.status(404).send({ error: 'Un des membres n\'a pas les monstres indiqués' })
+        return response.status(404).send({ message: 'Un des membres n\'a pas les monstres indiqués' })
       }
 
       boxMemberAssigned.forEach((box) => {
