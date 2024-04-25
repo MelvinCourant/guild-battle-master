@@ -33,6 +33,21 @@
         border-radius: var(--input-text-radius) !important;
       }
 
+      .combobox__input {
+        position: fixed;
+        z-index: 9999;
+        top: 10%;
+        left: 20px;
+        border: var(--border);
+        border-radius: var(--input-text-radius) var(--input-text-radius) 0 0;
+        width: calc(100% - 40px);
+        height: 60px;
+        padding: 10px 14px;
+        font-size: 1.25rem;
+        font-weight: 500;
+        line-height: 0.95;
+      }
+
       svg {
         transform: rotate(180deg);
       }
@@ -86,15 +101,14 @@
     @media screen and (max-width: 768px) {
       position: fixed;
       z-index: 9999;
-      top: 10%;
+      top: calc(10% + 60px);
       left: 20px;
       transform: initial;
       overflow-y: auto;
       width: calc(100% - 40px);
       height: fit-content;
-      max-height: 80vh;
+      max-height: calc(80vh - 60px);
       border: var(--border);
-      border-radius: var(--input-text-radius);
       box-shadow: var(--shadow);
     }
 
