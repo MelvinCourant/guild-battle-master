@@ -82,37 +82,6 @@
         flex: initial;
         overflow: initial;
         max-height: initial;
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
-      }
-
-      .defense {
-        @media screen and (max-width: 768px) {
-          width: 100%;
-        }
-
-        &__member {
-          font-size: functions.rem(18);
-        }
-
-        &__monsters {
-          @media screen and (max-width: 768px) {
-            gap: 10px
-          }
-
-          & > li {
-            @media screen and (max-width: 768px) {
-              width: calc(100% / 3);
-            }
-          }
-        }
-
-        &__image {
-          @media screen and (max-width: 768px) {
-            width: 100%;
-          }
-        }
       }
     }
   }
