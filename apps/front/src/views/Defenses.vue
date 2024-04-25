@@ -5,6 +5,7 @@ import {useUserStore} from "../stores/user.js";
 import {provide, ref, reactive} from 'vue';
 import {useRouter} from 'vue-router';
 import Dialog from "../components/utils/Dialog.vue";
+import Preview from "../components/utils/Preview.vue";
 
 const env = import.meta.env;
 const userStore = useUserStore();
@@ -99,10 +100,16 @@ const dialog = reactive({
 });
 const dialogIsOpen = ref(false);
 const compositionSelected = ref(null)
+const previewCategory = ref('');
+const previewTitle = ref('');
+const previewIsOpen = ref(false);
+const previewToComposition = ref([]);
+const compositionId = ref(null);
 
 provide("fields", fields);
 provide('filters', filters);
 provide('filtersValues', filtersValues);
+provide('compositions', previewToComposition);
 
 const loading = ref(false);
 
@@ -213,6 +220,16 @@ async function searchComposition(inputName, value) {
     compositions.value = await result.json();
   }
 }
+
+function previewComposition(id) {
+  const composition = compositions.value.find((composition) => composition.id === id);
+
+  previewCategory.value = `Tour ${composition.grade} nat`;
+  previewTitle.value = composition.name;
+  previewIsOpen.value = true;
+  previewToComposition.value = composition.defenses;
+  compositionId.value = id;
+}
 </script>
 
 <template>
@@ -223,6 +240,7 @@ async function searchComposition(inputName, value) {
       :memberRole="memberRole"
       @search="searchComposition"
       @actionSelected="actionSelected"
+      @previewComposition="previewComposition"
       :loading="loading"
     />
     <router-link
@@ -235,6 +253,16 @@ async function searchComposition(inputName, value) {
         <path d="M17.8235 10.2605H10.2605V17.8235H7.73948V10.2605H0.176453V7.7395H7.73948V0.176472H10.2605V7.7395H17.8235V10.2605Z" fill="var(--white)"/>
       </svg>
     </router-link>
+    <Preview
+      :category="previewCategory"
+      :title="previewTitle"
+      :actions="actions"
+      :memberRole="memberRole"
+      :isOpen="previewIsOpen"
+      :compositionId="compositionId"
+      @actionSelected="actionSelected"
+      @hidePreview="previewIsOpen = false"
+    />
   </main>
   <Dialog
     :dialog="dialog"

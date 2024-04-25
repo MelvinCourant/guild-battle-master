@@ -18,11 +18,20 @@ defineProps({
   },
 })
 
-defineEmits(['actionSelected'])
+const emits = defineEmits(['actionSelected', 'previewComposition'])
+
+function previewComposition(e) {
+  if(!e.target.closest('.more')) {
+    emits('previewComposition')
+  }
+}
 </script>
 
 <template>
-  <div class="composition-card">
+  <div
+    class="composition-card"
+    @click="previewComposition"
+  >
     <div class="composition-card__header">
       <div class="composition-card__actions-container">
         <div class="composition-card__actions">

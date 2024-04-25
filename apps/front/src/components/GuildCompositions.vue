@@ -23,7 +23,7 @@ defineProps({
   }
 })
 
-defineEmits(['search', 'actionSelected'])
+defineEmits(['search', 'actionSelected', 'previewComposition'])
 </script>
 
 <template>
@@ -42,10 +42,11 @@ defineEmits(['search', 'actionSelected'])
                 action: $event,
                 id: composition.id
           })"
+          @previewComposition="$emit('previewComposition', composition.id)"
       />
       <p
-          class="guild-compositions__empty"
-          v-if="
+        class="guild-compositions__empty"
+        v-if="
           compositions.length === 0 &&
           !loading
         "

@@ -1,0 +1,50 @@
+@use '../../partials/mixins';
+@use '../../partials/functions';
+
+.preview {
+  position: fixed;
+  z-index: 9997;
+  top: 70px;
+  right: 0;
+  bottom: 0;
+  width: 670px;
+  overflow-y: auto;
+  background: var(--system);
+  transform: translateX(100%);
+  transition: transform 0.3s;
+  padding-top: 15px;
+
+  &--open {
+    transform: translateX(0);
+  }
+
+  &__head {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 15px;
+  }
+
+  &__hide {
+    @include mixins.resetButton(none, transparent);
+  }
+
+  &__body {
+    padding: 20px 50px;
+  }
+
+  &__category {
+    color: var(--text-grey);
+    font-size: functions.rem(24);
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: 5px;
+  }
+
+  &__title {
+    @include mixins.font('text');
+    font-size: functions.rem(32);
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: 30px;
+  }
+}
