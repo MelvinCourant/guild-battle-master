@@ -34,7 +34,30 @@ router.beforeEach(async (to, from, next) => {
         await verifyUser();
     }
 
+    const pathsWithPermissions = [
+        {
+            path: '/composition',
+            roles: ['leader', 'moderator'],
+            redirect: '/defenses'
+        },
+        {
+            path: '/upload-json/guild',
+            roles: ['leader', 'moderator'],
+            redirect: '/upload-json'
+        }
+    ]
+
     if(isLogged) {
+        const pathHavePermission = pathsWithPermissions.find(path => path.path === to.path);
+
+        if(pathHavePermission) {
+            if(!pathHavePermission.roles.includes(userStore.user.role)) {
+                next({ path: pathHavePermission.redirect })
+            } else {
+                next();
+            }
+        }
+
         if(to.path === "/login" || to.path === "/register") {
             next({ path: from.path });
         } else {
