@@ -132,14 +132,16 @@ export default class CompositionsController {
       query = query.andWhere('name', 'like', `%${keyword}%`)
     }
 
-    if(filters &&
-      filters.grade === '4'
-    ) {
-      query = query.andWhere('grade', '4')
-    } else if(filters &&
-      filters.grade === '5'
-    ) {
-      query = query.andWhere('grade', '5')
+    if(filters) {
+      for (const filter in filters) {
+        if(
+          filter === '4_stars' ||
+          filter === '5_stars'
+        ) {
+          const stars = filter.split('_')[0]
+          query = query.andWhereNot('grade', stars)
+        }
+      }
     }
 
     const compositions = await query

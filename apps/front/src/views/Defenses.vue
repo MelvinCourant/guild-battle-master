@@ -18,6 +18,30 @@ const fields = [
     placeholder: "Nom d'une composition",
   }
 ];
+const filters = reactive([
+  {
+    title: "Type de tour",
+    fields: [
+      {
+        label: "4 étoiles",
+        attributes: {
+          type: "checkbox",
+          name: "4_stars",
+          checked: true
+        }
+      },
+      {
+        label: "5 étoiles",
+        attributes: {
+          type: "checkbox",
+          name: "5_stars",
+          checked: true
+        }
+      }
+    ]
+  }
+]);
+const filtersValues = ref({});
 const keyword = ref('');
 const compositions = ref([]);
 const actions = [
@@ -77,6 +101,8 @@ const dialogIsOpen = ref(false);
 const compositionSelected = ref(null)
 
 provide("fields", fields);
+provide('filters', filters);
+provide('filtersValues', filtersValues);
 
 const loading = ref(false);
 
@@ -138,6 +164,55 @@ function dialogResponse(name) {
     dialogIsOpen.value = false;
   }
 }
+
+async function searchComposition(inputName, value) {
+  if(inputName === 'search') {
+    keyword.value = value;
+  } else {
+    filtersValues.value = value;
+    filters.forEach(filter => {
+      filter.fields.forEach(field => {
+        for(const key in filtersValues.value) {
+          if(field.attributes.name === key) {
+            field.attributes.checked = value[key];
+
+            if(value[key] === true) {
+              delete filtersValues.value[key];
+            }
+          }
+        }
+      });
+    });
+  }
+
+  let body;
+
+  if(keyword.value) {
+    body = {
+      keyword: keyword.value
+    };
+  }
+
+  if(Object.keys(filtersValues.value).length > 0){
+    body = {
+      ...body,
+      filters: filtersValues.value
+    };
+  }
+
+  const result = await fetch(`${env.VITE_URL}/api/compositions/${guildId}/search`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify(body)
+  });
+
+  if (result.ok) {
+    compositions.value = await result.json();
+  }
+}
 </script>
 
 <template>
@@ -146,6 +221,7 @@ function dialogResponse(name) {
       :compositions="compositions"
       :actions="actions"
       :memberRole="memberRole"
+      @search="searchComposition"
       @actionSelected="actionSelected"
       :loading="loading"
     />
