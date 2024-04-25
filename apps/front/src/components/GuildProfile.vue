@@ -76,7 +76,10 @@ function onImageLoad() {
         width="90"
         height="12"
         class="guild-profile__skeleton-update"
-        v-else
+        v-if="
+          !imageLoaded && name && user.role === 'leader' ||
+          !imageLoaded && name && user.role === 'moderator'
+        "
     />
   </div>
 </template>

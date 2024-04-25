@@ -97,7 +97,11 @@ function onImageLoad() {
     <SkeletonLoader
         width="90"
         height="12"
-        v-else
+        v-if="
+          !imageLoaded && pseudo && user.role === 'leader' ||
+          !imageLoaded && pseudo && user.role === 'moderator' ||
+          !imageLoaded && pseudo && user.member_id === memberId
+      "
     />
   </div>
 </template>
