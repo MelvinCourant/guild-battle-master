@@ -15,7 +15,7 @@ const fields = [
   {
     type: "search",
     name: "search",
-    placeholder: "Composition, monstre, .etc",
+    placeholder: "Nom d'une composition",
   }
 ];
 const keyword = ref('');

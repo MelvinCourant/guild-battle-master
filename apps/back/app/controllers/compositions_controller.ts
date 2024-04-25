@@ -123,8 +123,26 @@ export default class CompositionsController {
       return response.status(404).send({ error: 'La guilde est invalide ou n\'existe pas' })
     }
 
-    const compositions = await Composition.query()
+    const keyword = request.input('keyword')
+    const filters = request.input('filters')
+    let query = Composition.query()
       .where('guild_id', guild.id)
+
+    if(keyword) {
+      query = query.andWhere('name', 'like', `%${keyword}%`)
+    }
+
+    if(filters &&
+      filters.grade === '4'
+    ) {
+      query = query.andWhere('grade', '4')
+    } else if(filters &&
+      filters.grade === '5'
+    ) {
+      query = query.andWhere('grade', '5')
+    }
+
+    const compositions = await query
       .select('id', 'name', 'grade')
       .orderBy('grade', 'desc')
     let compositionsData = []
