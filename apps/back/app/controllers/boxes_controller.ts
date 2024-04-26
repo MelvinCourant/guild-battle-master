@@ -40,7 +40,7 @@ export default class BoxesController {
     const jsonParsed: any = JSON.parse(data)
     const monsters: any = jsonParsed.unit_list
 
-    async function createBoxes(monsters: any) {
+    async function createBoxes() {
       for (const monster of monsters) {
         const box: any = await Box.query()
           .where('monster_id', monster.unit_master_id)
@@ -70,7 +70,7 @@ export default class BoxesController {
       }
     }
 
-    await createBoxes(monsters)
+    await createBoxes()
     fs.unlinkSync(jsonLink)
 
     const memberBoxes = await Box.query().where('member_id', memberId)
@@ -87,11 +87,10 @@ export default class BoxesController {
     const boxes = await Box.query().where('member_id', memberId).select('monster_id', 'quantity')
     let monsters = []
 
-    let query = Monster.query()
-      .whereIn(
-        'unit_master_id',
-        boxes.map((box: any) => box.monster_id)
-      )
+    let query = Monster.query().whereIn(
+      'unit_master_id',
+      boxes.map((box: any) => box.monster_id)
+    )
 
     if (keyword) {
       query = query.andWhere('name', 'LIKE', `%${keyword}%`)
@@ -102,7 +101,7 @@ export default class BoxesController {
       let naturalGrades = [2, 3, 4, 5]
 
       for (const filter in filters) {
-        if(
+        if (
           filter === 'fire' ||
           filter === 'water' ||
           filter === 'wind' ||
@@ -110,47 +109,41 @@ export default class BoxesController {
           filter === 'dark'
         ) {
           elements = elements.filter((e) => e !== filter)
-        } else if(
+        } else if (
           filter === '2_stars' ||
           filter === '3_stars' ||
           filter === '4_stars' ||
           filter === '5_stars'
         ) {
-          const stars = parseInt(filter.split('_')[0])
+          const stars = Number.parseInt(filter.split('_')[0])
           naturalGrades = naturalGrades.filter((n) => n !== stars)
-        } else if(filters.hasOwnProperty(filter)) {
+        } else if (filters.hasOwnProperty(filter)) {
           query = query.andWhere(filter, filters[filter])
         }
       }
 
-      if (
-        elements.length < 5 &&
-        elements.length > 0
-      ) {
+      if (elements.length < 5 && elements.length > 0) {
         query = query.andWhere((builder) => {
           elements.forEach((element, index) => {
             if (index === 0) {
-              builder.where('element', element);
+              builder.where('element', element)
             } else {
-              builder.orWhere('element', element);
+              builder.orWhere('element', element)
             }
-          });
-        });
+          })
+        })
       }
 
-      if (
-        naturalGrades.length < 4 &&
-        naturalGrades.length > 0
-      ) {
+      if (naturalGrades.length < 4 && naturalGrades.length > 0) {
         query = query.andWhere((builder) => {
           naturalGrades.forEach((grade, index) => {
             if (index === 0) {
-              builder.where('natural_grade', grade - 1);
+              builder.where('natural_grade', grade - 1)
             } else {
-              builder.orWhere('natural_grade', grade - 1);
+              builder.orWhere('natural_grade', grade - 1)
             }
-          });
-        });
+          })
+        })
       }
     }
 
@@ -162,7 +155,7 @@ export default class BoxesController {
       const box = boxes.find((b) => b.monster_id === monster.unit_master_id)
       const quantity = box ? box.quantity : 0
 
-      if(quantity !== 0) {
+      if (quantity !== 0) {
         monstersWithQuantity.push({
           name: monster.name,
           element: monster.element,
@@ -174,12 +167,14 @@ export default class BoxesController {
       }
     }
 
-    if(sort !== 'element') {
-      if(sort === 'quantity') {
+    if (sort !== 'element') {
+      if (sort === 'quantity') {
         monstersWithQuantity = monstersWithQuantity.sort((a, b) => b.quantity - a.quantity)
       } else if (sort === 'grade') {
-        monstersWithQuantity = monstersWithQuantity.sort((a, b) => b.natural_grade - a.natural_grade)
-      } else if(sort === 'name') {
+        monstersWithQuantity = monstersWithQuantity.sort(
+          (a, b) => b.natural_grade - a.natural_grade
+        )
+      } else if (sort === 'name') {
         monstersWithQuantity = monstersWithQuantity.sort((a, b) => a.name.localeCompare(b.name))
       }
     } else {
@@ -198,21 +193,20 @@ export default class BoxesController {
   async compositions({ auth, params, request, response }: HttpContext) {
     const user = await auth.authenticate()
 
-    if(
-      user.role !== 'admin' &&
-      user.role !== 'leader' &&
-      user.role !== 'moderator'
-    ) {
+    if (user.role !== 'admin' && user.role !== 'leader' && user.role !== 'moderator') {
       return response.forbidden()
     }
 
     const guildId = params.guildId
     const keyword = request.input('keyword')
     const filters = request.input('filters')
-    let members;
+    let members
 
-    if(keyword) {
-      members = await Member.query().where('guild_id', guildId).andWhere('pseudo', 'LIKE', `%${keyword}%`).select('id', 'pseudo')
+    if (keyword) {
+      members = await Member.query()
+        .where('guild_id', guildId)
+        .andWhere('pseudo', 'LIKE', `%${keyword}%`)
+        .select('id', 'pseudo')
     } else {
       members = await Member.query().where('guild_id', guildId).select('id', 'pseudo')
     }
@@ -225,25 +219,25 @@ export default class BoxesController {
 
     let compositions = []
 
-    async function getBoxes(memberId: any, defensesSelected: any = []) {
-      let boxes = await Box.query().where('member_id', memberId).whereRaw('monsters_assigned < quantity').select('monster_id', 'quantity', 'monsters_assigned')
+    async function getBoxes(memberId: any) {
+      let boxes = await Box.query()
+        .where('member_id', memberId)
+        .whereRaw('monsters_assigned < quantity')
+        .select('monster_id', 'quantity', 'monsters_assigned')
 
-      if(
-        boxes.length === 0 ||
-        defensesSelected.length === 0
-      ) {
+      if (boxes.length === 0 || defensesSelected.length === 0) {
         return boxes
       }
 
-      let memberDefensesSelected: any[] = [];
+      let memberDefensesSelected: any[] = []
 
       defensesSelected.forEach((defense: any) => {
-        if(defense.member === memberId) {
+        if (defense.member === memberId) {
           memberDefensesSelected.push(defense)
         }
       })
 
-      if(memberDefensesSelected.length > 0) {
+      if (memberDefensesSelected.length > 0) {
         for (let defense of memberDefensesSelected) {
           for (let box of boxes) {
             if (
@@ -251,9 +245,9 @@ export default class BoxesController {
               box.monster_id === defense.second ||
               box.monster_id === defense.third
             ) {
-              box.monsters_assigned += 1;
+              box.monsters_assigned += 1
               if (box.monsters_assigned >= box.quantity) {
-                boxes = boxes.filter(b => b !== box);
+                boxes = boxes.filter((b) => b !== box)
               }
             }
           }
@@ -264,46 +258,59 @@ export default class BoxesController {
     }
 
     for (const member of members) {
-      const boxes = await getBoxes(member.id, defensesSelected)
+      const boxes = await getBoxes(member.id)
 
-      let monsters: any[] = [];
-      let query = Monster.query()
-        .whereIn(
-          'unit_master_id',
-          boxes.map((box) => box.monster_id)
-        )
+      let monsters: any[] = []
+      let query = Monster.query().whereIn(
+        'unit_master_id',
+        boxes.map((box) => box.monster_id)
+      )
 
-      if(filters) {
+      if (filters) {
         query = query.andWhere('is_fusion_shop', filters.is_fusion_shop)
       }
 
-      if(grade === '5') {
+      if (grade === '5') {
         query = query.select('unit_master_id', 'image', 'element', 'natural_grade', 'name')
       } else {
-        query = query.select('unit_master_id', 'image', 'element', 'natural_grade', 'name')
+        query = query
+          .select('unit_master_id', 'image', 'element', 'natural_grade', 'name')
           .whereRaw('natural_grade < 4')
       }
 
       monsters = await query
 
+      // eslint-disable-next-line no-inner-declarations
       function findPossibilities(requestMonsters: any) {
         let possibilities: any[] = []
 
-        if(grade === '5') {
+        if (grade === '5') {
           requestMonsters.forEach((monster: any) => {
-            if(monster === 'light') {
-              possibilities = possibilities.concat(monsters.filter((monster) => monster.element === 'light' && monster.natural_grade === '5'))
-            } else if(monster === 'dark') {
-              possibilities = possibilities.concat(monsters.filter((monster) => monster.element === 'dark' && monster.natural_grade === '5'))
-            } else if(monster === 'light-dark') {
-              possibilities = possibilities.concat(monsters.filter((monster) => (monster.element === 'light' || monster.element === 'dark') && monster.natural_grade === '5'))
+            if (monster === 'light') {
+              possibilities = possibilities.concat(
+                monsters.filter((m) => m.element === 'light' && m.natural_grade === '5')
+              )
+            } else if (monster === 'dark') {
+              possibilities = possibilities.concat(
+                monsters.filter((m) => m.element === 'dark' && m.natural_grade === '5')
+              )
+            } else if (monster === 'light-dark') {
+              possibilities = possibilities.concat(
+                monsters.filter(
+                  (m) => (m.element === 'light' || m.element === 'dark') && m.natural_grade === '5'
+                )
+              )
             } else {
-              possibilities = possibilities.concat(monsters.filter((m) => m.unit_master_id === monster))
+              possibilities = possibilities.concat(
+                monsters.filter((m) => m.unit_master_id === monster)
+              )
             }
           })
         } else {
           requestMonsters.forEach((monster: any) => {
-            possibilities = possibilities.concat(monsters.filter((m) => m.unit_master_id === monster))
+            possibilities = possibilities.concat(
+              monsters.filter((m) => m.unit_master_id === monster)
+            )
           })
         }
 
@@ -314,7 +321,7 @@ export default class BoxesController {
       let secondBoxesPossibilities: any[] = findPossibilities(secondMonsters)
       let thirdBoxesPossibilities: any[] = findPossibilities(thirdMonsters)
 
-      if(
+      if (
         leaderBoxesPossibilities.length === 0 ||
         secondBoxesPossibilities.length === 0 ||
         thirdBoxesPossibilities.length === 0
@@ -327,7 +334,11 @@ export default class BoxesController {
           if (secondBox.unit_master_id === leaderBox.unit_master_id) continue
 
           for (const thirdBox of thirdBoxesPossibilities) {
-            if (thirdBox.unit_master_id === leaderBox.unit_master_id || thirdBox.unit_master_id === secondBox.unit_master_id) continue
+            if (
+              thirdBox.unit_master_id === leaderBox.unit_master_id ||
+              thirdBox.unit_master_id === secondBox.unit_master_id
+            )
+              continue
 
             compositions.push({
               member,
@@ -342,7 +353,7 @@ export default class BoxesController {
               third: {
                 unit_master_id: thirdBox.unit_master_id,
                 image: thirdBox.image,
-              }
+              },
             })
           }
         }

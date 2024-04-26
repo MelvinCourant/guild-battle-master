@@ -1,4 +1,4 @@
-import vine, {SimpleMessagesProvider} from '@vinejs/vine'
+import vine, { SimpleMessagesProvider } from '@vinejs/vine'
 
 const messages = {
   string: 'Le {{ field }} doit être une chaîne de caractères',
@@ -15,8 +15,8 @@ export const createCompositionValidator = vine.compile(
         member: vine.number(),
         leader: vine.number(),
         second: vine.number(),
-        third: vine.number()
+        third: vine.number(),
       })
-    )
+    ),
   })
 )

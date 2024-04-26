@@ -3,7 +3,7 @@ import User from '#models/user'
 import Member from '#models/member'
 
 export default class UsersController {
-  public async verify({ auth, response }: HttpContext) {
+  async verify({ auth, response }: HttpContext) {
     const user = await auth.authenticate()
 
     if (user) {

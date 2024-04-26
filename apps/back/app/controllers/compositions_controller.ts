@@ -1,31 +1,23 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import { createCompositionValidator } from '#validators/composition'
-import Member from "#models/member";
-import Guild from "#models/guild";
-import Composition from "#models/composition";
-import Defense from "#models/defense";
-import Monster from "#models/monster";
-import Box from "#models/box";
+import Member from '#models/member'
+import Guild from '#models/guild'
+import Composition from '#models/composition'
+import Defense from '#models/defense'
+import Monster from '#models/monster'
+import Box from '#models/box'
 
 export default class CompositionsController {
-  public async create({ auth, request, response }: HttpContext) {
+  async create({ auth, request, response }: HttpContext) {
     const user = await auth.authenticate()
     const payload = await request.validateUsing(createCompositionValidator)
 
-    if(
-      user.role !== 'admin' &&
-      user.role !== 'leader' &&
-      user.role !== 'moderator'
-    ) {
+    if (user.role !== 'admin' && user.role !== 'leader' && user.role !== 'moderator') {
       return response.forbidden()
     }
 
-    const member = await Member.query()
-      .where('user_id', user.id)
-      .firstOrFail()
-    const guild = await Guild.query()
-      .where('id', member.guild_id)
-      .firstOrFail()
+    const member = await Member.query().where('user_id', user.id).firstOrFail()
+    const guild = await Guild.query().where('id', member.guild_id).firstOrFail()
 
     // @ts-ignore
     const composition = await Composition.create({
@@ -35,15 +27,13 @@ export default class CompositionsController {
     })
 
     for (const defense of payload.defenses) {
-      const memberAssigned = await Member.query()
-        .where('id', defense.member)
-        .firstOrFail()
+      const memberAssigned = await Member.query().where('id', defense.member).firstOrFail()
       const defenseAssigned = await Defense.create({
         composition_id: composition.id,
         member_id: defense.member,
         leader_monster: defense.leader,
         second_monster: defense.second,
-        third_monster: defense.third
+        third_monster: defense.third,
       })
       const boxMemberAssigned = await Box.query()
         .where('member_id', memberAssigned.id)
@@ -54,8 +44,10 @@ export default class CompositionsController {
             .orWhere('monster_id', defenseAssigned.third_monster)
         })
 
-      if(boxMemberAssigned.length === 0) {
-        return response.status(404).send({ message: 'Un des membres n\'a pas les monstres indiqués' })
+      if (boxMemberAssigned.length === 0) {
+        return response
+          .status(404)
+          .send({ message: "Un des membres n'a pas les monstres indiqués" })
       }
 
       boxMemberAssigned.forEach((box) => {
@@ -67,30 +59,40 @@ export default class CompositionsController {
     return response.created({ message: 'Composition créée avec succès' })
   }
 
-  public async destroy({ auth, params, response }: HttpContext) {
+  async destroy({ auth, params, response }: HttpContext) {
     const user = await auth.authenticate()
 
-    if(
-      user.role !== 'admin' &&
-      user.role !== 'leader' &&
-      user.role !== 'moderator'
-    ) {
+    if (user.role !== 'admin' && user.role !== 'leader' && user.role !== 'moderator') {
       return response.forbidden()
     }
 
-    const composition = await Composition.query()
-      .where('id', params.id)
-      .firstOrFail()
+    const composition = await Composition.query().where('id', params.id).firstOrFail()
     const defenses = await Defense.query()
       .where('composition_id', composition.id)
       .select('id', 'leader_monster', 'second_monster', 'third_monster', 'member_id')
     const monstersAssigned = await Box.query()
-      .where('member_id', 'in', defenses.map((defense) => defense.member_id))
+      .where(
+        'member_id',
+        'in',
+        defenses.map((defense) => defense.member_id)
+      )
       .andWhere((builder) => {
         builder
-          .where('monster_id', 'in', defenses.map((defense) => defense.leader_monster))
-          .orWhere('monster_id', 'in', defenses.map((defense) => defense.second_monster))
-          .orWhere('monster_id', 'in', defenses.map((defense) => defense.third_monster))
+          .where(
+            'monster_id',
+            'in',
+            defenses.map((defense) => defense.leader_monster)
+          )
+          .orWhere(
+            'monster_id',
+            'in',
+            defenses.map((defense) => defense.second_monster)
+          )
+          .orWhere(
+            'monster_id',
+            'in',
+            defenses.map((defense) => defense.third_monster)
+          )
       })
 
     monstersAssigned.forEach((box) => {
@@ -103,50 +105,35 @@ export default class CompositionsController {
     return response.noContent()
   }
 
-  public async search({ auth, params, request, response }: HttpContext) {
+  async search({ auth, params, request, response }: HttpContext) {
     const user = await auth.authenticate()
     const guildId = params.guildId
-    const guild = await Guild.query()
-      .where('id', guildId)
-      .first()
-    const userMember = await Member.query()
-      .where('user_id', user.id)
-      .firstOrFail()
-    const userGuild = await Guild.query()
-      .where('id', userMember.guild_id)
-      .firstOrFail()
+    const guild = await Guild.query().where('id', guildId).first()
+    const userMember = await Member.query().where('user_id', user.id).firstOrFail()
+    const userGuild = await Guild.query().where('id', userMember.guild_id).firstOrFail()
 
-    if(
-      !guild ||
-      userGuild.id !== guild.id
-    ) {
-      return response.status(404).send({ message: 'La guilde est invalide ou n\'existe pas' })
+    if (!guild || userGuild.id !== guild.id) {
+      return response.status(404).send({ message: "La guilde est invalide ou n'existe pas" })
     }
 
     const keyword = request.input('keyword')
     const filters = request.input('filters')
-    let query = Composition.query()
-      .where('guild_id', guild.id)
+    let query = Composition.query().where('guild_id', guild.id)
 
-    if(keyword) {
+    if (keyword) {
       query = query.andWhere('name', 'like', `%${keyword}%`)
     }
 
-    if(filters) {
+    if (filters) {
       for (const filter in filters) {
-        if(
-          filter === '4_stars' ||
-          filter === '5_stars'
-        ) {
+        if (filter === '4_stars' || filter === '5_stars') {
           const stars = filter.split('_')[0]
           query = query.andWhereNot('grade', stars)
         }
       }
     }
 
-    const compositions = await query
-      .select('id', 'name', 'grade')
-      .orderBy('grade', 'desc')
+    const compositions = await query.select('id', 'name', 'grade').orderBy('grade', 'desc')
     let compositionsData = []
 
     for (const composition of compositions) {
@@ -155,12 +142,12 @@ export default class CompositionsController {
         .select('id', 'leader_monster', 'second_monster', 'third_monster', 'member_id')
       let defensesData = []
 
-      if(defenses.length === 0) {
+      if (defenses.length === 0) {
         compositionsData.push({
           id: composition.id,
           name: composition.name,
           grade: composition.grade,
-          defenses: []
+          defenses: [],
         })
 
         continue
@@ -189,7 +176,7 @@ export default class CompositionsController {
           leader: leaderMonster,
           second: secondMonster,
           third: thirdMonster,
-          member: member
+          member: member,
         })
       }
 
@@ -197,27 +184,21 @@ export default class CompositionsController {
         id: composition.id,
         name: composition.name,
         grade: composition.grade,
-        defenses: defensesData
+        defenses: defensesData,
       })
     }
 
     return response.ok(compositionsData)
   }
 
-  public async update({ auth, params, request, response }: HttpContext) {
+  async update({ auth, params, request, response }: HttpContext) {
     const user = await auth.authenticate()
     const payload = await request.validateUsing(createCompositionValidator)
-    const composition = await Composition.query()
-      .where('id', params.id)
-      .firstOrFail()
-    const member = await Member.query()
-      .where('user_id', user.id)
-      .firstOrFail()
-    const guild = await Guild.query()
-      .where('id', member.guild_id)
-      .firstOrFail()
+    const composition = await Composition.query().where('id', params.id).firstOrFail()
+    const member = await Member.query().where('user_id', user.id).firstOrFail()
+    const guild = await Guild.query().where('id', member.guild_id).firstOrFail()
 
-    if(
+    if (
       user.role !== 'admin' &&
       user.role !== 'leader' &&
       user.role !== 'moderator' &&
@@ -226,13 +207,13 @@ export default class CompositionsController {
       return response.forbidden()
     }
 
-    if(payload.name !== composition.name) {
+    if (payload.name !== composition.name) {
       composition.name = payload.name
     }
 
     const grade = payload.grade.toString()
 
-    if(grade !== composition.grade) {
+    if (grade !== composition.grade) {
       // @ts-ignore
       composition.grade = grade
     }
@@ -253,33 +234,35 @@ export default class CompositionsController {
             .orWhere('monster_id', actualDefense.second_monster)
             .orWhere('monster_id', actualDefense.third_monster)
         })
-      const defensesAssignedInPayload = payload.defenses.filter((defense) =>
-        defense.member === actualDefense.member_id &&
-        defense.leader === actualDefense.leader_monster &&
-        defense.second === actualDefense.second_monster &&
-        defense.third === actualDefense.third_monster
+      const defensesAssignedInPayload = payload.defenses.filter(
+        (defense) =>
+          defense.member === actualDefense.member_id &&
+          defense.leader === actualDefense.leader_monster &&
+          defense.second === actualDefense.second_monster &&
+          defense.third === actualDefense.third_monster
       )
 
-      if(boxMemberAssigned.length === 0) {
-        return response.status(404).send({ message: 'Un des membres n\'a pas les monstres indiqués' })
+      if (boxMemberAssigned.length === 0) {
+        return response
+          .status(404)
+          .send({ message: "Un des membres n'a pas les monstres indiqués" })
       }
 
-      if(
+      if (
         defensesAssignedInPayload &&
         boxMemberAssigned.length === defensesAssignedInPayload.length
       ) {
-        defensesData = defensesData.filter((defense) =>
-          defense.member !== actualDefense.member_id &&
-          defense.leader !== actualDefense.leader_monster &&
-          defense.second !== actualDefense.second_monster &&
-          defense.third !== actualDefense.third_monster
+        defensesData = defensesData.filter(
+          (defense) =>
+            defense.member !== actualDefense.member_id &&
+            defense.leader !== actualDefense.leader_monster &&
+            defense.second !== actualDefense.second_monster &&
+            defense.third !== actualDefense.third_monster
         )
-      } else if(
+      } else if (
         boxMemberAssigned.length !== 0 &&
-        (
-          defensesAssignedInPayload &&
-          boxMemberAssigned.length !== defensesAssignedInPayload.length
-        )
+        defensesAssignedInPayload &&
+        boxMemberAssigned.length !== defensesAssignedInPayload.length
       ) {
         boxMemberAssigned.forEach((box) => {
           box.monsters_assigned--
@@ -291,15 +274,13 @@ export default class CompositionsController {
     }
 
     for (const defense of defensesData) {
-      const memberAssigned = await Member.query()
-        .where('id', defense.member)
-        .firstOrFail()
+      const memberAssigned = await Member.query().where('id', defense.member).firstOrFail()
       const defenseAssigned = await Defense.create({
         composition_id: composition.id,
         member_id: defense.member,
         leader_monster: defense.leader,
         second_monster: defense.second,
-        third_monster: defense.third
+        third_monster: defense.third,
       })
       const boxMemberAssigned = await Box.query()
         .where('member_id', memberAssigned.id)
@@ -310,8 +291,10 @@ export default class CompositionsController {
             .orWhere('monster_id', defenseAssigned.third_monster)
         })
 
-      if(boxMemberAssigned.length === 0) {
-        return response.status(404).send({ message: 'Un des membres n\'a pas les monstres indiqués' })
+      if (boxMemberAssigned.length === 0) {
+        return response
+          .status(404)
+          .send({ message: "Un des membres n'a pas les monstres indiqués" })
       }
 
       boxMemberAssigned.forEach((box) => {
@@ -323,7 +306,7 @@ export default class CompositionsController {
     return response.created({ message: 'Composition mis à jour avec succès' })
   }
 
-  public async show({ auth, params, response }: HttpContext) {
+  async show({ auth, params, response }: HttpContext) {
     const user = await auth.authenticate()
     const userMember = await Member.query()
       .where('user_id', user.id)
@@ -334,7 +317,7 @@ export default class CompositionsController {
       .select('id', 'name', 'grade', 'guild_id')
       .firstOrFail()
 
-    if(composition.guild_id !== userMember.guild_id) {
+    if (composition.guild_id !== userMember.guild_id) {
       return response.forbidden()
     }
 
@@ -365,24 +348,24 @@ export default class CompositionsController {
         id: defense.id,
         leader: {
           unit_master_id: leaderMonster.unit_master_id,
-          image: leaderMonster.image
+          image: leaderMonster.image,
         },
         second: {
           unit_master_id: secondMonster.unit_master_id,
-          image: secondMonster.image
+          image: secondMonster.image,
         },
         third: {
           unit_master_id: thirdMonster.unit_master_id,
-          image: thirdMonster.image
+          image: thirdMonster.image,
         },
-        member: member
+        member: member,
       })
     }
 
     return response.ok({
       name: composition.name,
       grade: composition.grade,
-      defenses: defensesData
+      defenses: defensesData,
     })
   }
 }

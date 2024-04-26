@@ -1,7 +1,7 @@
 import { BaseModel, column, belongsTo } from '@adonisjs/lucid/orm'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
-import Monster from "#models/monster";
-import Member from "#models/member";
+import Monster from '#models/monster'
+import Member from '#models/member'
 
 export default class Box extends BaseModel {
   @column({ isPrimary: true })

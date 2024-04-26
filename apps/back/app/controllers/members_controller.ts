@@ -51,7 +51,7 @@ export default class MembersController {
 
     const userParams = await User.query().where('id', member.user_id).select('image').first()
 
-    if(userParams && userParams.image) {
+    if (userParams && userParams.image) {
       image = userParams.image
     }
 
@@ -59,7 +59,7 @@ export default class MembersController {
       member: {
         pseudo: member.pseudo,
         grade: member.grade,
-        image: image
+        image: image,
       },
       monsters: monstersWithQuantity,
     })

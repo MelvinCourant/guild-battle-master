@@ -1,23 +1,25 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import Monster from "#models/monster";
-import fs from 'fs';
-import { pipeline } from 'stream';
-import { promisify } from 'util';
+import Monster from '#models/monster'
+import fs from 'node:fs'
+import { pipeline } from 'node:stream'
+import { promisify } from 'node:util'
 
 export default class MonstersController {
-  public async create({ response }: HttpContext) {
-    const streamPipeline = promisify(pipeline);
+  async create({ response }: HttpContext) {
+    const streamPipeline = promisify(pipeline)
     let totalPages: number = 1
 
     async function getSwarfarmMonsters(page: number) {
-      const result = await fetch(`https://swarfarm.com/api/v2/monsters/?base_stars__gte=3&page=${page}`)
+      const result = await fetch(
+        `https://swarfarm.com/api/v2/monsters/?base_stars__gte=3&page=${page}`
+      )
       return result.json()
     }
 
     let pageResults: any = await getSwarfarmMonsters(totalPages)
 
-    if(totalPages === 1) {
-      totalPages = (pageResults.count / 100) + 1
+    if (totalPages === 1) {
+      totalPages = pageResults.count / 100 + 1
     }
 
     for (let i = 1; i <= totalPages; i++) {
@@ -36,16 +38,13 @@ export default class MonstersController {
           'unit_icon_0019_3_3.png',
           'unit_icon_0019_3_4.png',
           'unit_icon_0019_4_3.png',
-          'unit_icon_0019_4_4.png'
+          'unit_icon_0019_4_4.png',
         ]
 
         if (
           notKorean.test(monster.name) &&
           !monstersNotReleased.includes(monster.image_filename) &&
-          (
-            monster.transforms_to > monster.id ||
-            !monster.transforms_to
-          )
+          (monster.transforms_to > monster.id || !monster.transforms_to)
         ) {
           await insertMonsterIntoDb(monster)
         }
@@ -71,22 +70,21 @@ export default class MonstersController {
         'Geralt',
         'Ciri',
         'Yennefer',
-        'Triss'
+        'Triss',
       ]
 
-      if (
-        monster.awakens_to ||
-        collabMonsters.includes(monsterName)
-      ) {
+      if (monster.awakens_to || collabMonsters.includes(monsterName)) {
         monsterName = `${monster.element} ${monsterName}`
       }
 
       const monsterFileName = monster.image_filename
-      const result: any = await fetch(`https://swarfarm.com/static/herders/images/monsters/${monsterFileName}`)
+      const result: any = await fetch(
+        `https://swarfarm.com/static/herders/images/monsters/${monsterFileName}`
+      )
       const dirPath = 'uploads/monsters'
 
-      if (!fs.existsSync(dirPath)){
-        fs.mkdirSync(dirPath, { recursive: true });
+      if (!fs.existsSync(dirPath)) {
+        fs.mkdirSync(dirPath, { recursive: true })
       }
 
       const imageExists = fs.existsSync(`${dirPath}/${monsterFileName}`)
@@ -123,21 +121,18 @@ export default class MonstersController {
           'wind-gingerbrave',
           'cow-girl',
           'wind-totemist',
-          'wind-valkyrja'
+          'wind-valkyrja',
         ]
 
-        if(
-          (
-            monster.awakens_from &&
-            !monster.awakens_to
-          ) ||
+        if (
+          (monster.awakens_from && !monster.awakens_to) ||
           collabMonsters.includes(monster.name)
         ) {
           isFullyAwakened = true
         }
 
-        if (fusionOrShopMonsters.some(slug => monster.bestiary_slug.includes(slug))) {
-          isFusionOrShop = true;
+        if (fusionOrShopMonsters.some((slug) => monster.bestiary_slug.includes(slug))) {
+          isFusionOrShop = true
         }
 
         const monsterData = {
@@ -147,16 +142,13 @@ export default class MonstersController {
           natural_grade: monster.natural_stars - 1, // -1 to fix natural_grade is 1 star higher than it should be
           image: `monsters/${monsterFileName}`,
           is_fully_awakened: isFullyAwakened,
-          is_fusion_shop: isFusionOrShop
+          is_fusion_shop: isFusionOrShop,
         }
         // @ts-ignore
         await Monster.create(monsterData)
       }
 
-      if(
-        !imageExists ||
-        !monsterExists
-      ) {
+      if (!imageExists || !monsterExists) {
         console.log(`Monster ${monsterName} created successfully`)
       }
     }
@@ -164,7 +156,7 @@ export default class MonstersController {
     return response.status(200).json({ message: 'Monsters created successfully' })
   }
 
-  public async show({ params, response }: HttpContext) {
+  async show({ params, response }: HttpContext) {
     const { id } = params
     const monster = await Monster.find(id)
 
@@ -175,15 +167,13 @@ export default class MonstersController {
     return response.status(200).json(monster)
   }
 
-  public async index({request, response}: HttpContext) {
-    let monsters;
+  async index({ request, response }: HttpContext) {
+    let monsters
     const grade = request.input('grade')
 
     if (grade === 'all') {
-      monsters = await Monster.query()
-        .where('is_fully_awakened', true)
-        .orderBy('name', 'asc')
-    } else if(grade === 4) {
+      monsters = await Monster.query().where('is_fully_awakened', true).orderBy('name', 'asc')
+    } else if (grade === 4) {
       monsters = await Monster.query()
         .where('is_fully_awakened', true)
         .whereRaw('natural_grade < ?', [grade])

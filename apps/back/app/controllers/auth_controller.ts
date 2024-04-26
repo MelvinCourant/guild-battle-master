@@ -21,7 +21,8 @@ export default class AuthController {
       const payload = await request.validateUsing(createUserMemberValidator)
       const user: any = await User.query().where('email', payload.email).first()
 
-      async function deletePreviousData(user: any) {
+      // eslint-disable-next-line no-inner-declarations
+      async function deletePreviousData() {
         // Delete previous data if user exists but not completed registration
         const userImage: any = await User.query()
           .where('email', payload.email)
@@ -66,7 +67,7 @@ export default class AuthController {
           .send({ message: 'Un compte existe déjà avec cette adresse email' })
       } else if (user && user.pending === 1) {
         // User exists but not completed registration
-        await deletePreviousData(user)
+        await deletePreviousData()
       }
 
       const userImage: any = payload.image
@@ -113,6 +114,7 @@ export default class AuthController {
         return response.status(500).send({ message: 'Error reading json file' })
       }
 
+      // eslint-disable-next-line no-inner-declarations
       async function createMembers(wizardId: number, members: any) {
         for (const memberIndex of Object.keys(members)) {
           const member: any = members[memberIndex]
@@ -153,6 +155,7 @@ export default class AuthController {
         }
       }
 
+      // eslint-disable-next-line no-inner-declarations
       async function createBoxes(memberId: number, monsters: any) {
         for (const monster of monsters) {
           const box: any = await Box.query()
@@ -170,13 +173,10 @@ export default class AuthController {
             continue
           }
 
-          if (
-            box &&
-            box.quantity !== numberOfMonsters
-          ) {
+          if (box && box.quantity !== numberOfMonsters) {
             box.quantity = numberOfMonsters
             await box.save()
-          } else if(!box){
+          } else if (!box) {
             await Box.create({
               monster_id: monster.unit_master_id,
               member_id: memberId,
@@ -192,12 +192,17 @@ export default class AuthController {
       let guild: any = null
 
       const memberExists: any = await Member.query().where('wizard_id', wizardId).first()
-      const guildExists: any = await Guild.query().where('guild_id_json', jsonParsed.guild.guild_info.guild_id).first()
+      const guildExists: any = await Guild.query()
+        .where('guild_id_json', jsonParsed.guild.guild_info.guild_id)
+        .first()
 
       if (memberExists) {
         const memberGuild: any = await Guild.query().where('id', memberExists.guild_id).first()
         const members: any = await Member.query().where('guild_id', memberGuild.id).select('id')
-        const leader = await Member.query().where('wizard_id', jsonParsed.guild.guild_info.master_wizard_id).select('pseudo').first()
+        const leader = await Member.query()
+          .where('wizard_id', jsonParsed.guild.guild_info.master_wizard_id)
+          .select('pseudo')
+          .firstOrFail()
 
         memberExists.user_id = user.id
         memberExists.save()
@@ -211,7 +216,7 @@ export default class AuthController {
         })
       }
 
-      if(guildExists) {
+      if (guildExists) {
         return response.status(400).send({ message: 'Guild already exists' })
       }
 

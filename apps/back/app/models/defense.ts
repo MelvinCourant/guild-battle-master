@@ -1,9 +1,9 @@
 import { DateTime } from 'luxon'
-import {BaseModel, belongsTo, column} from '@adonisjs/lucid/orm'
-import Monster from "#models/monster";
-import Member from "#models/member";
-import Composition from "#models/composition";
-import type {BelongsTo} from "@adonisjs/lucid/types/relations";
+import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
+import Monster from '#models/monster'
+import Member from '#models/member'
+import Composition from '#models/composition'
+import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 
 export default class Defense extends BaseModel {
   @column({ isPrimary: true })

@@ -14,7 +14,7 @@ import GuildsController from '#controllers/guilds_controller'
 import MembersController from '#controllers/members_controller'
 import MonstersController from '#controllers/monsters_controller'
 import BoxesController from '#controllers/boxes_controller'
-import CompositionsController from "#controllers/compositions_controller";
+import CompositionsController from '#controllers/compositions_controller'
 import app from '@adonisjs/core/services/app'
 
 router
@@ -135,7 +135,7 @@ router
 
     router.post('/:guildId/search-compositions', async (data) => {
       return boxesController.compositions(data)
-    });
+    })
   })
   .prefix('api/boxes')
 

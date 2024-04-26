@@ -39,6 +39,6 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare updatedAt: DateTime | null
 
   static accessTokens = DbAccessTokensProvider.forModel(User, {
-    expiresIn: '30 days'
+    expiresIn: '30 days',
   })
 }

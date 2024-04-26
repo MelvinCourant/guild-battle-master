@@ -3,7 +3,7 @@ import { SimpleMessagesProvider } from '@vinejs/vine'
 
 const messages = {
   'email.required': 'Une adresse email est requis',
-  'email.email': 'L\'adresse email doit être valide',
+  'email.email': "L'adresse email doit être valide",
   'password.required': 'Un mot de passe est requis',
 }
 

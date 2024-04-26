@@ -12,7 +12,7 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
-    "monsters": "node get-monsters.js"
+    "monsters": "node get_monsters.js"
   },
   "imports": {
     "#controllers/*": "./app/controllers/*.js",
