@@ -44,7 +44,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           source: "apps/front/dist/*"
-          target: "/home/melvincourant/"
+          target: "/home/melvincourant/htdocs/guildbattlemaster.com/"
           strip_components: 3
 
       - name: Copy backend build to server
@@ -55,5 +55,5 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           source: "apps/back/build/*"
-          target: "/home/melvincourant/back/*"
+          target: "/home/melvincourant/htdocs/guildbattlemaster.com/back/"
           strip_components: 3
