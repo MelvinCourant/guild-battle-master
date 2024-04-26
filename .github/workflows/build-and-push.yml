@@ -45,7 +45,7 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           source: "apps/front/dist/*"
           target: "/home/melvincourant/"
-          strip_components: 1
+          strip_components: 3
 
       - name: Copy backend build to server
         uses: appleboy/scp-action@master
@@ -56,4 +56,4 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           source: "apps/back/build/*"
           target: "/home/melvincourant/back/*"
-          strip_components: 1
+          strip_components: 3
