@@ -54,6 +54,6 @@ jobs:
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          source: "apps/back/build/*"
+          source: "apps/back/build/*, apps/back/get_monsters.js"
           target: "/home/melvincourant/htdocs/guildbattlemaster.com/back/"
           strip_components: 3
