@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHashHistory } from 'vue-router';
 import Guild from '../views/Guild.vue';
 import Defenses from "../views/Defenses.vue";
 import Map from '../views/Map.vue';
@@ -11,7 +11,7 @@ import Composition from "../views/Composition.vue";
 
 const router = createRouter(
 {
-    history: createWebHistory(),
+    history: createWebHashHistory(),
     routes: [
         {
             path: '/guild',
