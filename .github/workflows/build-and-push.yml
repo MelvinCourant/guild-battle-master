@@ -13,6 +13,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4.1.1
 
+      - name: Load .env file
+        uses: SpicyPizza/create-envfile@v1
+        with:
+          envkey_VITE_URL: ${{ secrets.VITE_URL }}
+          file_name: apps/front/.env
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v2.4.0
         with:
