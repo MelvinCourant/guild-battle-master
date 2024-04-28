@@ -154,7 +154,7 @@
     left: 0;
     bottom: 0;
     right: 0;
-    background: rgba(21, 22, 25, 0.70);
+    background: var(--background-transparent);;
 
     @media screen and (max-width: 768px) {
       display: initial;

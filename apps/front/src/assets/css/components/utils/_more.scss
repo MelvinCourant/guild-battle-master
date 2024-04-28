@@ -14,13 +14,24 @@
 
   &__actions {
     position: absolute;
-    z-index: 2;
+    z-index: 9999;
     bottom: -8px;
     transform: translateY(100%);
     box-shadow: var(--shadow);
     border-radius: var(--input-text-radius);
     overflow: hidden;
     background: var(--background);
+
+    @media screen and (max-width: 768px) {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      transform: none;
+      border-radius: 15px 15px 0 0;
+      padding: 30px 20px 0;
+      background: var(--system);
+    }
 
     &--left {
       right: 0;
@@ -40,12 +51,39 @@
     font-size: functions.rem(14);
     line-height: 1;
 
+    @media screen and (max-width: 768px) {
+      width: 100%;
+      height: 60px;
+      font-size: functions.rem(20);
+      font-weight: 500;
+      line-height: 0.95;
+    }
+
     &:hover {
       background: var(--system-lightened);
+
+      @media screen and (max-width: 768px) {
+        background: var(--system);
+      }
     }
 
     &--danger {
       color: var(--danger);
+    }
+  }
+
+  &__trigger {
+    display: none;
+    position: fixed;
+    z-index: 9998;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: var(--background-transparent);;
+
+    @media screen and (max-width: 768px) {
+      display: initial;
     }
   }
 }
