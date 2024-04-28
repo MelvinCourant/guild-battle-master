@@ -23,19 +23,20 @@
   .user-profile {
     display: flex;
     padding: 20px 30px;
-    flex-direction: column;
     gap: 10px;
     border-bottom: var(--border);
 
     &__avatar {
-      width: 65px;
-      height: 65px;
+      width: 50px;
+      height: 50px;
     }
 
     &__identity {
       display: flex;
       align-items: flex-end;
+      height: fit-content;
       gap: 6px;
+      margin-top: 10px;
     }
 
     &__pseudo {
