@@ -9,6 +9,7 @@
   color: var(--white);
   font-family: fonts.$marianne;
   scrollbar-width: none;
+  -webkit-tap-highlight-color: transparent;
 
   &::-webkit-scrollbar {
     display: none;
