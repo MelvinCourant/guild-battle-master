@@ -35,27 +35,6 @@ export default class AuthController {
           fs.unlinkSync(imageLink)
         }
 
-        const member: any = await Member.query().where('user_id', user.id).first()
-
-        if (member) {
-          await Box.query().where('member_id', member.id).delete()
-
-          await Member.query().where('user_id', user.id).delete()
-        }
-
-        const guild: any = await Guild.query().where('leader_id', user.id).first()
-        let members: any = null
-
-        if (guild) {
-          await Guild.query().where('leader_id', user.id).delete()
-
-          members = await Member.query().where('guild_id', guild.id).select('id').first()
-        }
-
-        if (members) {
-          await Member.query().where('guild_id', guild.id).delete()
-        }
-
         await User.query().where('email', payload.email).delete()
       }
 
