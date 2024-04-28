@@ -225,7 +225,7 @@ export default class BoxesController {
         .whereRaw('monsters_assigned < quantity')
         .select('monster_id', 'quantity', 'monsters_assigned')
 
-      if (boxes.length === 0 || defensesSelected.length === 0) {
+      if (boxes.length === 0 || !defensesSelected) {
         return boxes
       }
 
