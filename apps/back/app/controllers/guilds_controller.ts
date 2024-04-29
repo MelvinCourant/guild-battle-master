@@ -45,6 +45,10 @@ export default class GuildsController {
         lds: [],
       }
 
+      if (userMember && userMember.role) {
+        memberInformations.role = userMember.role
+      }
+
       // eslint-disable-next-line no-inner-declarations
       async function addLds() {
         for (const monster of memberBox) {

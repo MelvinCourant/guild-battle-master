@@ -19,6 +19,12 @@
   border-radius: 15px;
   box-shadow: var(--shadow);
 
+  &__content {
+    .select {
+      margin: 10px 0 0 0;
+    }
+  }
+
   &__image {
     display: flex;
     justify-content: center;

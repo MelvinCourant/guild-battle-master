@@ -1,7 +1,7 @@
 <script setup>
-import '../assets/css/views/_guild.scss';
-import {provide, reactive, ref} from "vue";
-import {useUserStore} from "../stores/user.js";
+import "../assets/css/views/_guild.scss";
+import { provide, reactive, ref } from "vue";
+import { useUserStore } from "../stores/user.js";
 import GuildProfile from "../components/GuildProfile.vue";
 import Dialog from "../components/utils/Dialog.vue";
 import Alert from "../components/utils/Alert.vue";
@@ -17,169 +17,166 @@ const fields = [
     type: "search",
     name: "search",
     placeholder: "Grade, pseudo, etc.",
-  }
+  },
 ];
 const columns = reactive([
   {
-    name: '',
-    key: 'picture',
-    class: 'table-grid__picture'
+    name: "",
+    key: "picture",
+    class: "table-grid__picture",
   },
   {
-    name: 'Pseudo',
-    key: 'pseudo',
-    class: 'table-grid__pseudo',
-    sortOrder: ''
+    name: "Pseudo",
+    key: "pseudo",
+    class: "table-grid__pseudo",
+    sortOrder: "",
   },
   {
-    name: 'Grade',
-    key: 'grade',
-    class: 'table-grid__grade',
-    sortOrder: 'asc'
+    name: "Grade",
+    key: "grade",
+    class: "table-grid__grade",
+    sortOrder: "asc",
   },
   {
-    name: 'Rôle',
-    key: 'role',
-    class: 'table-grid__role',
-    sortOrder: ''
+    name: "Rôle",
+    key: "role",
+    class: "table-grid__role",
+    sortOrder: "",
   },
   {
-    name: '5 nats lds',
-    key: 'lds',
-    class: 'table-grid__lds',
-    sortOrder: ''
+    name: "5 nats lds",
+    key: "lds",
+    class: "table-grid__lds",
+    sortOrder: "",
   },
   {
-    name: '',
-    key: 'actions',
-    class: 'table__actions'
-  }
+    name: "",
+    key: "actions",
+    class: "table__actions",
+  },
 ]);
 const sortOptions = [
   {
-    value: 'pseudo',
-    text: 'Pseudo'
+    value: "pseudo",
+    text: "Pseudo",
   },
   {
-    value: 'grade',
-    text: 'Grade'
+    value: "grade",
+    text: "Grade",
   },
   {
-    value: 'role',
-    text: 'Rôle'
+    value: "role",
+    text: "Rôle",
   },
   {
-    value: 'lds',
-    text: '5 nats lds'
-  }
+    value: "lds",
+    text: "5 nats lds",
+  },
 ];
-const actualSort = ref('grade');
+const actualSort = ref("grade");
 const data = ref({});
 const actions = [
   {
-    name: 'update',
-    label: 'Mettre à jour',
+    name: "update",
+    label: "Mettre à jour",
     permissions: [
       {
-        role: 'leader',
-        canModify: ['all']
+        role: "leader",
+        canModify: ["all"],
       },
       {
-        role: 'moderator',
-        canModify: ['all']
-      }
+        role: "moderator",
+        canModify: ["all"],
+      },
     ],
-    danger: false
+    danger: false,
   },
   {
-    name: 'role',
-    label: 'Attribuer un rôle',
+    name: "role",
+    label: "Attribuer un rôle",
     permissions: [
       {
-        role: 'leader',
-        canModify: ['all']
+        role: "leader",
+        canModify: ["moderator", "member"],
       },
-      {
-        role: 'moderator',
-        canModify: ['']
-      }
     ],
-    danger: false
+    danger: false,
   },
   {
-    name: 'exclude',
-    label: 'Exclure',
+    name: "exclude",
+    label: "Exclure",
     permissions: [
       {
-        role: 'leader',
-        canModify: ['all']
+        role: "leader",
+        canModify: ["moderator", "member"],
       },
       {
-        role: 'moderator',
-        canModify: ['']
-      }
+        role: "moderator",
+        canModify: [""],
+      },
     ],
-    danger: true
-  }
+    danger: true,
+  },
 ];
 const members = ref([]);
 const memberSelected = ref({});
 const guild = ref({});
 const dialog = reactive({
   image: {
-    src: '',
-    alt: ''
+    src: "",
+    alt: "",
   },
   content: {
-    title: '',
-    description: ''
+    title: "",
+    description: "",
   },
   fields: [
     {
-      type: 'button',
-      name: 'cancel',
-      value: 'Annuler',
+      type: "button",
+      name: "cancel",
+      value: "Annuler",
     },
     {
-      type: 'button',
-      name: 'exclude',
-      value: 'Exclure',
-      style: 'danger'
-    }
-  ]
+      type: "button",
+      name: "exclude",
+      value: "Exclure",
+      style: "danger",
+    },
+  ],
 });
 const dialogIsOpen = ref(false);
 const alert = reactive({
   display: false,
-  type: '',
-  message: '',
+  type: "",
+  message: "",
 });
 const loading = ref(true);
 const router = useRouter();
+const roleSelected = ref("");
 
-provide('fields', fields);
-provide('columns', columns);
-provide('sortOptions', sortOptions);
-provide('sortValue', actualSort);
-provide('data', data);
-provide('loading', loading);
+provide("fields", fields);
+provide("columns", columns);
+provide("sortOptions", sortOptions);
+provide("sortValue", actualSort);
+provide("data", data);
+provide("loading", loading);
 
 async function getMembers() {
   const result = await fetch(`${env.VITE_URL}/api/guilds/${user.guild_id}`, {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
-    }
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
   });
 
   if (result.ok) {
     const resultJson = await result.json();
     data.value = {
       rows: resultJson.members,
-      link: '/member/',
-      badges: ['lds'],
-      actions: actions
+      link: "/member/",
+      badges: ["lds"],
+      actions: actions,
     };
     members.value = resultJson.members;
     guild.value = resultJson.guild;
@@ -203,32 +200,24 @@ function sort(key) {
   function toggleSortOrder(columns) {
     columns.forEach((column) => {
       if (
-          column.key === key &&
-          column.sortOrder === '' ||
-          column.key === key &&
-          column.sortOrder === 'desc'
+        (column.key === key && column.sortOrder === "") ||
+        (column.key === key && column.sortOrder === "desc")
       ) {
-        column.sortOrder = 'asc';
-      } else if (
-          column.key === key &&
-          column.sortOrder === 'asc'
-      ) {
-        column.sortOrder = 'desc';
+        column.sortOrder = "asc";
+      } else if (column.key === key && column.sortOrder === "asc") {
+        column.sortOrder = "desc";
       } else {
-        column.sortOrder = '';
+        column.sortOrder = "";
       }
     });
   }
 
-  if(
-    key === 'picture' ||
-    key === 'actions'
-  ) {
+  if (key === "picture" || key === "actions") {
     return;
   } else if (actualSort.value === key) {
     members.value = members.value.reverse();
-  } else if(key === 'grade') {
-    const gradeOrder = ['leader', 'vice-leader', 'senior', 'member'];
+  } else if (key === "grade") {
+    const gradeOrder = ["leader", "vice-leader", "senior", "member"];
 
     members.value = members.value.sort((a, b) => {
       return gradeOrder.indexOf(a.grade) - gradeOrder.indexOf(b.grade);
@@ -246,43 +235,147 @@ function actionSelected(selection) {
   const action = selection.action;
   const memberId = selection.id;
 
-  if (action === 'update') {
+  if (action === "update") {
+    if (user.role === "member") {
+      return;
+    }
+
     router.push(`/upload-json/${memberId}`);
-  } else if (action === 'exclude') {
-    memberSelected.value = members.value.find((member) => member.id === memberId);
+  } else if (action === "exclude") {
+    if (user.role === "member") {
+      return;
+    }
+
+    memberSelected.value = members.value.find(
+      (member) => member.id === memberId,
+    );
 
     dialog.image = {
       src: memberSelected.value.image,
-      alt: memberSelected.value.pseudo
+      alt: memberSelected.value.pseudo,
     };
     dialog.content = {
       title: `Exclure ${memberSelected.value.pseudo} de la guilde ?`,
-      description: 'Cet utilisateur ne sera plus membre de votre guilde. Cependant il ne sera pas exclu définitivement s’il est encore membre de votre guilde en jeu.'
+      description:
+        "Cet utilisateur ne sera plus membre de votre guilde. Cependant il ne sera pas exclu définitivement s’il est encore membre de votre guilde en jeu.",
     };
+    dialogIsOpen.value = true;
+  } else {
+    if (user.role === "" || user.role !== "leader") {
+      return;
+    }
+
+    memberSelected.value = members.value.find(
+      (member) => member.id === memberId,
+    );
+
+    let roleOptions = [];
+
+    if (memberSelected.value.role === "member") {
+      roleOptions = [
+        {
+          value: "leader",
+          text: "Leader",
+        },
+        {
+          value: "moderator",
+          text: "Moderator",
+        },
+      ];
+      roleSelected.value = "moderator";
+    } else {
+      roleOptions = [
+        {
+          value: "leader",
+          text: "Leader",
+        },
+        {
+          value: "member",
+          text: "Member",
+        },
+      ];
+      roleSelected.value = "member";
+    }
+
+    dialog.image = {
+      src: memberSelected.value.image,
+      alt: memberSelected.value.pseudo,
+    };
+    dialog.content = {
+      title: `Attribuer un rôle à ${memberSelected.value.pseudo} ?`,
+      description: `Choisissez un rôle pour cet utilisateur. Si le rôle choisi est Leader, ${memberSelected.value.pseudo} recevra une notification pour accepter ou refuser le rôle.`,
+      select: {
+        options: roleOptions,
+        value: roleSelected.value,
+      },
+    };
+    dialog.fields = [
+      {
+        type: "button",
+        name: "cancel",
+        value: "Annuler",
+      },
+      {
+        type: "button",
+        name: "role",
+        value: "Attribuer",
+        style: "primary",
+      },
+    ];
     dialogIsOpen.value = true;
   }
 }
 
 async function dialogResponse(name) {
-  if(name === 'exclude') {
-    const result = await fetch(`${env.VITE_URL}/api/members/${memberSelected.value.id}/exclude`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      }
-    });
+  if (name === "exclude") {
+    const result = await fetch(
+      `${env.VITE_URL}/api/members/${memberSelected.value.id}/exclude`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
     const resultJson = await result.json();
 
-    if(result.ok) {
+    if (result.ok) {
       await getMembers();
       closeDialog();
       alert.display = true;
-      alert.type = 'success';
+      alert.type = "success";
       alert.message = resultJson.message;
     } else {
       alert.display = true;
-      alert.type = 'error';
+      alert.type = "error";
+      alert.message = resultJson.message;
+    }
+  } else if (name === "role") {
+    const result = await fetch(
+      `${env.VITE_URL}/api/members/${memberSelected.value.id}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          role: roleSelected.value,
+        }),
+      },
+    );
+    const resultJson = await result.json();
+
+    if (result.ok) {
+      await getMembers();
+      closeDialog();
+      alert.display = true;
+      alert.type = "success";
+      alert.message = resultJson.message;
+    } else {
+      alert.display = true;
+      alert.type = "error";
       alert.message = resultJson.message;
     }
   } else {
@@ -295,32 +388,36 @@ function closeDialog() {
 }
 
 async function madeSearch(inputName, value) {
-  if(value === '') {
+  if (value === "") {
     await getMembers();
     return;
   }
 
-  const result = await fetch(`${env.VITE_URL}/api/guilds/${user.guild_id}/members`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
+  const result = await fetch(
+    `${env.VITE_URL}/api/guilds/${user.guild_id}/members`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        keyword: value,
+        sort: {
+          name: actualSort.value,
+          order: columns.find((column) => column.key === actualSort.value)
+            .sortOrder,
+        },
+      }),
     },
-    body: JSON.stringify({
-      keyword: value,
-      sort: {
-        name: actualSort.value,
-        order: columns.find((column) => column.key === actualSort.value).sortOrder
-      }
-    })
-  });
+  );
 
-  if(result.ok) {
+  if (result.ok) {
     const resultJson = await result.json();
     data.value = {
       rows: resultJson.members,
-      badges: ['lds'],
-      actions: actions
+      badges: ["lds"],
+      actions: actions,
     };
     members.value = resultJson.members;
   }
@@ -334,10 +431,7 @@ function sortGrid(key) {
 
 <template>
   <main class="guild">
-    <GuildProfile
-      :name="guild.name"
-      :image="guild.image"
-    />
+    <GuildProfile :name="guild.name" :image="guild.image" />
     <TableGrid
       @sort="sort"
       @actionSelected="actionSelected"
@@ -350,10 +444,10 @@ function sortGrid(key) {
     :isOpen="dialogIsOpen"
     @click="dialogResponse"
     @close="closeDialog"
+    @change="
+      roleSelected = $event;
+      dialog.content.select.value = roleSelected;
+    "
   />
-  <Alert
-    :display="alert.display"
-    :type="alert.type"
-    :message="alert.message"
-  />
+  <Alert :display="alert.display" :type="alert.type" :message="alert.message" />
 </template>

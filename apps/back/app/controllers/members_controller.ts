@@ -125,11 +125,9 @@ export default class MembersController {
     const role = request.input('role')
 
     if (
-      (user.role !== 'admin' && user.role !== 'leader' && user.role !== 'moderator') ||
+      (user.role !== 'admin' && user.role !== 'leader') ||
       applicantGuildId !== memberGuildId ||
       user.role === role ||
-      (user.role === 'moderator' && userMember.role === 'moderator') ||
-      (user.role === 'moderator' && userMember.role === 'leader') ||
       (user.role === 'leader' && userMember.role === 'leader')
     ) {
       return response.status(403).json({ message: "Vous n'avez pas les droits" })
