@@ -15,6 +15,7 @@ import MembersController from '#controllers/members_controller'
 import MonstersController from '#controllers/monsters_controller'
 import BoxesController from '#controllers/boxes_controller'
 import CompositionsController from '#controllers/compositions_controller'
+import NotificationsController from '#controllers/notifications_controller'
 import app from '@adonisjs/core/services/app'
 
 router
@@ -164,3 +165,13 @@ router
     })
   })
   .prefix('api/compositions')
+
+router
+  .group(() => {
+    const notificationsController = new NotificationsController()
+
+    router.get('/', async (data) => {
+      return notificationsController.index(data)
+    })
+  })
+  .prefix('api/notifications')
