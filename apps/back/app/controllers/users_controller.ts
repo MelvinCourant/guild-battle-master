@@ -1,6 +1,8 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import User from '#models/user'
 import Member from '#models/member'
+import Notification from '#models/notification'
+import Guild from '#models/guild'
 
 export default class UsersController {
   async verify({ auth, response }: HttpContext) {
@@ -34,5 +36,73 @@ export default class UsersController {
       })
     }
     return response.unauthorized()
+  }
+
+  async bequeathLeader({ auth, request, response }: HttpContext) {
+    const user = await auth.authenticate()
+    const receiverMember = await Member.query()
+      .where('user_id', user.id)
+      .select('pseudo', 'guild_id')
+      .firstOrFail()
+    const notificationId = request.input('notification_id')
+    const notification = await Notification.query().where('id', notificationId).firstOrFail()
+    const sender = await User.query().where('id', notification.sender_id).firstOrFail()
+    const senderMember = await Member.query()
+      .where('user_id', sender.id)
+      .select('pseudo')
+      .firstOrFail()
+    const guild = await Guild.query()
+      .where('leader_id', sender.id)
+      .select('id', 'image', 'leader_id')
+      .firstOrFail()
+
+    if (
+      notification.receiver_id !== user.id ||
+      notification.sender_id !== sender.id ||
+      notification.action !== 'bequeath_leader' ||
+      guild.leader_id !== sender.id ||
+      receiverMember.guild_id !== guild.id
+    ) {
+      return response.status(400).json({ message: 'Action invalide' })
+    }
+
+    const accept = request.input('accept')
+
+    if (accept) {
+      guild.leader_id = user.id
+      // @ts-ignore
+      guild.image = user.image
+      await guild.save()
+
+      user.role = 'leader'
+      await user.save()
+
+      sender.role = 'member'
+      await sender.save()
+
+      notification.message = `${senderMember.pseudo} vous a légué le rôle de leader`
+      notification.action = ''
+      await notification.save()
+
+      await Notification.create({
+        sender_id: user.id,
+        receiver_id: sender.id,
+        message: `${receiverMember.pseudo} a accepté de devenir leader`,
+      })
+
+      return response.json({ message: `Vous êtes désormais le leader de la guilde` })
+    } else {
+      notification.message = 'Vous avez refusé de devenir leader'
+      notification.action = ''
+      await notification.save()
+
+      await Notification.create({
+        sender_id: user.id,
+        receiver_id: sender.id,
+        message: `${receiverMember.pseudo} a refusé de devenir leader`,
+      })
+
+      return response.json({ message: `Vous avez refusé de devenir leader` })
+    }
   }
 }

@@ -25,6 +25,10 @@ router
     router.get('/verify', async (data) => {
       return usersController.verify(data)
     })
+
+    router.patch('/bequeath-leader', async (data) => {
+      return usersController.bequeathLeader(data)
+    })
   })
   .prefix('api/users')
 
