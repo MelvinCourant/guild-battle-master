@@ -8,6 +8,7 @@ import Box from '#models/box'
 import Monster from '#models/monster'
 import Guild from '#models/guild'
 import User from '#models/user'
+import Notification from '#models/notification'
 
 export default class MembersController {
   async show({ auth, params, response }: HttpContext) {
@@ -112,7 +113,7 @@ export default class MembersController {
     const user = await auth.authenticate()
     const applicantMember = await Member.query()
       .where('user_id', user.id)
-      .select('id', 'guild_id')
+      .select('id', 'pseudo', 'guild_id')
       .firstOrFail()
     const applicantGuildId = applicantMember.guild_id
     const member = await Member.query()
@@ -124,12 +125,7 @@ export default class MembersController {
 
     const role = request.input('role')
 
-    if (
-      (user.role !== 'admin' && user.role !== 'leader') ||
-      applicantGuildId !== memberGuildId ||
-      user.role === role ||
-      (user.role === 'leader' && userMember.role === 'leader')
-    ) {
+    if ((user.role !== 'admin' && user.role !== 'leader') || applicantGuildId !== memberGuildId) {
       return response.status(403).json({ message: "Vous n'avez pas les droits" })
     }
 
@@ -139,6 +135,17 @@ export default class MembersController {
       return response
         .status(400)
         .json({ message: `Le membre ${member.pseudo} a déjà le rôle ${role}` })
+    } else if (role === 'leader' && user.role === 'leader') {
+      await Notification.create({
+        sender_id: user.id,
+        receiver_id: member.user_id,
+        message: `${applicantMember.pseudo} veut vous léguer le rôle de leader`,
+        action: 'bequeath_leader',
+      })
+
+      return response.json({
+        message: `Une notification a été envoyée à ${member.pseudo}`,
+      })
     } else {
       userMember.role = role
       await userMember.save()

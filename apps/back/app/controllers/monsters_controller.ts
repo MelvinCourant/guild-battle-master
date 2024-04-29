@@ -27,7 +27,7 @@ export default class MonstersController {
       const monsters = pageResults.results
 
       for (const monster of monsters) {
-        const notKorean = new RegExp(/^[a-z A-Z]+$/)
+        const notKorean = new RegExp(/^[a-z A-Z0-9]+$/)
         const monstersNotReleased = [
           'unit_icon_0019_0_3.png',
           'unit_icon_0019_0_4.png',
