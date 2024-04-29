@@ -108,7 +108,7 @@ const actions = [
     permissions: [
       {
         role: "leader",
-        canModify: ["moderator", "member"],
+        canModify: ["all"],
       },
       {
         role: "moderator",
