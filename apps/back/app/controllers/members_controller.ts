@@ -110,32 +110,41 @@ export default class MembersController {
 
   async update({ auth, params, request, response }: HttpContext) {
     const user = await auth.authenticate()
-    const leadGuild = await Guild.query().where('leader_id', user.id).select('id').firstOrFail()
-    const leadGuildId = leadGuild.id
-    const member = await Member.query().where('id', params.id).firstOrFail()
+    const applicantMember = await Member.query()
+      .where('user_id', user.id)
+      .select('id', 'guild_id')
+      .firstOrFail()
+    const applicantGuildId = applicantMember.guild_id
+    const member = await Member.query()
+      .where('id', params.id)
+      .select('pseudo', 'guild_id', 'user_id')
+      .firstOrFail()
     const memberGuildId = member.guild_id
+    const userMember = await User.query().where('id', member.user_id).firstOrFail()
+
+    const role = request.input('role')
 
     if (
       (user.role !== 'admin' && user.role !== 'leader' && user.role !== 'moderator') ||
-      leadGuildId !== memberGuildId
+      applicantGuildId !== memberGuildId ||
+      user.role === role ||
+      (user.role === 'moderator' && userMember.role === 'moderator') ||
+      (user.role === 'moderator' && userMember.role === 'leader') ||
+      (user.role === 'leader' && userMember.role === 'leader')
     ) {
       return response.status(403).json({ message: "Vous n'avez pas les droits" })
     }
 
-    const grade = request.input('grade')
-
-    if (grade !== 'leader' && grade !== 'vice-leader' && grade !== 'senior' && grade !== 'member') {
+    if (role !== 'leader' && role !== 'moderator' && role !== 'member') {
       return response.status(400).json({ message: "Ce rôle n'existe pas" })
-    } else if (grade === member.grade) {
+    } else if (role === userMember.role) {
       return response
         .status(400)
-        .json({ message: `Le membre ${member.pseudo} a déjà le rôle ${grade}` })
+        .json({ message: `Le membre ${member.pseudo} a déjà le rôle ${role}` })
     } else {
-      // TODO: managing the situation when the leader wants to hand over his role to another member
-      // TODO: managing the situation when the member have a account to update his role
-      member.grade = grade
-      await member.save()
-      return response.json({ message: `Le rôle ${grade} a bien été attribué à ${member.pseudo}` })
+      userMember.role = role
+      await userMember.save()
+      return response.json({ message: `Le rôle ${role} a bien été attribué à ${member.pseudo}` })
     }
   }
 
