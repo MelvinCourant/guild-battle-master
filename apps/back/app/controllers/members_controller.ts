@@ -139,7 +139,7 @@ export default class MembersController {
       await Notification.create({
         sender_id: user.id,
         receiver_id: member.user_id,
-        message: `${applicantMember.pseudo} veut vous léguer le rôle de leader`,
+        message: `${applicantMember.pseudo} veut vous léguer le rôle leader`,
         action: 'bequeath_leader',
       })
 

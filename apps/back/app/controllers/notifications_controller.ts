@@ -9,7 +9,6 @@ export default class NotificationsController {
       .where('receiver_id', user.id)
       .select('id', 'sender_id', 'message', 'action', 'created_at')
       .orderBy('created_at', 'desc')
-      .paginate(1, 10)
     const senderImages = await User.query()
       .whereIn(
         'id',

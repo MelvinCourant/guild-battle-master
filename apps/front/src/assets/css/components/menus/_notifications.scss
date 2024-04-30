@@ -1,0 +1,51 @@
+@use '../../partials/functions';
+
+.notifications {
+  position: absolute;
+  z-index: 9998;
+  top: 48px;
+  right: 0;
+  width: 400px;
+  height: 450px;
+  max-height: 450px;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--input-text-radius);
+  background: var(--system);
+  box-shadow: var(--shadow);
+
+  &__head {
+    display: flex;
+    align-items: center;
+    height: 50px;
+    border-bottom: var(--border);
+    padding: 0 36px 0 20px;
+
+    p {
+      font-size: functions.rem(16);
+      font-weight: 500;
+      line-height: 0.875;
+    }
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow-y: auto;
+
+    &--empty {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      p {
+        font-size: functions.rem(20);
+        line-height: normal;
+        color: var(--text-grey);
+        text-align: center;
+        width: 200px;
+      }
+    }
+  }
+}

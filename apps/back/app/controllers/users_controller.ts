@@ -81,7 +81,7 @@ export default class UsersController {
       await sender.save()
 
       notification.message = `${senderMember.pseudo} vous a légué le rôle de leader`
-      notification.action = ''
+      notification.action = null
       await notification.save()
 
       await Notification.create({
@@ -93,7 +93,7 @@ export default class UsersController {
       return response.json({ message: `Vous êtes désormais le leader de la guilde` })
     } else {
       notification.message = 'Vous avez refusé de devenir leader'
-      notification.action = ''
+      notification.action = null
       await notification.save()
 
       await Notification.create({

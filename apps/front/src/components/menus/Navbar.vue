@@ -1,105 +1,169 @@
 <script setup>
-  import { useUserStore } from "../../stores/user.js";
-  import '../../assets/css/components/menus/_navbar.scss';
-  import { useRoute } from "vue-router";
-  import logo from '../../assets/imgs/logo.svg';
-  import AccountMenu from "../../components/menus/AccountMenu.vue";
-  import NavbarMobile from "../../components/menus/mobile/NavbarMobile.vue";
-  import { provide, ref } from "vue";
-
-  const desktopLinks = [
-    {
-      name: 'Guilde',
-      path: '/guild',
-      selected: false
-    },
-    {
-      name: 'Plan de siège',
-      path: '/map',
-      selected: false
-    },
-    {
-      name: 'Défenses',
-      path: '/defenses',
-      selected: false
-    }
-  ];
-  const mobileLinks = [
-    {
-      name: 'Guilde',
-      path: '/guild',
-      selected: false
-    },
-    {
-      name: 'Plan de siège',
-      path: '/map',
-      selected: false
-    },
-    {
-      name: 'Défenses',
-      path: '/defenses',
-      selected: false
-    },
-    {
-      name: 'Notifications',
-      path: '/notifications',
-      selected: false
-    }
-  ];
-  const route = useRoute();
-  const userStore = useUserStore();
-  const user = userStore.user;
-  const userProfile = {
-    pseudo: user.pseudo,
-    image: user.image,
-    grade: user.grade
+import { useUserStore } from "../../stores/user.js";
+import '../../assets/css/components/menus/_navbar.scss';
+import { useRoute } from "vue-router";
+import logo from '../../assets/imgs/logo.svg';
+import AccountMenu from "../../components/menus/AccountMenu.vue";
+import NavbarMobile from "../../components/menus/mobile/NavbarMobile.vue";
+import { provide, ref } from "vue";
+import Notifications from "./Notifications.vue";
+const env = import.meta.env;
+const desktopLinks = [
+  {
+    name: 'Guilde',
+    path: '/guild',
+    selected: false
+  },
+  {
+    name: 'Plan de siège',
+    path: '/map',
+    selected: false
+  },
+  {
+    name: 'Défenses',
+    path: '/defenses',
+    selected: false
   }
-  const submenu = [
-    {
-      icon: 'profile',
-      text: 'Profil de membre',
-      path: '/member'
-    },
-    {
-      icon: 'settings',
-      text: 'Paramètres',
-      path: '/settings'
-    },
-    {
-      icon: 'upload',
-      text: 'Importer un json',
-      path: '/upload-json'
-    },
-    {
-      icon: 'information',
-      text: 'À propos',
-      path: '/about'
-    },
-    {
-      icon: 'logout',
-      text: 'Se déconnecter',
-      path: '/logout'
-    }
-  ];
-  const onMobile = ref(false);
-
-  provide('submenu', submenu);
-  provide('userProfile', userProfile);
-  provide('onMobile', onMobile);
-
-  function handleMobile() {
-    if(
-        window.innerWidth <= 768 &&
-        !onMobile.value ||
-        window.innerWidth > 768 &&
-        onMobile.value
-    ) {
-      onMobile.value = !onMobile.value;
-    }
+];
+const mobileLinks = [
+  {
+    name: 'Guilde',
+    path: '/guild',
+    selected: false
+  },
+  {
+    name: 'Plan de siège',
+    path: '/map',
+    selected: false
+  },
+  {
+    name: 'Défenses',
+    path: '/defenses',
+    selected: false
+  },
+  {
+    name: 'Notifications',
+    path: '/notifications',
+    selected: false
   }
+];
+const route = useRoute();
+const userStore = useUserStore();
+const user = userStore.user;
+const token = userStore.token;
+const userProfile = {
+  pseudo: user.pseudo,
+  image: user.image,
+  grade: user.grade
+}
+const submenu = [
+  {
+    icon: 'profile',
+    text: 'Profil de membre',
+    path: '/member'
+  },
+  {
+    icon: 'settings',
+    text: 'Paramètres',
+    path: '/settings'
+  },
+  {
+    icon: 'upload',
+    text: 'Importer un json',
+    path: '/upload-json'
+  },
+  {
+    icon: 'information',
+    text: 'À propos',
+    path: '/about'
+  },
+  {
+    icon: 'logout',
+    text: 'Se déconnecter',
+    path: '/logout'
+  }
+];
+const onMobile = ref(false);
+const notifications = ref([]);
+const notificationsOpen = ref(false);
+const actionsNotifications = [
+  {
+    name: "read",
+    label: "Marquer comme lu",
+    danger: false,
+  },
+  {
+    name: "delete",
+    label: "Supprimer",
+    danger: true,
+  }
+];
 
-  handleMobile();
-  window.addEventListener('resize', handleMobile);
+provide('submenu', submenu);
+provide('userProfile', userProfile);
+provide('onMobile', onMobile);
+
+function handleMobile() {
+  if(
+      window.innerWidth <= 768 &&
+      !onMobile.value ||
+      window.innerWidth > 768 &&
+      onMobile.value
+  ) {
+    onMobile.value = !onMobile.value;
+  }
+}
+
+handleMobile();
+window.addEventListener('resize', handleMobile);
+
+async function getNotifications() {
+  const result = await fetch(`${env.VITE_URL}/api/notifications`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
+
+  if(result.ok) {
+    const resultJson = await result.json();
+    notifications.value = resultJson.notifications;
+  }
+}
+
+getNotifications();
+
+async function bequeathLeader(value, notificationId) {
+  const result = await fetch(`${env.VITE_URL}/api/users/bequeath-leader`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify({
+      "notification_id": notificationId,
+      "accept": value
+    })
+  })
+
+  if(result.ok) {
+    await getNotifications();
+  }
+}
+
+async function madeNotificationsAction(event) {
+  if(event.action === 'bequeath_leader') {
+    let actionValue;
+
+    if(event.value === true) {
+      actionValue = 1;
+    } else {
+      actionValue = 0;
+    }
+
+    await bequeathLeader(actionValue, event.notificationId);
+  }
+}
 </script>
 
 <template>
@@ -146,12 +210,23 @@
             <li
                 v-show="!onMobile"
                 :aria-hidden="onMobile"
+                class="navbar__notifications"
             >
-              <button class="navbar__notifications-button">
+              <button
+                  class="navbar__notifications-button"
+                  @click="notificationsOpen = !notificationsOpen"
+              >
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="18" viewBox="0 0 16 18" fill="none">
                   <path fill-rule="evenodd" clip-rule="evenodd" d="M13.4998 7.85417V12.4375L15.3332 14.2708V15.1875H0.666504V14.2708L2.49984 12.4375V7.85417C2.49984 5.03083 3.994 2.68417 6.62484 2.06083V1.4375C6.62484 0.676667 7.239 0.0625 7.99984 0.0625C8.76067 0.0625 9.37484 0.676667 9.37484 1.4375V2.06083C11.9965 2.68417 13.4998 5.04 13.4998 7.85417ZM9.83317 16.1042C9.83317 16.5904 9.64002 17.0567 9.2962 17.4005C8.95238 17.7443 8.48607 17.9375 7.99984 17.9375C7.51361 17.9375 7.04729 17.7443 6.70348 17.4005C6.35966 17.0567 6.1665 16.5904 6.1665 16.1042H9.83317Z" fill="white"/>
                 </svg>
               </button>
+              <Notifications
+                  :notifications="notifications"
+                  :isOpen="notificationsOpen"
+                  :actions="actionsNotifications"
+                  @close="notificationsOpen = false"
+                  @action="madeNotificationsAction"
+              />
             </li>
             <li>
               <AccountMenu :userImage="user.image" />

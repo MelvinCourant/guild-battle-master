@@ -1,0 +1,57 @@
+@use '../../partials/mixins';
+@use '../../partials/functions';
+
+.notification {
+  width: 100%;
+  min-height: 70px;
+  display: flex;
+  gap: 10px;
+  padding: 15px 20px;
+
+  .avatar {
+    width: 40px;
+    height: 40px;
+  }
+
+  &__content {
+    display: flex;
+    gap: 10px;
+    flex: 1;
+  }
+
+  &__texts {
+    flex: 1;
+  }
+
+  &__message {
+    font-size: functions.rem(14);
+    line-height: normal;
+  }
+
+  &__pseudo,
+  &__highlight {
+    font-weight: 700;
+  }
+
+  &__highlight {
+    color: var(--primary);
+  }
+
+  &__time {
+    font-size: functions.rem(12);
+    line-height: normal;
+    color: var(--text-grey);
+  }
+
+  &__action {
+    display: flex;
+    gap: 10px;
+    padding-top: 1px;
+  }
+
+  &__button {
+    @include mixins.resetButton(0, transparent);
+    width: 12.5px;
+    height: 12.5px;
+  }
+}

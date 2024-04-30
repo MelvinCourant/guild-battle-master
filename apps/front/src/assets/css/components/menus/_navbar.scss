@@ -87,10 +87,17 @@
 
   &__right {
     gap: 30px;
+    height: 40px;
   }
 
-  &__notifications-button {
-    @include mixins.resetButton(none, transparent);
+  &__notifications {
+    display: flex;
+    height: 100%;
+    position: relative;
+
+    &-button {
+      @include mixins.resetButton(none, transparent);
+    }
   }
 
   & + main {

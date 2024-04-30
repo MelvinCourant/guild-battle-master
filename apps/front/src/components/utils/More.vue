@@ -35,19 +35,27 @@ document.addEventListener("click", closeActions);
 
 function getActions() {
   props.actions.forEach((action) => {
-    action.permissions.forEach((permission) => {
-      if (
-        permission.role === user.role &&
-        (permission.canModify.includes("all") ||
-          permission.canModify.includes(props.memberRole))
-      ) {
-        actionsToDisplay.value.push({
-          name: action.name,
-          label: action.label,
-          danger: action.danger,
-        });
-      }
-    });
+    if(action.permissions) {
+      action.permissions.forEach((permission) => {
+        if (
+            permission.role === user.role &&
+            (permission.canModify.includes("all") ||
+                permission.canModify.includes(props.memberRole))
+        ) {
+          actionsToDisplay.value.push({
+            name: action.name,
+            label: action.label,
+            danger: action.danger,
+          });
+        }
+      });
+    } else {
+      actionsToDisplay.value.push({
+        name: action.name,
+        label: action.label,
+        danger: action.danger,
+      });
+    }
   });
 }
 
