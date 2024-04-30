@@ -51,7 +51,11 @@ function formatMessage(message) {
   words.forEach((word, index) => {
     if (index === 0) {
       formattedMessage += `<span class="notification__pseudo">${word}</span> `;
-    } else if (word.toLowerCase() === 'leader') {
+    } else if (
+        word.toLowerCase() === 'leader' ||
+        word.toLowerCase() === 'moderator' ||
+        word.toLowerCase() === 'member'
+    ){
       formattedMessage += `<span class="notification__highlight">${word}</span> `;
     } else {
       formattedMessage += word + ' ';

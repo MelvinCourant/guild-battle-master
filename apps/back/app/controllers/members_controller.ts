@@ -149,6 +149,12 @@ export default class MembersController {
     } else {
       userMember.role = role
       await userMember.save()
+      await Notification.create({
+        sender_id: user.id,
+        receiver_id: member.user_id,
+        message: `${applicantMember.pseudo} vous a attribué le rôle ${role}`,
+      })
+
       return response.json({ message: `Le rôle ${role} a bien été attribué à ${member.pseudo}` })
     }
   }
