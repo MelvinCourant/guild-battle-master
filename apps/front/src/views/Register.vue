@@ -355,7 +355,7 @@
 
 <template>
   <main class="register">
-    <h1 class="register__title">Inscription</h1>
+    <h1 class="hidden-title">Inscription</h1>
     <FormPage
         :steps="steps"
         :currentStep="currentStep"

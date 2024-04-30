@@ -365,6 +365,7 @@ function dialogResponse(name) {
 
 <template>
   <main class="composition">
+    <h1 class="hidden-title">Ajouter une composition</h1>
     <SearchComposition
       :compositions="compositions"
       :comboboxLabels="comboboxLabels"

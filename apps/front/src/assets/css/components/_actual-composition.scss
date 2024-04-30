@@ -19,11 +19,11 @@
     min-width: initial;
     max-width: initial;
     margin-right: 0;
+    border-left: 0;
   }
 
   @media screen and (max-width: 768px) {
     padding: 0;
-    border-left: none;
     flex: initial;
     overflow: initial;
     height: fit-content;

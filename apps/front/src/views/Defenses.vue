@@ -234,6 +234,7 @@ function previewComposition(id) {
 
 <template>
   <main class="defenses">
+    <h1 class="hidden-title">Défenses</h1>
     <GuildCompositions
       :compositions="compositions"
       :actions="actions"

@@ -159,6 +159,7 @@ async function uploadJson() {
 
 <template>
   <main class="upload-json">
+    <h1 class="hidden-title">Importer un JSON</h1>
     <FormPage
         @sendValue="updateValue"
         @submit="uploadJson"
