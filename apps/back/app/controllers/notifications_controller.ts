@@ -7,8 +7,8 @@ export default class NotificationsController {
     const user = await auth.authenticate()
     const notifications = await Notification.query()
       .where('receiver_id', user.id)
-      .select('id', 'sender_id', 'message', 'action', 'is_read', 'updated_at')
-      .orderBy('updated_at', 'desc')
+      .select('id', 'sender_id', 'message', 'action', 'is_read', 'created_at')
+      .orderBy('created_at', 'desc')
     const senderImages = await User.query()
       .whereIn(
         'id',
@@ -19,7 +19,9 @@ export default class NotificationsController {
     return response.ok({
       notifications: notifications.map((n) => ({
         ...n.serialize(),
-        image: senderImages.find((u) => u.id === n.sender_id)?.image,
+        image: senderImages.find((u) => u.id === n.sender_id)?.image
+          ? senderImages.find((u) => u.id === n.sender_id)?.image
+          : 'placeholder.jpg',
       })),
     })
   }

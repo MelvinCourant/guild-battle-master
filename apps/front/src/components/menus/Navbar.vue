@@ -165,6 +165,20 @@ async function madeNotificationsAction(event) {
   }
 }
 
+async function readNotification(notificationId) {
+  const result = await fetch(`${env.VITE_URL}/api/notifications/${notificationId}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+  });
+
+  if(result.ok) {
+    await getNotifications();
+  }
+}
+
 async function deleteNotification(notificationId) {
   const result = await fetch(`${env.VITE_URL}/api/notifications/${notificationId}`, {
     method: 'DELETE',
@@ -180,6 +194,7 @@ async function deleteNotification(notificationId) {
 
 async function actionSelected(event) {
   if(event.action === 'read') {
+    await readNotification(event.id);
   } else if(event.action === 'delete') {
     await deleteNotification(event.id);
   }
@@ -247,6 +262,7 @@ async function actionSelected(event) {
                   @close="notificationsOpen = false"
                   @action="madeNotificationsAction"
                   @actionSelected="actionSelected"
+                  @notificationRead="readNotification"
               />
             </li>
             <li>

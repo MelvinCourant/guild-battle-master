@@ -15,7 +15,7 @@ const props = defineProps({
   }
 })
 
-defineEmits(['action', 'actionSelected', 'notificationRead'])
+const emits = defineEmits(['action', 'actionSelected', 'notificationRead'])
 
 function timeSince(date) {
   const seconds = Math.floor((new Date() - date) / 1000);
@@ -65,7 +65,7 @@ function formatMessage(message) {
   return formattedMessage.trim();
 }
 
-const time = ref(timeSince(new Date(props.notification.updatedAt)));
+const time = ref(timeSince(new Date(props.notification.createdAt)));
 const message = ref(formatMessage(props.notification.message));
 
 function addMessage() {
@@ -77,7 +77,7 @@ onMounted(() => {
   addMessage();
 })
 
-watch(() => props.notification.updatedAt, (value) => {
+watch(() => props.notification.createdAt, (value) => {
   time.value = timeSince(new Date(value));
 })
 
@@ -85,6 +85,12 @@ watch(() => props.notification.message, (value) => {
   message.value = formatMessage(value);
   addMessage();
 })
+
+function emitNotificationRead(event) {
+  if(!event.target.closest('.more')) {
+    emits('notificationRead', props.notification.id);
+  }
+}
 </script>
 
 <template>
@@ -96,7 +102,7 @@ watch(() => props.notification.message, (value) => {
         }
       ]"
       :data-id="`notification-${notification.id}`"
-      @click="$emit('notificationRead', notification.id)"
+      @click="emitNotificationRead"
   >
     <Avatar
         :src="notification.image"
