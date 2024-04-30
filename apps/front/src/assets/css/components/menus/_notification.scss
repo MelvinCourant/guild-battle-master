@@ -8,6 +8,10 @@
   gap: 10px;
   padding: 15px 20px;
 
+  &--unread {
+    background-color: var(--system-lightened);
+  }
+
   .avatar {
     width: 40px;
     height: 40px;

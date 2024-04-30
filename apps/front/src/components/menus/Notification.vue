@@ -15,7 +15,7 @@ const props = defineProps({
   }
 })
 
-defineEmits(['action', 'actionSelected'])
+defineEmits(['action', 'actionSelected', 'notificationRead'])
 
 function timeSince(date) {
   const seconds = Math.floor((new Date() - date) / 1000);
@@ -89,8 +89,14 @@ watch(() => props.notification.message, (value) => {
 
 <template>
   <li
-      class="notification"
+      :class="[
+        'notification',
+        {
+          'notification--unread': notification.isRead === 0
+        }
+      ]"
       :data-id="`notification-${notification.id}`"
+      @click="$emit('notificationRead', notification.id)"
   >
     <Avatar
         :src="notification.image"
