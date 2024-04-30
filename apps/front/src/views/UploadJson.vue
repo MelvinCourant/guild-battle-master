@@ -167,6 +167,7 @@ async function uploadJson() {
         :display="alert.display"
         :type="alert.type"
         :message="alert.message"
+        @close="alert.display = false"
     />
   </main>
 </template>

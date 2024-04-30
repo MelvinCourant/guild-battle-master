@@ -1,7 +1,7 @@
 <script setup>
 import '../../assets/css/components/menus/_notification.scss';
 import Avatar from "../utils/Avatar.vue";
-import {onMounted} from "vue";
+import {onMounted, ref, watch} from "vue";
 import More from "../utils/More.vue";
 
 const props = defineProps({
@@ -61,12 +61,25 @@ function formatMessage(message) {
   return formattedMessage.trim();
 }
 
-const time = timeSince(new Date(props.notification.createdAt));
-const message = formatMessage(props.notification.message);
+const time = ref(timeSince(new Date(props.notification.createdAt)));
+const message = ref(formatMessage(props.notification.message));
+
+function addMessage() {
+  const messageElement = document.querySelector(`[data-id="notification-${props.notification.id}"] .notification__message`);
+  messageElement.innerHTML = message.value;
+}
 
 onMounted(() => {
-  const messageElement = document.querySelector(`[data-id="notification-${props.notification.id}"] .notification__message`);
-  messageElement.innerHTML = message;
+  addMessage();
+})
+
+watch(() => props.notification.createdAt, (value) => {
+  time.value = timeSince(new Date(value));
+})
+
+watch(() => props.notification.message, (value) => {
+  message.value = formatMessage(value);
+  addMessage();
 })
 </script>
 

@@ -342,7 +342,7 @@ async function dialogResponse(name) {
 
     if (result.ok) {
       await getMembers();
-      closeDialog();
+      dialogIsOpen.value = false;
       alert.display = true;
       alert.type = "success";
       alert.message = resultJson.message;
@@ -369,7 +369,7 @@ async function dialogResponse(name) {
 
     if (result.ok) {
       await getMembers();
-      closeDialog();
+      dialogIsOpen.value = false;
       alert.display = true;
       alert.type = "success";
       alert.message = resultJson.message;
@@ -379,12 +379,8 @@ async function dialogResponse(name) {
       alert.message = resultJson.message;
     }
   } else {
-    closeDialog();
+    dialogIsOpen.value = false;
   }
-}
-
-function closeDialog() {
-  dialogIsOpen.value = false;
 }
 
 async function madeSearch(inputName, value) {
@@ -443,11 +439,16 @@ function sortGrid(key) {
     :dialog="dialog"
     :isOpen="dialogIsOpen"
     @click="dialogResponse"
-    @close="closeDialog"
+    @close="dialogIsOpen = false"
     @change="
       roleSelected = $event;
       dialog.content.select.value = roleSelected;
     "
   />
-  <Alert :display="alert.display" :type="alert.type" :message="alert.message" />
+  <Alert
+      :display="alert.display"
+      :type="alert.type"
+      :message="alert.message"
+      @close="alert.display = false"
+  />
 </template>

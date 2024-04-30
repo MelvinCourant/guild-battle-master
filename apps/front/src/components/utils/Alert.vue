@@ -1,21 +1,23 @@
 <script setup>
-  import '../../assets/css/components/utils/_alert.scss';
+import '../../assets/css/components/utils/_alert.scss';
 
-  defineProps({
-    display: {
-      type: Boolean,
-      required: true,
-      default: false,
-    },
-    type: {
-      type: String,
-      default: 'success',
-    },
-    message: {
-      type: String,
-      required: true,
-    },
-  });
+defineProps({
+  display: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
+  type: {
+    type: String,
+    default: 'success',
+  },
+  message: {
+    type: String,
+    required: true,
+  },
+});
+
+defineEmits(['close']);
 </script>
 
 <template>
@@ -44,6 +46,6 @@
   <div
       class="alert__overlay"
       v-show="display"
-      @click="display = false"
+      @click="$emit('close')"
   ></div>
 </template>
