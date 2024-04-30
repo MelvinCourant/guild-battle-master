@@ -401,8 +401,7 @@ async function madeSearch(inputName, value) {
         keyword: value,
         sort: {
           name: actualSort.value,
-          order: columns.find((column) => column.key === actualSort.value)
-            .sortOrder,
+          order: columns.find((column) => column.key === actualSort.value).sortOrder,
         },
       }),
     },
@@ -412,6 +411,7 @@ async function madeSearch(inputName, value) {
     const resultJson = await result.json();
     data.value = {
       rows: resultJson.members,
+      link: "/member/",
       badges: ["lds"],
       actions: actions,
     };
