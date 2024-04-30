@@ -17,7 +17,7 @@ defineProps({
   }
 })
 
-const emits = defineEmits(['close', 'action'])
+const emits = defineEmits(['close', 'action', 'actionSelected'])
 
 document.addEventListener('click', (event) => {
   if (!event.target.closest('.notifications') && !event.target.closest('.navbar__notifications-button')) {
@@ -52,6 +52,7 @@ document.addEventListener('click', (event) => {
           :notification="notification"
           :actions="actions"
           @action="$emit('action', $event)"
+          @actionSelected="$emit('actionSelected', $event)"
         />
       </ul>
       <p v-else>

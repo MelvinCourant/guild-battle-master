@@ -15,7 +15,7 @@ const props = defineProps({
   }
 })
 
-defineEmits(['action'])
+defineEmits(['action', 'actionSelected'])
 
 function timeSince(date) {
   const seconds = Math.floor((new Date() - date) / 1000);
@@ -129,6 +129,10 @@ watch(() => props.notification.message, (value) => {
       <More
         v-else
         :actions="actions"
+        @actionSelected="$emit('actionSelected', {
+          action: $event,
+          id: notification.id
+        })"
       />
     </div>
   </li>

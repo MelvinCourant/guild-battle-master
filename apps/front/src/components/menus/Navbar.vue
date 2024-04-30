@@ -164,6 +164,26 @@ async function madeNotificationsAction(event) {
     await bequeathLeader(actionValue, event.notificationId);
   }
 }
+
+async function deleteNotification(notificationId) {
+  const result = await fetch(`${env.VITE_URL}/api/notifications/${notificationId}`, {
+    method: 'DELETE',
+    headers : {
+      'Authorization': `Bearer ${token}`
+    }
+  })
+
+  if(result.ok) {
+    await getNotifications();
+  }
+}
+
+async function actionSelected(event) {
+  if(event.action === 'read') {
+  } else if(event.action === 'delete') {
+    await deleteNotification(event.id);
+  }
+}
 </script>
 
 <template>
@@ -226,6 +246,7 @@ async function madeNotificationsAction(event) {
                   :actions="actionsNotifications"
                   @close="notificationsOpen = false"
                   @action="madeNotificationsAction"
+                  @actionSelected="actionSelected"
               />
             </li>
             <li>
