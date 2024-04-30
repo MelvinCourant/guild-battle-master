@@ -69,8 +69,11 @@ const time = ref(timeSince(new Date(props.notification.createdAt)));
 const message = ref(formatMessage(props.notification.message));
 
 function addMessage() {
-  const messageElement = document.querySelector(`[data-id="notification-${props.notification.id}"] .notification__message`);
-  messageElement.innerHTML = message.value;
+  const messageElements = document.querySelectorAll(`[data-id="notification-${props.notification.id}"] .notification__message`);
+
+  messageElements.forEach((element) => {
+    element.innerHTML = message.value;
+  })
 }
 
 onMounted(() => {

@@ -111,6 +111,10 @@ function handleMobile() {
       onMobile.value
   ) {
     onMobile.value = !onMobile.value;
+
+    if(!onMobile.value) {
+      getNotifications();
+    }
   }
 }
 
@@ -253,7 +257,7 @@ async function actionSelected(event) {
               <button
                   :class="[
                     'navbar__notifications-button',
-                    { 'navbar__notifications-button--unread': !notifications[0].isRead }
+                    { 'navbar__notifications-button--unread': notifications[0] && !notifications[0].isRead }
                   ]"
                   @click="notificationsOpen = !notificationsOpen"
               >

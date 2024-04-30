@@ -8,6 +8,7 @@ import Logout from "../views/Logout.vue";
 import UploadJson from "../views/UploadJson.vue";
 import Member from "../views/Member.vue";
 import Composition from "../views/Composition.vue";
+import Notifications from "../views/NotificationsPage.vue";
 
 const router = createRouter(
 {
@@ -64,6 +65,10 @@ const router = createRouter(
         {
             path: '/composition/:id',
             component: Composition
+        },
+        {
+            path: '/notifications',
+            component: Notifications
         }
     ]
 });

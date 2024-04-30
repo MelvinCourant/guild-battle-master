@@ -29,7 +29,7 @@ defineProps({
             :class="[
                 'navbar-mobile__link',
               { 'navbar-mobile__link--selected': mobileLink.path === route.path },
-              { 'navbar-mobile__link--unread': mobileLink.path === '/notifications' && !notifications[0].isRead > 0}
+              { 'navbar-mobile__link--unread': mobileLink.path === '/notifications' && notifications[0] && !notifications[0].isRead > 0}
             ]"
         >
           <svg
