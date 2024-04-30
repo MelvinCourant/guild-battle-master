@@ -23,4 +23,16 @@ export default class NotificationsController {
       })),
     })
   }
+
+  async destroy({ auth, params, response }: HttpContext) {
+    const user = await auth.authenticate()
+    const notification = await Notification.findOrFail(params.id)
+
+    if (notification.receiver_id !== user.id) {
+      return response.forbidden()
+    }
+
+    await notification.delete()
+    return response.noContent()
+  }
 }

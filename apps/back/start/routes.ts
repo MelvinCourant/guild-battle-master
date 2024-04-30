@@ -177,5 +177,9 @@ router
     router.get('/', async (data) => {
       return notificationsController.index(data)
     })
+
+    router.delete('/:id', async (data) => {
+      return notificationsController.destroy(data)
+    })
   })
   .prefix('api/notifications')
