@@ -15,6 +15,7 @@ export default class extends BaseSchema {
         .onDelete('CASCADE')
       table.string('message').notNullable()
       table.string('action')
+      table.boolean('is_read').defaultTo(false)
 
       table.timestamp('created_at')
       table.timestamp('updated_at')

@@ -22,6 +22,9 @@ export default class Notification extends BaseModel {
   @column()
   action: string
 
+  @column()
+  is_read: boolean
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
