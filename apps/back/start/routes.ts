@@ -181,5 +181,9 @@ router
     router.delete('/:id', async (data) => {
       return notificationsController.destroy(data)
     })
+
+    router.patch('/:id', async (data) => {
+      return notificationsController.update(data)
+    })
   })
   .prefix('api/notifications')
