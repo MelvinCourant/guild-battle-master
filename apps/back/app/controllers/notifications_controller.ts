@@ -7,8 +7,8 @@ export default class NotificationsController {
     const user = await auth.authenticate()
     const notifications = await Notification.query()
       .where('receiver_id', user.id)
-      .select('id', 'sender_id', 'message', 'action', 'created_at')
-      .orderBy('created_at', 'desc')
+      .select('id', 'sender_id', 'message', 'action', 'updated_at')
+      .orderBy('updated_at', 'desc')
     const senderImages = await User.query()
       .whereIn(
         'id',

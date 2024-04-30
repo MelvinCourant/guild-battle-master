@@ -65,7 +65,7 @@ function formatMessage(message) {
   return formattedMessage.trim();
 }
 
-const time = ref(timeSince(new Date(props.notification.createdAt)));
+const time = ref(timeSince(new Date(props.notification.updatedAt)));
 const message = ref(formatMessage(props.notification.message));
 
 function addMessage() {
@@ -77,7 +77,7 @@ onMounted(() => {
   addMessage();
 })
 
-watch(() => props.notification.createdAt, (value) => {
+watch(() => props.notification.updatedAt, (value) => {
   time.value = timeSince(new Date(value));
 })
 
