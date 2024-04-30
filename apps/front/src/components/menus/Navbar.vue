@@ -238,7 +238,10 @@ async function actionSelected(event) {
             v-show="onMobile"
             :aria-hidden="!onMobile"
         >
-          <NavbarMobile :mobileLinks="mobileLinks" />
+          <NavbarMobile
+              :mobileLinks="mobileLinks"
+              :notifications="notifications"
+          />
         </li>
         <li>
           <ul class="navbar__right">

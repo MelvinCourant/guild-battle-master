@@ -1,15 +1,19 @@
 <script setup>
-  import '../../../assets/css/components/menus/mobile/_navbar-mobile.scss';
-  import { useRoute } from "vue-router";
+import '../../../assets/css/components/menus/mobile/_navbar-mobile.scss';
+import { useRoute } from "vue-router";
 
-  const route = useRoute();
+const route = useRoute();
 
-  defineProps({
-    mobileLinks: {
-      type: Array,
-      required: true
-    }
-  });
+defineProps({
+  mobileLinks: {
+    type: Array,
+    required: true
+  },
+  notifications: {
+    type: Array,
+    required: true
+  }
+});
 </script>
 
 <template>
@@ -22,8 +26,11 @@
       >
         <router-link
             :to="mobileLink.path"
-            class="navbar-mobile__link"
-            :class="{ 'navbar-mobile__link--selected': mobileLink.path === route.path }"
+            :class="[
+                'navbar-mobile__link',
+              { 'navbar-mobile__link--selected': mobileLink.path === route.path },
+              { 'navbar-mobile__link--unread': mobileLink.path === '/notifications' && !notifications[0].isRead > 0}
+            ]"
         >
           <svg
               v-if="mobileLink.path === '/guild'"

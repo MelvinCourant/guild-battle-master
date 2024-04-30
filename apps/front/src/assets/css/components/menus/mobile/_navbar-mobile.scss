@@ -38,5 +38,21 @@
         fill: var(--primary);
       }
     }
+
+    &--unread {
+      position: relative;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 8px;
+        left: 50%;
+        transform: translateX(calc(-50% + 4px));
+        width: 10px;
+        height: 10px;
+        background: var(--danger);
+        border-radius: 50%;
+      }
+    }
   }
 }
