@@ -92,11 +92,28 @@
 
   &__notifications {
     display: flex;
+    align-items: center;
     height: 100%;
     position: relative;
 
     &-button {
+      position: relative;
       @include mixins.resetButton(none, transparent);
+      width: 30px;
+      height: 30px;
+
+      &--unread {
+        &::before {
+          content: "";
+          position: absolute;
+          top: 6px;
+          right: 7px;
+          width: 8px;
+          height: 8px;
+          background: var(--danger);
+          border-radius: 50%;
+        }
+      }
     }
   }
 

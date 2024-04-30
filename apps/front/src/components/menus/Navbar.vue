@@ -248,7 +248,10 @@ async function actionSelected(event) {
                 class="navbar__notifications"
             >
               <button
-                  class="navbar__notifications-button"
+                  :class="[
+                    'navbar__notifications-button',
+                    { 'navbar__notifications-button--unread': !notifications[0].isRead }
+                  ]"
                   @click="notificationsOpen = !notificationsOpen"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="18" viewBox="0 0 16 18" fill="none">
