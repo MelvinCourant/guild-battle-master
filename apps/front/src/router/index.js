@@ -17,22 +17,37 @@ const router = createRouter(
         {
             path: '/guild',
             component: Guild,
+            meta: {
+                title: 'Guilde'
+            }
         },
         {
             path: '/map',
-            component: Map
+            component: Map,
+            meta: {
+                title: 'Plan de siège'
+            }
         },
         {
             path: '/defenses',
-            component: Defenses
+            component: Defenses,
+            meta: {
+                title: 'Défenses'
+            }
         },
         {
             path: '/login',
-            component: Login
+            component: Login,
+            meta: {
+                title: 'Connexion'
+            }
         },
         {
             path: '/register',
-            component: Register
+            component: Register,
+            meta: {
+                title: 'Inscription'
+            }
         },
         {
             path: '/logout',
@@ -40,35 +55,59 @@ const router = createRouter(
         },
         {
             path: '/upload-json',
-            component: UploadJson
+            component: UploadJson,
+            meta: {
+                title: 'Importer un JSON'
+            }
         },
         {
             path: '/upload-json/:id',
-            component: UploadJson
+            component: UploadJson,
+            meta: {
+                title: 'Importer un JSON'
+            }
         },
         {
             path: '/upload-json/guild',
-            component: UploadJson
+            component: UploadJson,
+            meta: {
+                title: 'Importer un JSON'
+            }
         },
         {
             path: '/member',
-            component: Member
+            component: Member,
+            meta: {
+                title: 'Membre'
+            }
         },
         {
             path: '/member/:id',
-            component: Member
+            component: Member,
+            meta: {
+                title: 'Membre'
+            }
         },
         {
             path: '/composition',
-            component: Composition
+            component: Composition,
+            meta: {
+                title: 'Ajouter une composition'
+            }
         },
         {
             path: '/composition/:id',
-            component: Composition
+            component: Composition,
+            meta: {
+                title: 'Modifier une composition'
+            }
         },
         {
             path: '/notifications',
-            component: Notifications
+            component: Notifications,
+            meta: {
+                title: 'Notifications'
+            }
         }
     ]
 });

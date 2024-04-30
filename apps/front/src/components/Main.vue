@@ -12,6 +12,12 @@
     } else {
       hideNavbar.value = false;
     }
+
+    if(route.meta.title) {
+      document.head.querySelector('title').textContent = `Guild battle Master - ${route.meta.title}`;
+    } else {
+      document.head.querySelector('title').textContent = "Guild battle Master";
+    }
   });
 </script>
 
