@@ -158,7 +158,7 @@ export default class MonstersController {
 
   async show({ params, response }: HttpContext) {
     const { id } = params
-    const monster = await Monster.find(id)
+    const monster = await Monster.query().where('unit_master_id', id).first()
 
     if (!monster) {
       return response.status(404).json({ message: 'Monster not found' })

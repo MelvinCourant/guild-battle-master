@@ -1,47 +1,48 @@
 <script setup>
-import '../../../assets/css/components/utils/inputs/_combobox.scss';
-import { ref } from 'vue';
+import "../../../assets/css/components/utils/inputs/_combobox.scss";
+import { ref } from "vue";
 import Badge from "../Badge.vue";
 
 const props = defineProps({
   label: {
     type: String,
-    default: ''
+    default: "",
   },
   options: {
     type: Array,
-    required: true
+    required: true,
+  },
+  values: {
+    type: Array,
+    default: [],
   },
   resetValues: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 });
 
-const emit = defineEmits(['updateValues']);
+const emit = defineEmits(["updateValues"]);
 
-const values = ref([]);
+const values = ref(props.values);
 const isOpen = ref(false);
 
-document.addEventListener('click', (event) => {
-  if (
-    !(event.target).closest('.combobox') &&
-    isOpen.value
-  ) {
+document.addEventListener("click", (event) => {
+  if (!event.target.closest(".combobox") && isOpen.value) {
     isOpen.value = false;
   }
 });
 
 function updateValues(value) {
-  if(!values.value.find((v) => v.value === value)) {
+  if (!values.value.find((v) => v.value === value)) {
     values.value.push(props.options.find((option) => option.value === value));
   } else {
     values.value = values.value.filter((v) => v.value !== value);
   }
 
-  emit('updateValues', values.value);
-  document.querySelectorAll('.combobox__input').forEach((input) => {
-    input.value = '';
+  emit("updateValues", values.value);
+  document.querySelectorAll(".combobox__input").forEach((input) => {
+    input.value = "";
   });
   props.options.forEach((option) => {
     option.display = true;
@@ -58,20 +59,16 @@ function search(value) {
 <template>
   <div class="combobox">
     <div class="combobox__container">
-      <label
-        for="combobox"
-        class="combobox__label"
-      >
+      <label for="combobox" class="combobox__label">
         {{ label }}
       </label>
       <div
         :class="[
-            'combobox__entries',
-            {
-              'combobox__entries--open': isOpen
-            }
+          'combobox__entries',
+          {
+            'combobox__entries--open': isOpen,
+          },
         ]"
-
       >
         <input
           role="combobox"
@@ -83,16 +80,22 @@ function search(value) {
           autocomplete="off"
           @input="search($event.target.value)"
           @focus="isOpen = true"
-        >
+        />
         <div class="combobox__arrow">
-          <svg xmlns="http://www.w3.org/2000/svg" width="9" height="6" viewBox="0 0 9 6" fill="none">
-            <path d="M0.666672 0.916668L4.83334 5.08333L9 0.916668H0.666672Z" fill="var(--white)"/>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="9"
+            height="6"
+            viewBox="0 0 9 6"
+            fill="none"
+          >
+            <path
+              d="M0.666672 0.916668L4.83334 5.08333L9 0.916668H0.666672Z"
+              fill="var(--white)"
+            />
           </svg>
         </div>
-        <ul
-          v-if="values.length > 0"
-          class="combobox__values"
-        >
+        <ul v-if="values.length > 0" class="combobox__values">
           <Badge
             v-for="value in values"
             :key="value.value"
@@ -107,11 +110,11 @@ function search(value) {
       <ul
         role="listbox"
         :class="[
-              'combobox__list',
-              {
-                'combobox__list--open': isOpen
-              }
-          ]"
+          'combobox__list',
+          {
+            'combobox__list--open': isOpen,
+          },
+        ]"
         id="listbox"
       >
         <li
@@ -120,13 +123,18 @@ function search(value) {
           role="option"
           :tabindex="index"
           :class="[
-              'combobox__option',
-              {
-                'combobox__option--selected': values.find((v) => v.value === option.value)
-              }
+            'combobox__option',
+            {
+              'combobox__option--selected': values.find(
+                (v) => v.value === option.value,
+              ),
+            },
           ]"
           v-show="option.display"
-          @click="isOpen = false; updateValues(option.value)"
+          @click="
+            isOpen = false;
+            updateValues(option.value);
+          "
         >
           {{ option.text }}
         </li>

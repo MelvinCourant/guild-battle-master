@@ -54,7 +54,7 @@ export default class GuildsController {
         for (const monster of memberBox) {
           const monsterData = await Monster.query()
             .where('unit_master_id', monster.monster_id)
-            .select('id', 'name', 'element', 'natural_grade', 'is_fusion_shop')
+            .select('unit_master_id', 'name', 'element', 'natural_grade', 'is_fusion_shop')
             .first()
 
           if (!monsterData) {
@@ -74,7 +74,7 @@ export default class GuildsController {
               monsterData.is_fusion_shop === 0)
           ) {
             lds.push({
-              id: monsterData.id,
+              unit_master_id: monsterData.unit_master_id,
               name: monsterData.name,
               element: monsterData.element,
               quantity: monster.quantity,
