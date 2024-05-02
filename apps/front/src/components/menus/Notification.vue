@@ -110,6 +110,7 @@ function emitNotificationRead(event) {
     <Avatar
         :src="notification.image"
         alt="Sender avatar"
+        :disableSkeleton="true"
     />
     <div class="notification__content">
       <div class="notification__texts">

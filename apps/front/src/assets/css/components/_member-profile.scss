@@ -18,15 +18,15 @@
 
   &__image {
     min-width: 100px;
-    width: 100px;
+    width: 100px !important;
     min-height: 100px;
-    height: 100px;
+    height: 100px !important;
 
     @media screen and (max-width: 768px) {
       min-width: 80px;
-      width: 80px;
+      width: 80px !important;
       min-height: 80px;
-      height: 80px;
+      height: 80px !important;
     }
   }
 

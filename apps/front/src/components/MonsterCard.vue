@@ -24,6 +24,7 @@ defineProps({
         :className="'monster-card__avatar'"
         :src="image"
         :alt="name"
+        :disableSkeleton="true"
     />
     <div
         class="monster-card__quantity"

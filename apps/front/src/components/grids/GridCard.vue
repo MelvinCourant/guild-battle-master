@@ -64,9 +64,10 @@ function othersText(numberMonsters) {
       <template v-if="key !== 'id'">
         <router-link v-if="key === 'image'" :to="link + content.id">
           <Avatar
-            :class="columns[index - 1].class"
+            :className="columns[index - 1].class"
             :src="content.image"
             :alt="content.pseudo"
+            :disableSkeleton="true"
           />
         </router-link>
         <div

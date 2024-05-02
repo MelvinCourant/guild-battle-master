@@ -30,10 +30,6 @@ defineProps({
 });
 
 const imageLoaded = ref(false);
-
-function onImageLoad() {
-  imageLoaded.value = true;
-}
 </script>
 
 <template>
@@ -41,19 +37,12 @@ function onImageLoad() {
     <Avatar
       :src="image"
       :alt="pseudo"
-      :class="'member-profile__image'"
-      @load="onImageLoad"
+      :className="'member-profile__image'"
+      @load="imageLoaded = true"
       v-show="
         imageLoaded &&
         pseudo
       "
-      v-if="image"
-    />
-    <SkeletonLoader
-        circle
-        size="100"
-        class="member-profile__skeleton-image"
-        v-if="!imageLoaded"
     />
 
     <h1

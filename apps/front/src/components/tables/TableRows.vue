@@ -56,9 +56,10 @@ function othersText(numberMonsters) {
           </ul>
           <router-link :to="link + row.id" v-else-if="key === 'image'">
             <Avatar
-              :class="'table-rows__image'"
+              :className="'table-rows__image'"
               :src="info"
               :alt="row.pseudo"
+              :disableSkeleton="true"
             />
           </router-link>
           <div v-else-if="key === 'grade'" class="table-grid__grade-name">

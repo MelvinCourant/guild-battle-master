@@ -21,10 +21,6 @@ defineProps({
 });
 
 const imageLoaded = ref(false);
-
-function onImageLoad() {
-  imageLoaded.value = true;
-}
 </script>
 
 <template>
@@ -32,19 +28,12 @@ function onImageLoad() {
     <Avatar
       :src="image"
       :alt="name"
-      :class="'guild-profile__image'"
-      @load="onImageLoad"
+      :className="'guild-profile__image'"
+      @load="imageLoaded = true"
       v-show="
         imageLoaded &&
         name
       "
-      v-if="image"
-    />
-    <SkeletonLoader
-        circle
-        size="100"
-        class="guild-profile__skeleton-image"
-        v-if="!imageLoaded"
     />
 
     <h1

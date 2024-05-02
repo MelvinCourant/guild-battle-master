@@ -1,6 +1,7 @@
 <script setup>
 import '../../assets/css/components/utils/_avatar.scss';
-import { computed } from "vue";
+import {computed, ref} from "vue";
+import {SkeletonLoader} from "vue3-loading-skeleton";
 
 const props = defineProps({
   className: {
@@ -15,11 +16,17 @@ const props = defineProps({
     type: String,
     required: true
   },
+  disableSkeleton: {
+    type: Boolean,
+    default: false
+  },
   loading: {
     type: String,
     default: 'lazy'
   }
 });
+
+const emit = defineEmits(['load']);
 
 const env = import.meta.env;
 
@@ -30,6 +37,13 @@ const generateSrc = computed(() => {
     return `${env.VITE_URL}/uploads/${props.src}`;
   }
 });
+
+const imageLoaded = ref(false);
+
+function onImageLoad() {
+  imageLoaded.value = true;
+  emit('load');
+}
 </script>
 
 <template>
@@ -40,6 +54,17 @@ const generateSrc = computed(() => {
       ]"
       :src="generateSrc"
       :alt="alt"
+      v-show="imageLoaded"
+      @load="onImageLoad"
       :loading="loading"
   >
+  <SkeletonLoader
+      size="100"
+      tag="div"
+      :class="[
+          'avatar',
+          className
+      ]"
+      v-if="!imageLoaded && !disableSkeleton"
+  />
 </template>
