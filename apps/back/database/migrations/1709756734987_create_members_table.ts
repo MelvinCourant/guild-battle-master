@@ -5,15 +5,15 @@ export default class extends BaseSchema {
 
   async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
+      table.uuid('id').primary()
       table.integer('wizard_id').unsigned().notNullable()
       table.string('pseudo').notNullable()
       table
         .enu('grade', ['leader', 'vice-leader', 'senior', 'member'])
         .notNullable()
         .defaultTo('member')
-      table.integer('user_id').unsigned().references('users.id').nullable().onDelete('CASCADE')
-      table.integer('guild_id').unsigned().references('guilds.id').nullable()
+      table.string('user_id').references('id').inTable('users').nullable().onDelete('CASCADE')
+      table.string('guild_id').references('id').inTable('guilds').nullable()
       table.unique(['id', 'guild_id'])
 
       table.timestamp('created_at')

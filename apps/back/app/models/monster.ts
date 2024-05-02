@@ -1,8 +1,14 @@
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { BaseModel, beforeCreate, column } from '@adonisjs/lucid/orm'
+import { v4 as uuidv4 } from 'uuid'
 
 export default class Monster extends BaseModel {
   @column({ isPrimary: true })
-  declare id: number
+  declare id: string
+
+  @beforeCreate()
+  static async assignUuid(monster: Monster) {
+    monster.id = uuidv4()
+  }
 
   @column()
   declare unit_master_id: number

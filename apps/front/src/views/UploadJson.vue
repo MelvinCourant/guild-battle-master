@@ -45,7 +45,7 @@ const isGuildUpload = ref(false);
 const route = useRoute();
 const router = useRouter();
 const params = route.params;
-const id = parseInt(params.id);
+const id = params.id;
 const json = ref(null);
 const alert = reactive({
   display: false,

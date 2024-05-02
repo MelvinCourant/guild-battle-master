@@ -12,7 +12,7 @@ export const createCompositionValidator = vine.compile(
     grade: vine.number(),
     defenses: vine.array(
       vine.object({
-        member: vine.number(),
+        member: vine.string(),
         leader: vine.number(),
         second: vine.number(),
         third: vine.number(),

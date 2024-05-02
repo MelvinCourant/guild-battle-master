@@ -135,7 +135,7 @@ export default class AuthController {
       }
 
       // eslint-disable-next-line no-inner-declarations
-      async function createBoxes(memberId: number, monsters: any) {
+      async function createBoxes(memberId: string, monsters: any) {
         for (const monster of monsters) {
           const box: any = await Box.query()
             .where('monster_id', monster.unit_master_id)
@@ -210,7 +210,7 @@ export default class AuthController {
       })
 
       const members: any = jsonParsed.guild.guild_members
-      let memberId: number = 0
+      let memberId: string = ''
       let leaderPseudo: string = members[wizardId].wizard_name
 
       user.role = 'leader'

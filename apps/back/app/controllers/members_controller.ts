@@ -228,7 +228,7 @@ export default class MembersController {
     let monstersAdded = 0
     let monstersUpdated = 0
 
-    async function updateBoxes(memberId: number, monsters: any) {
+    async function updateBoxes(memberId: string, monsters: any) {
       for (const monster of monsters) {
         const box: any = await Box.query()
           .where('monster_id', monster.unit_master_id)

@@ -5,9 +5,9 @@ export default class extends BaseSchema {
 
   async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
+      table.uuid('id').primary()
       table.integer('monster_id').unsigned().references('monsters.unit_master_id')
-      table.integer('member_id').unsigned().references('members.id').onDelete('CASCADE')
+      table.string('member_id').references('id').inTable('members').onDelete('CASCADE')
       table.integer('quantity').notNullable().defaultTo(1)
       table.integer('monsters_assigned').notNullable().defaultTo(0)
       table.unique(['id', 'member_id', 'monster_id'])

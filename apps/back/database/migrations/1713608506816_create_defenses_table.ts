@@ -5,18 +5,18 @@ export default class extends BaseSchema {
 
   async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
+      table.uuid('id').primary()
       table.integer('leader_monster').unsigned().references('monsters.unit_master_id').notNullable()
       table.integer('second_monster').unsigned().references('monsters.unit_master_id').notNullable()
       table.integer('third_monster').unsigned().references('monsters.unit_master_id').notNullable()
-      table.integer('member_id').unsigned().references('members.id').notNullable()
+      table.string('member_id').references('id').inTable('members').notNullable()
       table
-        .integer('composition_id')
-        .unsigned()
-        .references('compositions.id')
+        .string('composition_id')
+        .references('id')
+        .inTable('compositions')
         .notNullable()
         .onDelete('CASCADE')
-      table.integer('tower_id')
+      table.string('tower_id')
 
       table.timestamp('created_at')
       table.timestamp('updated_at')

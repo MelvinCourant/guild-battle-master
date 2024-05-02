@@ -5,12 +5,12 @@ export default class extends BaseSchema {
 
   async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
-      table.integer('sender_id').unsigned().references('users.id').notNullable().onDelete('CASCADE')
+      table.uuid('id').primary()
+      table.string('sender_id').references('id').inTable('users').notNullable().onDelete('CASCADE')
       table
-        .integer('receiver_id')
-        .unsigned()
-        .references('users.id')
+        .string('receiver_id')
+        .references('id')
+        .inTable('users')
         .notNullable()
         .onDelete('CASCADE')
       table.string('message').notNullable()

@@ -17,7 +17,7 @@ export default class GuildsController {
       .select('guild_id')
       .firstOrFail()
     const memberGuildId = memberGuild.guild_id
-    const guildId = Number.parseInt(params.id)
+    const guildId = params.id
 
     if (guildId !== memberGuildId) {
       return response.status(403).json({ message: 'Guilde invalide' })
@@ -155,7 +155,7 @@ export default class GuildsController {
     const jsonParsed: any = JSON.parse(data)
 
     // eslint-disable-next-line no-inner-declarations
-    async function createOrUpdateMembers(members: any, guildId: number, previousMembers: any) {
+    async function createOrUpdateMembers(members: any, guildId: string, previousMembers: any) {
       for (const memberIndex of Object.keys(members)) {
         const member: any = members[memberIndex]
         const memberExists = await Member.query().where('wizard_id', member.wizard_id).first()
@@ -220,7 +220,7 @@ export default class GuildsController {
       .select('guild_id')
       .firstOrFail()
     const memberGuildId = memberGuild.guild_id
-    const guildId = Number.parseInt(params.id)
+    const guildId = params.id
     const sort = request.input('sort')
 
     if (guildId !== memberGuildId) {

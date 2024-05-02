@@ -5,10 +5,10 @@ export default class extends BaseSchema {
 
   async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
+      table.uuid('id').primary()
       table.integer('guild_id_json').notNullable()
       table.string('name').notNullable()
-      table.integer('leader_id').unsigned().references('users.id').onDelete('CASCADE')
+      table.string('leader_id').references('id').inTable('users').onDelete('CASCADE')
       table.unique(['name', 'leader_id'])
       table.string('image').nullable()
 

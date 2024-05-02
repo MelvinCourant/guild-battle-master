@@ -1,17 +1,23 @@
 import { DateTime } from 'luxon'
-import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
+import { BaseModel, belongsTo, column, beforeCreate } from '@adonisjs/lucid/orm'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import User from '#models/user'
+import { v4 as uuidv4 } from 'uuid'
 
 export default class Notification extends BaseModel {
   @column({ isPrimary: true })
-  declare id: number
+  declare id: string
+
+  @beforeCreate()
+  static async assignUuid(notification: Notification) {
+    notification.id = uuidv4()
+  }
 
   @column()
-  sender_id: number
+  sender_id: string
 
   @column()
-  receiver_id: number
+  receiver_id: string
 
   @belongsTo(() => User)
   declare monster: BelongsTo<typeof User>
