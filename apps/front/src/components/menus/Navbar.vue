@@ -7,6 +7,7 @@ import AccountMenu from "../../components/menus/AccountMenu.vue";
 import NavbarMobile from "../../components/menus/mobile/NavbarMobile.vue";
 import { provide, ref } from "vue";
 import Notifications from "./Notifications.vue";
+
 const env = import.meta.env;
 const desktopLinks = [
   {
@@ -86,6 +87,7 @@ const submenu = [
 const onMobile = ref(false);
 const notifications = ref([]);
 const notificationsOpen = ref(false);
+const notificationsLoading = ref(false);
 const actionsNotifications = [
   {
     name: "read",
@@ -203,6 +205,12 @@ async function actionSelected(event) {
     await deleteNotification(event.id);
   }
 }
+
+async function refreshNotifications() {
+  notificationsLoading.value = true;
+  await getNotifications();
+  notificationsLoading.value = false;
+}
 </script>
 
 <template>
@@ -269,10 +277,12 @@ async function actionSelected(event) {
                   :notifications="notifications"
                   :isOpen="notificationsOpen"
                   :actions="actionsNotifications"
+                  :isLoading="notificationsLoading"
                   @close="notificationsOpen = false"
                   @action="madeNotificationsAction"
                   @actionSelected="actionSelected"
                   @notificationRead="readNotification"
+                  @refresh="refreshNotifications"
               />
             </li>
             <li>
