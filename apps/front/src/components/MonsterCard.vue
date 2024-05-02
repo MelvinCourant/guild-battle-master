@@ -25,6 +25,7 @@ defineProps({
         :src="image"
         :alt="name"
         :disableSkeleton="true"
+        :loading="'lazy'"
     />
     <div
         class="monster-card__quantity"

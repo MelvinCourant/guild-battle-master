@@ -22,7 +22,7 @@ const props = defineProps({
   },
   loading: {
     type: String,
-    default: 'lazy'
+    default: ''
   }
 });
 
@@ -54,7 +54,7 @@ function onImageLoad() {
       ]"
       :src="generateSrc"
       :alt="alt"
-      v-show="imageLoaded"
+      v-show="imageLoaded || disableSkeleton"
       @load="onImageLoad"
       :loading="loading"
   >
