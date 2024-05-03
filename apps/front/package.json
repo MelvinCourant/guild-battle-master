@@ -11,13 +11,13 @@
   "dependencies": {
     "gsap": "^3.12.5",
     "pinia": "^2.1.7",
-    "sass": "^1.71.1",
-    "vue": "^3.4.19",
-    "vue-router": "^4.3.0",
+    "sass": "^1.76.0",
+    "vue": "^3.4.26",
+    "vue-router": "^4.3.2",
     "vue3-loading-skeleton": "^0.0.13"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",
-    "vite": "^5.1.4"
+    "vite": "^5.2.11"
   }
 }
