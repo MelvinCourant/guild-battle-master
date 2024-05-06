@@ -16,7 +16,7 @@ export default class extends BaseSchema {
         .inTable('compositions')
         .notNullable()
         .onDelete('CASCADE')
-      table.string('tower_id')
+      table.string('tower_id').references('id').inTable('towers').onDelete('CASCADE')
 
       table.timestamp('created_at')
       table.timestamp('updated_at')

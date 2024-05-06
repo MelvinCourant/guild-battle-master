@@ -13,6 +13,7 @@ import Member from '#models/member'
 import Guild from '#models/guild'
 import Box from '#models/box'
 import Monster from '#models/monster'
+import Tower from '#models/tower'
 
 export default class AuthController {
   async register({ request, response }: HttpContext) {
@@ -221,6 +222,15 @@ export default class AuthController {
       const membersNumber = Object.keys(members).length
 
       fs.unlinkSync(jsonLink)
+
+      for(let towerId = 1; towerId <= 12; towerId++) {
+        await Tower.create({
+          guild_id: guild.id,
+          position: towerId,
+          side: 'blue',
+          map: 'classic',
+        })
+      }
 
       return response.created({
         message: 'Guild, member and guild mates created',

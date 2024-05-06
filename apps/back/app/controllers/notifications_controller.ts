@@ -3,7 +3,7 @@ import Notification from '#models/notification'
 import User from '#models/user'
 
 export default class NotificationsController {
-  async index({ auth, response }: HttpContext) {
+  async list({ auth, response }: HttpContext) {
     const user = await auth.authenticate()
     const notifications = await Notification.query()
       .where('receiver_id', user.id)

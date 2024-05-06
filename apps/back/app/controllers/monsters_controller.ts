@@ -167,7 +167,7 @@ export default class MonstersController {
     return response.status(200).json(monster)
   }
 
-  async index({ request, response }: HttpContext) {
+  async list({ request, response }: HttpContext) {
     let monsters
     const grade = request.input('grade')
 

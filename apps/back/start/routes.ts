@@ -16,6 +16,7 @@ import MonstersController from '#controllers/monsters_controller'
 import BoxesController from '#controllers/boxes_controller'
 import CompositionsController from '#controllers/compositions_controller'
 import NotificationsController from '#controllers/notifications_controller'
+import TowersController from "#controllers/towers_controller";
 import app from '@adonisjs/core/services/app'
 
 router
@@ -121,7 +122,7 @@ router
     })
 
     router.post('/', async (data) => {
-      return monstersController.index(data)
+      return monstersController.list(data)
     })
   })
   .prefix('api/monsters')
@@ -175,7 +176,7 @@ router
     const notificationsController = new NotificationsController()
 
     router.get('/', async (data) => {
-      return notificationsController.index(data)
+      return notificationsController.list(data)
     })
 
     router.delete('/:id', async (data) => {
@@ -187,3 +188,13 @@ router
     })
   })
   .prefix('api/notifications')
+
+router
+  .group(() => {
+    const towersController = new TowersController()
+
+    router.get('/', async (data) => {
+      return towersController.list(data)
+    })
+  })
+  .prefix('api/towers')

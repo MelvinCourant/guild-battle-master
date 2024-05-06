@@ -5,6 +5,7 @@ import Member from '#models/member'
 import Composition from '#models/composition'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import { v4 as uuidv4 } from 'uuid'
+import Tower from "#models/tower";
 
 export default class Defense extends BaseModel {
   @column({ isPrimary: true })
@@ -41,6 +42,9 @@ export default class Defense extends BaseModel {
 
   @column()
   declare tower_id: string
+
+  @belongsTo(() => Tower)
+  declare tower: BelongsTo<typeof Tower>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
