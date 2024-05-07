@@ -232,7 +232,7 @@ export default class AuthController {
             position: towerId,
             side: 'blue',
             map: 'classic',
-            grade: 4,
+            grade: '4',
           })
         } else {
           await Tower.create({
@@ -240,7 +240,7 @@ export default class AuthController {
             position: towerId,
             side: 'blue',
             map: 'classic',
-            grade: 5,
+            grade: '5',
           })
         }
       }

@@ -8,7 +8,7 @@ export default class extends BaseSchema {
       table.uuid('id').primary()
       table.integer('guild_id_json').notNullable()
       table.string('name').notNullable()
-      table.string('leader_id').references('id').inTable('users').onDelete('CASCADE')
+      table.string('leader_id').references('id').inTable('users')
       table.unique(['name', 'leader_id'])
       table.string('image').nullable()
 

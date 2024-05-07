@@ -17,6 +17,7 @@ import BoxesController from '#controllers/boxes_controller'
 import CompositionsController from '#controllers/compositions_controller'
 import NotificationsController from '#controllers/notifications_controller'
 import TowersController from '#controllers/towers_controller'
+import DefensesController from '#controllers/defenses_controller'
 import app from '@adonisjs/core/services/app'
 
 router
@@ -202,3 +203,13 @@ router
     })
   })
   .prefix('api/towers')
+
+router
+  .group(() => {
+    const defensesController = new DefensesController()
+
+    router.get('/', async (data) => {
+      return defensesController.list(data)
+    })
+  })
+  .prefix('api/defenses')
