@@ -16,7 +16,7 @@ import MonstersController from '#controllers/monsters_controller'
 import BoxesController from '#controllers/boxes_controller'
 import CompositionsController from '#controllers/compositions_controller'
 import NotificationsController from '#controllers/notifications_controller'
-import TowersController from "#controllers/towers_controller";
+import TowersController from '#controllers/towers_controller'
 import app from '@adonisjs/core/services/app'
 
 router
@@ -195,6 +195,10 @@ router
 
     router.get('/', async (data) => {
       return towersController.list(data)
+    })
+
+    router.put('/:id', async (data) => {
+      return towersController.update(data)
     })
   })
   .prefix('api/towers')

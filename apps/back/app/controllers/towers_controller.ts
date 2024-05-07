@@ -1,22 +1,25 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import Member from "#models/member";
-import Tower from "#models/tower";
-import Defense from "#models/defense";
-import Monster from "#models/monster";
+import Member from '#models/member'
+import Tower from '#models/tower'
+import Defense from '#models/defense'
+import Monster from '#models/monster'
 
 export default class TowersController {
   async list({ auth, response }: HttpContext) {
     const user = await auth.authenticate()
     const member = await Member.query().where('user_id', user.id).select('guild_id').firstOrFail()
-    const towers = await Tower
-      .query()
+    const towers = await Tower.query()
       .where('guild_id', member.guild_id)
       .where('side', 'blue')
       .andWhere('map', 'classic')
       .orderBy('position', 'asc')
       .select('id', 'position')
     const defenses = await Defense.query()
-      .where('tower_id', 'in', towers.map(tower => tower.id))
+      .where(
+        'tower_id',
+        'in',
+        towers.map((tower) => tower.id)
+      )
       .select('id', 'leader_monster', 'second_monster', 'third_monster', 'member_id', 'tower_id')
     let defensesData: any = {}
 
@@ -40,24 +43,24 @@ export default class TowersController {
 
       const key = `${leaderMonster.unit_master_id}-${secondMonster.unit_master_id}-${thirdMonster.unit_master_id}`
 
-      if (
-        defensesData[key] &&
-        !defensesData[key].members.includes(member.pseudo)
-      ) {
-        defensesData[key].members += ` / ${member.pseudo}`;
+      if (defensesData[key] && !defensesData[key].members.includes(member.pseudo)) {
+        defensesData[key].members += ` / ${member.pseudo}`
       } else if (
         defensesData[key] &&
         defensesData[key].members.includes(member.pseudo) &&
         !defensesData[key].members.match(`${member.pseudo} x`)
       ) {
         const numberDefensesAssignedToMember = Object.values(defenses).filter(
-          defense =>
+          (defense) =>
             defense.member_id === member.id &&
             defense.leader_monster === leaderMonster.unit_master_id &&
             defense.second_monster === secondMonster.unit_master_id &&
             defense.third_monster === thirdMonster.unit_master_id
         ).length
-        defensesData[key].members = defensesData[key].members.replace(member.pseudo, `${member.pseudo} x${numberDefensesAssignedToMember}`);
+        defensesData[key].members = defensesData[key].members.replace(
+          member.pseudo,
+          `${member.pseudo} x${numberDefensesAssignedToMember}`
+        )
       } else if (!defensesData[key]) {
         defensesData[key] = {
           leader: {
@@ -81,7 +84,7 @@ export default class TowersController {
     let towersData = []
     for (const tower of towers) {
       let towerDefenses = []
-      towerDefenses = Object.values(defensesData).filter(defense => defense.tower_id === tower.id);
+      towerDefenses = Object.values(defensesData).filter((defense) => defense.tower_id === tower.id)
 
       towersData.push({
         id: tower.id,
@@ -91,5 +94,41 @@ export default class TowersController {
     }
 
     return response.json(towersData)
+  }
+
+  async update({ auth, params, request, response }: HttpContext) {
+    const user = await auth.authenticate()
+    const userGuild = await Member.query()
+      .where('user_id', user.id)
+      .select('guild_id')
+      .firstOrFail()
+    const tower = await Tower.query().where('id', params.id).firstOrFail()
+
+    if (
+      tower.guild_id !== userGuild.guild_id ||
+      (user.role !== 'admin' && user.role !== 'leader' && user.role !== 'moderator')
+    ) {
+      return response.forbidden()
+    }
+
+    const defensesSelected = request.input('defenses')
+
+    if (defensesSelected.length > 5) {
+      return response.badRequest('Vous ne pouvez pas assigner plus de 5 défenses à une tour')
+    }
+
+    const actualDefenses = await Defense.query().where('tower_id', tower.id).select('id')
+
+    for (const defense of actualDefenses) {
+      if (!defensesSelected.includes(defense.id)) {
+        await Defense.query().where('id', defense.id).update({ tower_id: null })
+      }
+    }
+
+    for (const defense of defensesSelected) {
+      if (!actualDefenses.find((actualDefense) => actualDefense.id === defense)) {
+        await Defense.query().where('id', defense).update({ tower_id: tower.id })
+      }
+    }
   }
 }
