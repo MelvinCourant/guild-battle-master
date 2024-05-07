@@ -3,6 +3,7 @@ import Member from '#models/member'
 import Tower from '#models/tower'
 import Defense from '#models/defense'
 import Monster from '#models/monster'
+import Composition from '#models/composition'
 
 export default class TowersController {
   async list({ auth, response }: HttpContext) {
@@ -126,9 +127,22 @@ export default class TowersController {
     }
 
     for (const defense of defensesSelected) {
-      if (!actualDefenses.find((actualDefense) => actualDefense.id === defense)) {
+      const defenseExists = await Defense.query()
+        .where('id', defense)
+        .select('composition_id')
+        .firstOrFail()
+      const composition = await Composition.query()
+        .where('id', defenseExists.composition_id)
+        .select('grade')
+        .firstOrFail()
+
+      if (composition.grade !== tower.grade) {
+        return response.badRequest('Vous ne pouvez pas assigner cette défense à cette tour')
+      } else if (!actualDefenses.find((actualDefense) => actualDefense.id === defense)) {
         await Defense.query().where('id', defense).update({ tower_id: tower.id })
       }
     }
+
+    return response.noContent()
   }
 }
