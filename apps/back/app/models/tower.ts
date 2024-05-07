@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import {BaseModel, beforeCreate, column} from '@adonisjs/lucid/orm'
+import { BaseModel, beforeCreate, column } from '@adonisjs/lucid/orm'
 import { v4 as uuidv4 } from 'uuid'
 
 export default class Tower extends BaseModel {
@@ -16,6 +16,9 @@ export default class Tower extends BaseModel {
 
   @column()
   declare position: number
+
+  @column()
+  declare grade: 4 | 5
 
   @column()
   declare side: 'blue' | 'red' | 'yellow'

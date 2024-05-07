@@ -223,13 +223,26 @@ export default class AuthController {
 
       fs.unlinkSync(jsonLink)
 
-      for(let towerId = 1; towerId <= 12; towerId++) {
-        await Tower.create({
-          guild_id: guild.id,
-          position: towerId,
-          side: 'blue',
-          map: 'classic',
-        })
+      const fourNatTower = [2, 8, 12]
+
+      for (let towerId = 1; towerId <= 12; towerId++) {
+        if (fourNatTower.includes(towerId)) {
+          await Tower.create({
+            guild_id: guild.id,
+            position: towerId,
+            side: 'blue',
+            map: 'classic',
+            grade: 4,
+          })
+        } else {
+          await Tower.create({
+            guild_id: guild.id,
+            position: towerId,
+            side: 'blue',
+            map: 'classic',
+            grade: 5,
+          })
+        }
       }
 
       return response.created({
