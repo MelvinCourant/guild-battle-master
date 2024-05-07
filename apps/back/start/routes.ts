@@ -201,6 +201,10 @@ router
     router.put('/:id', async (data) => {
       return towersController.update(data)
     })
+
+    router.delete('/', async (data) => {
+      return towersController.destroy(data)
+    })
   })
   .prefix('api/towers')
 

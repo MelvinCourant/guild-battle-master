@@ -145,4 +145,22 @@ export default class TowersController {
 
     return response.noContent()
   }
+
+  async destroy({ auth, response }: HttpContext) {
+    const user = await auth.authenticate()
+
+    if (user.role !== 'admin' && user.role !== 'leader' && user.role !== 'moderator') {
+      return response.forbidden()
+    }
+
+    const member = await Member.query().where('user_id', user.id).select('guild_id').firstOrFail()
+    const members = await Member.query().where('guild_id', member.guild_id).select('id')
+
+    await Defense.query()
+      .whereIn(
+        'member_id',
+        members.map((member) => member.id)
+      )
+      .update({ tower_id: null })
+  }
 }
