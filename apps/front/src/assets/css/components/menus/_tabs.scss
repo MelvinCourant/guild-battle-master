@@ -1,0 +1,56 @@
+@use '../../partials/functions';
+@use '../../partials/mixins';
+
+.tabs {
+  display: flex;
+  justify-content: space-between;
+  height: 60px;
+  border-bottom: solid 1px var(--system);
+  padding-right: 25px;
+
+  &__list {
+    display: flex;
+    height: 100%;
+  }
+
+  &__link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding: 0 60px 0 25px;
+    font-size: functions.rem(20);
+    font-weight: 700;
+    line-height: 0.6;
+
+    &--selected {
+      color: var(--primary);
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background-color: var(--primary);
+      }
+    }
+  }
+
+  &__tools {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__tool {
+    @include mixins.resetButton(var(--border), var(--background));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: var(--input-text-radius);
+  }
+}
