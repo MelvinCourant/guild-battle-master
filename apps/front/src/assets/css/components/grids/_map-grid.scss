@@ -1,0 +1,8 @@
+.map-grid {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+  max-height: calc(100vh - 70px - 60px);
+  overflow-y: auto;
+  padding: 60px 70px;
+}

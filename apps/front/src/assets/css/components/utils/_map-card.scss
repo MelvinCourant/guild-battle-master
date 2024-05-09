@@ -1,0 +1,49 @@
+@use '../../partials/functions';
+
+.map-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  background: var(--system);
+  border-radius: var(--input-text-radius);
+  padding: 20px;
+  width: 240px;
+
+  &--tower {
+    gap: 10px;
+  }
+
+  &__position {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(30%, -30%);
+    background: var(--primary);
+    border-radius: 50%;
+    box-shadow: var(--shadow);
+    width: 30px;
+    height: 30px;
+    padding-top: 4px;
+    font-size: functions.rem(20);
+    font-weight: 700;
+    line-height: 0.9;
+    text-align: center;
+  }
+
+  .defense {
+    &__member {
+      line-height: 1.2;
+    }
+
+    &__monsters {
+      gap: 10px !important;
+    }
+
+    &__image {
+      border-radius: 4px !important;
+    }
+  }
+}
