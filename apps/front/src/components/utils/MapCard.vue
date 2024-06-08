@@ -24,13 +24,16 @@ defineProps({
         {{ cardDetails.position }}
       </span>
     </div>
-    <Defense
-      v-for="(defense, index) in cardDetails.defenses"
-      :key="index"
-      :member="defense.members"
-      :leader="defense.leader"
-      :second="defense.second"
-      :third="defense.third"
-    />
+    <template v-if="cardDetails.defenses && cardDetails.defenses.length > 0">
+      <Defense
+        v-for="(defense, index) in cardDetails.defenses"
+        :key="index"
+        :member="defense.members"
+        :leader="defense.leader"
+        :second="defense.second"
+        :third="defense.third"
+      />
+    </template>
+    <Defense v-else-if="cardDetails.defenses.length === 0" :isEmpty="true" />
   </div>
 </template>

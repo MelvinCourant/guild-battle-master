@@ -45,7 +45,7 @@ export default class TowersController {
       const key = `${leaderMonster.unit_master_id}-${secondMonster.unit_master_id}-${thirdMonster.unit_master_id}`
 
       if (defensesData[key] && !defensesData[key].members.includes(member.pseudo)) {
-        defensesData[key].members += ` / ${member.pseudo}`
+        defensesData[key].members += ` / ${member.pseudo}`
       } else if (
         defensesData[key] &&
         defensesData[key].members.includes(member.pseudo) &&

@@ -6,6 +6,23 @@
   flex-direction: column;
   height: fit-content;
 
+  &--empty {
+    .defense {
+      &__member {
+        color: var(--text-grey);
+      }
+
+      &__monsters {
+        li {
+          background: var(--text-grey);
+          border-radius: var(--input-text-radius);
+          width: 60px;
+          height: 60px;
+        }
+      }
+    }
+  }
+
   &__add,
   &__remove {
     content: '';

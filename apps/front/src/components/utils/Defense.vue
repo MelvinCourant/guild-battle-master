@@ -4,19 +4,19 @@ import "../../assets/css/components/utils/_defense.scss";
 const props = defineProps({
   member: {
     type: Object,
-    required: true,
   },
   leader: {
     type: Object,
-    required: true,
   },
   second: {
     type: Object,
-    required: true,
   },
   third: {
     type: Object,
-    required: true,
+  },
+  isEmpty: {
+    type: Boolean,
+    default: false,
   },
 });
 
@@ -44,17 +44,33 @@ function clickOnDefense() {
 
 <template>
   <div
-    class="defense"
+    :class="[
+      'defense',
+      {
+        'defense--empty': isEmpty,
+      },
+    ]"
     @mouseenter="defenseHover"
     @mouseleave="defenseLeave"
     @click="clickOnDefense"
   >
-    <div class="defense__member" v-if="member">
+    <span class="defense__member" v-if="member && member.pseudo">
       {{ member.pseudo }}
-    </div>
+    </span>
+    <span class="defense__member" v-else-if="member && !member.pseudo">
+      {{ member }}
+    </span>
+    <span class="defense__member" v-if="isEmpty"> Aucune défense </span>
+    <span
+      class="defense__member--empty"
+      v-else-if="!member && !leader && !second && !third"
+    >
+      Aucune défense
+    </span>
     <ul class="defense__monsters">
       <li class="defense__leader">
         <img
+          v-if="!isEmpty && leader && leader.image"
           :src="`${env.VITE_URL}/uploads/${leader.image}`"
           :alt="leader.unit_master_id"
           class="defense__image"
@@ -64,6 +80,7 @@ function clickOnDefense() {
       </li>
       <li class="defense__second">
         <img
+          v-if="!isEmpty && second && second.image"
           :src="`${env.VITE_URL}/uploads/${second.image}`"
           :alt="second.unit_master_id"
           class="defense__image"
@@ -73,6 +90,7 @@ function clickOnDefense() {
       </li>
       <li class="defense__third">
         <img
+          v-if="!isEmpty && third && third.image"
           :src="`${env.VITE_URL}/uploads/${third.image}`"
           :alt="third.unit_master_id"
           class="defense__image"

@@ -3,7 +3,11 @@ import "../assets/css/views/_map.scss";
 import Tabs from "../components/menus/Tabs.vue";
 import { ref } from "vue";
 import MapGrid from "../components/grids/MapGrid.vue";
+import { useUserStore } from "../stores/user.js";
 
+const env = import.meta.env;
+const userStore = useUserStore();
+const token = userStore.token;
 const links = [
   {
     id: 1,
@@ -28,48 +32,23 @@ const tools = [
     title: "Réinitialiser le plan",
   },
 ];
-const cards = ref([
-  {
-    id: 1,
-    position: 1,
-    defenses: [
-      {
-        members: {
-          pseudo: "John Doe / Jane Doe / Foo Bar",
-        },
-        leader: {
-          image: "monsters/unit_icon_0037_4_1.png",
-          unit_master_id: 20115,
-        },
-        second: {
-          image: "monsters/unit_icon_0037_4_1.png",
-          unit_master_id: 20115,
-        },
-        third: {
-          image: "monsters/unit_icon_0037_4_1.png",
-          unit_master_id: 20115,
-        },
-      },
-      {
-        members: {
-          pseudo: "John Doe",
-        },
-        leader: {
-          image: "monsters/unit_icon_0053_0_1.png",
-          unit_master_id: 14031,
-        },
-        second: {
-          image: "monsters/unit_icon_0053_0_1.png",
-          unit_master_id: 14031,
-        },
-        third: {
-          image: "monsters/unit_icon_0053_0_1.png",
-          unit_master_id: 14031,
-        },
-      },
-    ],
-  },
-]);
+const cards = ref([]);
+
+async function getTowers() {
+  const result = await fetch(`${env.VITE_URL}/api/towers`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (result.ok) {
+    cards.value = await result.json();
+  }
+}
+
+getTowers();
 </script>
 
 <template>
