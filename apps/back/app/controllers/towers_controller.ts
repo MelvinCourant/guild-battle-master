@@ -57,7 +57,12 @@ export default class TowersController {
       })
     }
 
-    return response.json(defensesData)
+    const towerData = {
+      grade: tower.grade,
+      defenses: defensesData,
+    }
+
+    return response.json(towerData)
   }
 
   async list({ auth, response }: HttpContext) {

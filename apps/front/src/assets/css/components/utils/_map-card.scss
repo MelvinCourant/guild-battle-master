@@ -1,15 +1,17 @@
 @use '../../partials/functions';
 
 .map-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  background: var(--system);
-  border-radius: var(--input-text-radius);
-  padding: 20px;
-  width: 240px;
-  height: fit-content;
+  & > a {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background: var(--system);
+    border-radius: var(--input-text-radius);
+    padding: 20px;
+    width: 240px;
+    height: fit-content;
+  }
 
   &--tower {
     gap: 10px;

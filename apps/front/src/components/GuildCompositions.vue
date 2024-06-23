@@ -1,5 +1,5 @@
 <script setup>
-import '../assets/css/components/_guild-compositions.scss';
+import "../assets/css/components/_guild-compositions.scss";
 import FiltersBar from "./utils/FiltersBar.vue";
 import CompositionCard from "./CompositionCard.vue";
 import Loader from "./utils/Loader.vue";
@@ -7,49 +7,48 @@ import Loader from "./utils/Loader.vue";
 defineProps({
   compositions: {
     type: Array,
-    required: true
+    required: true,
   },
   actions: {
     type: Array,
-    required: true
+    default: () => [],
   },
   memberRole: {
     type: String,
-    default: ''
+    default: "",
   },
   loading: {
     type: Boolean,
-    default: false
-  }
-})
+    default: false,
+  },
+});
 
-defineEmits(['search', 'actionSelected', 'previewComposition'])
+defineEmits(["search", "actionSelected", "previewComposition"]);
 </script>
 
 <template>
   <div class="guild-compositions">
     <FiltersBar
-        @search="(inputName, value) => $emit('search', inputName, value)"
+      @search="(inputName, value) => $emit('search', inputName, value)"
     />
     <div class="guild-compositions__cards">
       <CompositionCard
-          v-for="composition in compositions"
-          :key="composition.id"
-          :composition="composition"
-          :actions="actions"
-          :memberRole="memberRole"
-          @actionSelected="$emit('actionSelected', {
-                action: $event,
-                id: composition.id
-          })"
-          @previewComposition="$emit('previewComposition', composition.id)"
+        v-for="composition in compositions"
+        :key="composition.id"
+        :composition="composition"
+        :actions="actions"
+        :memberRole="memberRole"
+        @actionSelected="
+          $emit('actionSelected', {
+            action: $event,
+            id: composition.id,
+          })
+        "
+        @previewComposition="$emit('previewComposition', composition.id)"
       />
       <p
         class="guild-compositions__empty"
-        v-if="
-          compositions.length === 0 &&
-          !loading
-        "
+        v-if="compositions.length === 0 && !loading"
       >
         Aucune composition disponible.
       </p>

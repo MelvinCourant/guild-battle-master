@@ -1,0 +1,13 @@
+.tower {
+  position: relative;
+  display: flex;
+  width: 100%;
+  min-height: calc(100vh - 70px);
+  height: 100%;
+  padding: 80px 70px;
+
+  @media screen and (max-width: 768px) {
+    min-height: calc(100vh - 114px);
+    padding: 30px 20px;
+  }
+}
