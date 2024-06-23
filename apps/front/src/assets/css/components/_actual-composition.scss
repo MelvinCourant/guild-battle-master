@@ -29,6 +29,12 @@
     height: fit-content;
   }
 
+  &__grade {
+    color: var(--text-grey);
+    font-size: functions.rem(24);
+    font-weight: 700;
+  }
+
   &__form {
     .select {
       margin-bottom: 5px;

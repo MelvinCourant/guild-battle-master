@@ -59,6 +59,7 @@ export default class TowersController {
 
     const towerData = {
       grade: tower.grade,
+      position: tower.position,
       defenses: defensesData,
     }
 

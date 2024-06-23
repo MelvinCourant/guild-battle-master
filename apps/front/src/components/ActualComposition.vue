@@ -18,6 +18,14 @@ const props = defineProps({
     type: String,
     default: "5",
   },
+  mode: {
+    type: String,
+    default: "composition",
+  },
+  grade: {
+    type: String,
+    default: "",
+  },
 });
 
 const emits = defineEmits([
@@ -71,6 +79,10 @@ const buttons = [
   },
 ];
 
+if (props.mode === "tower") {
+  nameField.disabled = true;
+}
+
 watch(
   () => props.compositionName,
   (newName) => {
@@ -113,10 +125,14 @@ function updateCompositionGrade(value) {
   <form class="actual-composition" @submit.prevent="$emit('saveComposition')">
     <div class="actual-composition__form">
       <Select
+        v-if="mode !== 'tower'"
         :options="options"
         :value="optionValue"
         @change="updateCompositionGrade"
       />
+      <p v-if="mode === 'tower'" class="actual-composition__grade">
+        {{ grade }}
+      </p>
       <Field
         :attributes="nameField"
         @sendValue="

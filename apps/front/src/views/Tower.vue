@@ -5,6 +5,7 @@ import { useUserStore } from "../stores/user.js";
 import { provide, ref } from "vue";
 import GuildCompositions from "../components/GuildCompositions.vue";
 import Preview from "../components/utils/Preview.vue";
+import ActualComposition from "../components/ActualComposition.vue";
 
 const route = useRoute();
 const params = route.params;
@@ -31,6 +32,8 @@ const previewTitle = ref("");
 const previewIsOpen = ref(false);
 const previewToComposition = ref([]);
 const compositionId = ref(null);
+const towerDefenses = ref([]);
+const defensesSelected = ref([]);
 
 provide("fields", fields);
 provide("compositions", previewToComposition);
@@ -46,6 +49,7 @@ async function getTower() {
 
   if (result.ok) {
     tower.value = await result.json();
+    towerDefenses.value = tower.value.defenses;
     await getCompositions();
   }
 }
@@ -136,6 +140,12 @@ function previewComposition(id) {
       :compositions="compositions"
       @search="searchComposition"
       @previewComposition="previewComposition"
+    />
+    <ActualComposition
+      :compositions="towerDefenses"
+      :compositionName="`Tour n°${tower.position}`"
+      :mode="'tower'"
+      :grade="`${tower.grade} nat`"
     />
     <Preview
       :category="previewCategory"
