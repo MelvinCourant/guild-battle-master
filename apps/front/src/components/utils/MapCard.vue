@@ -19,21 +19,23 @@ defineProps({
       },
     ]"
   >
-    <div v-if="cardDetails.position" class="map-card__position">
-      <span class="map-card__number">
-        {{ cardDetails.position }}
-      </span>
-    </div>
-    <template v-if="cardDetails.defenses && cardDetails.defenses.length > 0">
-      <Defense
-        v-for="(defense, index) in cardDetails.defenses"
-        :key="index"
-        :member="defense.members"
-        :leader="defense.leader"
-        :second="defense.second"
-        :third="defense.third"
-      />
-    </template>
-    <Defense v-else-if="cardDetails.defenses.length === 0" :isEmpty="true" />
+    <router-link :to="`/tower/${cardDetails.id}`" class="map-card__link">
+      <div v-if="cardDetails.position" class="map-card__position">
+        <span class="map-card__number">
+          {{ cardDetails.position }}
+        </span>
+      </div>
+      <template v-if="cardDetails.defenses && cardDetails.defenses.length > 0">
+        <Defense
+          v-for="(defense, index) in cardDetails.defenses"
+          :key="index"
+          :member="defense.members"
+          :leader="defense.leader"
+          :second="defense.second"
+          :third="defense.third"
+        />
+      </template>
+      <Defense v-else-if="cardDetails.defenses.length === 0" :isEmpty="true" />
+    </router-link>
   </div>
 </template>
