@@ -4,6 +4,7 @@ import { useRoute } from "vue-router";
 import { useUserStore } from "../stores/user.js";
 import { provide, ref } from "vue";
 import GuildCompositions from "../components/GuildCompositions.vue";
+import Preview from "../components/utils/Preview.vue";
 
 const route = useRoute();
 const params = route.params;
@@ -25,8 +26,14 @@ const fields = [
 const body = ref({});
 const filters = ref({});
 const keyword = ref("");
+const previewCategory = ref("");
+const previewTitle = ref("");
+const previewIsOpen = ref(false);
+const previewToComposition = ref([]);
+const compositionId = ref(null);
 
 provide("fields", fields);
+provide("compositions", previewToComposition);
 
 async function getTower() {
   const result = await fetch(`${env.VITE_URL}/api/towers/${id}`, {
@@ -109,6 +116,18 @@ async function searchComposition(inputName, value) {
     compositions.value = await result.json();
   }
 }
+
+function previewComposition(id) {
+  const composition = compositions.value.find(
+    (composition) => composition.id === id,
+  );
+
+  previewCategory.value = `Tour ${composition.grade} nat`;
+  previewTitle.value = composition.name;
+  previewIsOpen.value = true;
+  previewToComposition.value = composition.defenses;
+  compositionId.value = id;
+}
 </script>
 
 <template>
@@ -116,6 +135,15 @@ async function searchComposition(inputName, value) {
     <GuildCompositions
       :compositions="compositions"
       @search="searchComposition"
+      @previewComposition="previewComposition"
+    />
+    <Preview
+      :category="previewCategory"
+      :title="previewTitle"
+      :isOpen="previewIsOpen"
+      :compositionId="compositionId"
+      orientation="left"
+      @hidePreview="previewIsOpen = false"
     />
   </main>
 </template>

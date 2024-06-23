@@ -21,7 +21,23 @@
   }
 
   &--open {
-    transform: translateX(0);
+    transform: translateX(0) !important;
+  }
+
+  &--left {
+    right: auto;
+    left: 0;
+    transform: translateX(-100%);
+
+    .preview {
+      &__head {
+        justify-content: flex-end;
+      }
+
+      &__hide {
+        transform: rotate(180deg);
+      }
+    }
   }
 
   &__head {
