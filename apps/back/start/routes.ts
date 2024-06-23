@@ -194,6 +194,10 @@ router
   .group(() => {
     const towersController = new TowersController()
 
+    router.get('/:id', async (data) => {
+      return towersController.show(data)
+    })
+
     router.get('/', async (data) => {
       return towersController.list(data)
     })

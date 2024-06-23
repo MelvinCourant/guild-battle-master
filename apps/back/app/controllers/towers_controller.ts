@@ -6,6 +6,60 @@ import Monster from '#models/monster'
 import Composition from '#models/composition'
 
 export default class TowersController {
+  async show({ auth, params, response }: HttpContext) {
+    const user = await auth.authenticate()
+    const tower = await Tower.query().where('id', params.id).firstOrFail()
+    const guild = await Member.query().where('user_id', user.id).select('guild_id').firstOrFail()
+
+    if (tower.guild_id !== guild.guild_id) {
+      return response.forbidden()
+    }
+
+    const defenses = await Defense.query().where('tower_id', tower.id).select('id')
+    let defensesData = []
+
+    for (const defense of defenses) {
+      const defenseData = await Defense.query()
+        .where('id', defense.id)
+        .select('leader_monster', 'second_monster', 'third_monster', 'member_id')
+        .firstOrFail()
+      const leaderMonster = await Monster.query()
+        .where('unit_master_id', defenseData.leader_monster)
+        .select('unit_master_id', 'image')
+        .firstOrFail()
+      const secondMonster = await Monster.query()
+        .where('unit_master_id', defenseData.second_monster)
+        .select('unit_master_id', 'image')
+        .firstOrFail()
+      const thirdMonster = await Monster.query()
+        .where('unit_master_id', defenseData.third_monster)
+        .select('unit_master_id', 'image')
+        .firstOrFail()
+      const member = await Member.query()
+        .where('id', defenseData.member_id)
+        .select('id', 'pseudo')
+        .firstOrFail()
+
+      defensesData.push({
+        leader: {
+          unit_master_id: leaderMonster.unit_master_id,
+          image: leaderMonster.image,
+        },
+        second: {
+          unit_master_id: secondMonster.unit_master_id,
+          image: secondMonster.image,
+        },
+        third: {
+          unit_master_id: thirdMonster.unit_master_id,
+          image: thirdMonster.image,
+        },
+        member: member.pseudo,
+      })
+    }
+
+    return response.json(defensesData)
+  }
+
   async list({ auth, response }: HttpContext) {
     const user = await auth.authenticate()
     const member = await Member.query().where('user_id', user.id).select('guild_id').firstOrFail()
