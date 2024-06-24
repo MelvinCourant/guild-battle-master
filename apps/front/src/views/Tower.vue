@@ -33,7 +33,6 @@ const previewIsOpen = ref(false);
 const previewToComposition = ref([]);
 const compositionId = ref(null);
 const towerDefenses = ref([]);
-const defensesSelected = ref([]);
 
 provide("fields", fields);
 provide("compositions", previewToComposition);
@@ -132,6 +131,47 @@ function previewComposition(id) {
   previewToComposition.value = composition.defenses;
   compositionId.value = id;
 }
+
+function defenseHover(event) {
+  const defenseRemove = document.createElement("div");
+
+  defenseRemove.classList.add("defense__remove");
+  defenseRemove.innerHTML =
+    '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="31" viewBox="0 0 30 31" fill="none">\n' +
+    '  <path d="M15 0.5C6.72 0.5 0 7.22 0 15.5C0 23.78 6.72 30.5 15 30.5C23.28 30.5 30 23.78 30 15.5C30 7.22 23.28 0.5 15 0.5ZM22.5 17H7.5V14H22.5V17Z" fill="#F85149"/>\n' +
+    "</svg>";
+  event.appendChild(defenseRemove);
+  document.body.style.cursor = "pointer";
+}
+
+function defenseLeave(event) {
+  if (event.querySelector(".defense__remove")) {
+    event.querySelector(".defense__remove").remove();
+    document.body.style.cursor = "default";
+  }
+}
+
+function addDefenseToTower(index, defense) {
+  towerDefenses.value.push(defense);
+  const composition = compositions.value.find(
+    (composition) => composition.id === compositionId.value,
+  );
+  composition.defenses = composition.defenses.filter(
+    (compDefense) =>
+      compDefense.member !== defense.member &&
+      compDefense.leader !== defense.leader &&
+      compDefense.second !== defense.second &&
+      compDefense.third !== defense.third,
+  );
+
+  previewToComposition.value = composition.defenses;
+
+  if (composition.defenses.length === 0) {
+    compositions.value = compositions.value.filter(
+      (comp) => comp.id !== compositionId.value,
+    );
+  }
+}
 </script>
 
 <template>
@@ -154,6 +194,9 @@ function previewComposition(id) {
       :compositionId="compositionId"
       orientation="left"
       @hidePreview="previewIsOpen = false"
+      @defenseHover="defenseHover"
+      @defenseLeave="defenseLeave"
+      @clickOnDefense="addDefenseToTower"
     />
   </main>
 </template>

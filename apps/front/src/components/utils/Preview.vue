@@ -34,7 +34,13 @@ defineProps({
   },
 });
 
-const emits = defineEmits(["actionSelected", "hidePreview"]);
+const emits = defineEmits([
+  "actionSelected",
+  "hidePreview",
+  "defenseHover",
+  "defenseLeave",
+  "clickOnDefense",
+]);
 
 window.addEventListener("click", (event) => {
   if (
@@ -94,7 +100,13 @@ window.addEventListener("click", (event) => {
           {{ title }}
         </h2>
       </div>
-      <Compositions />
+      <Compositions
+        @defenseHover="$emit('defenseHover', $event)"
+        @defenseLeave="$emit('defenseLeave', $event)"
+        @clickOnDefense="
+          (index, defense) => $emit('clickOnDefense', index, defense)
+        "
+      />
     </div>
   </div>
 </template>
