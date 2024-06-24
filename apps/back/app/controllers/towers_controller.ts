@@ -41,6 +41,7 @@ export default class TowersController {
         .firstOrFail()
 
       defensesData.push({
+        id: defense.id,
         leader: {
           unit_master_id: leaderMonster.unit_master_id,
           image: leaderMonster.image,

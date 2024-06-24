@@ -1,6 +1,6 @@
 <script setup>
 import "../assets/css/views/_tower.scss";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useUserStore } from "../stores/user.js";
 import { provide, ref } from "vue";
 import GuildCompositions from "../components/GuildCompositions.vue";
@@ -8,6 +8,7 @@ import Preview from "../components/utils/Preview.vue";
 import ActualComposition from "../components/ActualComposition.vue";
 
 const route = useRoute();
+const router = useRouter();
 const params = route.params;
 const id = params.id;
 const env = import.meta.env;
@@ -48,7 +49,7 @@ async function getTower() {
 
   if (result.ok) {
     tower.value = await result.json();
-    towerDefenses.value = tower.value.defenses;
+    towerDefenses.value = tower.value;
     await getCompositions();
   }
 }
@@ -152,16 +153,18 @@ function defenseLeave(event) {
 }
 
 function addDefenseToTower(index, defense) {
-  towerDefenses.value.push(defense);
+  towerDefenses.value.defenses.push({
+    id: index,
+    member: defense.member,
+    leader: defense.leader,
+    second: defense.second,
+    third: defense.third,
+  });
   const composition = compositions.value.find(
     (composition) => composition.id === compositionId.value,
   );
   composition.defenses = composition.defenses.filter(
-    (compDefense) =>
-      compDefense.member !== defense.member &&
-      compDefense.leader !== defense.leader &&
-      compDefense.second !== defense.second &&
-      compDefense.third !== defense.third,
+    (compDefense) => compDefense.id !== index,
   );
 
   previewToComposition.value = composition.defenses;
@@ -170,6 +173,32 @@ function addDefenseToTower(index, defense) {
     compositions.value = compositions.value.filter(
       (comp) => comp.id !== compositionId.value,
     );
+  }
+}
+
+async function saveTower() {
+  let body = {};
+  let defenses = [];
+
+  towerDefenses.value.defenses.forEach((defense) => {
+    defenses.push(defense.id);
+  });
+
+  body = {
+    defenses: defenses,
+  };
+
+  const result = await fetch(`${env.VITE_URL}/api/towers/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (result.ok) {
+    await router.push("/map");
   }
 }
 </script>
@@ -182,10 +211,11 @@ function addDefenseToTower(index, defense) {
       @previewComposition="previewComposition"
     />
     <ActualComposition
-      :compositions="towerDefenses"
+      :compositions="towerDefenses.defenses"
       :compositionName="`Tour n°${tower.position}`"
       :mode="'tower'"
       :grade="`${tower.grade} nat`"
+      @saveComposition="saveTower"
     />
     <Preview
       :category="previewCategory"
