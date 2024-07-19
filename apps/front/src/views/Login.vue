@@ -1,5 +1,5 @@
 <script setup>
-import '../assets/css/views/_login-register.scss';
+import "../assets/css/views/_login-register.scss";
 import FormPage from "../components/FormPage.vue";
 import Alert from "../components/utils/Alert.vue";
 import { provide, reactive } from "vue";
@@ -16,66 +16,66 @@ function generateImgSrc(src) {
 
 const image = {
   src: generateImgSrc("camilla.jpg"),
-  alt: 'Login image',
-}
+  alt: "Login image",
+};
 const loginForm = reactive({
-  title: 'Guild battle Master',
+  title: "Guild battle Master",
   forms: [
     {
       id: 1,
       fields: [
         {
-          label: 'Email*',
+          label: "Email*",
           attributes: {
-            type: 'email',
-            name: 'email',
+            type: "email",
+            name: "email",
             required: true,
-            autocomplete: 'email',
-          }
+            autocomplete: "email",
+          },
         },
         {
-          label: 'Mot de passe*',
+          label: "Mot de passe*",
           attributes: {
-            type: 'password',
-            name: 'password',
+            type: "password",
+            name: "password",
             required: true,
-            autocomplete: 'current-password',
-          }
+            autocomplete: "current-password",
+          },
         },
         {
           attributes: {
-            type: 'submit',
-            value: 'Connexion',
-            style: 'primary'
-          }
-        }
+            type: "submit",
+            value: "Connexion",
+            style: "primary",
+          },
+        },
       ],
-    }
+    },
   ],
   footerText: {
-    text: 'Vous n’avez pas de compte ?',
-    link: 'Inscrivez-vous',
-    href: '/register',
+    text: "Vous n’avez pas de compte ?",
+    link: "Inscrivez-vous",
+    href: "/register",
   },
   passwordForgotten: {
-    text: 'Mot de passe oublié ?',
-    href: '/password-forgotten',
-  }
+    text: "Mot de passe oublié ?",
+    href: "/password-forgotten",
+  },
 });
 const fields = loginForm.forms[0].fields;
 const formValues = reactive({
-  email: '',
-  password: '',
+  email: "",
+  password: "",
 });
 const alert = reactive({
   display: false,
-  message: '',
+  message: "",
 });
 
-provide('formContainer', loginForm);
+provide("formContainer", loginForm);
 
 function updateValue(inputName, value) {
-  if(inputName === 'email') {
+  if (inputName === "email") {
     formValues.email = value;
   } else {
     formValues.password = value;
@@ -86,13 +86,13 @@ function displayError(resultJson) {
   let errorsFields;
   let globalError;
 
-  if(resultJson.errors) {
+  if (resultJson.errors) {
     errorsFields = resultJson.errors;
   } else {
     globalError = resultJson.message;
   }
 
-  if(errorsFields) {
+  if (errorsFields) {
     errorsFields.forEach((error) => {
       fields.forEach((field) => {
         if (field.attributes.name === error.field) {
@@ -102,19 +102,19 @@ function displayError(resultJson) {
     });
   } else {
     alert.display = true;
-    alert.type = 'error';
+    alert.type = "error";
     alert.message = globalError;
   }
 }
 
 async function login() {
   const submitButton = fields[2];
-  submitButton.loading = 'Chargement...';
+  submitButton.loading = "Chargement...";
 
   const result = await fetch(`${env.VITE_URL}/api/auth/login`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({
       email: formValues.email,
@@ -131,23 +131,19 @@ async function login() {
     const tokenValue = tokenObject.token;
     userStore.updateToken(tokenValue);
 
-    await router.push('/guild');
+    await router.push("/");
   } else {
     displayError(resultJson);
   }
 
-  submitButton.loading = '';
+  submitButton.loading = "";
 }
 </script>
 
 <template>
   <main class="login">
     <h1 class="hidden-title">Connexion</h1>
-    <FormPage
-        :image="image"
-        @sendValue="updateValue"
-        @submit="login"
-    />
+    <FormPage :image="image" @sendValue="updateValue" @submit="login" />
     <Alert
       :display="alert.display"
       :type="alert.type"

@@ -24,7 +24,8 @@
   }
 
   &__add,
-  &__remove {
+  &__remove,
+  &__selected {
     content: '';
     display: flex;
     justify-content: center;
@@ -37,6 +38,15 @@
     right: 0;
     bottom: 0;
     background: var(--background-transparent);
+  }
+
+  &__selected {
+    & + .defense {
+      &__add,
+      &__remove {
+        background: none !important;
+      }
+    }
   }
 
   &__member {

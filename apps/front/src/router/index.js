@@ -15,7 +15,7 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
-      path: "/guild",
+      path: "/",
       component: Guild,
       meta: {
         title: "Guilde",

@@ -1,7 +1,7 @@
 <script setup>
-import '../assets/css/views/_notifications-page.scss';
+import "../assets/css/views/_notifications-page.scss";
 import { useUserStore } from "../stores/user.js";
-import {ref} from "vue";
+import { ref } from "vue";
 import Notification from "../components/menus/Notification.vue";
 import { useRouter } from "vue-router";
 
@@ -21,38 +21,37 @@ const actionsNotifications = [
     name: "delete",
     label: "Supprimer",
     danger: true,
-  }
+  },
 ];
 
 function handleMobile() {
-  if (
-      window.innerWidth <= 768 &&
-      !onMobile.value
-  ) {
+  if (window.innerWidth <= 768 && !onMobile.value) {
     onMobile.value = true;
   } else {
     onMobile.value = false;
-    router.push('/guild');
+    router.push("/");
   }
 }
 
 handleMobile();
-window.addEventListener('resize', handleMobile);
+window.addEventListener("resize", handleMobile);
 
 async function getNotifications() {
   const result = await fetch(`${env.VITE_URL}/api/notifications`, {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'Authorization': `Bearer ${token}`
-    }
+      Authorization: `Bearer ${token}`,
+    },
   });
 
-  if(result.ok) {
+  if (result.ok) {
     const resultJson = await result.json();
     notifications.value = resultJson.notifications;
 
-    if(resultJson.notifications[0].isRead) {
-      document.querySelector('.navbar-mobile__link--unread').classList.remove('navbar-mobile__link--unread');
+    if (resultJson.notifications[0].isRead) {
+      document
+        .querySelector(".navbar-mobile__link--unread")
+        .classList.remove("navbar-mobile__link--unread");
     }
   }
 }
@@ -61,27 +60,27 @@ getNotifications();
 
 async function bequeathLeader(value, notificationId) {
   const result = await fetch(`${env.VITE_URL}/api/users/bequeath-leader`, {
-    method: 'PATCH',
+    method: "PATCH",
     headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
-      "notification_id": notificationId,
-      "accept": value
-    })
-  })
+      notification_id: notificationId,
+      accept: value,
+    }),
+  });
 
-  if(result.ok) {
+  if (result.ok) {
     await getNotifications();
   }
 }
 
 async function madeNotificationsAction(event) {
-  if(event.action === 'bequeath_leader') {
+  if (event.action === "bequeath_leader") {
     let actionValue;
 
-    if(event.value === true) {
+    if (event.value === true) {
       actionValue = 1;
     } else {
       actionValue = 0;
@@ -92,36 +91,42 @@ async function madeNotificationsAction(event) {
 }
 
 async function readNotification(notificationId) {
-  const result = await fetch(`${env.VITE_URL}/api/notifications/${notificationId}`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+  const result = await fetch(
+    `${env.VITE_URL}/api/notifications/${notificationId}`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
     },
-  });
+  );
 
-  if(result.ok) {
+  if (result.ok) {
     await getNotifications();
   }
 }
 
 async function deleteNotification(notificationId) {
-  const result = await fetch(`${env.VITE_URL}/api/notifications/${notificationId}`, {
-    method: 'DELETE',
-    headers : {
-      'Authorization': `Bearer ${token}`
-    }
-  })
+  const result = await fetch(
+    `${env.VITE_URL}/api/notifications/${notificationId}`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
 
-  if(result.ok) {
+  if (result.ok) {
     await getNotifications();
   }
 }
 
 async function actionSelected(event) {
-  if(event.action === 'read') {
+  if (event.action === "read") {
     await readNotification(event.id);
-  } else if(event.action === 'delete') {
+  } else if (event.action === "delete") {
     await deleteNotification(event.id);
   }
 }
@@ -130,9 +135,7 @@ async function actionSelected(event) {
 <template>
   <main class="notifications-page">
     <h1 class="notifications-page__title">Notifications</h1>
-    <ul
-        v-if="notifications.length > 0"
-    >
+    <ul v-if="notifications.length > 0">
       <Notification
         v-for="notification in notifications"
         :key="notification.id"
@@ -143,8 +146,6 @@ async function actionSelected(event) {
         @notificationRead="readNotification"
       />
     </ul>
-    <p v-else>
-      Aucune notification disponible
-    </p>
+    <p v-else>Aucune notification disponible</p>
   </main>
 </template>

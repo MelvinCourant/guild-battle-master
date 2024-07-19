@@ -131,28 +131,75 @@ function previewComposition(id) {
   previewIsOpen.value = true;
   previewToComposition.value = composition.defenses;
   compositionId.value = id;
+
+  const previewMatchedWithTower = towerDefenses.value.defenses.filter(
+    (defense) =>
+      composition.defenses.find((compDefense) => compDefense.id === defense.id),
+  );
+
+  if (previewMatchedWithTower.length > 0) {
+    previewToComposition.value.forEach((defense) => {
+      if (
+        previewMatchedWithTower.find(
+          (previewDefense) => previewDefense.id === defense.id,
+        )
+      ) {
+        defense.isSelected = true;
+      }
+    });
+  }
 }
 
 function defenseHover(event) {
-  const defenseRemove = document.createElement("div");
+  if (
+    event.querySelector(".defense__add") ||
+    event.querySelector(".defense__remove")
+  )
+    return;
 
-  defenseRemove.classList.add("defense__remove");
-  defenseRemove.innerHTML =
-    '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="31" viewBox="0 0 30 31" fill="none">\n' +
-    '  <path d="M15 0.5C6.72 0.5 0 7.22 0 15.5C0 23.78 6.72 30.5 15 30.5C23.28 30.5 30 23.78 30 15.5C30 7.22 23.28 0.5 15 0.5ZM22.5 17H7.5V14H22.5V17Z" fill="#F85149"/>\n' +
-    "</svg>";
-  event.appendChild(defenseRemove);
-  document.body.style.cursor = "pointer";
+  if (event.querySelector(".defense__selected")) {
+    const defenseRemove = document.createElement("div");
+
+    defenseRemove.classList.add("defense__remove");
+    defenseRemove.innerHTML =
+      '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="31" viewBox="0 0 30 31" fill="none">\n' +
+      '  <path d="M15 0.5C6.72 0.5 0 7.22 0 15.5C0 23.78 6.72 30.5 15 30.5C23.28 30.5 30 23.78 30 15.5C30 7.22 23.28 0.5 15 0.5ZM22.5 17H7.5V14H22.5V17Z" fill="#F85149"/>\n' +
+      "</svg>";
+    event.appendChild(defenseRemove);
+    document.body.style.cursor = "pointer";
+  } else {
+    const defenseAdd = document.createElement("div");
+
+    defenseAdd.classList.add("defense__add");
+    defenseAdd.innerHTML =
+      '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="31" viewBox="0 0 30 31" fill="none">\n' +
+      '  <path fill-rule="evenodd" clip-rule="evenodd" d="M0 15.5C0 7.22 6.72 0.5 15 0.5C23.28 0.5 30 7.22 30 15.5C30 23.78 23.28 30.5 15 30.5C6.72 30.5 0 23.78 0 15.5ZM16.5 17H22.5V14H16.5V8H13.5V14H7.5V17H13.5V23H16.5V17Z" fill="#DE7800"/>\n' +
+      "</svg>";
+    event.appendChild(defenseAdd);
+    document.body.style.cursor = "pointer";
+  }
 }
 
 function defenseLeave(event) {
   if (event.querySelector(".defense__remove")) {
     event.querySelector(".defense__remove").remove();
-    document.body.style.cursor = "default";
+  } else {
+    event.querySelector(".defense__add").remove();
   }
+
+  document.body.style.cursor = "default";
 }
 
 function addDefenseToTower(index, defense) {
+  if (towerDefenses.value.defenses.length >= 5) {
+    return;
+  }
+
+  if (towerDefenses.value.defenses.find((def) => def.id === index)) {
+    removeDefenseFromTower(index);
+    return;
+  }
+
   towerDefenses.value.defenses.push({
     id: index,
     member: defense.member,
@@ -160,20 +207,24 @@ function addDefenseToTower(index, defense) {
     second: defense.second,
     third: defense.third,
   });
-  const composition = compositions.value.find(
-    (composition) => composition.id === compositionId.value,
-  );
-  composition.defenses = composition.defenses.filter(
-    (compDefense) => compDefense.id !== index,
+
+  previewToComposition.value.forEach((previewDefense) => {
+    if (previewDefense.id === index) {
+      previewDefense.isSelected = true;
+    }
+  });
+}
+
+function removeDefenseFromTower(index) {
+  towerDefenses.value.defenses = towerDefenses.value.defenses.filter(
+    (defense) => defense.id !== index,
   );
 
-  previewToComposition.value = composition.defenses;
-
-  if (composition.defenses.length === 0) {
-    compositions.value = compositions.value.filter(
-      (comp) => comp.id !== compositionId.value,
-    );
-  }
+  previewToComposition.value.forEach((previewDefense) => {
+    if (previewDefense.id === index) {
+      previewDefense.isSelected = false;
+    }
+  });
 }
 
 async function saveTower() {
@@ -216,6 +267,7 @@ async function saveTower() {
       :mode="'tower'"
       :grade="`${tower.grade} nat`"
       @saveComposition="saveTower"
+      @clickOnDefense="removeDefenseFromTower"
     />
     <Preview
       :category="previewCategory"

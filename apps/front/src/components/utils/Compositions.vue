@@ -17,6 +17,7 @@ const compositions = ref(inject("compositions"));
       :leader="composition.leader"
       :second="composition.second"
       :third="composition.third"
+      :isSelected="composition.isSelected"
       @defenseHover="$emit('defenseHover', $event)"
       @defenseLeave="$emit('defenseLeave', $event)"
       @clickOnDefense="

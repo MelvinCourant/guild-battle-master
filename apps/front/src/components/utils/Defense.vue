@@ -18,6 +18,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  isSelected: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const emits = defineEmits(["defenseHover", "defenseLeave", "clickOnDefense"]);
@@ -33,6 +37,12 @@ function defenseLeave(event) {
 }
 
 function clickOnDefense() {
+  if (document.querySelector(".defense__add")) {
+    document.querySelector(".defense__add").remove();
+  } else if (document.querySelector(".defense__remove")) {
+    document.querySelector(".defense__remove").remove();
+  }
+
   emits("clickOnDefense", {
     member: props.member,
     leader: props.leader,
@@ -99,5 +109,6 @@ function clickOnDefense() {
         />
       </li>
     </ul>
+    <div class="defense__selected" v-if="isSelected"></div>
   </div>
 </template>

@@ -74,7 +74,11 @@
     margin-bottom: 30px;
   }
 
-  .defense__remove {
-    background: var(--system-transparent);
+  .defense {
+    &__add,
+    &__remove,
+    &__selected {
+      background: var(--system-transparent);
+    }
   }
 }
