@@ -11,6 +11,8 @@ defineProps({
     required: true,
   },
 });
+
+defineEmits(["toolClicked"]);
 </script>
 
 <template>
@@ -38,6 +40,7 @@ defineProps({
         :key="tool.name"
         class="tabs__tool"
         :title="tool.title"
+        @click="$emit('toolClicked', tool)"
       >
         <svg
           v-if="tool.name === 'capture'"
