@@ -57,7 +57,7 @@ const dialog = {
 const dialogIsOpen = ref(false);
 
 async function getTowers() {
-  const result = await fetch(`${env.VITE_URL}/api/towers`, {
+  const result = await fetch(`${env.VITE_URL}/api/towers/list`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -73,7 +73,7 @@ async function getTowers() {
 getTowers();
 
 async function resetTowers() {
-  const result = await fetch(`${env.VITE_URL}/api/towers`, {
+  const result = await fetch(`${env.VITE_URL}/api/towers/reset`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",

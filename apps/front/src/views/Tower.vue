@@ -39,7 +39,7 @@ provide("fields", fields);
 provide("compositions", previewToComposition);
 
 async function getTower() {
-  const result = await fetch(`${env.VITE_URL}/api/towers/${id}`, {
+  const result = await fetch(`${env.VITE_URL}/api/towers/${id}/show`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -242,7 +242,7 @@ async function saveTower() {
     defenses: defenses,
   };
 
-  const result = await fetch(`${env.VITE_URL}/api/towers/${id}`, {
+  const result = await fetch(`${env.VITE_URL}/api/towers/${id}/show`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",

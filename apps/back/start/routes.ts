@@ -194,20 +194,24 @@ router
   .group(() => {
     const towersController = new TowersController()
 
-    router.get('/:id', async (data) => {
+    router.get('/:id/show', async (data) => {
       return towersController.show(data)
     })
 
-    router.get('/', async (data) => {
+    router.get('/list', async (data) => {
       return towersController.list(data)
     })
 
-    router.put('/:id', async (data) => {
+    router.put('/:id/update', async (data) => {
       return towersController.update(data)
     })
 
-    router.delete('/', async (data) => {
+    router.delete('/reset', async (data) => {
       return towersController.destroy(data)
+    })
+
+    router.get('/defenses-per-member', async (data) => {
+      return towersController.defensesPerMember(data)
     })
   })
   .prefix('api/towers')

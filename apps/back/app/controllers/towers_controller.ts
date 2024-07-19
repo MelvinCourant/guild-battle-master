@@ -103,27 +103,26 @@ export default class TowersController {
         .select('id', 'pseudo')
         .firstOrFail()
 
-      const key = `${leaderMonster.unit_master_id}-${secondMonster.unit_master_id}-${thirdMonster.unit_master_id}`
+      const key = `${defense.tower_id}-${leaderMonster.unit_master_id}-${secondMonster.unit_master_id}-${thirdMonster.unit_master_id}`
 
-      if (defensesData[key] && !defensesData[key].members.includes(member.pseudo)) {
-        defensesData[key].members += ` / ${member.pseudo}`
-      } else if (
-        defensesData[key] &&
-        defensesData[key].members.includes(member.pseudo) &&
-        !defensesData[key].members.match(`${member.pseudo} x`)
-      ) {
-        const numberDefensesAssignedToMember = Object.values(defenses).filter(
-          (defense) =>
-            defense.member_id === member.id &&
-            defense.leader_monster === leaderMonster.unit_master_id &&
-            defense.second_monster === secondMonster.unit_master_id &&
-            defense.third_monster === thirdMonster.unit_master_id
-        ).length
-        defensesData[key].members = defensesData[key].members.replace(
-          member.pseudo,
-          `${member.pseudo} x${numberDefensesAssignedToMember}`
-        )
-      } else if (!defensesData[key]) {
+      if (defensesData[key]) {
+        if (!defensesData[key].members.includes(member.pseudo)) {
+          defensesData[key].members += ` / ${member.pseudo}`
+        } else if (!defensesData[key].members.match(`${member.pseudo} x`)) {
+          const numberDefensesAssignedToMember = Object.values(defenses).filter(
+            (d) =>
+              d.member_id === member.id &&
+              d.leader_monster === leaderMonster.unit_master_id &&
+              d.second_monster === secondMonster.unit_master_id &&
+              d.third_monster === thirdMonster.unit_master_id &&
+              d.tower_id === defense.tower_id // S'assurer de comparer aussi les tower_id
+          ).length
+          defensesData[key].members = defensesData[key].members.replace(
+            member.pseudo,
+            `${member.pseudo} x${numberDefensesAssignedToMember}`
+          )
+        }
+      } else {
         defensesData[key] = {
           leader: {
             unit_master_id: leaderMonster.unit_master_id,
@@ -145,9 +144,9 @@ export default class TowersController {
 
     let towersData = []
     for (const tower of towers) {
-      let towerDefenses = []
-      towerDefenses = Object.values(defensesData).filter((defense) => defense.tower_id === tower.id)
-
+      let towerDefenses = Object.values(defensesData).filter(
+        (defense) => defense.tower_id === tower.id
+      )
       towersData.push({
         id: tower.id,
         position: tower.position,
@@ -223,5 +222,66 @@ export default class TowersController {
         members.map((member) => member.id)
       )
       .update({ tower_id: null })
+  }
+
+  async defensesPerMember({ auth, response }: HttpContext) {
+    const user = await auth.authenticate()
+    const guild = await Member.query().where('user_id', user.id).select('guild_id').firstOrFail()
+    const towers = await Tower.query().where('guild_id', guild.guild_id).select('id')
+    const members = await Member.query().where('guild_id', guild.guild_id).select('id', 'pseudo')
+
+    const defenses = await Defense.query()
+      .where(
+        'tower_id',
+        'in',
+        towers.map((tower) => tower.id)
+      )
+      .select('id', 'leader_monster', 'second_monster', 'third_monster', 'member_id', 'tower_id')
+    let membersData = []
+
+    for (const member of members) {
+      const defensesAssignedToMember = defenses.filter((defense) => defense.member_id === member.id)
+
+      if (defensesAssignedToMember.length === 0) continue
+
+      let defensesData = []
+
+      for (const defense of defensesAssignedToMember) {
+        const leaderMonster = await Monster.query()
+          .where('unit_master_id', defense.leader_monster)
+          .select('unit_master_id', 'image')
+          .firstOrFail()
+        const secondMonster = await Monster.query()
+          .where('unit_master_id', defense.second_monster)
+          .select('unit_master_id', 'image')
+          .firstOrFail()
+        const thirdMonster = await Monster.query()
+          .where('unit_master_id', defense.third_monster)
+          .select('unit_master_id', 'image')
+          .firstOrFail()
+
+        defensesData.push({
+          leader: {
+            unit_master_id: leaderMonster.unit_master_id,
+            image: leaderMonster.image,
+          },
+          second: {
+            unit_master_id: secondMonster.unit_master_id,
+            image: secondMonster.image,
+          },
+          third: {
+            unit_master_id: thirdMonster.unit_master_id,
+            image: thirdMonster.image,
+          },
+        })
+      }
+
+      membersData.push({
+        pseudo: member.pseudo,
+        defenses: defensesData,
+      })
+    }
+
+    return response.json(membersData)
   }
 }
