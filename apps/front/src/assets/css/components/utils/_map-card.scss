@@ -1,11 +1,10 @@
 @use '../../partials/functions';
 
 .map-card {
-  & > a {
+  &__box {
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: 15px;
     background: var(--system);
     border-radius: var(--input-text-radius);
     padding: 20px;
@@ -15,6 +14,10 @@
 
   &--tower {
     gap: 10px;
+
+    .map-card__box {
+      gap: 15px;
+    }
   }
 
   &__position {
@@ -34,6 +37,19 @@
     font-weight: 700;
     line-height: 0.9;
     text-align: center;
+  }
+
+  &__member {
+    font-size: functions.rem(20);
+    line-height: normal;
+    font-weight: 700;
+    margin-bottom: 5px;
+  }
+
+  &__assigned-defenses {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
   }
 
   .defense {

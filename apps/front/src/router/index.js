@@ -10,6 +10,7 @@ import Member from "../views/Member.vue";
 import Composition from "../views/Composition.vue";
 import Notifications from "../views/NotificationsPage.vue";
 import Tower from "../views/Tower.vue";
+import DefensesPerMember from "../views/DefensesPerMember.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -114,6 +115,13 @@ const router = createRouter({
       component: Tower,
       meta: {
         title: "Modifier une tour",
+      },
+    },
+    {
+      path: "/defenses-per-member",
+      component: DefensesPerMember,
+      meta: {
+        title: "Défenses par membre",
       },
     },
   ],
