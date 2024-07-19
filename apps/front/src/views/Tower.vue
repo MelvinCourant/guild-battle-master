@@ -69,6 +69,7 @@ async function getCompositions() {
 
   body.value = {
     filters: filters.value,
+    tower_id: id,
   };
 
   const result = await fetch(
@@ -97,10 +98,12 @@ async function searchComposition(inputName, value) {
     body.value = {
       keyword: keyword.value,
       filters: filters.value,
+      tower_id: id,
     };
   } else {
     body.value = {
       filters: filters.value,
+      tower_id: id,
     };
   }
 

@@ -139,7 +139,7 @@ export default class CompositionsController {
     for (const composition of compositions) {
       const defenses = await Defense.query()
         .where('composition_id', composition.id)
-        .select('id', 'leader_monster', 'second_monster', 'third_monster', 'member_id')
+        .select('id', 'leader_monster', 'second_monster', 'third_monster', 'member_id', 'tower_id')
       let defensesData = []
 
       if (defenses.length === 0) {
@@ -171,13 +171,42 @@ export default class CompositionsController {
           .select('id', 'pseudo')
           .firstOrFail()
 
-        defensesData.push({
-          id: defense.id,
-          leader: leaderMonster,
-          second: secondMonster,
-          third: thirdMonster,
-          member: member,
-        })
+        let defenseInfo = {}
+
+        if (
+          request.input('tower_id') !== null &&
+          defense.tower_id &&
+          defense.tower_id == request.input('tower_id')
+        ) {
+          defenseInfo = {
+            id: defense.id,
+            leader: leaderMonster,
+            second: secondMonster,
+            third: thirdMonster,
+            member: member,
+            is_selected: true,
+          }
+        } else if (
+          request.input('tower_id') &&
+          defense.tower_id &&
+          defense.tower_id != request.input('tower_id')
+        ) {
+          continue
+        } else {
+          defenseInfo = {
+            id: defense.id,
+            leader: leaderMonster,
+            second: secondMonster,
+            third: thirdMonster,
+            member: member,
+          }
+        }
+
+        defensesData.push(defenseInfo)
+      }
+
+      if (defensesData.length === 0) {
+        continue
       }
 
       compositionsData.push({
@@ -323,7 +352,7 @@ export default class CompositionsController {
 
     const defenses = await Defense.query()
       .where('composition_id', composition.id)
-      .select('id', 'leader_monster', 'second_monster', 'third_monster', 'member_id')
+      .select('id', 'leader_monster', 'second_monster', 'third_monster', 'member_id', 'tower_id')
     let defensesData = []
 
     for (const defense of defenses) {
