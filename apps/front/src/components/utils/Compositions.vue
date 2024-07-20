@@ -11,7 +11,7 @@ const compositions = ref(inject("compositions"));
 <template>
   <div class="compositions">
     <Defense
-      v-for="composition in compositions"
+      v-for="(composition, index) in compositions"
       :key="composition.id"
       :member="composition.member"
       :leader="composition.leader"
@@ -20,9 +20,7 @@ const compositions = ref(inject("compositions"));
       :isSelected="composition.isSelected"
       @defenseHover="$emit('defenseHover', $event)"
       @defenseLeave="$emit('defenseLeave', $event)"
-      @clickOnDefense="
-        (defense) => $emit('clickOnDefense', composition.id, defense)
-      "
+      @clickOnDefense="(defense) => $emit('clickOnDefense', index, defense)"
     />
   </div>
 </template>

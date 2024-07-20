@@ -98,7 +98,10 @@ async function getActualComposition() {
     const resultJson = await result.json();
     compositionName.value = resultJson.name;
     compositionGrade.value = resultJson.grade;
-    actualComposition.value = resultJson.defenses;
+
+    if (!router.currentRoute.value.query.d) {
+      actualComposition.value = resultJson.defenses;
+    }
   } else {
     await router.push("/composition");
   }
