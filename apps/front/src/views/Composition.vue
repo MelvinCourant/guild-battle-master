@@ -79,8 +79,10 @@ const compositionId = route.params.id;
 const compositions = ref([]);
 const compositionGrade = ref("5");
 const compositionName = ref("");
+const initialCompositions = ref([]);
 const actualComposition = ref([]);
 const defensesSelected = ref([]);
+const defensesTemporarilyUnassigned = ref([]);
 
 async function getActualComposition() {
   const result = await fetch(
@@ -102,6 +104,8 @@ async function getActualComposition() {
     if (!router.currentRoute.value.query.d) {
       actualComposition.value = resultJson.defenses;
     }
+
+    initialCompositions.value = JSON.parse(JSON.stringify(resultJson.defenses));
   } else {
     await router.push("/composition");
   }
@@ -241,6 +245,10 @@ async function getQueryParams() {
   if (query.g) {
     compositionGrade.value = query.g;
   }
+
+  if (query.dtu) {
+    defensesTemporarilyUnassigned.value = JSON.parse(query.dtu);
+  }
 }
 
 async function initWithParams() {
@@ -279,6 +287,8 @@ async function addOrRemoveQueryParams(name) {
     query.n = compositionName.value;
   } else if (name === "grade") {
     query.g = compositionGrade.value;
+  } else if (name === "defenses_temporarily_unassigned") {
+    query.dtu = JSON.stringify(defensesTemporarilyUnassigned.value);
   }
 
   for (const key in query) {
@@ -474,8 +484,18 @@ async function getCompositions(name, values) {
   await addOrRemoveQueryParams(name);
 
   if (defensesSelected.value.length > 0) {
+    const defensesSelectedBody = defensesSelected.value.filter(
+      (defense) =>
+        !initialCompositions.value.some(
+          (initialDefense) =>
+            initialDefense.leader === defense.leader &&
+            initialDefense.second === defense.second &&
+            initialDefense.third === defense.third,
+        ),
+    );
+
     body = {
-      defenses_selected: defensesSelected.value,
+      defenses_selected: defensesSelectedBody,
     };
   }
 
@@ -490,6 +510,13 @@ async function getCompositions(name, values) {
     body = {
       ...body,
       filters: filtersValues.value,
+    };
+  }
+
+  if (defensesTemporarilyUnassigned.value.length > 0) {
+    body = {
+      ...body,
+      defenses_temporarily_unassigned: defensesTemporarilyUnassigned.value,
     };
   }
 
@@ -526,11 +553,55 @@ async function getCompositions(name, values) {
 
 function addDefense(index, defense) {
   actualComposition.value.push(defense);
+
+  if (
+    initialCompositions.value.find(
+      (initialDefense) =>
+        initialDefense.leader.unit_master_id ===
+          defense.leader.unit_master_id &&
+        initialDefense.second.unit_master_id ===
+          defense.second.unit_master_id &&
+        initialDefense.third.unit_master_id === defense.third.unit_master_id,
+    )
+  ) {
+    defensesTemporarilyUnassigned.value =
+      defensesTemporarilyUnassigned.value.filter(
+        (defenseTemporarilyUnassigned) =>
+          defenseTemporarilyUnassigned.leader !==
+            defense.leader.unit_master_id &&
+          defenseTemporarilyUnassigned.second !==
+            defense.second.unit_master_id &&
+          defenseTemporarilyUnassigned.third !== defense.third.unit_master_id,
+      );
+
+    addOrRemoveQueryParams("defenses_temporarily_unassigned");
+  }
+
   getCompositions("defense-selected");
 }
 
-function removeDefense(index) {
+function removeDefense(index, defense) {
   actualComposition.value.splice(index, 1);
+
+  if (
+    initialCompositions.value.find(
+      (initialDefense) =>
+        initialDefense.leader.unit_master_id ===
+          defense.leader.unit_master_id &&
+        initialDefense.second.unit_master_id ===
+          defense.second.unit_master_id &&
+        initialDefense.third.unit_master_id === defense.third.unit_master_id,
+    )
+  ) {
+    defensesTemporarilyUnassigned.value.push({
+      leader: defense.leader.unit_master_id,
+      second: defense.second.unit_master_id,
+      third: defense.third.unit_master_id,
+    });
+
+    addOrRemoveQueryParams("defenses_temporarily_unassigned");
+  }
+
   getCompositions("defense-selected");
 }
 

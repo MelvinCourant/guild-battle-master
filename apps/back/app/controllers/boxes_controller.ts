@@ -215,18 +215,41 @@ export default class BoxesController {
     const secondMonsters = request.input('second_monsters')
     const thirdMonsters = request.input('third_monsters')
     const defensesSelected = request.input('defenses_selected')
+    const defensesTemporarilyUnassigned = request.input('defenses_temporarily_unassigned')
     const grade = request.input('grade')
 
     let compositions = []
 
     async function getBoxes(memberId: any) {
-      let boxes = await Box.query()
-        .where('member_id', memberId)
-        .whereRaw('monsters_assigned < quantity')
-        .select('monster_id', 'quantity', 'monsters_assigned')
+      let memberBoxes
 
-      if (boxes.length === 0 || !defensesSelected) {
-        return boxes
+      if (defensesTemporarilyUnassigned) {
+        memberBoxes = await Box.query()
+          .where('member_id', memberId)
+          .select('monster_id', 'quantity', 'monsters_assigned')
+
+        for (let box of memberBoxes) {
+          for (let defense of defensesTemporarilyUnassigned) {
+            if (
+              box.monster_id === defense.leader ||
+              box.monster_id === defense.second ||
+              box.monster_id === defense.third
+            ) {
+              box.monsters_assigned -= 1
+            }
+          }
+        }
+
+        memberBoxes = memberBoxes.filter((box) => box.monsters_assigned < box.quantity)
+      } else {
+        memberBoxes = await Box.query()
+          .where('member_id', memberId)
+          .whereRaw('monsters_assigned < quantity')
+          .select('monster_id', 'quantity', 'monsters_assigned')
+      }
+
+      if (memberBoxes.length === 0 || !defensesSelected) {
+        return memberBoxes
       }
 
       let memberDefensesSelected: any[] = []
@@ -239,7 +262,7 @@ export default class BoxesController {
 
       if (memberDefensesSelected.length > 0) {
         for (let defense of memberDefensesSelected) {
-          for (let box of boxes) {
+          for (let box of memberBoxes) {
             if (
               box.monster_id === defense.leader ||
               box.monster_id === defense.second ||
@@ -247,14 +270,14 @@ export default class BoxesController {
             ) {
               box.monsters_assigned += 1
               if (box.monsters_assigned >= box.quantity) {
-                boxes = boxes.filter((b) => b !== box)
+                memberBoxes = memberBoxes.filter((b) => b !== box)
               }
             }
           }
         }
       }
 
-      return boxes
+      return memberBoxes
     }
 
     for (const member of members) {
