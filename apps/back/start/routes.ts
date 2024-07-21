@@ -18,6 +18,7 @@ import CompositionsController from '#controllers/compositions_controller'
 import NotificationsController from '#controllers/notifications_controller'
 import TowersController from '#controllers/towers_controller'
 import DefensesController from '#controllers/defenses_controller'
+import ResetPasswordController from '#controllers/reset_password_controller'
 import app from '@adonisjs/core/services/app'
 
 router
@@ -225,3 +226,17 @@ router
     })
   })
   .prefix('api/defenses')
+
+const resetPasswordController = new ResetPasswordController()
+
+router.post('/api/forgot-password', async (data) => {
+  return resetPasswordController.forgotPassword(data)
+})
+
+router.get('/api/reset-password', async (data) => {
+  return resetPasswordController.verifyUrl(data)
+})
+
+router.post('/api/reset-password', async (data) => {
+  return resetPasswordController.resetPassword(data)
+})
