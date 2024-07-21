@@ -255,7 +255,17 @@ export default class BoxesController {
       let memberDefensesSelected: any[] = []
 
       defensesSelected.forEach((defense: any) => {
-        if (defense.member === memberId) {
+        if (
+          defense.member === memberId &&
+          defensesTemporarilyUnassigned &&
+          !defensesTemporarilyUnassigned.find(
+            (d: { member: string; leader: number; second: number; third: number }) =>
+              d.member === memberId &&
+              d.leader === defense.leader &&
+              d.second === defense.second &&
+              d.third === defense.third
+          )
+        ) {
           memberDefensesSelected.push(defense)
         }
       })

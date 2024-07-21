@@ -488,6 +488,7 @@ async function getCompositions(name, values) {
       (defense) =>
         !initialCompositions.value.some(
           (initialDefense) =>
+            initialDefense.member === defense.member &&
             initialDefense.leader === defense.leader &&
             initialDefense.second === defense.second &&
             initialDefense.third === defense.third,
@@ -557,6 +558,7 @@ function addDefense(index, defense) {
   if (
     initialCompositions.value.find(
       (initialDefense) =>
+        initialDefense.member.id === defense.member.id &&
         initialDefense.leader.unit_master_id ===
           defense.leader.unit_master_id &&
         initialDefense.second.unit_master_id ===
@@ -567,6 +569,7 @@ function addDefense(index, defense) {
     defensesTemporarilyUnassigned.value =
       defensesTemporarilyUnassigned.value.filter(
         (defenseTemporarilyUnassigned) =>
+          defenseTemporarilyUnassigned.member !== defense.member.id &&
           defenseTemporarilyUnassigned.leader !==
             defense.leader.unit_master_id &&
           defenseTemporarilyUnassigned.second !==
@@ -586,6 +589,7 @@ function removeDefense(index, defense) {
   if (
     initialCompositions.value.find(
       (initialDefense) =>
+        initialDefense.member.id === defense.member.id &&
         initialDefense.leader.unit_master_id ===
           defense.leader.unit_master_id &&
         initialDefense.second.unit_master_id ===
@@ -594,6 +598,7 @@ function removeDefense(index, defense) {
     )
   ) {
     defensesTemporarilyUnassigned.value.push({
+      member: defense.member.id,
       leader: defense.leader.unit_master_id,
       second: defense.second.unit_master_id,
       third: defense.third.unit_master_id,
