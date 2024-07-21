@@ -287,7 +287,7 @@ async function addOrRemoveQueryParams(name) {
     query.n = compositionName.value;
   } else if (name === "grade") {
     query.g = compositionGrade.value;
-  } else if (name === "defenses_temporarily_unassigned") {
+  } else if (name === "defenses-temporarily-unassigned") {
     query.dtu = JSON.stringify(defensesTemporarilyUnassigned.value);
   }
 
@@ -552,7 +552,7 @@ async function getCompositions(name, values) {
   }
 }
 
-function addDefense(index, defense) {
+async function addDefense(index, defense) {
   actualComposition.value.push(defense);
 
   if (
@@ -566,24 +566,37 @@ function addDefense(index, defense) {
         initialDefense.third.unit_master_id === defense.third.unit_master_id,
     )
   ) {
-    defensesTemporarilyUnassigned.value =
-      defensesTemporarilyUnassigned.value.filter(
-        (defenseTemporarilyUnassigned) =>
-          defenseTemporarilyUnassigned.member !== defense.member.id &&
-          defenseTemporarilyUnassigned.leader !==
-            defense.leader.unit_master_id &&
-          defenseTemporarilyUnassigned.second !==
-            defense.second.unit_master_id &&
-          defenseTemporarilyUnassigned.third !== defense.third.unit_master_id,
-      );
+    let defenseFind = false;
 
-    addOrRemoveQueryParams("defenses_temporarily_unassigned");
+    defensesTemporarilyUnassigned.value.forEach(
+      (defenseTemporarilyUnassigned) => {
+        if (
+          !defenseFind &&
+          defenseTemporarilyUnassigned.member === defense.member.id &&
+          defenseTemporarilyUnassigned.leader ===
+            defense.leader.unit_master_id &&
+          defenseTemporarilyUnassigned.second ===
+            defense.second.unit_master_id &&
+          defenseTemporarilyUnassigned.third === defense.third.unit_master_id
+        ) {
+          defensesTemporarilyUnassigned.value.splice(
+            defensesTemporarilyUnassigned.value.indexOf(
+              defenseTemporarilyUnassigned,
+            ),
+            1,
+          );
+          defenseFind = true;
+        }
+      },
+    );
+
+    await addOrRemoveQueryParams("defenses-temporarily-unassigned");
   }
 
-  getCompositions("defense-selected");
+  await getCompositions("defense-selected");
 }
 
-function removeDefense(index, defense) {
+async function removeDefense(index, defense) {
   actualComposition.value.splice(index, 1);
 
   if (
@@ -604,10 +617,10 @@ function removeDefense(index, defense) {
       third: defense.third.unit_master_id,
     });
 
-    addOrRemoveQueryParams("defenses_temporarily_unassigned");
+    await addOrRemoveQueryParams("defenses-temporarily-unassigned");
   }
 
-  getCompositions("defense-selected");
+  await getCompositions("defense-selected");
 }
 
 async function updateCompositionGrade(value) {
