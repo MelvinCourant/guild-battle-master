@@ -10,7 +10,8 @@ watch(route, () => {
   if (
     route.path === "/login" ||
     route.path === "/register" ||
-    route.path === "/forgot-password"
+    route.path === "/forgot-password" ||
+    route.path === "/reset-password"
   ) {
     hideNavbar.value = true;
   } else {

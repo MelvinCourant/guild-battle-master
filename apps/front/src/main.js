@@ -63,7 +63,8 @@ router.beforeEach(async (to, from, next) => {
     if (
       to.path === "/login" ||
       to.path === "/register" ||
-      to.path === "/forgot-password"
+      to.path === "/forgot-password" ||
+      to.path === "/reset-password"
     ) {
       next({ path: from.path });
     } else {
@@ -73,7 +74,8 @@ router.beforeEach(async (to, from, next) => {
     if (
       to.path === "/login" ||
       to.path === "/register" ||
-      to.path === "/forgot-password"
+      to.path === "/forgot-password" ||
+      to.path === "/reset-password"
     ) {
       next();
     } else {
