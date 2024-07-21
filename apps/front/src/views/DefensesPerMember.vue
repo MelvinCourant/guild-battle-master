@@ -25,10 +25,6 @@ const links = [
 ];
 const tools = [
   {
-    name: "capture",
-    title: "Faire une capture d'écran",
-  },
-  {
     name: "reset",
     title: "Réinitialiser le plan",
   },
@@ -72,10 +68,24 @@ async function getDefensesPerMember() {
 
 getDefensesPerMember();
 
+async function resetTowers() {
+  const result = await fetch(`${env.VITE_URL}/api/towers/reset`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (result.ok) {
+    cards.value.forEach((card) => {
+      card.defenses = [];
+    });
+  }
+}
+
 function toolClicked(tool) {
-  if (tool.name === "capture") {
-    // TODO: Implement capture
-  } else if (tool.name === "reset") {
+  if (tool.name === "reset") {
     dialogIsOpen.value = true;
   }
 }

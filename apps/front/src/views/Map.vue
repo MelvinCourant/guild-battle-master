@@ -25,10 +25,6 @@ const links = [
 ];
 const tools = [
   {
-    name: "capture",
-    title: "Faire une capture d'écran",
-  },
-  {
     name: "reset",
     title: "Réinitialiser le plan",
   },
@@ -89,9 +85,7 @@ async function resetTowers() {
 }
 
 function toolClicked(tool) {
-  if (tool.name === "capture") {
-    // TODO: Implement capture
-  } else if (tool.name === "reset") {
+  if (tool.name === "reset") {
     dialogIsOpen.value = true;
   }
 }
