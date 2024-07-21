@@ -11,6 +11,7 @@ import Composition from "../views/Composition.vue";
 import Notifications from "../views/NotificationsPage.vue";
 import Tower from "../views/Tower.vue";
 import DefensesPerMember from "../views/DefensesPerMember.vue";
+import ForgotPassword from "../views/ForgotPassword.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -122,6 +123,13 @@ const router = createRouter({
       component: DefensesPerMember,
       meta: {
         title: "Défenses par membre",
+      },
+    },
+    {
+      path: "/forgot-password",
+      component: ForgotPassword,
+      meta: {
+        title: "Mot de passe oublié",
       },
     },
   ],

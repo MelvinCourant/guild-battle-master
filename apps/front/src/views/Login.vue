@@ -59,7 +59,7 @@ const loginForm = reactive({
   },
   passwordForgotten: {
     text: "Mot de passe oublié ?",
-    href: "/password-forgotten",
+    href: "/forgot-password",
   },
 });
 const fields = loginForm.forms[0].fields;
