@@ -64,19 +64,9 @@ const submenu = [
     path: "/member",
   },
   {
-    icon: "settings",
-    text: "Paramètres",
-    path: "/settings",
-  },
-  {
     icon: "upload",
     text: "Importer un json",
     path: "/upload-json",
-  },
-  {
-    icon: "information",
-    text: "À propos",
-    path: "/about",
   },
   {
     icon: "logout",
