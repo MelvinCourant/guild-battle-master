@@ -117,7 +117,7 @@ export default class TowersController {
               d.leader_monster === leaderMonster.unit_master_id &&
               d.second_monster === secondMonster.unit_master_id &&
               d.third_monster === thirdMonster.unit_master_id &&
-              d.tower_id === defense.tower_id // S'assurer de comparer aussi les tower_id
+              d.tower_id === defense.tower_id
           ).length
           defensesData[key].members = defensesData[key].members.replace(
             member.pseudo,

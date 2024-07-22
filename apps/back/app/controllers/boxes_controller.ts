@@ -256,15 +256,16 @@ export default class BoxesController {
 
       defensesSelected.forEach((defense: any) => {
         if (
-          defense.member === memberId &&
-          defensesTemporarilyUnassigned &&
-          !defensesTemporarilyUnassigned.find(
-            (d: { member: string; leader: number; second: number; third: number }) =>
-              d.member === memberId &&
-              d.leader === defense.leader &&
-              d.second === defense.second &&
-              d.third === defense.third
-          )
+          (defense.member === memberId &&
+            defensesTemporarilyUnassigned &&
+            !defensesTemporarilyUnassigned.find(
+              (d: { member: string; leader: number; second: number; third: number }) =>
+                d.member === memberId &&
+                d.leader === defense.leader &&
+                d.second === defense.second &&
+                d.third === defense.third
+            )) ||
+          (defense.member === memberId && !defensesTemporarilyUnassigned)
         ) {
           memberDefensesSelected.push(defense)
         }
