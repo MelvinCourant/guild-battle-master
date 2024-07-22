@@ -27,6 +27,12 @@ export default class MonstersController {
       const monsters = pageResults.results
 
       for (const monster of monsters) {
+        const monsterExists = await Monster.findBy('unit_master_id', monster.com2us_id)
+
+        if (monsterExists) {
+          continue
+        }
+
         const notKorean = new RegExp(/^[a-z A-Z0-9]+$/)
         const monstersNotReleased = [
           'unit_icon_0019_0_3.png',
