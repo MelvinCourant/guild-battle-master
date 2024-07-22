@@ -20,6 +20,30 @@
     }
   }
 
+  &--blue {
+    .map-card {
+      &__position {
+        background: var(--blue-team);
+      }
+    }
+  }
+
+  &--red {
+    .map-card {
+      &__position {
+        background: var(--red-team);
+      }
+    }
+  }
+
+  &--yellow {
+    .map-card {
+      &__position {
+        background: var(--yellow-team);
+      }
+    }
+  }
+
   &__position {
     display: flex;
     justify-content: center;
@@ -27,7 +51,6 @@
     top: 0;
     right: 0;
     transform: translate(30%, -30%);
-    background: var(--primary);
     border-radius: 50%;
     box-shadow: var(--shadow);
     width: 30px;

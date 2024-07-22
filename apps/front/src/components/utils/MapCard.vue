@@ -14,6 +14,7 @@ defineProps({
   <div
     :class="[
       'map-card',
+      cardDetails.position ? `map-card--${cardDetails.side}` : '',
       {
         'map-card--tower': cardDetails.position,
       },
