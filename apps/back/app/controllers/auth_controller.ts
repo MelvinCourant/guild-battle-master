@@ -223,13 +223,13 @@ export default class AuthController {
 
       fs.unlinkSync(jsonLink)
 
-      const fourNatTower = [2, 8, 12]
+      const fourNatTowers = [4, 7, 11]
 
-      for (let towerId = 1; towerId <= 12; towerId++) {
-        if (fourNatTower.includes(towerId)) {
+      for (let towerBlueId = 1; towerBlueId <= 12; towerBlueId++) {
+        if (fourNatTowers.includes(towerBlueId)) {
           await Tower.create({
             guild_id: guild.id,
-            position: towerId,
+            position: towerBlueId,
             side: 'blue',
             map: 'classic',
             grade: '4',
@@ -237,8 +237,48 @@ export default class AuthController {
         } else {
           await Tower.create({
             guild_id: guild.id,
-            position: towerId,
+            position: towerBlueId,
             side: 'blue',
+            map: 'classic',
+            grade: '5',
+          })
+        }
+      }
+
+      for (let towerRedId = 6; towerRedId <= 9; towerRedId++) {
+        if (fourNatTowers.includes(towerRedId)) {
+          await Tower.create({
+            guild_id: guild.id,
+            position: towerRedId,
+            side: 'red',
+            map: 'classic',
+            grade: '4',
+          })
+        } else {
+          await Tower.create({
+            guild_id: guild.id,
+            position: towerRedId,
+            side: 'red',
+            map: 'classic',
+            grade: '5',
+          })
+        }
+      }
+
+      for (let towerYellowId = 9; towerYellowId <= 12; towerYellowId++) {
+        if (fourNatTowers.includes(towerYellowId)) {
+          await Tower.create({
+            guild_id: guild.id,
+            position: towerYellowId,
+            side: 'yellow',
+            map: 'classic',
+            grade: '4',
+          })
+        } else {
+          await Tower.create({
+            guild_id: guild.id,
+            position: towerYellowId,
+            side: 'yellow',
             map: 'classic',
             grade: '5',
           })
