@@ -23,6 +23,11 @@
     font-weight: 700;
     line-height: 0.6;
 
+    @media screen and (max-width: 768px) {
+      padding: 0 30px 0 15px;
+      font-size: functions.rem(16);
+    }
+
     &--selected {
       color: var(--primary);
 
