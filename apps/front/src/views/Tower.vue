@@ -17,6 +17,7 @@ const token = userStore.token;
 const user = userStore.user;
 const guildId = user.guild_id;
 const tower = ref({});
+const towerName = ref("");
 const compositions = ref([]);
 const fields = [
   {
@@ -50,6 +51,15 @@ async function getTower() {
   if (result.ok) {
     tower.value = await result.json();
     towerDefenses.value = tower.value;
+
+    if (tower.value.side === "yellow") {
+      towerName.value = `Tour n°${tower.value.position} jaune`;
+    } else if (tower.value.side === "red") {
+      towerName.value = `Tour n°${tower.value.position} rouge`;
+    } else {
+      towerName.value = `Tour n°${tower.value.position} bleue`;
+    }
+
     await getCompositions();
   }
 }
@@ -266,7 +276,7 @@ async function saveTower() {
     />
     <ActualComposition
       :compositions="towerDefenses.defenses"
-      :compositionName="`Tour n°${tower.position}`"
+      :compositionName="towerName"
       :mode="'tower'"
       :grade="`${tower.grade} nat`"
       @saveComposition="saveTower"
