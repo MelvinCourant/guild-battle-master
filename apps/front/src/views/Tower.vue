@@ -196,25 +196,25 @@ function defenseHover(event) {
 function defenseLeave(event) {
   if (event.querySelector(".defense__remove")) {
     event.querySelector(".defense__remove").remove();
-  } else {
+    document.body.style.cursor = "default";
+  } else if (event.querySelector(".defense__add")) {
     event.querySelector(".defense__add").remove();
+    document.body.style.cursor = "default";
   }
-
-  document.body.style.cursor = "default";
 }
 
-function addDefenseToTower(index, defense) {
-  if (towerDefenses.value.defenses.length >= 5) {
+function addDefenseToTower(index, defense, defenseId) {
+  if (towerDefenses.value.defenses.length === 5) {
     return;
   }
 
-  if (towerDefenses.value.defenses.find((def) => def.id === index)) {
-    removeDefenseFromTower(index);
+  if (towerDefenses.value.defenses.find((def) => def.id === defenseId)) {
+    removeDefenseFromTower(defenseId);
     return;
   }
 
   towerDefenses.value.defenses.push({
-    id: index,
+    id: defenseId,
     member: defense.member,
     leader: defense.leader,
     second: defense.second,
@@ -222,19 +222,19 @@ function addDefenseToTower(index, defense) {
   });
 
   previewToComposition.value.forEach((previewDefense) => {
-    if (previewDefense.id === index) {
+    if (previewDefense.id === defenseId) {
       previewDefense.isSelected = true;
     }
   });
 }
 
-function removeDefenseFromTower(index) {
+function removeDefenseFromTower(defenseId) {
   towerDefenses.value.defenses = towerDefenses.value.defenses.filter(
-    (defense) => defense.id !== index,
+    (defense) => defense.id !== defenseId,
   );
 
   previewToComposition.value.forEach((previewDefense) => {
-    if (previewDefense.id === index) {
+    if (previewDefense.id === defenseId) {
       previewDefense.isSelected = false;
     }
   });
@@ -252,7 +252,7 @@ async function saveTower() {
     defenses: defenses,
   };
 
-  const result = await fetch(`${env.VITE_URL}/api/towers/${id}/show`, {
+  const result = await fetch(`${env.VITE_URL}/api/towers/${id}/update`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",

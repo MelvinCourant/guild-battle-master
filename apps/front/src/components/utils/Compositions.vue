@@ -20,7 +20,9 @@ const compositions = ref(inject("compositions"));
       :isSelected="composition.isSelected"
       @defenseHover="$emit('defenseHover', $event)"
       @defenseLeave="$emit('defenseLeave', $event)"
-      @clickOnDefense="(defense) => $emit('clickOnDefense', index, defense)"
+      @clickOnDefense="
+        (defense) => $emit('clickOnDefense', index, defense, composition.id)
+      "
     />
   </div>
 </template>

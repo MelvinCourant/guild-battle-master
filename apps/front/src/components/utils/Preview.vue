@@ -104,7 +104,8 @@ window.addEventListener("click", (event) => {
         @defenseHover="$emit('defenseHover', $event)"
         @defenseLeave="$emit('defenseLeave', $event)"
         @clickOnDefense="
-          (index, defense) => $emit('clickOnDefense', index, defense)
+          (index, defense, defenseId) =>
+            $emit('clickOnDefense', index, defense, defenseId)
         "
       />
     </div>
