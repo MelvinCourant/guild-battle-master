@@ -95,9 +95,13 @@ export default class CompositionsController {
           )
       })
 
-    monstersAssigned.forEach((box) => {
-      box.monsters_assigned--
-      box.save()
+    defenses.forEach((defense) => {
+      monstersAssigned.forEach((monsterAssigned) => {
+        monsterAssigned.monsters_assigned--
+        monsterAssigned.save()
+      })
+
+      defense.delete()
     })
 
     await composition.delete()
