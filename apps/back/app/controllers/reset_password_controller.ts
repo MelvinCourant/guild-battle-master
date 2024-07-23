@@ -26,7 +26,7 @@ export default class ResetPasswordController {
       await mail.send((message) => {
         message
           .to(user.email)
-          .from('support@guildbattlemaster.com')
+          .from('no-reply@guildbattlemaster.com')
           .subject('Demande de réinitialisation de mot de passe')
           .html(
             '<h1>Demande de réinitilisation de mot de passe</h1>' +
