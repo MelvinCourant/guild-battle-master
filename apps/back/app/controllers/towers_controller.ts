@@ -11,7 +11,10 @@ export default class TowersController {
     const tower = await Tower.query().where('id', params.id).firstOrFail()
     const guild = await Member.query().where('user_id', user.id).select('guild_id').firstOrFail()
 
-    if (tower.guild_id !== guild.guild_id) {
+    if (
+      tower.guild_id !== guild.guild_id ||
+      (user.role !== 'admin' && user.role !== 'leader' && user.role !== 'moderator')
+    ) {
       return response.forbidden()
     }
 

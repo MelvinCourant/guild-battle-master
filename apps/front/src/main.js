@@ -45,11 +45,16 @@ router.beforeEach(async (to, from, next) => {
       roles: ["leader", "moderator"],
       redirect: "/upload-json",
     },
+    {
+      path: "/tower",
+      roles: ["leader", "moderator"],
+      redirect: "/map",
+    },
   ];
 
   if (isLogged) {
     const pathHavePermission = pathsWithPermissions.find(
-      (path) => path.path === to.path,
+      (path) => to.path.match(path.path) !== null,
     );
 
     if (pathHavePermission) {
