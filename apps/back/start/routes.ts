@@ -32,6 +32,10 @@ router
     router.patch('/bequeath-leader', async (data) => {
       return usersController.bequeathLeader(data)
     })
+
+    router.patch('/update-profile', async (data) => {
+      return usersController.updateProfile(data)
+    })
   })
   .prefix('api/users')
 
