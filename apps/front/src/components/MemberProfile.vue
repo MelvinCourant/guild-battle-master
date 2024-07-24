@@ -34,6 +34,7 @@ const props = defineProps({
     default: false,
   },
 });
+defineEmits(["updateImage"]);
 
 const imageField = reactive({
   type: "file",
@@ -89,6 +90,7 @@ const memberImage = reactive({
         inputFileImageLoaded !== null && inputFileImageLoaded === true && pseudo
       "
       @imageLoaded="inputFileImageLoaded = true"
+      @sendValue="(inputName, value) => $emit('updateImage', inputName, value)"
     />
 
     <h1

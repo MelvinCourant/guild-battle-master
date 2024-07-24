@@ -2,62 +2,62 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 
 export const useUserStore = defineStore("user", () => {
-    let localStorageUser = null;
+  let localStorageUser = null;
 
-    if(localStorage.getItem("user")) {
-        localStorageUser = JSON.parse(localStorage.getItem("user") || "{}");
-    }
+  if (localStorage.getItem("user")) {
+    localStorageUser = JSON.parse(localStorage.getItem("user") || "{}");
+  }
 
-    let pseudo = "";
-    let grade = "";
-    let image = "placeholder.jpg";
-    const user = ref({})
+  let pseudo = "";
+  let grade = "";
+  let image = "placeholder.jpg";
+  const user = ref({});
+
+  user.value = {
+    pseudo: pseudo,
+    grade: grade,
+    image: image,
+  };
+
+  if (localStorageUser) {
+    pseudo = localStorageUser.pseudo;
+    grade = localStorageUser.grade;
+    image = localStorageUser.image;
 
     user.value = {
-        pseudo: pseudo,
-        grade: grade,
-        image: image,
+      pseudo: pseudo,
+      grade: grade,
+      image: image,
+    };
+  }
+
+  const token = ref(localStorage.getItem("token") || "");
+
+  function updateUser(newUser) {
+    for (let key in newUser) {
+      user.value[key] = newUser[key];
     }
 
-    if(localStorageUser) {
-        pseudo = localStorageUser.pseudo;
-        grade = localStorageUser.grade;
-        image = localStorageUser.image;
+    localStorage.setItem("user", JSON.stringify(user.value));
+  }
 
-        user.value = {
-            pseudo: pseudo,
-            grade: grade,
-            image: image,
-        }
-    }
+  function updateToken(newToken) {
+    token.value = newToken;
+    localStorage.setItem("token", newToken);
+  }
 
-    const token = ref(localStorage.getItem("token") || "");
+  function logout() {
+    user.value = {};
+    token.value = "";
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+  }
 
-    function updateUser(newUser, isLoginPage = false) {
-        user.value = newUser;
-
-        if(isLoginPage) {
-            localStorage.setItem('user', JSON.stringify(newUser));
-        }
-    }
-
-    function updateToken(newToken) {
-        token.value = newToken;
-        localStorage.setItem('token', newToken);
-    }
-
-    function logout() {
-        user.value = {};
-        token.value = "";
-        localStorage.removeItem("user");
-        localStorage.removeItem("token");
-    }
-
-    return {
-        user,
-        token,
-        updateUser,
-        updateToken,
-        logout,
-    }
+  return {
+    user,
+    token,
+    updateUser,
+    updateToken,
+    logout,
+  };
 });

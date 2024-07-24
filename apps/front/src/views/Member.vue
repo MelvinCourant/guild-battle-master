@@ -5,6 +5,7 @@ import Monsters from "../components/Monsters.vue";
 import { provide, ref, reactive, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useUserStore } from "../stores/user.js";
+import Alert from "../components/utils/Alert.vue";
 
 const env = import.meta.env;
 const userStore = useUserStore();
@@ -143,6 +144,11 @@ const sortOptions = [
 ];
 const actualSort = ref("element");
 const userIsTheMember = ref(false);
+const alert = reactive({
+  display: false,
+  type: "",
+  message: "",
+});
 
 provide("monsters", monsters);
 provide("fields", fields);
@@ -280,6 +286,34 @@ async function sort(key) {
     });
   }
 }
+
+async function updateMember(inputName, value) {
+  const formData = new FormData();
+  formData.append("image", value);
+
+  const result = await fetch(`${env.VITE_URL}/api/users/update-profile`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  });
+
+  const resultJson = await result.json();
+
+  if (result.ok) {
+    userStore.updateUser(resultJson.user);
+  } else {
+    alert.display = true;
+    alert.type = "error";
+
+    if (resultJson.errors) {
+      alert.message = resultJson.errors;
+    } else {
+      alert.message = resultJson.message;
+    }
+  }
+}
 </script>
 
 <template>
@@ -290,7 +324,13 @@ async function sort(key) {
       :grade="member.grade"
       :image="member.image"
       :userIsTheMember="userIsTheMember"
+      @updateImage="updateMember"
     />
     <Monsters @search="searchMonsters" @sortGrid="sort" />
+    <Alert
+      :display="alert.display"
+      :type="alert.type"
+      :message="alert.message"
+    />
   </main>
 </template>

@@ -137,6 +137,17 @@ export default class UsersController {
       }
     }
 
-    return response.json({ message: 'Profil mis à jour' })
+    const member = await Member.query()
+      .where('user_id', user.id)
+      .select('pseudo', 'grade')
+      .firstOrFail()
+
+    return response.json({
+      user: {
+        pseudo: member.pseudo,
+        grade: member.grade,
+        image: user.image,
+      },
+    })
   }
 }

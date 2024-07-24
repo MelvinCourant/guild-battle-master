@@ -5,7 +5,7 @@ import { useRoute } from "vue-router";
 import logo from "../../assets/imgs/logo.svg";
 import AccountMenu from "../../components/menus/AccountMenu.vue";
 import NavbarMobile from "../../components/menus/mobile/NavbarMobile.vue";
-import { provide, ref } from "vue";
+import { provide, ref, watch } from "vue";
 import Notifications from "./Notifications.vue";
 
 const env = import.meta.env;
@@ -52,11 +52,11 @@ const route = useRoute();
 const userStore = useUserStore();
 const user = userStore.user;
 const token = userStore.token;
-const userProfile = {
+const userProfile = ref({
   pseudo: user.pseudo,
   image: user.image,
   grade: user.grade,
-};
+});
 const submenu = [
   {
     icon: "profile",
@@ -94,6 +94,18 @@ const actionsNotifications = [
 provide("submenu", submenu);
 provide("userProfile", userProfile);
 provide("onMobile", onMobile);
+
+watch(
+  () => userStore.user,
+  (newUser) => {
+    userProfile.value = {
+      pseudo: newUser.pseudo,
+      image: newUser.image,
+      grade: newUser.grade,
+    };
+  },
+  { deep: true },
+);
 
 function handleMobile() {
   if (
