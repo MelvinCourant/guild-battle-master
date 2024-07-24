@@ -1,9 +1,9 @@
 <script setup>
-import '../assets/css/views/_member.scss';
+import "../assets/css/views/_member.scss";
 import MemberProfile from "../components/MemberProfile.vue";
 import Monsters from "../components/Monsters.vue";
-import {provide, ref, reactive, watch} from "vue";
-import {useRoute} from "vue-router";
+import { provide, ref, reactive, watch } from "vue";
+import { useRoute } from "vue-router";
 import { useUserStore } from "../stores/user.js";
 
 const env = import.meta.env;
@@ -21,20 +21,21 @@ const fields = [
     type: "search",
     name: "search",
     placeholder: "Nom du monstre",
-  }
+  },
 ];
 const filters = reactive([
   {
     fields: [
       {
-        label: "Afficher les monstres non-invocable par des vélins (fusions, Ifrits, etc.)",
+        label:
+          "Afficher les monstres non-invocable par des vélins (fusions, Ifrits, etc.)",
         attributes: {
           type: "checkbox",
           name: "is_fusion_shop",
-          checked: true
-        }
-      }
-    ]
+          checked: true,
+        },
+      },
+    ],
   },
   {
     title: "Élements",
@@ -44,42 +45,42 @@ const filters = reactive([
         attributes: {
           type: "checkbox",
           name: "fire",
-          checked: true
-        }
+          checked: true,
+        },
       },
       {
         label: "Eau",
         attributes: {
           type: "checkbox",
           name: "water",
-          checked: true
-        }
+          checked: true,
+        },
       },
       {
         label: "Vent",
         attributes: {
           type: "checkbox",
           name: "wind",
-          checked: true
-        }
+          checked: true,
+        },
       },
       {
         label: "Lumière",
         attributes: {
           type: "checkbox",
           name: "light",
-          checked: true
-        }
+          checked: true,
+        },
       },
       {
         label: "Ténèbres",
         attributes: {
           type: "checkbox",
           name: "dark",
-          checked: true
-        }
-      }
-    ]
+          checked: true,
+        },
+      },
+    ],
   },
   {
     title: "Grade naturel",
@@ -89,78 +90,74 @@ const filters = reactive([
         attributes: {
           type: "checkbox",
           name: "2_stars",
-          checked: true
-        }
+          checked: true,
+        },
       },
       {
         label: "3 étoiles",
         attributes: {
           type: "checkbox",
           name: "3_stars",
-          checked: true
-        }
+          checked: true,
+        },
       },
       {
         label: "4 étoiles",
         attributes: {
           type: "checkbox",
           name: "4_stars",
-          checked: true
-        }
+          checked: true,
+        },
       },
       {
         label: "5 étoiles",
         attributes: {
           type: "checkbox",
           name: "5_stars",
-          checked: true
-        }
-      }
-    ]
-  }
+          checked: true,
+        },
+      },
+    ],
+  },
 ]);
 const filtersValues = ref({});
 const loading = ref(true);
-const keyword = ref('');
+const keyword = ref("");
 const sortOptions = [
   {
-    value: 'element',
-    text: 'Élément'
+    value: "element",
+    text: "Élément",
   },
   {
-    value: 'quantity',
-    text: 'Quantité'
+    value: "quantity",
+    text: "Quantité",
   },
   {
-    value: 'grade',
-    text: 'Grade naturel'
+    value: "grade",
+    text: "Grade naturel",
   },
   {
-    value: 'name',
-    text: 'Nom'
-  }
+    value: "name",
+    text: "Nom",
+  },
 ];
-const actualSort = ref('element');
+const actualSort = ref("element");
+const userIsTheMember = ref(false);
 
-provide('monsters', monsters);
-provide('fields', fields);
-provide('filters', filters);
-provide('filtersValues', filtersValues);
-provide('loading', loading);
-provide('sortOptions', sortOptions);
-provide('sortValue', actualSort);
+provide("monsters", monsters);
+provide("fields", fields);
+provide("filters", filters);
+provide("filtersValues", filtersValues);
+provide("loading", loading);
+provide("sortOptions", sortOptions);
+provide("sortValue", actualSort);
 
 function initPage() {
-  if(
-      id &&
-      memberId.value !== id
-  ) {
+  if (id && memberId.value !== id) {
     memberId.value = id;
-  } else if(
-      id &&
-      memberId.value === id
-  ) {
+  } else {
     memberId.value = user.member_id;
+    userIsTheMember.value = true;
   }
 
   getMember();
@@ -168,17 +165,20 @@ function initPage() {
 
 initPage();
 
-watch(() => route.path, () => {
-  initPage();
-});
+watch(
+  () => route.path,
+  () => {
+    initPage();
+  },
+);
 
 async function getMember() {
   const result = await fetch(`${env.VITE_URL}/api/members/${memberId.value}`, {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
-    }
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
   });
 
   if (result.ok) {
@@ -191,19 +191,19 @@ async function getMember() {
 }
 
 async function searchMonsters(inputName, value) {
-  if(inputName === 'search') {
+  if (inputName === "search") {
     keyword.value = value;
-  } else if(inputName === 'sortGrid') {
+  } else if (inputName === "sortGrid") {
     actualSort.value = value;
   } else {
     filtersValues.value = value;
-    filters.forEach(filter => {
-      filter.fields.forEach(field => {
-        for(const key in filtersValues.value) {
-          if(field.attributes.name === key) {
+    filters.forEach((filter) => {
+      filter.fields.forEach((field) => {
+        for (const key in filtersValues.value) {
+          if (field.attributes.name === key) {
             field.attributes.checked = value[key];
 
-            if(value[key] === true) {
+            if (value[key] === true) {
               delete filtersValues.value[key];
             }
           }
@@ -214,32 +214,35 @@ async function searchMonsters(inputName, value) {
 
   let body;
 
-  if(keyword.value) {
+  if (keyword.value) {
     body = {
-      keyword: keyword.value
+      keyword: keyword.value,
     };
   }
 
-  if(Object.keys(filtersValues.value).length > 0){
+  if (Object.keys(filtersValues.value).length > 0) {
     body = {
       ...body,
-      filters: filtersValues.value
+      filters: filtersValues.value,
     };
   }
 
   body = {
     ...body,
-    sort: actualSort.value
+    sort: actualSort.value,
   };
 
-  const result = await fetch(`${env.VITE_URL}/api/boxes/${memberId.value}/search`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
+  const result = await fetch(
+    `${env.VITE_URL}/api/boxes/${memberId.value}/search`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(body),
     },
-    body: JSON.stringify(body)
-  });
+  );
 
   if (result.ok) {
     monsters.value = await result.json();
@@ -247,28 +250,34 @@ async function searchMonsters(inputName, value) {
 }
 
 async function sort(key) {
-  if(key === actualSort.value) {
+  if (key === actualSort.value) {
     return;
   }
 
   actualSort.value = key;
 
-  if(key !== 'element') {
-    if(key === 'quantity') {
-      monsters.value = monsters.value.sort((a, b) => b.quantity - a.quantity)
-    } else if (key === 'grade') {
-      monsters.value = monsters.value.sort((a, b) => b.natural_grade - a.natural_grade)
-    } else if(key === 'name') {
-      monsters.value = monsters.value.sort((a, b) => a.name.localeCompare(b.name))
+  if (key !== "element") {
+    if (key === "quantity") {
+      monsters.value = monsters.value.sort((a, b) => b.quantity - a.quantity);
+    } else if (key === "grade") {
+      monsters.value = monsters.value.sort(
+        (a, b) => b.natural_grade - a.natural_grade,
+      );
+    } else if (key === "name") {
+      monsters.value = monsters.value.sort((a, b) =>
+        a.name.localeCompare(b.name),
+      );
     }
   } else {
-    const elementsOrder = ['fire', 'water', 'wind', 'light', 'dark']
+    const elementsOrder = ["fire", "water", "wind", "light", "dark"];
     monsters.value = monsters.value.sort((a, b) => {
       if (a.element === b.element) {
-        return b.natural_grade - a.natural_grade
+        return b.natural_grade - a.natural_grade;
       }
-      return elementsOrder.indexOf(a.element) - elementsOrder.indexOf(b.element)
-    })
+      return (
+        elementsOrder.indexOf(a.element) - elementsOrder.indexOf(b.element)
+      );
+    });
   }
 }
 </script>
@@ -276,14 +285,12 @@ async function sort(key) {
 <template>
   <main class="member">
     <MemberProfile
-        :memberId="memberId"
-        :pseudo="member.pseudo"
-        :grade="member.grade"
-        :image="member.image"
+      :memberId="memberId"
+      :pseudo="member.pseudo"
+      :grade="member.grade"
+      :image="member.image"
+      :userIsTheMember="userIsTheMember"
     />
-    <Monsters
-        @search="searchMonsters"
-        @sortGrid="sort"
-    />
+    <Monsters @search="searchMonsters" @sortGrid="sort" />
   </main>
 </template>
