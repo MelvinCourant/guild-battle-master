@@ -1,31 +1,31 @@
 <script setup>
-  import InputString from "../../components/utils/inputs/InputString.vue";
-  import InputFile from "../../components/utils/inputs/InputFile.vue";
-  import Button from "../../components/utils/inputs/Button.vue";
-  import Checkbox from "./inputs/Checkbox.vue";
+import InputString from "../../components/utils/inputs/InputString.vue";
+import InputFile from "../../components/utils/inputs/InputFile.vue";
+import Button from "../../components/utils/inputs/Button.vue";
+import Checkbox from "./inputs/Checkbox.vue";
 
-  defineProps({
-    error: {
-      type: String,
-    },
-    image: {
-      type: Object,
-    },
-    label: {
-      type: String,
-      default: "",
-    },
-    loading: {
-      type: String,
-      default: "",
-    },
-    attributes: {
-      type: Object,
-      required: true,
-    }
-  });
+defineProps({
+  error: {
+    type: String,
+  },
+  image: {
+    type: Object,
+  },
+  label: {
+    type: String,
+    default: "",
+  },
+  loading: {
+    type: String,
+    default: "",
+  },
+  attributes: {
+    type: Object,
+    required: true,
+  },
+});
 
-  defineEmits(['click', 'sendValue']);
+defineEmits(["click", "sendValue", "imageLoaded"]);
 </script>
 
 <template>
@@ -35,6 +35,7 @@
     :attributes="attributes"
     v-if="attributes.type === 'file'"
     @sendValue="(inputName, value) => $emit('sendValue', inputName, value)"
+    @imageLoaded="$emit('imageLoaded')"
   />
 
   <InputString
@@ -58,16 +59,16 @@
   />
 
   <Button
-      :loading="loading"
-      :attributes="attributes"
-      v-if="attributes.type === 'submit'"
-      @click="$emit('click')"
+    :loading="loading"
+    :attributes="attributes"
+    v-if="attributes.type === 'submit'"
+    @click="$emit('click')"
   />
 
   <Checkbox
-      :label="label"
-      :attributes="attributes"
-      v-if="attributes.type === 'checkbox'"
-      @sendValue="(inputName, value) => $emit('sendValue', inputName, value)"
+    :label="label"
+    :attributes="attributes"
+    v-if="attributes.type === 'checkbox'"
+    @sendValue="(inputName, value) => $emit('sendValue', inputName, value)"
   />
 </template>

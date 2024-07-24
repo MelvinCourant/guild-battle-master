@@ -9,6 +9,8 @@ const messages = {
   'password.minLength': 'Le mot de passe doit avoir au minimum {{ min }} caractères',
   'password.maxLength': 'Le mot de passe doit avoir au maximum {{ max }} caractères',
   'password.confirmed': 'Les mots de passe ne correspondent pas',
+  'image.size': "L'image doit faire moins de 10 Mo",
+  'image.extnames': "L'image doit être au format jpg, jpeg, png ou webp",
 }
 
 vine.messagesProvider = new SimpleMessagesProvider(messages)

@@ -3,6 +3,10 @@ import User from '#models/user'
 import Member from '#models/member'
 import Notification from '#models/notification'
 import Guild from '#models/guild'
+import { imgValidator } from '#validators/file'
+import fs from 'node:fs'
+import app from '@adonisjs/core/services/app'
+import { cuid } from '@adonisjs/core/helpers'
 
 export default class UsersController {
   async verify({ auth, response }: HttpContext) {
@@ -104,5 +108,46 @@ export default class UsersController {
 
       return response.json({ message: `Vous avez refusé de devenir leader` })
     }
+  }
+
+  async updateProfile({ auth, request, response }: HttpContext) {
+    const user = await auth.authenticate()
+    const payload = await request.validateUsing(imgValidator)
+    const image = payload.image
+
+    if (image) {
+      const oldImage = user.image
+
+      if (oldImage) {
+        fs.unlinkSync(`./uploads/${oldImage}`)
+      }
+
+      await image.move(app.makePath('uploads'), {
+        name: `${cuid()}.${image.extname}`,
+      })
+      // @ts-ignore
+      user.image = image.fileName
+      await user.save()
+
+      if (user.role === 'leader') {
+        const guild = await Guild.query().where('leader_id', user.id).select('id').firstOrFail()
+        // @ts-ignore
+        guild.image = image.fileName
+        await guild.save()
+      }
+    }
+
+    const member = await Member.query()
+      .where('user_id', user.id)
+      .select('pseudo', 'grade')
+      .firstOrFail()
+
+    return response.json({
+      user: {
+        pseudo: member.pseudo,
+        grade: member.grade,
+        image: user.image,
+      },
+    })
   }
 }

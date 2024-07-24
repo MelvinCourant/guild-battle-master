@@ -125,7 +125,7 @@ async function login() {
 
   if (result.ok) {
     const user = resultJson.user;
-    userStore.updateUser(user, true);
+    userStore.updateUser(user);
 
     const tokenObject = resultJson.token;
     const tokenValue = tokenObject.token;
