@@ -26,24 +26,24 @@ export default class NotificationsController {
     })
   }
 
-  async destroy({ auth, params, response }: HttpContext) {
+  async destroy({ i18n, auth, params, response }: HttpContext) {
     const user = await auth.authenticate()
     const notification = await Notification.findOrFail(params.id)
 
     if (notification.receiver_id !== user.id) {
-      return response.forbidden()
+      return response.status(403).json({ message: i18n.t('messages.forbidden') })
     }
 
     await notification.delete()
     return response.noContent()
   }
 
-  async update({ auth, params, response }: HttpContext) {
+  async update({ i18n, auth, params, response }: HttpContext) {
     const user = await auth.authenticate()
     const notification = await Notification.findOrFail(params.id)
 
     if (notification.receiver_id !== user.id) {
-      return response.forbidden()
+      return response.status(403).json({ message: i18n.t('messages.forbidden') })
     }
 
     notification.is_read = true

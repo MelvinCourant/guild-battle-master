@@ -10,7 +10,7 @@ import app from '@adonisjs/core/services/app'
 import { cuid } from '@adonisjs/core/helpers'
 
 export default class GuildsController {
-  async show({ auth, params, response }: HttpContext) {
+  async show({ i18n, auth, params, response }: HttpContext) {
     const user = await auth.authenticate()
     const memberGuild = await Member.query()
       .where('user_id', user.id)
@@ -20,7 +20,7 @@ export default class GuildsController {
     const guildId = params.id
 
     if (guildId !== memberGuildId) {
-      return response.status(403).json({ message: 'Guilde invalide' })
+      return response.status(403).json({ message: i18n.t('messages.guild_invalid_not_exist') })
     }
 
     const guild = await Guild.query().where('id', guildId).select('name', 'image').firstOrFail()
@@ -123,20 +123,18 @@ export default class GuildsController {
     })
   }
 
-  async create({ auth, request, response }: HttpContext) {
+  async create({ i18n, auth, request, response }: HttpContext) {
     const user = await auth.authenticate()
     const payload = await request.validateUsing(fileValidator)
     const userRole = await User.query().where('id', user.id).select('role').firstOrFail()
     const guild = await Guild.query().where('leader_id', user.id).first()
 
     if (userRole.role !== 'leader' && userRole.role !== 'moderator') {
-      return response
-        .status(403)
-        .json({ message: "Vous n'avez pas les droits pour effectuer cette action" })
+      return response.status(403).json({ message: i18n.t('messages.forbidden') })
     }
 
     if (!guild) {
-      return response.status(404).json({ message: 'Guilde invalide' })
+      return response.status(404).json({ message: i18n.t('messages.guild_invalid_not_exist') })
     }
 
     const json: any = payload.json
@@ -149,7 +147,7 @@ export default class GuildsController {
 
     if (!data) {
       fs.unlinkSync(jsonLink)
-      return response.status(500).send({ message: 'Error reading json file' })
+      return response.status(500).send({ message: i18n.t('messages.error_reading_json_file') })
     }
 
     const jsonParsed: any = JSON.parse(data)
@@ -212,7 +210,7 @@ export default class GuildsController {
     })
   }
 
-  async search({ auth, params, request, response }: HttpContext) {
+  async search({ i18n, auth, params, request, response }: HttpContext) {
     const user = await auth.authenticate()
     const keyword = decodeURIComponent(request.input('keyword'))
     const memberGuild = await Member.query()
@@ -224,7 +222,7 @@ export default class GuildsController {
     const sort = request.input('sort')
 
     if (guildId !== memberGuildId) {
-      return response.status(403).json({ message: 'Guilde invalide' })
+      return response.status(403).json({ message: i18n.t('messages.guild_invalid_not_exist') })
     }
 
     let members: any

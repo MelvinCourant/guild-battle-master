@@ -190,11 +190,11 @@ export default class BoxesController {
     return response.status(200).json(monstersWithQuantity)
   }
 
-  async compositions({ auth, params, request, response }: HttpContext) {
+  async compositions({ i18n, auth, params, request, response }: HttpContext) {
     const user = await auth.authenticate()
 
     if (user.role !== 'admin' && user.role !== 'leader' && user.role !== 'moderator') {
-      return response.forbidden()
+      return response.status(403).json({ message: i18n.t('messages.forbidden') })
     }
 
     const guildId = params.guildId

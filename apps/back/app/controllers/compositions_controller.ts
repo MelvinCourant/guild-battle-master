@@ -13,7 +13,7 @@ export default class CompositionsController {
     const payload = await request.validateUsing(createCompositionValidator)
 
     if (user.role !== 'admin' && user.role !== 'leader' && user.role !== 'moderator') {
-      return response.forbidden()
+      return response.status(403).json({ message: i18n.t('messages.forbidden') })
     }
 
     const member = await Member.query().where('user_id', user.id).firstOrFail()
@@ -59,11 +59,11 @@ export default class CompositionsController {
     return response.created({ message: i18n.t('messages.composition_successfully_created') })
   }
 
-  async destroy({ auth, params, response }: HttpContext) {
+  async destroy({ i18n, auth, params, response }: HttpContext) {
     const user = await auth.authenticate()
 
     if (user.role !== 'admin' && user.role !== 'leader' && user.role !== 'moderator') {
-      return response.forbidden()
+      return response.status(403).json({ message: i18n.t('messages.forbidden') })
     }
 
     const composition = await Composition.query().where('id', params.id).firstOrFail()
@@ -237,7 +237,7 @@ export default class CompositionsController {
       user.role !== 'moderator' &&
       guild.id !== composition.guild_id
     ) {
-      return response.forbidden()
+      return response.status(403).json({ message: i18n.t('messages.forbidden') })
     }
 
     if (payload.name !== composition.name) {
@@ -339,7 +339,7 @@ export default class CompositionsController {
     return response.created({ message: i18n.t('messages.composition_successfully_updated') })
   }
 
-  async show({ auth, params, response }: HttpContext) {
+  async show({ i18n, auth, params, response }: HttpContext) {
     const user = await auth.authenticate()
     const userMember = await Member.query()
       .where('user_id', user.id)
@@ -351,7 +351,7 @@ export default class CompositionsController {
       .firstOrFail()
 
     if (composition.guild_id !== userMember.guild_id) {
-      return response.forbidden()
+      return response.status(403).json({ message: i18n.t('messages.forbidden') })
     }
 
     const defenses = await Defense.query()

@@ -6,7 +6,7 @@ import Monster from '#models/monster'
 import Composition from '#models/composition'
 
 export default class TowersController {
-  async show({ auth, params, response }: HttpContext) {
+  async show({ i18n, auth, params, response }: HttpContext) {
     const user = await auth.authenticate()
     const tower = await Tower.query().where('id', params.id).firstOrFail()
     const guild = await Member.query().where('user_id', user.id).select('guild_id').firstOrFail()
@@ -15,7 +15,7 @@ export default class TowersController {
       tower.guild_id !== guild.guild_id ||
       (user.role !== 'admin' && user.role !== 'leader' && user.role !== 'moderator')
     ) {
-      return response.forbidden()
+      return response.status(403).json({ message: i18n.t('messages.forbidden') })
     }
 
     const defenses = await Defense.query().where('tower_id', tower.id).select('id')
@@ -163,7 +163,7 @@ export default class TowersController {
     return response.json(towersData)
   }
 
-  async update({ auth, params, request, response }: HttpContext) {
+  async update({ i18n, auth, params, request, response }: HttpContext) {
     const user = await auth.authenticate()
     const userGuild = await Member.query()
       .where('user_id', user.id)
@@ -175,7 +175,7 @@ export default class TowersController {
       tower.guild_id !== userGuild.guild_id ||
       (user.role !== 'admin' && user.role !== 'leader' && user.role !== 'moderator')
     ) {
-      return response.forbidden()
+      return response.status(403).json({ message: i18n.t('messages.forbidden') })
     }
 
     const defensesSelected = request.input('defenses')
@@ -212,11 +212,11 @@ export default class TowersController {
     return response.noContent()
   }
 
-  async destroy({ auth, response }: HttpContext) {
+  async destroy({ i18n, auth, response }: HttpContext) {
     const user = await auth.authenticate()
 
     if (user.role !== 'admin' && user.role !== 'leader' && user.role !== 'moderator') {
-      return response.forbidden()
+      return response.status(403).json({ message: i18n.t('messages.forbidden') })
     }
 
     const member = await Member.query().where('user_id', user.id).select('guild_id').firstOrFail()
