@@ -3,13 +3,14 @@ import "../assets/css/views/_about-us.scss";
 
 const avatars = [
   {
-    src: "../assets/imgs/avatars/nai.jpg",
+    fileName: "nai",
     alt: "Melvin Courant/Naï~",
   },
 ];
 
-function generateSrc(src) {
-  return new URL(src, import.meta.url).href;
+function generateSrc(fileName) {
+  return new URL(`../assets/imgs/avatars/${fileName}.jpg`, import.meta.url)
+    .href;
 }
 </script>
 
@@ -17,7 +18,7 @@ function generateSrc(src) {
   <main class="about-us">
     <div class="about-us__avatars">
       <div class="about-us__avatar" v-for="avatar in avatars">
-        <img :src="generateSrc(avatar.src)" :alt="avatar.alt" />
+        <img :src="generateSrc(avatar.fileName)" :alt="avatar.alt" />
       </div>
     </div>
     <div class="about-us__content">
