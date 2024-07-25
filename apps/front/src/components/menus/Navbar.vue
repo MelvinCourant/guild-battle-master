@@ -7,43 +7,45 @@ import AccountMenu from "../../components/menus/AccountMenu.vue";
 import NavbarMobile from "../../components/menus/mobile/NavbarMobile.vue";
 import { provide, ref, watch } from "vue";
 import Notifications from "./Notifications.vue";
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 
 const env = import.meta.env;
 const desktopLinks = [
   {
-    name: "Guilde",
+    name: t("guild"),
     path: "/",
     selected: false,
   },
   {
-    name: "Plan de siège",
+    name: t("siege_map"),
     path: "/map",
     selected: false,
   },
   {
-    name: "Défenses",
+    name: t("defenses"),
     path: "/defenses",
     selected: false,
   },
 ];
 const mobileLinks = [
   {
-    name: "Guilde",
+    name: t("guild"),
     path: "/",
     selected: false,
   },
   {
-    name: "Plan de siège",
+    name: t("siege_map"),
     path: "/map",
     selected: false,
   },
   {
-    name: "Défenses",
+    name: t("defenses"),
     path: "/defenses",
     selected: false,
   },
   {
-    name: "Notifications",
+    name: t("notifications"),
     path: "/notifications",
     selected: false,
   },
@@ -60,22 +62,22 @@ const userProfile = ref({
 const submenu = [
   {
     icon: "profile",
-    text: "Profil de membre",
+    text: t("member_profile"),
     path: "/member",
   },
   {
     icon: "upload",
-    text: "Importer un json",
+    text: t("upload_json"),
     path: "/upload-json",
   },
   {
     icon: "information",
-    text: "À propos",
+    text: t("about_us"),
     path: "/about-us",
   },
   {
     icon: "logout",
-    text: "Se déconnecter",
+    text: t("logout"),
     path: "/logout",
   },
 ];
@@ -86,12 +88,12 @@ const notificationsLoading = ref(false);
 const actionsNotifications = [
   {
     name: "read",
-    label: "Marquer comme lu",
+    label: t("mark_as_read"),
     danger: false,
   },
   {
     name: "delete",
-    label: "Supprimer",
+    label: t("delete"),
     danger: true,
   },
 ];

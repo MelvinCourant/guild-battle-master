@@ -19,6 +19,9 @@ importers:
       '@adonisjs/cors':
         specifier: ^2.2.1
         version: 2.2.1(@adonisjs/core@6.9.0)
+      '@adonisjs/i18n':
+        specifier: ^2.1.0
+        version: 2.1.0(@adonisjs/core@6.9.0)(@vinejs/vine@2.0.0)(edge.js@6.0.2)
       '@adonisjs/lucid':
         specifier: ^20.6.0
         version: 20.6.0(@adonisjs/assembler@7.5.1)(@adonisjs/core@6.9.0)(luxon@3.4.4)(mysql2@3.9.7)
@@ -104,6 +107,9 @@ importers:
       vue:
         specifier: ^3.4.26
         version: 3.4.26
+      vue-i18n:
+        specifier: ^9.13.1
+        version: 9.13.1(vue@3.4.26)
       vue-router:
         specifier: ^4.3.2
         version: 4.3.2(vue@3.4.26)
@@ -415,6 +421,30 @@ packages:
       type-is: 1.6.18
       vary: 1.1.2
       youch: 3.3.3
+
+  /@adonisjs/i18n@2.1.0(@adonisjs/core@6.9.0)(@vinejs/vine@2.0.0)(edge.js@6.0.2):
+    resolution: {integrity: sha512-ANHTvgzT3VYzpoIXdISSzu/EDtdWUPuY2QnxeBpvEtUnPewr5JWWdK64VGsJRC9lI0P0HC6ZLrijJpaoBb0nnw==}
+    engines: {node: '>=18.16.0'}
+    peerDependencies:
+      '@adonisjs/core': ^6.6.0
+      '@vinejs/vine': ^2.0.0
+      edge.js: ^6.0.2
+    peerDependenciesMeta:
+      '@vinejs/vine':
+        optional: true
+      edge.js:
+        optional: true
+    dependencies:
+      '@adonisjs/core': 6.9.0(@adonisjs/assembler@7.5.1)(@vinejs/vine@2.0.0)(edge.js@6.0.2)
+      '@poppinss/intl-formatter': 3.0.2
+      '@poppinss/utils': 6.7.3
+      '@vinejs/vine': 2.0.0
+      edge.js: 6.0.2
+      intl-messageformat: 10.5.14
+      luxon: 3.4.4
+      negotiator: 0.6.3
+      yaml: 2.5.0
+    dev: false
 
   /@adonisjs/logger@6.0.3:
     resolution: {integrity: sha512-CKxIpWBEX/e6duRE6qq8GJ90NQC8q26Q0aSuj+bUO6X4mgcgawxhciJTfpxmJNj9KEUmNAeHOn0hSpTITdk8Lg==}
@@ -867,6 +897,40 @@ packages:
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0, npm: '>=6.14.13'}
     dev: false
 
+  /@formatjs/ecma402-abstract@2.0.0:
+    resolution: {integrity: sha512-rRqXOqdFmk7RYvj4khklyqzcfQl9vEL/usogncBHRZfZBDOwMGuSRNFl02fu5KGHXdbinju+YXyuR+Nk8xlr/g==}
+    dependencies:
+      '@formatjs/intl-localematcher': 0.5.4
+      tslib: 2.6.2
+    dev: false
+
+  /@formatjs/fast-memoize@2.2.0:
+    resolution: {integrity: sha512-hnk/nY8FyrL5YxwP9e4r9dqeM6cAbo8PeU9UjyXojZMNvVad2Z06FAVHyR3Ecw6fza+0GH7vdJgiKIVXTMbSBA==}
+    dependencies:
+      tslib: 2.6.2
+    dev: false
+
+  /@formatjs/icu-messageformat-parser@2.7.8:
+    resolution: {integrity: sha512-nBZJYmhpcSX0WeJ5SDYUkZ42AgR3xiyhNCsQweFx3cz/ULJjym8bHAzWKvG5e2+1XO98dBYC0fWeeAECAVSwLA==}
+    dependencies:
+      '@formatjs/ecma402-abstract': 2.0.0
+      '@formatjs/icu-skeleton-parser': 1.8.2
+      tslib: 2.6.2
+    dev: false
+
+  /@formatjs/icu-skeleton-parser@1.8.2:
+    resolution: {integrity: sha512-k4ERKgw7aKGWJZgTarIcNEmvyTVD9FYh0mTrrBMHZ1b8hUu6iOJ4SzsZlo3UNAvHYa+PnvntIwRPt1/vy4nA9Q==}
+    dependencies:
+      '@formatjs/ecma402-abstract': 2.0.0
+      tslib: 2.6.2
+    dev: false
+
+  /@formatjs/intl-localematcher@0.5.4:
+    resolution: {integrity: sha512-zTwEpWOzZ2CiKcB93BLngUX59hQkuZjT2+SAQEscSm52peDW/getsawMcWF1rGRpMCX6D7nSJA3CzJ8gn13N/g==}
+    dependencies:
+      tslib: 2.6.2
+    dev: false
+
   /@humanwhocodes/config-array@0.13.0:
     resolution: {integrity: sha512-DZLEEqFWQFiyK6h5YIeynKx7JlvCYWL0cImfSRXZ9l4Sg2efkFGTuFf6vzXjK1cq6IYkU+Eg/JizXw+TD2vRNw==}
     engines: {node: '>=10.10.0'}
@@ -891,6 +955,27 @@ packages:
     resolution: {integrity: sha512-Ttl/jHpxfS3st5sxwICYfk4pOH0WrLI1SpW283GgQL7sCWU7EHIOhX4b4fkIxr3tkfzwg8+FNojtzsIEE7Ecgg==}
     engines: {node: '>=18.18'}
     dev: true
+
+  /@intlify/core-base@9.13.1:
+    resolution: {integrity: sha512-+bcQRkJO9pcX8d0gel9ZNfrzU22sZFSA0WVhfXrf5jdJOS24a+Bp8pozuS9sBI9Hk/tGz83pgKfmqcn/Ci7/8w==}
+    engines: {node: '>= 16'}
+    dependencies:
+      '@intlify/message-compiler': 9.13.1
+      '@intlify/shared': 9.13.1
+    dev: false
+
+  /@intlify/message-compiler@9.13.1:
+    resolution: {integrity: sha512-SKsVa4ajYGBVm7sHMXd5qX70O2XXjm55zdZB3VeMFCvQyvLew/dLvq3MqnaIsTMF1VkkOb9Ttr6tHcMlyPDL9w==}
+    engines: {node: '>= 16'}
+    dependencies:
+      '@intlify/shared': 9.13.1
+      source-map-js: 1.2.0
+    dev: false
+
+  /@intlify/shared@9.13.1:
+    resolution: {integrity: sha512-u3b6BKGhE6j/JeRU6C/RL2FgyJfy6LakbtfeVF8fJXURpZZTzfh3e05J0bu0XPw447Q6/WUp3C4ajv4TMS4YsQ==}
+    engines: {node: '>= 16'}
+    dev: false
 
   /@japa/api-client@2.0.3(@japa/assert@3.0.0)(@japa/runner@3.1.4):
     resolution: {integrity: sha512-2Eh68Kg1+7glMo+mLSPfBGN21wUEA61niTMwdmhEXyw5VrS4IctZxQWhn5fzwj5KnQJfPpxrRnt9432Zs0uN/g==}
@@ -1127,6 +1212,13 @@ packages:
 
   /@poppinss/inspect@1.0.1:
     resolution: {integrity: sha512-kLeEaBSGhlleyYvKc7c9s3uE6xv7cwyulE0EgHf4jU/CL96h0yC4mkdw1wvC1l1PYYQozCGy46FwMBAAMOobCA==}
+
+  /@poppinss/intl-formatter@3.0.2:
+    resolution: {integrity: sha512-t1sFyfCVKatuinDEsaTc78V5os9lPls/A6K9+ZmPQO2ILEHTVvg+JUQj75kKqHswTbSvB83V+qJZZxJxaCo+zw==}
+    engines: {node: '>=18.16.0'}
+    dependencies:
+      moize: 6.1.6
+    dev: false
 
   /@poppinss/macroable@1.0.2:
     resolution: {integrity: sha512-xhhEcEvhQC8mP5oOr5hbE4CmUgmw/IPV1jhpGg2xSkzoFrt9i8YVqBQt9744EFesi5F7pBheWozg63RUBM/5JA==}
@@ -2774,6 +2866,10 @@ packages:
     resolution: {integrity: sha512-VxPP4NqbUjj6MaAOafWeUn2cXWLcCtljklUtZf0Ind4XQ+QPtmA0b18zZy0jIQx+ExRVCR/ZQpBmik5lXshNsw==}
     dev: true
 
+  /fast-equals@3.0.3:
+    resolution: {integrity: sha512-NCe8qxnZFARSHGztGMZOO/PC1qa5MIFB5Hp66WdzbCRAz8U8US3bx1UTgLS49efBQPcUtO9gf5oVEY8o7y/7Kg==}
+    dev: false
+
   /fast-glob@3.3.2:
     resolution: {integrity: sha512-oX2ruAFQwf/Orj8m737Y5adxDQO0LAB7/S5MnxCdTNDd4p6BsyIVsv9JQsATbTSq8KHRpLwIHbVlUNatxd+1Ow==}
     engines: {node: '>=8.6.0'}
@@ -3218,6 +3314,15 @@ packages:
     engines: {node: '>= 0.10'}
     dev: false
 
+  /intl-messageformat@10.5.14:
+    resolution: {integrity: sha512-IjC6sI0X7YRjjyVH9aUgdftcmZK7WXdHeil4KwbjDnRWjnVitKpAx3rr6t6di1joFp5188VqKcobOPA6mCLG/w==}
+    dependencies:
+      '@formatjs/ecma402-abstract': 2.0.0
+      '@formatjs/fast-memoize': 2.2.0
+      '@formatjs/icu-messageformat-parser': 2.7.8
+      tslib: 2.6.2
+    dev: false
+
   /ipaddr.js@1.9.1:
     resolution: {integrity: sha512-0KI/607xoxSToH7GjN1FfSbLoU0+btTicjsQSWQlh/hZykN8KpmMf7uYwPW3R+akZ6R/w18ZlXSHBYXiYUPO3g==}
     engines: {node: '>= 0.10'}
@@ -3659,6 +3764,10 @@ packages:
     resolution: {integrity: sha512-iclAHeNqNm68zFtnZ0e+1L2yUIdvzNoauKU4WBA3VvH/vPFieF7qfRlwUZU+DA9P9bPXIS90ulxoUoCH23sV2w==}
     engines: {node: '>= 0.6'}
 
+  /micro-memoize@4.1.2:
+    resolution: {integrity: sha512-+HzcV2H+rbSJzApgkj0NdTakkC+bnyeiUxgT6/m7mjcz1CmM22KYFKp+EVj1sWe4UYcnriJr5uqHQD/gMHLD+g==}
+    dev: false
+
   /micromatch@4.0.5:
     resolution: {integrity: sha512-DMy+ERcEW2q8Z2Po+WNXuw3c5YaUSFjAO5GsJqfEl7UjvtIuFKO6ZrKvcItdy98dwFI2N1tg3zNIdKaQT+aNdA==}
     engines: {node: '>=8.6'}
@@ -3728,6 +3837,13 @@ packages:
     resolution: {integrity: sha512-+NsyUUAZDmo6YVHzL/stxSu3t9YS1iljliy3BSDrXJ/dkn1KYdmtZODGGjLcc9XLgVVpH4KshHB8XmZgMhaBXg==}
     engines: {node: '>=10'}
     hasBin: true
+
+  /moize@6.1.6:
+    resolution: {integrity: sha512-vSKdIUO61iCmTqhdoIDrqyrtp87nWZUmBPniNjO0fX49wEYmyDO4lvlnFXiGcaH1JLE/s/9HbiK4LSHsbiUY6Q==}
+    dependencies:
+      fast-equals: 3.0.3
+      micro-memoize: 4.1.2
+    dev: false
 
   /ms@2.1.2:
     resolution: {integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==}
@@ -4801,7 +4917,6 @@ packages:
 
   /tslib@2.6.2:
     resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}
-    dev: true
 
   /type-check@0.4.0:
     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}
@@ -4952,6 +5067,18 @@ packages:
       vue: 3.4.26
     dev: false
 
+  /vue-i18n@9.13.1(vue@3.4.26):
+    resolution: {integrity: sha512-mh0GIxx0wPtPlcB1q4k277y0iKgo25xmDPWioVVYanjPufDBpvu5ySTjP5wOrSvlYQ2m1xI+CFhGdauv/61uQg==}
+    engines: {node: '>= 16'}
+    peerDependencies:
+      vue: ^3.0.0
+    dependencies:
+      '@intlify/core-base': 9.13.1
+      '@intlify/shared': 9.13.1
+      '@vue/devtools-api': 6.6.1
+      vue: 3.4.26
+    dev: false
+
   /vue-router@4.3.2(vue@3.4.26):
     resolution: {integrity: sha512-hKQJ1vDAZ5LVkKEnHhmm1f9pMiWIBNGF5AwU67PdH7TyXCj/a4hTccuUuYCAMgJK6rO/NVYtQIEN3yL8CECa7Q==}
     peerDependencies:
@@ -5011,6 +5138,12 @@ packages:
 
   /yallist@4.0.0:
     resolution: {integrity: sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==}
+
+  /yaml@2.5.0:
+    resolution: {integrity: sha512-2wWLbGbYDiSqqIKoPjar3MPgB94ErzCtrNE1FdqGuaO0pi2JGjmE8aW8TDZwzU7vuxcGRdL/4gPQwQ7hD5AMSw==}
+    engines: {node: '>= 14'}
+    hasBin: true
+    dev: false
 
   /yargs-parser@21.1.1:
     resolution: {integrity: sha512-tVpsJW7DdjecAiFpbIB1e3qxIQsE6NoPc5/eTdrbbIC4h0LVsWhnoa3g+m2HclBIujHzsxZ4VJVA+GUuc2/LBw==}
