@@ -11,4 +11,6 @@
   "memberNotFoundBackStep2": "Member not found, back to step 2",
   "successfulRegistration": "Successful registration",
   "invalidStep": "Invalid step",
+  "incorrectEmailOrPassword": "Incorrect email address or password",
+  "userLoggedOut": "User logged out"
 }

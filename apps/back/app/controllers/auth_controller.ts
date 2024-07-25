@@ -330,7 +330,7 @@ export default class AuthController {
     }
   }
 
-  async login({ request, response }: HttpContext) {
+  async login({ i18n, request, response }: HttpContext) {
     const { email, password } = await request.validateUsing(loginValidator)
 
     try {
@@ -356,15 +356,15 @@ export default class AuthController {
         token,
       })
     } catch (error) {
-      return response.status(400).send({ message: 'Email ou mot de passe incorrect' })
+      return response.status(400).send({ message: i18n.t('messages.incorrectEmailOrPassword') })
     }
   }
 
-  async logout({ auth, response }: HttpContext) {
+  async logout({ i18n, auth, response }: HttpContext) {
     const user = await auth.authenticate()
     const token = user.currentAccessToken
     await User.accessTokens.delete(user, token.identifier)
 
-    return response.status(200).send({ message: 'User logged out' })
+    return response.status(200).send({ message: i18n.t('messages.userLoggedOut') })
   }
 }

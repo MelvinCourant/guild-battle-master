@@ -10,5 +10,7 @@
   "guildNotFoundBackStep2": "Guilde non trouvée, retourné à l'étape 2",
   "memberNotFoundBackStep2": "Membre non trouvé, retourné à l'étape 2",
   "successfulRegistration": "Inscription réussie",
-  "invalidStep": "Étape invalide"
+  "invalidStep": "Étape invalide",
+  "incorrectEmailOrPassword": "Email ou mot de passe incorrect",
+  "userLoggedOut": "Utilisateur déconnecté",
 }
