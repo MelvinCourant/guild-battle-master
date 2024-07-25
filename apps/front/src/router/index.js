@@ -13,6 +13,7 @@ import Tower from "../views/Tower.vue";
 import DefensesPerMember from "../views/DefensesPerMember.vue";
 import ForgotPassword from "../views/ForgotPassword.vue";
 import ResetPassword from "../views/ResetPassword.vue";
+import AboutUs from "../views/AboutUs.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -138,6 +139,13 @@ const router = createRouter({
       component: ResetPassword,
       meta: {
         title: "Réinitialiser le mot de passe",
+      },
+    },
+    {
+      path: "/about-us",
+      component: AboutUs,
+      meta: {
+        title: "À propos",
       },
     },
   ],

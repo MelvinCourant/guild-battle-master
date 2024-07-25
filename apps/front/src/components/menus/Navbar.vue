@@ -69,6 +69,11 @@ const submenu = [
     path: "/upload-json",
   },
   {
+    icon: "information",
+    text: "À propos",
+    path: "/about-us",
+  },
+  {
     icon: "logout",
     text: "Se déconnecter",
     path: "/logout",
