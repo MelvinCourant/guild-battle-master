@@ -66,7 +66,7 @@ export default class MembersController {
     })
   }
 
-  async verifyUploadPermissions({ auth, params, response }: HttpContext) {
+  async verifyUploadPermissions({ i18n, auth, params, response }: HttpContext) {
     const user = await auth.authenticate()
     const userMember = await Member.query()
       .where('user_id', user.id)
@@ -79,7 +79,7 @@ export default class MembersController {
     const userMemberParams = await User.query().where('id', memberParams.user_id).select('role')
 
     function returnError() {
-      return response.status(403).json({ message: "Vous n'avez pas les droits" })
+      return response.status(403).json({ message: i18n.t('messages.forbidden') })
     }
 
     if (user.role !== 'admin' && userMember.guild_id !== memberParams.guild_id) {
@@ -109,7 +109,7 @@ export default class MembersController {
     })
   }
 
-  async update({ auth, params, request, response }: HttpContext) {
+  async update({ i18n, auth, params, request, response }: HttpContext) {
     const user = await auth.authenticate()
     const applicantMember = await Member.query()
       .where('user_id', user.id)
@@ -126,25 +126,28 @@ export default class MembersController {
     const role = request.input('role')
 
     if ((user.role !== 'admin' && user.role !== 'leader') || applicantGuildId !== memberGuildId) {
-      return response.status(403).json({ message: "Vous n'avez pas les droits" })
+      return response.status(403).json({ message: i18n.t('messages.forbidden') })
     }
 
     if (role !== 'leader' && role !== 'moderator' && role !== 'member') {
-      return response.status(400).json({ message: "Ce rôle n'existe pas" })
+      return response.status(400).json({ message: i18n.t('messages.role_does_not_exist') })
     } else if (role === userMember.role) {
-      return response
-        .status(400)
-        .json({ message: `Le membre ${member.pseudo} a déjà le rôle ${role}` })
+      return response.status(400).json({
+        message: i18n.t('messages.member_have_already_role', {
+          pseudo: member.pseudo,
+          role: role,
+        }),
+      })
     } else if (role === 'leader' && user.role === 'leader') {
       await Notification.create({
         sender_id: user.id,
         receiver_id: member.user_id,
-        message: `${applicantMember.pseudo} veut vous léguer le rôle leader`,
+        message: i18n.t('messages.want_bequeath_leader', { pseudo: applicantMember.pseudo }),
         action: 'bequeath_leader',
       })
 
       return response.json({
-        message: `Une notification a été envoyée à ${member.pseudo}`,
+        message: i18n.t('messages.notification_send_to', { pseudo: member.pseudo }),
       })
     } else {
       userMember.role = role
@@ -152,10 +155,18 @@ export default class MembersController {
       await Notification.create({
         sender_id: user.id,
         receiver_id: member.user_id,
-        message: `${applicantMember.pseudo} vous a attribué le rôle ${role}`,
+        message: i18n.t('messages.has_given_you_role', {
+          pseudo: applicantMember.pseudo,
+          role: role,
+        }),
       })
 
-      return response.json({ message: `Le rôle ${role} a bien été attribué à ${member.pseudo}` })
+      return response.json({
+        message: i18n.t('messages.role_has_been_assigned_to', {
+          role: role,
+          pseudo: member.pseudo,
+        }),
+      })
     }
   }
 
@@ -173,7 +184,7 @@ export default class MembersController {
     const userMemberParams = await User.query().where('id', memberParams.user_id).select('role')
 
     function returnError() {
-      return response.status(403).json({ message: "Vous n'avez pas les droits" })
+      return response.status(403).json({ message: i18n.t('messages.forbidden') })
     }
 
     if (user.role !== 'admin' && userMember.guild_id !== memberParams.guild_id) {
@@ -216,13 +227,15 @@ export default class MembersController {
     let profileUpdated = ''
 
     if (wizardId !== memberParams.wizard_id) {
-      return response.status(400).json({ message: 'Le fichier ne correspond pas à votre compte' })
+      return response
+        .status(400)
+        .json({ message: i18n.t('messages.file_does_not_correspond_your_account') })
     }
 
     if (wizardName !== memberParams.pseudo) {
       memberParams.pseudo = wizardName
       await memberParams.save()
-      profileUpdated = ', profil mis à jour'
+      profileUpdated = i18n.t('messages.comma_profile_updated')
     }
 
     let monstersAdded = 0
@@ -270,27 +283,27 @@ export default class MembersController {
     let monsterUpdatedMessage = ''
 
     if (monstersAdded > 1) {
-      monsterAddedMessage = `${monstersAdded} monstres ajoutés`
+      monsterAddedMessage = `${monstersAdded} ${i18n.t('messages.monsters_added')}`
     } else if (monstersAdded === 1) {
-      monsterAddedMessage = '1 monstre ajouté'
+      monsterAddedMessage = `1 ${i18n.t('messages.monster_added')}`
     } else {
-      monsterAddedMessage = 'Aucun monstre ajouté'
+      monsterAddedMessage = i18n.t('messages.no_monster_added')
     }
 
     if (monstersUpdated > 1) {
-      monsterUpdatedMessage = `${monstersUpdated} monstres mis à jour`
+      monsterUpdatedMessage = `${monstersUpdated} ${i18n.t('messages.monsters_updated')}`
     } else if (monstersUpdated === 1) {
-      monsterUpdatedMessage = '1 monstre mis à jour'
+      monsterUpdatedMessage = `1 ${i18n.t('messages.monster_updated')}`
     } else {
-      monsterUpdatedMessage = 'aucun monstre mis à jour'
+      monsterUpdatedMessage = i18n.t('messages.no_monster_updated')
     }
 
     return response.json({
-      message: `Le fichier a bien été traité. ${monsterAddedMessage}, ${monsterUpdatedMessage} ${profileUpdated}`,
+      message: `${i18n.t('messages.file_has_been_processed_successfully')}. ${monsterAddedMessage}, ${monsterUpdatedMessage} ${profileUpdated}`,
     })
   }
 
-  async destroy({ auth, params, response }: HttpContext) {
+  async destroy({ i18n, auth, params, response }: HttpContext) {
     const user = await auth.authenticate()
     const userMember = await Member.query().where('user_id', user.id).select('id').firstOrFail()
     const leadGuild = await Guild.query().where('leader_id', user.id).select('id').firstOrFail()
@@ -307,12 +320,14 @@ export default class MembersController {
       (user.role === 'moderator' && memberRole.role === 'leader') ||
       (user.role === 'leader' && memberRole.role === 'leader')
     ) {
-      return response.status(403).json({ message: "Vous n'avez pas les droits" })
+      return response.status(403).json({ message: i18n.t('messages.forbidden') })
     }
 
     // @ts-ignore
     member.guild_id = null
     await member.save()
-    return response.json({ message: `Le membre ${member.pseudo} a bien été exclu de la guilde` })
+    return response.json({
+      message: i18n.t('messages.member_has_been_excluded_from_guild', { pseudo: member.pseudo }),
+    })
   }
 }
