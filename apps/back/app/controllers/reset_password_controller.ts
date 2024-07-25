@@ -8,7 +8,7 @@ import { DateTime } from 'luxon'
 import mail from '@adonisjs/mail/services/main'
 
 export default class ResetPasswordController {
-  async forgotPassword({ request, response }: HttpContext) {
+  async forgotPassword({ i18n, request, response }: HttpContext) {
     const payload = await request.validateUsing(forgotPasswordValidator)
     const email = payload.email
     const user = await User.query().where('email', email).first()
@@ -27,25 +27,25 @@ export default class ResetPasswordController {
         message
           .to(user.email)
           .from('no-reply@guildbattlemaster.com')
-          .subject('Demande de réinitialisation de mot de passe')
+          .subject(i18n.t('messages.password_reset_request'))
           .html(
-            '<h1>Demande de réinitilisation de mot de passe</h1>' +
-              '<p>Vous avez demandé à réinitialiser votre mot de passe. Cliquez sur le lien ci-dessous pour le réinitialiser.</p>' +
-              `<a href="${url}">Réinitialiser mon mot de passe</a>`
+            `<h1>${i18n.t('messages.password_reset_request')}</h1>` +
+              `<p>${i18n.t('messages.password_reset_request_email')}</p>` +
+              `<a href="${url}">${i18n.t('messages.password_reset')}</a>`
           )
       })
 
       return response.status(200).send({
-        message: 'Un email vous a été envoyé à votre adresse email',
+        message: i18n.t('messages.email_has_send_email_adress'),
       })
     }
 
     return response.status(404).send({
-      message: 'Aucun utilisateur trouvé avec cette adresse email',
+      message: i18n.t('messages.no_users_found_with_email_address'),
     })
   }
 
-  async verifyUrl({ request, response }: HttpContext) {
+  async verifyUrl({ i18n, request, response }: HttpContext) {
     const { email, token } = request.only(['email', 'token'])
     const tokenObj = await Token.query().where('token', token).first()
 
@@ -57,7 +57,7 @@ export default class ResetPasswordController {
       tokenObj.isUsed === 1
     ) {
       return response.status(400).send({
-        message: 'Lien expiré ou invalide',
+        message: i18n.t('messages.link_expired_invalid'),
       })
     }
 
@@ -67,11 +67,10 @@ export default class ResetPasswordController {
     })
   }
 
-  async resetPassword({ request, response }: HttpContext) {
+  async resetPassword({ i18n, request, response }: HttpContext) {
     const payload = await request.validateUsing(resetPasswordValidator)
     const { token, email } = payload
     const tokenObj = await Token.query().where('token', token).first()
-    console.log(tokenObj)
 
     if (
       !tokenObj ||
@@ -81,7 +80,7 @@ export default class ResetPasswordController {
       tokenObj.isUsed === 1
     ) {
       return response.status(400).send({
-        message: 'Lien expiré ou invalide',
+        message: i18n.t('messages.link_expired_invalid'),
       })
     }
 
@@ -89,7 +88,7 @@ export default class ResetPasswordController {
 
     if (!user) {
       return response.status(404).send({
-        message: 'Opération impossible',
+        message: i18n.t('messages.operation_impossible'),
       })
     }
 

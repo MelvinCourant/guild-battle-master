@@ -181,7 +181,7 @@ export default class TowersController {
     const defensesSelected = request.input('defenses')
 
     if (defensesSelected.length > 5) {
-      return response.badRequest('Vous ne pouvez pas assigner plus de 5 défenses à une tour')
+      return response.badRequest(i18n.t('messages.cannot_assign_more_than_5_defenses_tower'))
     }
 
     const actualDefenses = await Defense.query().where('tower_id', tower.id).select('id')
@@ -203,7 +203,7 @@ export default class TowersController {
         .firstOrFail()
 
       if (composition.grade !== tower.grade) {
-        return response.badRequest('Vous ne pouvez pas assigner cette défense à cette tour')
+        return response.badRequest(i18n.t('messages.cannot_assign_this_defense_to_tower'))
       } else if (!actualDefenses.find((actualDefense) => actualDefense.id === defense)) {
         await Defense.query().where('id', defense).update({ tower_id: tower.id })
       }

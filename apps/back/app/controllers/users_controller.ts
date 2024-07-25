@@ -42,7 +42,7 @@ export default class UsersController {
     return response.unauthorized()
   }
 
-  async bequeathLeader({ auth, request, response }: HttpContext) {
+  async bequeathLeader({ i18n, auth, request, response }: HttpContext) {
     const user = await auth.authenticate()
     const receiverMember = await Member.query()
       .where('user_id', user.id)
@@ -67,7 +67,7 @@ export default class UsersController {
       guild.leader_id !== sender.id ||
       receiverMember.guild_id !== guild.id
     ) {
-      return response.status(400).json({ message: 'Action invalide' })
+      return response.status(400).json({ message: i18n.t('messages.invalid_action') })
     }
 
     const accept = request.input('accept')
@@ -84,29 +84,33 @@ export default class UsersController {
       sender.role = 'member'
       await sender.save()
 
-      notification.message = `${senderMember.pseudo} vous a légué le rôle de leader`
+      notification.message = i18n.t('messages.has_bequeathed_you_role_leader', {
+        pseudo: senderMember.pseudo,
+      })
+      // @ts-ignore
       notification.action = null
       await notification.save()
 
       await Notification.create({
         sender_id: user.id,
         receiver_id: sender.id,
-        message: `${receiverMember.pseudo} a accepté de devenir leader`,
+        message: i18n.t('messages.has_agreed_to_become_leader', { pseudo: receiverMember.pseudo }),
       })
 
-      return response.json({ message: `Vous êtes désormais le leader de la guilde` })
+      return response.json({ message: i18n.t('messages.you_are_now_leader') })
     } else {
-      notification.message = 'Vous avez refusé de devenir leader'
+      notification.message = i18n.t('messages.you_refused_to_become_leader')
+      // @ts-ignore
       notification.action = null
       await notification.save()
 
       await Notification.create({
         sender_id: user.id,
         receiver_id: sender.id,
-        message: `${receiverMember.pseudo} a refusé de devenir leader`,
+        message: i18n.t('messages.refused_to_become_leader'),
       })
 
-      return response.json({ message: `Vous avez refusé de devenir leader` })
+      return response.json({ message: i18n.t('messages.you_refused_to_become_leader') })
     }
   }
 
