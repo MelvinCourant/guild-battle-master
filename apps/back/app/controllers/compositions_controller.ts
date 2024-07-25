@@ -8,7 +8,7 @@ import Monster from '#models/monster'
 import Box from '#models/box'
 
 export default class CompositionsController {
-  async create({ auth, request, response }: HttpContext) {
+  async create({ i18n, auth, request, response }: HttpContext) {
     const user = await auth.authenticate()
     const payload = await request.validateUsing(createCompositionValidator)
 
@@ -47,7 +47,7 @@ export default class CompositionsController {
       if (boxMemberAssigned.length === 0) {
         return response
           .status(404)
-          .send({ message: "Un des membres n'a pas les monstres indiqués" })
+          .send({ message: i18n.t('messages.one_of_member_does_not_save_monster_listed') })
       }
 
       boxMemberAssigned.forEach((box) => {
@@ -56,7 +56,7 @@ export default class CompositionsController {
       })
     }
 
-    return response.created({ message: 'Composition créée avec succès' })
+    return response.created({ message: i18n.t('messages.composition_successfully_created') })
   }
 
   async destroy({ auth, params, response }: HttpContext) {
@@ -109,7 +109,7 @@ export default class CompositionsController {
     return response.noContent()
   }
 
-  async search({ auth, params, request, response }: HttpContext) {
+  async search({ i18n, auth, params, request, response }: HttpContext) {
     const user = await auth.authenticate()
     const guildId = params.guildId
     const guild = await Guild.query().where('id', guildId).first()
@@ -117,7 +117,7 @@ export default class CompositionsController {
     const userGuild = await Guild.query().where('id', userMember.guild_id).firstOrFail()
 
     if (!guild || userGuild.id !== guild.id) {
-      return response.status(404).send({ message: "La guilde est invalide ou n'existe pas" })
+      return response.status(404).send({ message: i18n.t('messages.guild_invalid_not_exist') })
     }
 
     const keyword = request.input('keyword')
@@ -224,7 +224,7 @@ export default class CompositionsController {
     return response.ok(compositionsData)
   }
 
-  async update({ auth, params, request, response }: HttpContext) {
+  async update({ i18n, auth, params, request, response }: HttpContext) {
     const user = await auth.authenticate()
     const payload = await request.validateUsing(createCompositionValidator)
     const composition = await Composition.query().where('id', params.id).firstOrFail()
@@ -278,7 +278,7 @@ export default class CompositionsController {
       if (boxMemberAssigned.length === 0) {
         return response
           .status(404)
-          .send({ message: "Un des membres n'a pas les monstres indiqués" })
+          .send({ message: i18n.t('messages.one_of_member_does_not_save_monster_listed') })
       }
 
       if (
@@ -327,7 +327,7 @@ export default class CompositionsController {
       if (boxMemberAssigned.length === 0) {
         return response
           .status(404)
-          .send({ message: "Un des membres n'a pas les monstres indiqués" })
+          .send({ message: i18n.t('messages.one_of_member_does_not_save_monster_listed') })
       }
 
       boxMemberAssigned.forEach((box) => {
@@ -336,7 +336,7 @@ export default class CompositionsController {
       })
     }
 
-    return response.created({ message: 'Composition mis à jour avec succès' })
+    return response.created({ message: i18n.t('messages.composition_successfully_updated') })
   }
 
   async show({ auth, params, response }: HttpContext) {

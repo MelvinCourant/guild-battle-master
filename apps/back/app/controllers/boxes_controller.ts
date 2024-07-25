@@ -9,7 +9,7 @@ import Monster from '#models/monster'
 import { fileValidator } from '#validators/file'
 
 export default class BoxesController {
-  async create({ auth, params, request, response }: HttpContext) {
+  async create({ i18n, auth, params, request, response }: HttpContext) {
     const user = await auth.authenticate()
     const payload = await request.validateUsing(fileValidator)
     const userRole = await User.query().where('id', user.id).select('role').firstOrFail()
@@ -20,7 +20,7 @@ export default class BoxesController {
       user.id !== member.user_id ||
       (userRole.role !== 'leader' && userRole.role !== 'moderator')
     ) {
-      return response.status(403).json({ message: 'Membre invalide' })
+      return response.status(403).json({ message: i18n.t('messages.incorrect_member') })
     }
 
     const json = payload.json
@@ -34,7 +34,7 @@ export default class BoxesController {
 
     if (!data) {
       fs.unlinkSync(jsonLink)
-      return response.status(500).send({ message: 'Error reading json file' })
+      return response.status(500).send({ message: i18n.t('messages.error_reading_json_file') })
     }
 
     const jsonParsed: any = JSON.parse(data)

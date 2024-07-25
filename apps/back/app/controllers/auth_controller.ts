@@ -44,7 +44,7 @@ export default class AuthController {
         // User exists and already registered
         return response
           .status(400)
-          .send({ message: i18n.t('messages.accountAlreadyExistWithThisEmail') })
+          .send({ message: i18n.t('messages.account_already_exist_with_this_email') })
       } else if (user && user.pending === 1) {
         // User exists but not completed registration
         await deletePreviousData()
@@ -64,7 +64,7 @@ export default class AuthController {
         throw error
       })
 
-      return response.created({ message: i18n.t('messages.userCreated') })
+      return response.created({ message: i18n.t('messages.user_created') })
     } else if (request.params().step === '2') {
       // Verify guild and create guild and member
       const payload = await request.validateUsing(createGuildValidator)
@@ -73,7 +73,7 @@ export default class AuthController {
         .select('id')
         .first()
       if (!user) {
-        return response.status(404).send({ message: i18n.t('messages.userNotFoundBackStep1') })
+        return response.status(404).send({ message: i18n.t('messages.user_not_found_back_step_1') })
       }
 
       const userImage: any = await User.query()
@@ -91,7 +91,7 @@ export default class AuthController {
 
       if (!data) {
         fs.unlinkSync(jsonLink)
-        return response.status(500).send({ message: i18n.t('messages.errorReadingJsonFile') })
+        return response.status(500).send({ message: i18n.t('messages.error_reading_json_file') })
       }
 
       // eslint-disable-next-line no-inner-declarations
@@ -189,7 +189,7 @@ export default class AuthController {
         await createBoxes(memberExists.id, jsonParsed.unit_list)
 
         return response.created({
-          message: i18n.t('messages.userCreated'),
+          message: i18n.t('messages.user_created'),
           guildName: memberGuild.name,
           leader: leader.pseudo,
           members: members.length,
@@ -197,7 +197,7 @@ export default class AuthController {
       }
 
       if (guildExists) {
-        return response.status(400).send({ message: i18n.t('messages.guildAlreadyExist') })
+        return response.status(400).send({ message: i18n.t('messages.guild_already_exist') })
       }
 
       const guildName: string = jsonParsed.guild.guild_info.name
@@ -286,7 +286,7 @@ export default class AuthController {
       }
 
       return response.created({
-        message: i18n.t('messages.guildMemberGuildMatesCreated'),
+        message: i18n.t('messages.guild_member_guild_mates_created'),
         guildName: guildName,
         leader: leaderPseudo,
         members: membersNumber,
@@ -298,22 +298,22 @@ export default class AuthController {
 
       if (!user && !guild && !member) {
         return response.status(404).send({
-          message: i18n.t('messages.userGuildMemberNotFound'),
+          message: i18n.t('messages.user_guild_member_not_found'),
         })
       } else if (!guild || !member) {
         let modelsNotFound = ''
 
         if (!guild && !member) {
-          modelsNotFound = i18n.t('messages.guildMemberNotFoundBackStep2')
+          modelsNotFound = i18n.t('messages.guild_member_not_found_back_step_2')
         } else if (!guild) {
-          modelsNotFound = i18n.t('messages.guildNotFoundBackStep2')
+          modelsNotFound = i18n.t('messages.guild_not_found_back_step_2')
         } else {
-          modelsNotFound = i18n.t('messages.memberNotFoundBackStep2')
+          modelsNotFound = i18n.t('messages.member_not_found_back_step_2')
         }
 
         return response.status(404).send({ message: modelsNotFound })
       } else if (!user) {
-        return response.status(404).send({ message: i18n.t('messages.userNotFoundBackStep1') })
+        return response.status(404).send({ message: i18n.t('messages.user_not_found_back_step_1') })
       }
 
       // Verify all information
@@ -324,9 +324,9 @@ export default class AuthController {
       user.pending = 0
       await user.save()
 
-      return response.created({ message: i18n.t('messages.successfulRegistration') })
+      return response.created({ message: i18n.t('messages.successful_registration') })
     } else {
-      return response.status(400).send({ message: i18n.t('messages.invalidStep') })
+      return response.status(400).send({ message: i18n.t('messages.invalid_step') })
     }
   }
 
@@ -356,7 +356,7 @@ export default class AuthController {
         token,
       })
     } catch (error) {
-      return response.status(400).send({ message: i18n.t('messages.incorrectEmailOrPassword') })
+      return response.status(400).send({ message: i18n.t('messages.incorrect_email_or_password') })
     }
   }
 
@@ -365,6 +365,6 @@ export default class AuthController {
     const token = user.currentAccessToken
     await User.accessTokens.delete(user, token.identifier)
 
-    return response.status(200).send({ message: i18n.t('messages.userLoggedOut') })
+    return response.status(200).send({ message: i18n.t('messages.user_logged_out') })
   }
 }
