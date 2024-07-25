@@ -8,8 +8,8 @@ import NavbarMobile from "../../components/menus/mobile/NavbarMobile.vue";
 import { provide, ref, watch } from "vue";
 import Notifications from "./Notifications.vue";
 import { useI18n } from "vue-i18n";
-const { t } = useI18n();
 
+const { t } = useI18n();
 const env = import.meta.env;
 const desktopLinks = [
   {

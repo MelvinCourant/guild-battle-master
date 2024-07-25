@@ -2,11 +2,16 @@
   "about_us": "About us",
   "defenses": "Defenses",
   "delete": "Delete",
+  "founder_designer_developer": "Founder, designer and developer",
+  "go_to_personal_website": "Go to {name}'s personal website",
   "guild": "Guild",
+  "in_game": "in game",
   "logout": "Logout",
   "mark_as_read": "Mark as read",
   "member_profile": "Member profile",
   "notifications": "Notifications",
+  "send_email": "Send an email",
   "siege_map": "Siege map",
+  "support_email_address_problems_suggestions": "Support email address for any problems or suggestions",
   "upload_json": "Upload a json"
 }

@@ -2,11 +2,16 @@
   "about_us": "À propos",
   "defenses": "Défenses",
   "delete": "Supprimer",
+  "founder_designer_developer": "Fondateur, designer et développeur",
+  "go_to_personal_website": "Aller sur le site personnel de {name}",
   "guild": "Guilde",
+  "in_game": "en jeu",
   "logout": "Se déconnecter",
   "mark_as_read": "Marquer comme lu",
   "member_profile": "Profil de membre",
   "notifications": "Notifications",
+  "send_email": "Envoyer un email",
   "siege_map": "Plan de siège",
+  "support_email_address_problems_suggestions": "Adresse email de support pour tout problème ou suggestions",
   "upload_json": "Importer un json"
 }

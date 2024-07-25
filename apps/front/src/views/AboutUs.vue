@@ -1,6 +1,8 @@
 <script setup>
 import "../assets/css/views/_about-us.scss";
+import { useI18n } from "vue-i18n";
 
+const { t } = useI18n();
 const avatars = [
   {
     fileName: "nai",
@@ -22,19 +24,19 @@ function generateSrc(fileName) {
       </div>
     </div>
     <div class="about-us__content">
-      <h1 class="about-us__title">À propos</h1>
+      <h1 class="about-us__title">{{ t("about_us") }}</h1>
       <p class="about-us__infos">
-        Fondateur, designer et développeur: <br />
+        {{ t("founder_designer_developer") }}: <br />
         <a
           href="https://melvincourant.fr"
-          title="Aller sur le site personnel de Melvin Courant"
+          :title="t('go_to_personal_website', { name: 'Melvin Courant' })"
           target="_blank"
           >Melvin Courant</a
         >
-        aka <span>Naï~</span> ingame <br /><br />
+        aka <span>Naï~</span> {{ t("in_game") }} <br /><br />
 
-        Adresse email de support pour tout problème ou suggestions: <br />
-        <a href="mailto:support@guildbattlemaster.com" title="Envoyer un email"
+        {{ t("support_email_address_problems_suggestions") }}: <br />
+        <a href="mailto:support@guildbattlemaster.com" :title="t('send_email')"
           >support@guildbattlemaster.com</a
         >
       </p>
