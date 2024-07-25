@@ -1,0 +1,14 @@
+{
+  "accountAlreadyExistWithThisEmail": "Un compte existe déjà avec cette adresse email",
+  "userCreated": "Utilisateur créé",
+  "userNotFoundBackStep1": "Utilisateur non trouvé, retourné à l'étape 1",
+  "errorReadingJsonFile": "Erreur lors de la lecture du fichier JSON",
+  "guildAlreadyExist": "La guilde existe déjà",
+  "guildMemberGuildMatesCreated": "Guilde, membre et membres de la guilde créés",
+  "userGuildMemberNotFound": "Utilisateur, guilde et membre non trouvés, allez à la page d'inscription pour commencer l'inscription",
+  "guildMemberNotFoundBackStep2": "Guilde et membre non trouvés, retourné à l'étape 2",
+  "guildNotFoundBackStep2": "Guilde non trouvée, retourné à l'étape 2",
+  "memberNotFoundBackStep2": "Membre non trouvé, retourné à l'étape 2",
+  "successfulRegistration": "Inscription réussie",
+  "invalidStep": "Étape invalide"
+}

@@ -16,7 +16,7 @@ import Monster from '#models/monster'
 import Tower from '#models/tower'
 
 export default class AuthController {
-  async register({ request, response }: HttpContext) {
+  async register({ i18n, request, response }: HttpContext) {
     if (request.params().step === '1') {
       // Verify user and member and create user
       const payload = await request.validateUsing(createUserMemberValidator)
@@ -44,7 +44,7 @@ export default class AuthController {
         // User exists and already registered
         return response
           .status(400)
-          .send({ message: 'Un compte existe déjà avec cette adresse email' })
+          .send({ message: i18n.t('messages.accountAlreadyExistWithThisEmail') })
       } else if (user && user.pending === 1) {
         // User exists but not completed registration
         await deletePreviousData()
@@ -64,7 +64,7 @@ export default class AuthController {
         throw error
       })
 
-      return response.created({ message: 'User created' })
+      return response.created({ message: i18n.t('messages.userCreated') })
     } else if (request.params().step === '2') {
       // Verify guild and create guild and member
       const payload = await request.validateUsing(createGuildValidator)
@@ -73,7 +73,7 @@ export default class AuthController {
         .select('id')
         .first()
       if (!user) {
-        return response.status(404).send({ message: 'User not found, back to step 1' })
+        return response.status(404).send({ message: i18n.t('messages.userNotFoundBackStep1') })
       }
 
       const userImage: any = await User.query()
@@ -91,7 +91,7 @@ export default class AuthController {
 
       if (!data) {
         fs.unlinkSync(jsonLink)
-        return response.status(500).send({ message: 'Error reading json file' })
+        return response.status(500).send({ message: i18n.t('messages.errorReadingJsonFile') })
       }
 
       // eslint-disable-next-line no-inner-declarations
@@ -189,7 +189,7 @@ export default class AuthController {
         await createBoxes(memberExists.id, jsonParsed.unit_list)
 
         return response.created({
-          message: 'User created',
+          message: i18n.t('messages.userCreated'),
           guildName: memberGuild.name,
           leader: leader.pseudo,
           members: members.length,
@@ -197,7 +197,7 @@ export default class AuthController {
       }
 
       if (guildExists) {
-        return response.status(400).send({ message: 'Guild already exists' })
+        return response.status(400).send({ message: i18n.t('messages.guildAlreadyExist') })
       }
 
       const guildName: string = jsonParsed.guild.guild_info.name
@@ -286,7 +286,7 @@ export default class AuthController {
       }
 
       return response.created({
-        message: 'Guild, member and guild mates created',
+        message: i18n.t('messages.guildMemberGuildMatesCreated'),
         guildName: guildName,
         leader: leaderPseudo,
         members: membersNumber,
@@ -298,22 +298,22 @@ export default class AuthController {
 
       if (!user && !guild && !member) {
         return response.status(404).send({
-          message: 'User, guild and member not found, go to register page to start registration',
+          message: i18n.t('messages.userGuildMemberNotFound'),
         })
       } else if (!guild || !member) {
         let modelsNotFound = ''
 
         if (!guild && !member) {
-          modelsNotFound = 'Guild and Member'
+          modelsNotFound = i18n.t('messages.guildMemberNotFoundBackStep2')
         } else if (!guild) {
-          modelsNotFound = 'Guild'
+          modelsNotFound = i18n.t('messages.guildNotFoundBackStep2')
         } else {
-          modelsNotFound = 'Member'
+          modelsNotFound = i18n.t('messages.memberNotFoundBackStep2')
         }
 
-        return response.status(404).send({ message: `${modelsNotFound} not found, back to step 2` })
+        return response.status(404).send({ message: modelsNotFound })
       } else if (!user) {
-        return response.status(404).send({ message: 'User not found, back to step 1' })
+        return response.status(404).send({ message: i18n.t('messages.userNotFoundBackStep1') })
       }
 
       // Verify all information
@@ -324,9 +324,9 @@ export default class AuthController {
       user.pending = 0
       await user.save()
 
-      return response.created({ message: 'Registration successful' })
+      return response.created({ message: i18n.t('messages.successfulRegistration') })
     } else {
-      return response.status(400).send({ message: 'Invalid step' })
+      return response.status(400).send({ message: i18n.t('messages.invalidStep') })
     }
   }
 

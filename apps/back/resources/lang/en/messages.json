@@ -1,0 +1,14 @@
+{
+  "accountAlreadyExistWithThisEmail": "An account already exists with this email address",
+  "userCreated": "User created",
+  "userNotFoundBackStep1": "User not found, back to step 1",
+  "errorReadingJsonFile": "Error reading JSON file",
+  "guildAlreadyExist": "The guild already exists",
+  "guildMemberGuildMatesCreated": "Guild, member and guild mates created",
+  "userGuildMemberNotFound": "User, guild and member not found, go to register page to start registration",
+  "guildMemberNotFoundBackStep2": "Guild and member not found, back to step 2",
+  "guildNotFoundBackStep2": "Guild not found, back to step 2",
+  "memberNotFoundBackStep2": "Member not found, back to step 2",
+  "successfulRegistration": "Successful registration",
+  "invalidStep": "Invalid step",
+}
