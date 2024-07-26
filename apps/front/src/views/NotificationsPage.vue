@@ -4,7 +4,9 @@ import { useUserStore } from "../stores/user.js";
 import { ref } from "vue";
 import Notification from "../components/menus/Notification.vue";
 import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 
+const { t } = useI18n();
 const env = import.meta.env;
 const userStore = useUserStore();
 const token = userStore.token;
@@ -14,12 +16,12 @@ const notifications = ref([]);
 const actionsNotifications = [
   {
     name: "read",
-    label: "Marquer comme lu",
+    label: t("mark_as_read"),
     danger: false,
   },
   {
     name: "delete",
-    label: "Supprimer",
+    label: t("delete"),
     danger: true,
   },
 ];
@@ -146,6 +148,6 @@ async function actionSelected(event) {
         @notificationRead="readNotification"
       />
     </ul>
-    <p v-else>Aucune notification disponible</p>
+    <p v-else>{{ t("no_notification_available") }}</p>
   </main>
 </template>
