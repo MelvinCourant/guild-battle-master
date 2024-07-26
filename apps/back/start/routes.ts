@@ -253,5 +253,9 @@ router
     router.get('/list-guilds', async (data) => {
       return adminController.listGuilds(data)
     })
+
+    router.get('/list-users', async (data) => {
+      return adminController.listUsers(data)
+    })
   })
   .prefix('api/admin')

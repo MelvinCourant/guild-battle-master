@@ -335,26 +335,33 @@ export default class AuthController {
 
     try {
       const user = await User.verifyCredentials(email, password)
-      const member: any = await Member.query()
-        .where('user_id', user.id)
-        .select('pseudo', 'grade')
-        .firstOrFail()
-      const token = await User.accessTokens.create(user)
 
-      let userImage = 'placeholder.jpg'
+      if (user.role === 'admin') {
+        const token = await User.accessTokens.create(user)
 
-      if (user.image) {
-        userImage = user.image
+        return response.status(200).send(token)
+      } else {
+        const member: any = await Member.query()
+          .where('user_id', user.id)
+          .select('pseudo', 'grade')
+          .firstOrFail()
+        const token = await User.accessTokens.create(user)
+
+        let userImage = 'placeholder.jpg'
+
+        if (user.image) {
+          userImage = user.image
+        }
+
+        return response.status(200).send({
+          user: {
+            pseudo: member.pseudo,
+            grade: member.grade,
+            image: userImage,
+          },
+          token,
+        })
       }
-
-      return response.status(200).send({
-        user: {
-          pseudo: member.pseudo,
-          grade: member.grade,
-          image: userImage,
-        },
-        token,
-      })
     } catch (error) {
       return response.status(400).send({ message: i18n.t('messages.incorrect_email_or_password') })
     }
