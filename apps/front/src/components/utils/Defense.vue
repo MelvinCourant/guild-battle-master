@@ -1,5 +1,6 @@
 <script setup>
 import "../../assets/css/components/utils/_defense.scss";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps({
   member: {
@@ -26,6 +27,7 @@ const props = defineProps({
 
 const emits = defineEmits(["defenseHover", "defenseLeave", "clickOnDefense"]);
 
+const { t } = useI18n();
 const env = import.meta.env;
 
 function defenseHover(event) {
@@ -70,12 +72,12 @@ function clickOnDefense() {
     <span class="defense__member" v-else-if="member && !member.pseudo">
       {{ member }}
     </span>
-    <span class="defense__member" v-if="isEmpty"> Aucune défense </span>
+    <span class="defense__member" v-if="isEmpty"> {{ t("no_defense") }} </span>
     <span
       class="defense__member--empty"
       v-else-if="!member && !leader && !second && !third"
     >
-      Aucune défense
+      {{ t("no_defense") }}
     </span>
     <ul class="defense__monsters">
       <li class="defense__leader">
