@@ -6,7 +6,9 @@ import { provide, ref, reactive, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useUserStore } from "../stores/user.js";
 import Alert from "../components/utils/Alert.vue";
+import { useI18n } from "vue-i18n";
 
+const { t } = useI18n();
 const env = import.meta.env;
 const userStore = useUserStore();
 const token = userStore.token;
@@ -21,15 +23,14 @@ const fields = [
   {
     type: "search",
     name: "search",
-    placeholder: "Nom du monstre",
+    placeholder: t("monster_name"),
   },
 ];
 const filters = reactive([
   {
     fields: [
       {
-        label:
-          "Afficher les monstres non-invocable par des vélins (fusions, Ifrits, etc.)",
+        label: t("display_non_invocable_monsters"),
         attributes: {
           type: "checkbox",
           name: "is_fusion_shop",
@@ -39,10 +40,10 @@ const filters = reactive([
     ],
   },
   {
-    title: "Élements",
+    title: t("elements"),
     fields: [
       {
-        label: "Feu",
+        label: t("fire"),
         attributes: {
           type: "checkbox",
           name: "fire",
@@ -50,7 +51,7 @@ const filters = reactive([
         },
       },
       {
-        label: "Eau",
+        label: t("water"),
         attributes: {
           type: "checkbox",
           name: "water",
@@ -58,7 +59,7 @@ const filters = reactive([
         },
       },
       {
-        label: "Vent",
+        label: t("wind"),
         attributes: {
           type: "checkbox",
           name: "wind",
@@ -66,7 +67,7 @@ const filters = reactive([
         },
       },
       {
-        label: "Lumière",
+        label: t("light"),
         attributes: {
           type: "checkbox",
           name: "light",
@@ -74,7 +75,7 @@ const filters = reactive([
         },
       },
       {
-        label: "Ténèbres",
+        label: t("dark"),
         attributes: {
           type: "checkbox",
           name: "dark",
@@ -84,10 +85,10 @@ const filters = reactive([
     ],
   },
   {
-    title: "Grade naturel",
+    title: t("natural_grade"),
     fields: [
       {
-        label: "2 étoiles",
+        label: t("nb_stars", { number: 2 }),
         attributes: {
           type: "checkbox",
           name: "2_stars",
@@ -95,7 +96,7 @@ const filters = reactive([
         },
       },
       {
-        label: "3 étoiles",
+        label: t("nb_stars", { number: 3 }),
         attributes: {
           type: "checkbox",
           name: "3_stars",
@@ -103,7 +104,7 @@ const filters = reactive([
         },
       },
       {
-        label: "4 étoiles",
+        label: t("nb_stars", { number: 4 }),
         attributes: {
           type: "checkbox",
           name: "4_stars",
@@ -111,7 +112,7 @@ const filters = reactive([
         },
       },
       {
-        label: "5 étoiles",
+        label: t("nb_stars", { number: 5 }),
         attributes: {
           type: "checkbox",
           name: "5_stars",
@@ -127,19 +128,19 @@ const keyword = ref("");
 const sortOptions = [
   {
     value: "element",
-    text: "Élément",
+    text: t("element"),
   },
   {
     value: "quantity",
-    text: "Quantité",
+    text: t("quantity"),
   },
   {
     value: "grade",
-    text: "Grade naturel",
+    text: t("natural_grade"),
   },
   {
     value: "name",
-    text: "Nom",
+    text: t("name"),
   },
 ];
 const actualSort = ref("element");

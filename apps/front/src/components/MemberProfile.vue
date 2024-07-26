@@ -7,7 +7,9 @@ import { useUserStore } from "../stores/user.js";
 import Avatar from "./utils/Avatar.vue";
 import Grade from "./utils/Grade.vue";
 import Field from "./utils/Field.vue";
+import { useI18n } from "vue-i18n";
 
+const { t } = useI18n();
 const userStore = useUserStore();
 const user = userStore.user;
 const env = import.meta.env;
@@ -157,7 +159,7 @@ const memberImage = reactive({
           user.member_id === memberId)
       "
     >
-      Mettre à jour
+      {{ t("update") }}
     </router-link>
     <SkeletonLoader
       width="90"
