@@ -7,7 +7,9 @@ import Dialog from "../components/utils/Dialog.vue";
 import { useUserStore } from "../stores/user.js";
 import { useMonstersStore } from "../stores/monsters.js";
 import { useRouter, useRoute } from "vue-router";
+import { useI18n } from "vue-i18n";
 
+const { t } = useI18n();
 const env = import.meta.env;
 const userStore = useUserStore();
 const user = userStore.user;
@@ -19,15 +21,14 @@ const fields = reactive([
   {
     type: "search",
     name: "search",
-    placeholder: "Membre",
+    placeholder: t("member"),
   },
 ]);
 const filters = reactive([
   {
     fields: [
       {
-        label:
-          "Afficher les monstres non-invocable par des vélins (fusions, Ifrits, etc.)",
+        label: t("display_non_invocable_monsters"),
         attributes: {
           type: "checkbox",
           name: "is_fusion_shop",
@@ -38,7 +39,11 @@ const filters = reactive([
   },
 ]);
 const filtersValues = ref({});
-const comboboxLabels = ["Monstre leader", "2ème monstre", "3ème monstre"];
+const comboboxLabels = [
+  t("leader_monster"),
+  t("2nd_monster"),
+  t("3rd_monster"),
+];
 const comboboxOptions = ref([
   {
     value: "light",
@@ -271,11 +276,11 @@ async function addOrRemoveQueryParams(name) {
     query = { ...router.currentRoute.value.query };
   }
 
-  if (name === "Monstre leader") {
+  if (name === t("leader_monster")) {
     query.l = JSON.stringify(leaderMonsters.value);
-  } else if (name === "2ème monstre") {
+  } else if (name === t("2nd_monster")) {
     query.s = JSON.stringify(secondMonsters.value);
-  } else if (name === "3ème monstre") {
+  } else if (name === t("3rd_monster")) {
     query.t = JSON.stringify(thirdMonsters.value);
   } else if (name === "search") {
     query.k = keyword.value;
@@ -302,19 +307,19 @@ async function addOrRemoveQueryParams(name) {
 
 const dialog = {
   content: {
-    title: "Est-vous sûr de vouloir annuler ?",
-    description: "Les modifications non sauvegardées seront perdues.",
+    title: t("are_you_sure_cancel"),
+    description: t("unsaved_changes_lost"),
   },
   fields: [
     {
       type: "button",
       name: "back",
-      value: "Revenir",
+      value: t("back"),
     },
     {
       type: "button",
       name: "cancel",
-      value: "Annuler",
+      value: t("cancel"),
       style: "danger",
     },
   ],
@@ -473,11 +478,11 @@ async function getCompositions(name, values) {
     ids = values.map((value) => value.value);
   }
 
-  if (name === "Monstre leader") {
+  if (name === t("leader_monster")) {
     leaderMonsters.value = ids;
-  } else if (name === "2ème monstre") {
+  } else if (name === t("2nd_monster")) {
     secondMonsters.value = ids;
-  } else if (name === "3ème monstre") {
+  } else if (name === t("3rd_monster")) {
     thirdMonsters.value = ids;
   }
 
