@@ -147,7 +147,8 @@ function updateCompositionGrade(value) {
         @defenseHover="defenseHover"
         @defenseLeave="defenseLeave"
         @clickOnDefense="
-          (index, defense) => $emit('clickOnDefense', index, defense)
+          (index, defense, defenseId) =>
+            $emit('clickOnDefense', index, defense, defenseId)
         "
       />
     </div>

@@ -7,6 +7,7 @@ import GuildCompositions from "../components/GuildCompositions.vue";
 import Preview from "../components/utils/Preview.vue";
 import ActualComposition from "../components/ActualComposition.vue";
 import { useI18n } from "vue-i18n";
+import Dialog from "../components/utils/Dialog.vue";
 
 const { t } = useI18n();
 const route = useRoute();
@@ -37,6 +38,26 @@ const previewIsOpen = ref(false);
 const previewToComposition = ref([]);
 const compositionId = ref(null);
 const towerDefenses = ref([]);
+const dialog = {
+  content: {
+    title: t("are_you_sure_cancel"),
+    description: t("unsaved_changes_lost"),
+  },
+  fields: [
+    {
+      type: "button",
+      name: "back",
+      value: t("back"),
+    },
+    {
+      type: "button",
+      name: "cancel",
+      value: t("cancel"),
+      style: "danger",
+    },
+  ],
+};
+const dialogIsOpen = ref(false);
 
 provide("fields", fields);
 provide("compositions", previewToComposition);
@@ -226,7 +247,7 @@ function addDefenseToTower(index, defense, defenseId) {
   });
 }
 
-function removeDefenseFromTower(defenseId) {
+function removeDefenseFromTower(index, defense, defenseId) {
   towerDefenses.value.defenses = towerDefenses.value.defenses.filter(
     (defense) => defense.id !== defenseId,
   );
@@ -263,6 +284,14 @@ async function saveTower() {
     await router.push("/map");
   }
 }
+
+function dialogResponse(name) {
+  if (name === "back") {
+    dialogIsOpen.value = false;
+  } else {
+    router.push("/map");
+  }
+}
 </script>
 
 <template>
@@ -279,6 +308,7 @@ async function saveTower() {
       :grade="`${tower.grade} nat`"
       @saveComposition="saveTower"
       @clickOnDefense="removeDefenseFromTower"
+      @cancel="dialogIsOpen = true"
     />
     <Preview
       :category="previewCategory"
@@ -292,4 +322,10 @@ async function saveTower() {
       @clickOnDefense="addDefenseToTower"
     />
   </main>
+  <Dialog
+    :dialog="dialog"
+    :isOpen="dialogIsOpen"
+    @click="dialogResponse"
+    @close="dialogIsOpen = false"
+  />
 </template>
