@@ -2,7 +2,9 @@
 import Navbar from "../components/menus/Navbar.vue";
 import { ref, watch } from "vue";
 import { useRoute } from "vue-router";
+import { useI18n } from "vue-i18n";
 
+const { t } = useI18n();
 const hideNavbar = ref(false);
 const route = useRoute();
 
@@ -20,7 +22,7 @@ watch(route, () => {
 
   if (route.meta.title) {
     document.head.querySelector("title").textContent =
-      `Guild battle Master - ${route.meta.title}`;
+      `Guild battle Master - ${t(route.meta.title)}`;
   } else {
     document.head.querySelector("title").textContent = "Guild battle Master";
   }

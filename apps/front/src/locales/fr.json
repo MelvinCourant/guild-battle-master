@@ -89,6 +89,8 @@
   "tower_type": "Type de tour",
   "unsaved_changes_lost": "Les modifications non enregistrées seront perdues.",
   "update": "Mettre à jour",
+  "update_composition": "Modifier une composition",
+  "update_tower": "Modifier une tour",
   "update_your_profile": "Met à jour ton profil",
   "upload": "Importer",
   "upload_json": "Importer un json",

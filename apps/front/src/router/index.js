@@ -22,35 +22,35 @@ const router = createRouter({
       path: "/",
       component: Guild,
       meta: {
-        title: "Guilde",
+        title: "guild",
       },
     },
     {
       path: "/map",
       component: Map,
       meta: {
-        title: "Plan de siège",
+        title: "siege_map",
       },
     },
     {
       path: "/defenses",
       component: Defenses,
       meta: {
-        title: "Défenses",
+        title: "defenses",
       },
     },
     {
       path: "/login",
       component: Login,
       meta: {
-        title: "Connexion",
+        title: "login",
       },
     },
     {
       path: "/register",
       component: Register,
       meta: {
-        title: "Inscription",
+        title: "register",
       },
     },
     {
@@ -68,84 +68,84 @@ const router = createRouter({
       path: "/upload-json/:id",
       component: UploadJson,
       meta: {
-        title: "Importer un JSON",
+        title: "upload_json",
       },
     },
     {
       path: "/upload-json/guild",
       component: UploadJson,
       meta: {
-        title: "Importer un JSON",
+        title: "upload_json",
       },
     },
     {
       path: "/member",
       component: Member,
       meta: {
-        title: "Membre",
+        title: "member",
       },
     },
     {
       path: "/member/:id",
       component: Member,
       meta: {
-        title: "Membre",
+        title: "member",
       },
     },
     {
       path: "/composition",
       component: Composition,
       meta: {
-        title: "Ajouter une composition",
+        title: "add_composition",
       },
     },
     {
       path: "/composition/:id",
       component: Composition,
       meta: {
-        title: "Modifier une composition",
+        title: "update_composition",
       },
     },
     {
       path: "/notifications",
       component: Notifications,
       meta: {
-        title: "Notifications",
+        title: "notifications",
       },
     },
     {
       path: "/tower/:id",
       component: Tower,
       meta: {
-        title: "Modifier une tour",
+        title: "update_tower",
       },
     },
     {
       path: "/defenses-per-member",
       component: DefensesPerMember,
       meta: {
-        title: "Défenses par membre",
+        title: "defenses_per_member",
       },
     },
     {
       path: "/forgot-password",
       component: ForgotPassword,
       meta: {
-        title: "Mot de passe oublié",
+        title: "forgot_password",
       },
     },
     {
       path: "/reset-password",
       component: ResetPassword,
       meta: {
-        title: "Réinitialiser le mot de passe",
+        title: "reset_password",
       },
     },
     {
       path: "/about-us",
       component: AboutUs,
       meta: {
-        title: "À propos",
+        title: "about_us",
       },
     },
   ],

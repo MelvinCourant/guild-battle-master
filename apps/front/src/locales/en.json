@@ -89,6 +89,8 @@
   "tower_type": "Tower type",
   "unsaved_changes_lost": "Unsaved changes will be lost.",
   "update": "Update",
+  "update_composition": "Update composition",
+  "update_tower": "Update tower",
   "update_your_profile": "Update your profile",
   "upload": "Upload",
   "upload_json": "Upload a json",
