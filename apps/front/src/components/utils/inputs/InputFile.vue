@@ -2,6 +2,7 @@
 import "../../../assets/css/components/utils/inputs/_input-file.scss";
 import { ref, nextTick } from "vue";
 import { SkeletonLoader } from "vue3-loading-skeleton";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps({
   image: {
@@ -17,6 +18,7 @@ const props = defineProps({
 });
 const emit = defineEmits(["sendValue", "imageLoaded"]);
 
+const { t } = useI18n();
 const type = ref("");
 const typeClass = ref("");
 const onDragOver = ref(false);
@@ -116,8 +118,9 @@ function onImageLoad() {
         {{ fileName }}
       </span>
       <span v-else>
-        Glisser et déposer le fichier
-        <br />ou
+        {{ t("drag_and_drop_file") }}
+        <br />
+        {{ t("or") }}
       </span>
     </div>
 

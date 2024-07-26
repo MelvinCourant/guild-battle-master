@@ -5,16 +5,18 @@ import Alert from "../components/utils/Alert.vue";
 import { provide, reactive, ref, watch } from "vue";
 import { useUserStore } from "../stores/user.js";
 import { useRoute, useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 
+const { t } = useI18n();
 const uploadJsonForm = reactive({
-  title: "Met à jour ton profil",
+  title: t("update_your_profile"),
   highlight: "",
   forms: [
     {
       id: 1,
       fields: [
         {
-          label: "Parcourir",
+          label: t("browse"),
           attributes: {
             type: "file",
             name: "json",
@@ -25,7 +27,7 @@ const uploadJsonForm = reactive({
         {
           attributes: {
             type: "submit",
-            value: "Importer",
+            value: t("upload"),
             style: "primary",
           },
         },
@@ -65,7 +67,7 @@ async function verifyUploadPermissions() {
   const resultJson = await result.json();
 
   if (result.ok) {
-    uploadJsonForm.title = "Mettre à jour";
+    uploadJsonForm.title = t("update");
     uploadJsonForm.highlight = resultJson.pseudo;
   } else {
     await router.push("/upload-json");
@@ -78,12 +80,12 @@ function initPage() {
     verifyUploadPermissions();
   } else if (route.path === "/upload-json/guild") {
     isGuildUpload.value = true;
-    uploadJsonForm.title = "Mettre à jour";
-    uploadJsonForm.highlight = "la guilde";
+    uploadJsonForm.title = t("update");
+    uploadJsonForm.highlight = t("guild_lowercase");
   } else {
     isGuildUpload.value = false;
     memberId.value = user.member_id;
-    uploadJsonForm.title = "Met à jour ton profil";
+    uploadJsonForm.title = t("update_your_profile");
     uploadJsonForm.highlight = "";
   }
 }
@@ -104,7 +106,7 @@ function updateValue(inputName, value) {
 async function uploadJson() {
   if (!json.value) {
     alert.display = true;
-    alert.message = "Veuillez sélectionner un fichier JSON";
+    alert.message = t("please_select_json_file");
     alert.type = "error";
 
     return;
@@ -113,7 +115,7 @@ async function uploadJson() {
   const formData = new FormData();
   formData.append("json", json.value);
 
-  uploadJsonForm.forms[0].fields[1].loading = "Chargement...";
+  uploadJsonForm.forms[0].fields[1].loading = t("loading");
 
   let url = `${env.VITE_URL}/api/members/${memberId.value}`;
 
@@ -161,7 +163,7 @@ async function uploadJson() {
 
 <template>
   <main class="upload-json">
-    <h1 class="hidden-title">Importer un JSON</h1>
+    <h1 class="hidden-title">{{ t("upload_json") }}</h1>
     <FormPage @sendValue="updateValue" @submit="uploadJson" />
     <Alert
       :display="alert.display"
