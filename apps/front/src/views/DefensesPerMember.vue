@@ -5,20 +5,22 @@ import { ref } from "vue";
 import MapGrid from "../components/grids/MapGrid.vue";
 import { useUserStore } from "../stores/user.js";
 import Dialog from "../components/utils/Dialog.vue";
+import { useI18n } from "vue-i18n";
 
+const { t } = useI18n();
 const env = import.meta.env;
 const userStore = useUserStore();
 const token = userStore.token;
 const links = [
   {
     id: 1,
-    name: "Plan de siège",
+    name: t("siege_map"),
     path: "/map",
     selected: false,
   },
   {
     id: 2,
-    name: "Défenses par membre",
+    name: t("defenses_per_member"),
     path: "/defenses-per-member",
     selected: true,
   },
@@ -26,26 +28,25 @@ const links = [
 const tools = [
   {
     name: "reset",
-    title: "Réinitialiser le plan",
+    title: t("reset_map"),
   },
 ];
 const cards = ref([]);
 const dialog = {
   content: {
-    title: "Réinitialiser le plan",
-    description:
-      "Toutes les défenses seront supprimées de la carte. Êtes-vous sûr de vouloir continuer ?",
+    title: t("reset_map"),
+    description: t("reset_dialog_description"),
   },
   fields: [
     {
       type: "button",
       name: "cancel",
-      value: "Annuler",
+      value: t("cancel"),
     },
     {
       type: "button",
       name: "confirm",
-      value: "Confirmer",
+      value: t("confirm"),
       style: "danger",
     },
   ],
@@ -101,7 +102,7 @@ function confirmOrCancelReset(action) {
 
 <template>
   <main class="map">
-    <h1 class="hidden-title">Défenses par membre</h1>
+    <h1 class="hidden-title">{{ t("defenses_per_member") }}</h1>
     <Tabs :links="links" :tools="tools" @toolClicked="toolClicked" />
     <MapGrid :cards="cards" />
     <Dialog

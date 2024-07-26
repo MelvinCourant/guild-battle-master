@@ -102,7 +102,7 @@ function confirmOrCancelReset(action) {
 
 <template>
   <main class="map">
-    <h1 class="hidden-title">Plan de siège</h1>
+    <h1 class="hidden-title">{{ t("siege_map") }}</h1>
     <Tabs :links="links" :tools="tools" @toolClicked="toolClicked" />
     <MapGrid :cards="cards" />
     <Dialog

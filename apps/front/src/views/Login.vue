@@ -5,7 +5,9 @@ import Alert from "../components/utils/Alert.vue";
 import { provide, reactive } from "vue";
 import { useUserStore } from "../stores/user.js";
 import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 
+const { t } = useI18n();
 const env = import.meta.env;
 const userStore = useUserStore();
 const router = useRouter();
@@ -34,7 +36,7 @@ const loginForm = reactive({
           },
         },
         {
-          label: "Mot de passe*",
+          label: `${t("password")}*`,
           attributes: {
             type: "password",
             name: "password",
@@ -45,7 +47,7 @@ const loginForm = reactive({
         {
           attributes: {
             type: "submit",
-            value: "Connexion",
+            value: t("login"),
             style: "primary",
           },
         },
@@ -53,12 +55,12 @@ const loginForm = reactive({
     },
   ],
   footerText: {
-    text: "Vous n’avez pas de compte ?",
-    link: "Inscrivez-vous",
+    text: t("dont_have_account"),
+    link: t("sign_up"),
     href: "/register",
   },
   passwordForgotten: {
-    text: "Mot de passe oublié ?",
+    text: t("forgot_password"),
     href: "/forgot-password",
   },
 });
@@ -109,7 +111,7 @@ function displayError(resultJson) {
 
 async function login() {
   const submitButton = fields[2];
-  submitButton.loading = "Chargement...";
+  submitButton.loading = t("loading");
 
   const result = await fetch(`${env.VITE_URL}/api/auth/login`, {
     method: "POST",
@@ -142,7 +144,7 @@ async function login() {
 
 <template>
   <main class="login">
-    <h1 class="hidden-title">Connexion</h1>
+    <h1 class="hidden-title">{{ t("login") }}</h1>
     <FormPage :image="image" @sendValue="updateValue" @submit="login" />
     <Alert
       :display="alert.display"

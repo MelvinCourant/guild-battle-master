@@ -3,10 +3,12 @@ import "../assets/css/views/_login-register.scss";
 import FormPage from "../components/FormPage.vue";
 import { provide, reactive, ref } from "vue";
 import Alert from "../components/utils/Alert.vue";
+import { useI18n } from "vue-i18n";
 
+const { t } = useI18n();
 const env = import.meta.env;
 const forgotPasswordForm = reactive({
-  title: "Mot de passe oublié",
+  title: t("forgot_password"),
   forms: [
     {
       id: 1,
@@ -23,7 +25,7 @@ const forgotPasswordForm = reactive({
         {
           attributes: {
             type: "submit",
-            value: "Envoyer",
+            value: t("send"),
             style: "primary",
           },
         },
@@ -60,7 +62,6 @@ async function sendEmail(event) {
     alert.display = true;
     alert.type = "success";
     alert.message = resultJson.message;
-    console.log(alert);
   } else {
     forgotPasswordForm.forms[0].fields[0].error = resultJson.message;
   }

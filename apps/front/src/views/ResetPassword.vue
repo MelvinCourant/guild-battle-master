@@ -4,20 +4,22 @@ import FormPage from "../components/FormPage.vue";
 import { provide, reactive } from "vue";
 import Alert from "../components/utils/Alert.vue";
 import { useRoute, useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 
+const { t } = useI18n();
 const env = import.meta.env;
 const route = useRoute();
 const token = route.query.token;
 const email = route.query.email;
 const router = useRouter();
 const resetPasswordForm = reactive({
-  title: "Réinitialiser le mot de passe",
+  title: t("reset_password"),
   forms: [
     {
       id: 1,
       fields: [
         {
-          label: "Nouveau mot de passe*",
+          label: `${t("new_password")}*`,
           attributes: {
             type: "password",
             name: "password",
@@ -26,7 +28,7 @@ const resetPasswordForm = reactive({
           },
         },
         {
-          label: "Confirmer le mot de passe*",
+          label: `${t("confirm_password")}*`,
           attributes: {
             type: "password",
             name: "confirmationPassword",
@@ -37,7 +39,7 @@ const resetPasswordForm = reactive({
         {
           attributes: {
             type: "submit",
-            value: "Réinitialiser",
+            value: t("reset"),
             style: "primary",
           },
         },
@@ -45,8 +47,8 @@ const resetPasswordForm = reactive({
     },
   ],
   footerText: {
-    text: "Lien expiré ?",
-    link: "Refaire une demande",
+    text: t("expired_link"),
+    link: t("make_new_request"),
     href: "/forgot-password",
   },
 });
