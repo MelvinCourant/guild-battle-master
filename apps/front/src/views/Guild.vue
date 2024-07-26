@@ -7,7 +7,9 @@ import Dialog from "../components/utils/Dialog.vue";
 import Alert from "../components/utils/Alert.vue";
 import TableGrid from "../components/utils/TableGrid.vue";
 import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 
+const { t } = useI18n();
 const userStore = useUserStore();
 const user = userStore.user;
 const token = userStore.token;
@@ -38,13 +40,13 @@ const columns = reactive([
     sortOrder: "asc",
   },
   {
-    name: "Rôle",
+    name: t("role"),
     key: "role",
     class: "table-grid__role",
     sortOrder: "",
   },
   {
-    name: "5 nats lds",
+    name: t("lds_nat_5"),
     key: "lds",
     class: "table-grid__lds",
     sortOrder: "",
@@ -66,11 +68,11 @@ const sortOptions = [
   },
   {
     value: "role",
-    text: "Rôle",
+    text: t("role"),
   },
   {
     value: "lds",
-    text: "5 nats lds",
+    text: t("lds_nat_5"),
   },
 ];
 const actualSort = ref("grade");
@@ -78,7 +80,7 @@ const data = ref({});
 const actions = [
   {
     name: "update",
-    label: "Mettre à jour",
+    label: t("update"),
     permissions: [
       {
         role: "leader",
@@ -93,7 +95,7 @@ const actions = [
   },
   {
     name: "role",
-    label: "Attribuer un rôle",
+    label: t("assign_role"),
     permissions: [
       {
         role: "leader",
@@ -104,7 +106,7 @@ const actions = [
   },
   {
     name: "exclude",
-    label: "Exclure",
+    label: t("exclude"),
     permissions: [
       {
         role: "leader",
@@ -134,12 +136,12 @@ const dialog = reactive({
     {
       type: "button",
       name: "cancel",
-      value: "Annuler",
+      value: t("cancel"),
     },
     {
       type: "button",
       name: "exclude",
-      value: "Exclure",
+      value: t("exclude"),
       style: "danger",
     },
   ],
@@ -255,9 +257,10 @@ function actionSelected(selection) {
       alt: memberSelected.value.pseudo,
     };
     dialog.content = {
-      title: `Exclure ${memberSelected.value.pseudo} de la guilde ?`,
-      description:
-        "Cet utilisateur ne sera plus membre de votre guilde. Cependant il ne sera pas exclu définitivement s’il est encore membre de votre guilde en jeu.",
+      title: t("exclude_member_from_guild", {
+        pseudo: memberSelected.value.pseudo,
+      }),
+      description: t("exclude_dialog_description"),
     };
     dialogIsOpen.value = true;
   } else {
@@ -302,8 +305,12 @@ function actionSelected(selection) {
       alt: memberSelected.value.pseudo,
     };
     dialog.content = {
-      title: `Attribuer un rôle à ${memberSelected.value.pseudo} ?`,
-      description: `Choisissez un rôle pour cet utilisateur. Si le rôle choisi est Leader, ${memberSelected.value.pseudo} recevra une notification pour accepter ou refuser le rôle.`,
+      title: t("assign_role_to", {
+        pseudo: memberSelected.value.pseudo,
+      }),
+      description: t("choose_role_dialog_description", {
+        pseudo: memberSelected.value.pseudo,
+      }),
       select: {
         options: roleOptions,
         value: roleSelected.value,
@@ -313,12 +320,12 @@ function actionSelected(selection) {
       {
         type: "button",
         name: "cancel",
-        value: "Annuler",
+        value: t("cancel"),
       },
       {
         type: "button",
         name: "role",
-        value: "Attribuer",
+        value: t("assign"),
         style: "primary",
       },
     ];
@@ -401,7 +408,8 @@ async function madeSearch(inputName, value) {
         keyword: value,
         sort: {
           name: actualSort.value,
-          order: columns.find((column) => column.key === actualSort.value).sortOrder,
+          order: columns.find((column) => column.key === actualSort.value)
+            .sortOrder,
         },
       }),
     },
@@ -446,9 +454,9 @@ function sortGrid(key) {
     "
   />
   <Alert
-      :display="alert.display"
-      :type="alert.type"
-      :message="alert.message"
-      @close="alert.display = false"
+    :display="alert.display"
+    :type="alert.type"
+    :message="alert.message"
+    @close="alert.display = false"
   />
 </template>
