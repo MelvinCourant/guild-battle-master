@@ -5,9 +5,11 @@ import Grade from "../utils/Grade.vue";
 import { inject, ref, watch } from "vue";
 import More from "../utils/More.vue";
 import Avatar from "../utils/Avatar.vue";
+import { useI18n } from "vue-i18n";
 
 defineEmits(["actionSelected"]);
 
+const { t } = useI18n();
 const data = ref(inject("data"));
 const columns = inject("columns");
 const rows = ref([]);
@@ -22,9 +24,9 @@ watch(data, () => {
 
 function othersText(numberMonsters) {
   if (numberMonsters - 3 > 1) {
-    return `+${numberMonsters - 3} autres`;
+    return `+${numberMonsters - 3} ${t("others")}`;
   } else {
-    return `+1 autre`;
+    return `+1 ${t("other")}`;
   }
 }
 </script>
