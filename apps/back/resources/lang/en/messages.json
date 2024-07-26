@@ -12,6 +12,7 @@
   "forbidden": "You do not have the rights to perform this action",
   "guild_already_exist": "The guild already exists",
   "guild_invalid_not_exist": "The guild is invalid or does not exist",
+  "guild_mates_updated": "Guild mates updated",
   "guild_member_guild_mates_created": "Guild, member and guild mates created",
   "guild_member_not_found_back_step_2": "Guild and member not found, back to step 2",
   "guild_not_found_back_step_2": "Guild not found, back to step 2",

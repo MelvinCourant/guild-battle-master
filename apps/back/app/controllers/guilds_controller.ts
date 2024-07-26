@@ -205,7 +205,7 @@ export default class GuildsController {
     fs.unlinkSync(jsonLink)
 
     return response.created({
-      message: 'Guild mates updated',
+      message: i18n.t('messages.guild_mates_updated'),
       members: membersNumber,
     })
   }

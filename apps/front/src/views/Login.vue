@@ -117,6 +117,7 @@ async function login() {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "Accept-Language": userStore.language,
     },
     body: JSON.stringify({
       email: formValues.email,

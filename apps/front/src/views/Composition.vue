@@ -97,6 +97,7 @@ async function getActualComposition() {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
+        "Accept-Language": userStore.language,
       },
     },
   );
@@ -336,6 +337,7 @@ async function getAllMonsters() {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
+      "Accept-Language": userStore.language,
     },
     body: JSON.stringify({
       grade: "all",
@@ -384,6 +386,7 @@ async function getLessFiveStarsMonsters() {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
+      "Accept-Language": userStore.language,
     },
     body: JSON.stringify({
       grade: 4,
@@ -411,6 +414,7 @@ async function getMember(id) {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
+      "Accept-Language": userStore.language,
     },
   });
 
@@ -430,6 +434,7 @@ async function getMonster(id) {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        "Accept-Language": userStore.language,
       },
     });
 
@@ -546,6 +551,7 @@ async function getCompositions(name, values) {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
+          "Accept-Language": userStore.language,
         },
         body: JSON.stringify(body),
       },
@@ -669,6 +675,7 @@ async function saveComposition() {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
+        "Accept-Language": userStore.language,
       },
       body: JSON.stringify(body),
     });
@@ -678,6 +685,7 @@ async function saveComposition() {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
+        "Accept-Language": userStore.language,
       },
       body: JSON.stringify(body),
     });

@@ -59,6 +59,7 @@ async function getTowers() {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
+      "Accept-Language": userStore.language,
     },
   });
 
@@ -75,6 +76,7 @@ async function resetTowers() {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
+      "Accept-Language": userStore.language,
     },
   });
 

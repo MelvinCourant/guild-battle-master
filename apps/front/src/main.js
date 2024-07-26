@@ -31,12 +31,17 @@ router.beforeEach(async (to, from, next) => {
   const userStore = useUserStore();
   let isLogged = false;
 
+  if (locale.value === "fr") {
+    userStore.updateLanguage(locale.value);
+  }
+
   async function verifyUser() {
     const result = await fetch(`${env.VITE_URL}/api/users/verify`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${userStore.token}`,
+        "Accept-Language": userStore.language,
       },
     });
 

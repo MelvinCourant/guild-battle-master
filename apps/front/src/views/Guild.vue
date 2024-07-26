@@ -169,6 +169,7 @@ async function getMembers() {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
+      "Accept-Language": userStore.language,
     },
   });
 
@@ -342,6 +343,7 @@ async function dialogResponse(name) {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
+          "Accept-Language": userStore.language,
         },
       },
     );
@@ -366,6 +368,7 @@ async function dialogResponse(name) {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
+          "Accept-Language": userStore.language,
         },
         body: JSON.stringify({
           role: roleSelected.value,
@@ -403,6 +406,7 @@ async function madeSearch(inputName, value) {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
+        "Accept-Language": userStore.language,
       },
       body: JSON.stringify({
         keyword: value,

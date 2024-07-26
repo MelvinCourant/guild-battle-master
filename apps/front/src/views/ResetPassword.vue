@@ -101,6 +101,7 @@ async function resetPassword() {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "Accept-Language": userStore.language,
     },
     body: JSON.stringify({
       token: token,

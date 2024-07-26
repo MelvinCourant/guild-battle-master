@@ -135,6 +135,7 @@ async function getNotifications() {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
+      "Accept-Language": userStore.language,
     },
   });
 
@@ -152,6 +153,7 @@ async function bequeathLeader(value, notificationId) {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
+      "Accept-Language": userStore.language,
     },
     body: JSON.stringify({
       notification_id: notificationId,
@@ -186,6 +188,7 @@ async function readNotification(notificationId) {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
+        "Accept-Language": userStore.language,
       },
     },
   );
@@ -202,6 +205,7 @@ async function deleteNotification(notificationId) {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
+        "Accept-Language": userStore.language,
       },
     },
   );

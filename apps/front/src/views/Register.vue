@@ -267,6 +267,9 @@ async function register(step, fields, optionalFiles) {
 
   const result = await fetch(`${env.VITE_URL}/api/auth/register/${step}`, {
     method: "POST",
+    headers: {
+      "Accept-Language": userStore.language,
+    },
     body: formData,
   });
 

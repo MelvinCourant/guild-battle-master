@@ -53,11 +53,19 @@ export const useUserStore = defineStore("user", () => {
     localStorage.removeItem("token");
   }
 
+  const language = ref("en");
+
+  function updateLanguage(newLanguage) {
+    language.value = newLanguage;
+  }
+
   return {
     user,
     token,
     updateUser,
     updateToken,
     logout,
+    language,
+    updateLanguage,
   };
 });

@@ -68,6 +68,7 @@ async function getTower() {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
+      "Accept-Language": userStore.language,
     },
   });
 
@@ -108,6 +109,7 @@ async function getCompositions() {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
+        "Accept-Language": userStore.language,
       },
       body: JSON.stringify(body.value),
     },
@@ -143,6 +145,7 @@ async function searchComposition(inputName, value) {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
+        "Accept-Language": userStore.language,
       },
       body: JSON.stringify(body.value),
     },
@@ -276,6 +279,7 @@ async function saveTower() {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
+      "Accept-Language": userStore.language,
     },
     body: JSON.stringify(body),
   });

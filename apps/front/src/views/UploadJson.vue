@@ -61,6 +61,7 @@ async function verifyUploadPermissions() {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
+        "Accept-Language": userStore.language,
       },
     },
   );
@@ -127,6 +128,7 @@ async function uploadJson() {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${token}`,
+      "Accept-Language": userStore.language,
     },
     body: formData,
   });

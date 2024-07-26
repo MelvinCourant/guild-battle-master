@@ -12,7 +12,8 @@ async function logout() {
   const result = await fetch(`${env.VITE_URL}/api/auth/logout`, {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${userStore.token}`,
+      Authorization: `Bearer ${token}`,
+      "Accept-Language": userStore.language,
     },
   });
 

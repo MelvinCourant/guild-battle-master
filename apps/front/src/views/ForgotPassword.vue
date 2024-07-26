@@ -4,8 +4,10 @@ import FormPage from "../components/FormPage.vue";
 import { provide, reactive, ref } from "vue";
 import Alert from "../components/utils/Alert.vue";
 import { useI18n } from "vue-i18n";
+import { useUserStore } from "../stores/user.js";
 
 const { t } = useI18n();
+const userStore = useUserStore();
 const env = import.meta.env;
 const forgotPasswordForm = reactive({
   title: t("forgot_password"),
@@ -50,6 +52,7 @@ async function sendEmail(event) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "Accept-Language": userStore.language,
     },
     body: JSON.stringify({
       email: email.value,

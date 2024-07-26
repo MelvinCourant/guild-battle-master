@@ -185,6 +185,7 @@ async function getMember() {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
+      "Accept-Language": userStore.language,
     },
   });
 
@@ -246,6 +247,7 @@ async function searchMonsters(inputName, value) {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
+        "Accept-Language": userStore.language,
       },
       body: JSON.stringify(body),
     },
@@ -296,6 +298,7 @@ async function updateMember(inputName, value) {
     method: "PATCH",
     headers: {
       Authorization: `Bearer ${token}`,
+      "Accept-Language": userStore.language,
     },
     body: formData,
   });

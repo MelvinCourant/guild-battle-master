@@ -125,6 +125,7 @@ async function getAllCompositions() {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
+        "Accept-Language": userStore.language,
       },
     },
   );
@@ -145,6 +146,7 @@ async function deleteComposition(id) {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
+      "Accept-Language": userStore.language,
     },
   });
 
@@ -220,6 +222,7 @@ async function searchComposition(inputName, value) {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
+        "Accept-Language": userStore.language,
       },
       body: JSON.stringify(body),
     },
