@@ -6,7 +6,9 @@ import { provide, ref } from "vue";
 import GuildCompositions from "../components/GuildCompositions.vue";
 import Preview from "../components/utils/Preview.vue";
 import ActualComposition from "../components/ActualComposition.vue";
+import { useI18n } from "vue-i18n";
 
+const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const params = route.params;
@@ -23,7 +25,7 @@ const fields = [
   {
     type: "search",
     name: "search",
-    placeholder: "Nom d'une composition",
+    placeholder: t("composition_name"),
   },
 ];
 const body = ref({});
@@ -51,14 +53,10 @@ async function getTower() {
   if (result.ok) {
     tower.value = await result.json();
     towerDefenses.value = tower.value;
-
-    if (tower.value.side === "yellow") {
-      towerName.value = `Tour n°${tower.value.position} jaune`;
-    } else if (tower.value.side === "red") {
-      towerName.value = `Tour n°${tower.value.position} rouge`;
-    } else {
-      towerName.value = `Tour n°${tower.value.position} bleue`;
-    }
+    towerName.value = t("tower_number_side", {
+      number: tower.value.position,
+      side: tower.value.side,
+    });
 
     await getCompositions();
   }
@@ -139,7 +137,7 @@ function previewComposition(id) {
     (composition) => composition.id === id,
   );
 
-  previewCategory.value = `Tour ${composition.grade} nat`;
+  previewCategory.value = t("tower_nat", { number: composition.grade });
   previewTitle.value = composition.name;
   previewIsOpen.value = true;
   previewToComposition.value = composition.defenses;

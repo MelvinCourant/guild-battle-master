@@ -4,6 +4,7 @@ import Select from "./utils/inputs/Select.vue";
 import { provide, reactive, ref, watch } from "vue";
 import Field from "./utils/Field.vue";
 import Compositions from "./utils/Compositions.vue";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps({
   compositions: {
@@ -36,6 +37,7 @@ const emits = defineEmits([
   "cancel",
 ]);
 
+const { t } = useI18n();
 const actualCompositions = ref(props.compositions);
 
 provide("compositions", actualCompositions);
@@ -49,11 +51,11 @@ watch(
 
 const options = [
   {
-    text: "Tour 5 nat",
+    text: t("tower_nat", { number: 5 }),
     value: "5",
   },
   {
-    text: "Tour 4 nat",
+    text: t("tower_nat", { number: 4 }),
     value: "4",
   },
 ];
@@ -61,7 +63,7 @@ const optionValue = ref(props.optionValue);
 const nameField = reactive({
   type: "text",
   name: "name",
-  placeholder: "Nom de la composition",
+  placeholder: t("composition_name"),
   value: props.compositionName,
   autocomplete: "off",
 });
@@ -69,12 +71,12 @@ const buttons = [
   {
     type: "button",
     name: "cancel",
-    value: "Annuler",
+    value: t("cancel"),
   },
   {
     type: "submit",
     name: "save",
-    value: "Sauvegarder",
+    value: t("save"),
     style: "primary",
   },
 ];

@@ -3,6 +3,7 @@ import "../assets/css/components/_guild-compositions.scss";
 import FiltersBar from "./utils/FiltersBar.vue";
 import CompositionCard from "./CompositionCard.vue";
 import Loader from "./utils/Loader.vue";
+import { useI18n } from "vue-i18n";
 
 defineProps({
   compositions: {
@@ -24,6 +25,8 @@ defineProps({
 });
 
 defineEmits(["search", "actionSelected", "previewComposition"]);
+
+const { t } = useI18n();
 </script>
 
 <template>
@@ -50,7 +53,7 @@ defineEmits(["search", "actionSelected", "previewComposition"]);
         class="guild-compositions__empty"
         v-if="compositions.length === 0 && !loading"
       >
-        Aucune composition disponible.
+        {{ t("no_composition_available") }}
       </p>
       <Loader v-if="loading" />
     </div>

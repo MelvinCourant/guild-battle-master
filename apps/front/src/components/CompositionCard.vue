@@ -1,7 +1,8 @@
 <script setup>
-import '../assets/css/components/_composition-card.scss';
+import "../assets/css/components/_composition-card.scss";
 import More from "./utils/More.vue";
 import Defense from "./utils/Defense.vue";
+import { useI18n } from "vue-i18n";
 
 defineProps({
   composition: {
@@ -10,28 +11,27 @@ defineProps({
   },
   memberRole: {
     type: String,
-    default: ''
+    default: "",
   },
   actions: {
     type: Array,
     required: true,
   },
-})
+});
 
-const emits = defineEmits(['actionSelected', 'previewComposition'])
+const emits = defineEmits(["actionSelected", "previewComposition"]);
+
+const { t } = useI18n();
 
 function previewComposition(e) {
-  if(!e.target.closest('.more')) {
-    emits('previewComposition')
+  if (!e.target.closest(".more")) {
+    emits("previewComposition");
   }
 }
 </script>
 
 <template>
-  <div
-    class="composition-card"
-    @click="previewComposition"
-  >
+  <div class="composition-card" @click="previewComposition">
     <div class="composition-card__header">
       <div class="composition-card__actions-container">
         <div class="composition-card__actions">
@@ -43,14 +43,16 @@ function previewComposition(e) {
           />
         </div>
       </div>
-      <p class="composition-card__grade">Tour {{ composition.grade }} nat</p>
+      <p class="composition-card__grade">
+        {{ t("tower_nat", { number: composition.grade }) }}
+      </p>
       <h3 class="composition-card__title">{{ composition.name }}</h3>
     </div>
     <div class="composition-card__defenses">
       <Defense
-          :leader="composition.defenses[0].leader"
-          :second="composition.defenses[0].second"
-          :third="composition.defenses[0].third"
+        :leader="composition.defenses[0].leader"
+        :second="composition.defenses[0].second"
+        :third="composition.defenses[0].third"
       />
     </div>
   </div>
