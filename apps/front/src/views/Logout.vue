@@ -5,6 +5,7 @@ import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 const userStore = useUserStore();
+const token = userStore.token;
 const env = import.meta.env;
 const router = useRouter();
 

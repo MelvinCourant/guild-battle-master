@@ -5,7 +5,7 @@ import { useMonstersStore } from "../../stores/monsters.js";
 import Tooltip from "./Tooltip.vue";
 import { useUserStore } from "../../stores/user.js";
 
-const userStore = useUserStore;
+const userStore = useUserStore();
 const env = import.meta.env;
 const props = defineProps({
   monstersIds: {

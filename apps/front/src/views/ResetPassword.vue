@@ -5,8 +5,10 @@ import { provide, reactive } from "vue";
 import Alert from "../components/utils/Alert.vue";
 import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
+import { useUserStore } from "../stores/user";
 
 const { t } = useI18n();
+const userStore = useUserStore();
 const env = import.meta.env;
 const route = useRoute();
 const token = route.query.token;
