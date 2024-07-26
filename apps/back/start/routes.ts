@@ -19,6 +19,7 @@ import NotificationsController from '#controllers/notifications_controller'
 import TowersController from '#controllers/towers_controller'
 import DefensesController from '#controllers/defenses_controller'
 import ResetPasswordController from '#controllers/reset_password_controller'
+import AdminController from '#controllers/admin_controller'
 import app from '@adonisjs/core/services/app'
 
 router
@@ -244,3 +245,13 @@ router.get('/api/reset-password', async (data) => {
 router.post('/api/reset-password', async (data) => {
   return resetPasswordController.resetPassword(data)
 })
+
+router
+  .group(() => {
+    const adminController = new AdminController()
+
+    router.get('/list-guilds', async (data) => {
+      return adminController.listGuilds(data)
+    })
+  })
+  .prefix('api/admin')
