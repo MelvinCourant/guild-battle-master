@@ -36,6 +36,70 @@ export default class AdminController {
     return response.json(guildsData)
   }
 
+  async searchGuild({ i18n, auth, request, response }: HttpContext) {
+    const user = await auth.authenticate()
+
+    if (user.role !== 'admin') {
+      return response.status(403).json({ message: i18n.t('messages.forbidden') })
+    }
+
+    const keyword = request.input('keyword')
+    let guilds
+    let guildsData = []
+
+    if (!keyword) {
+      guilds = await Guild.all()
+
+      for (let guild of guilds) {
+        const leader = await Member.query().where('user_id', guild.leader_id).firstOrFail()
+
+        guildsData.push({
+          guild: {
+            id: guild.id,
+            guild_id_json: guild.guild_id_json,
+            name: guild.name,
+            leader_id: guild.leader_id,
+            image: guild.image,
+            created_at: guild.createdAt,
+          },
+          leader: {
+            user_id: leader.user_id,
+            pseudo: leader.pseudo,
+          },
+        })
+      }
+
+      return response.json(guildsData)
+    } else {
+      guilds = await Guild.query()
+        .leftJoin('members', 'guilds.leader_id', 'members.user_id')
+        .where('guilds.name', 'like', `%${keyword}%`)
+        .orWhere('members.pseudo', 'like', `%${keyword}%`)
+        .select('guilds.*', 'members.pseudo as leader_pseudo')
+
+      for (let guild of guilds) {
+        const leader = await Member.query().where('user_id', guild.leader_id).firstOrFail()
+
+        guildsData.push({
+          guild: {
+            id: guild.id,
+            guild_id_json: guild.guild_id_json,
+            name: guild.name,
+            leader_id: guild.leader_id,
+            image: guild.image,
+            created_at: guild.createdAt,
+          },
+          leader: {
+            user_id: leader.user_id,
+            pseudo: leader.pseudo,
+          },
+        })
+      }
+
+      return response.json(guildsData)
+    }
+  }
+
   async listUsers({ i18n, auth, response }: HttpContext) {
     const user = await auth.authenticate()
 
