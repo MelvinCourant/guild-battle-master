@@ -22,7 +22,6 @@ export default class AdminController {
           id: guild.id,
           guild_id_json: guild.guild_id_json,
           name: guild.name,
-          leader_id: guild.leader_id,
           image: guild.image,
           created_at: guild.createdAt,
         },
@@ -44,60 +43,55 @@ export default class AdminController {
     }
 
     const keyword = request.input('keyword')
-    let guilds
-    let guildsData = []
+    const sort = request.input('sort')
+    let query = Guild.query().leftJoin('members', 'guilds.leader_id', 'members.user_id')
 
-    if (!keyword) {
-      guilds = await Guild.all()
-
-      for (let guild of guilds) {
-        const leader = await Member.query().where('user_id', guild.leader_id).firstOrFail()
-
-        guildsData.push({
-          guild: {
-            id: guild.id,
-            guild_id_json: guild.guild_id_json,
-            name: guild.name,
-            leader_id: guild.leader_id,
-            image: guild.image,
-            created_at: guild.createdAt,
-          },
-          leader: {
-            user_id: leader.user_id,
-            pseudo: leader.pseudo,
-          },
-        })
-      }
-
-      return response.json(guildsData)
-    } else {
-      guilds = await Guild.query()
-        .leftJoin('members', 'guilds.leader_id', 'members.user_id')
+    if (keyword) {
+      query = query
         .where('guilds.name', 'like', `%${keyword}%`)
         .orWhere('members.pseudo', 'like', `%${keyword}%`)
-        .select('guilds.*', 'members.pseudo as leader_pseudo')
+    }
 
-      for (let guild of guilds) {
-        const leader = await Member.query().where('user_id', guild.leader_id).firstOrFail()
+    query = query.select('guilds.*', 'members.pseudo as leader_pseudo')
 
-        guildsData.push({
+    if (sort) {
+      if (sort.name === 'pseudo') {
+        query = query.orderBy('members.pseudo', sort.order)
+      } else {
+        query = query.orderBy(sort.name, sort.order)
+      }
+    }
+
+    const page = request.input('page') || 1
+    const pageSize = request.input('pageSize') || 25
+    const guilds = await query.paginate(page, pageSize)
+
+    const guildsData = await Promise.all(
+      guilds.toJSON().data.map(async (guild) => {
+        const leader = await Member.query()
+          .where('user_id', guild.leader_id)
+          .select('pseudo')
+          .firstOrFail()
+        return {
           guild: {
             id: guild.id,
             guild_id_json: guild.guild_id_json,
             name: guild.name,
-            leader_id: guild.leader_id,
             image: guild.image,
             created_at: guild.createdAt,
           },
           leader: {
-            user_id: leader.user_id,
+            user_id: guild.leader_id,
             pseudo: leader.pseudo,
           },
-        })
-      }
+        }
+      })
+    )
 
-      return response.json(guildsData)
-    }
+    return response.json({
+      meta: guilds.toJSON().meta,
+      data: guildsData,
+    })
   }
 
   async listUsers({ i18n, auth, response }: HttpContext) {
