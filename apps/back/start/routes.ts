@@ -254,12 +254,16 @@ router
       return adminController.listGuilds(data)
     })
 
-    router.post('/search-guild', async (data) => {
+    router.post('/search-guilds', async (data) => {
       return adminController.searchGuild(data)
     })
 
     router.get('/list-users', async (data) => {
       return adminController.listUsers(data)
+    })
+
+    router.post('/search-users', async (data) => {
+      return adminController.searchUsers(data)
     })
   })
   .prefix('api/admin')
