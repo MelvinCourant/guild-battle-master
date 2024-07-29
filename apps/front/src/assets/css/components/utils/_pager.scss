@@ -1,0 +1,35 @@
+@use "../../partials/functions";
+
+.pager {
+  display: flex;
+  gap: 10px;
+  width: fit-content;
+  margin: 15px auto 0;
+
+  &__button {
+    width: 45px;
+    height: 45px;
+    border-radius: 5px;
+    border: none;
+    background: var(--system);
+    cursor: pointer;
+
+    &:hover(:not(.pager__button--selected)) {
+      background: var(--system-lightened);
+    }
+
+    &:disabled {
+      opacity: 50%;
+    }
+
+    &--selected {
+      background: var(--primary);
+    }
+
+    span {
+      font-size: functions.rem(24);
+      font-weight: 700;
+      line-height: 1.5;
+    }
+  }
+}

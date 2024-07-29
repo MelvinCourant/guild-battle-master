@@ -6,6 +6,7 @@ import { useUserStore } from "../../stores/user.js";
 import { provide, reactive, ref } from "vue";
 import Table from "../../components/tables/Table.vue";
 import FiltersBar from "../../components/utils/FiltersBar.vue";
+import Pager from "../../components/utils/Pager.vue";
 
 const { t } = useI18n();
 const userStore = useUserStore();
@@ -66,6 +67,7 @@ const actualSort = ref("created_at");
 const data = ref({});
 const guilds = ref([]);
 const loading = ref(true);
+const pager = ref({});
 
 provide("fields", fields);
 provide("columns", columns);
@@ -93,7 +95,15 @@ async function getGuilds() {
 
   if (result.ok) {
     const resultJson = await result.json();
+    const resultMeta = resultJson.meta;
+
+    pager.value = {
+      currentPage: 4,
+      lastPage: 5,
+    };
+
     let resultData = resultJson.data;
+
     resultData = resultData.map((guild) => {
       return {
         id: guild.id,
@@ -205,5 +215,10 @@ async function searchGuilds(inputName, value) {
     <h1 class="hidden-title">{{ t("admin_list_guilds") }}</h1>
     <FiltersBar @search="searchGuilds" />
     <Table @sort="sort" />
+    <Pager
+      v-if="pager && pager.lastPage > 1"
+      :currentPage="pager.currentPage"
+      :lastPage="pager.lastPage"
+    />
   </main>
 </template>
