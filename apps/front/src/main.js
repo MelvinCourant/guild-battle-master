@@ -74,6 +74,11 @@ router.beforeEach(async (to, from, next) => {
       roles: ["leader", "moderator"],
       redirect: "/map",
     },
+    {
+      path: "/admin",
+      roles: ["admin"],
+      redirect: "/",
+    },
   ];
 
   if (isLogged) {

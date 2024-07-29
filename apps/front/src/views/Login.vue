@@ -134,7 +134,11 @@ async function login() {
     const tokenValue = tokenObject.token;
     userStore.updateToken(tokenValue);
 
-    await router.push("/");
+    if (user.role === "admin") {
+      await router.push("/admin");
+    } else {
+      await router.push("/");
+    }
   } else {
     displayError(resultJson);
   }

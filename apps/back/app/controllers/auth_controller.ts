@@ -339,7 +339,13 @@ export default class AuthController {
       if (user.role === 'admin') {
         const token = await User.accessTokens.create(user)
 
-        return response.status(200).send(token)
+        return response.status(200).send({
+          user: {
+            role: user.role,
+            username: user.username,
+          },
+          token,
+        })
       } else {
         const member: any = await Member.query()
           .where('user_id', user.id)

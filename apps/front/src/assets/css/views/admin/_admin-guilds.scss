@@ -1,0 +1,38 @@
+@use "../../partials/functions";
+
+.admin-guilds {
+  position: relative;
+  width: 100%;
+  min-height: calc(100vh - 70px);
+  height: 100%;
+  max-height: calc(100vh - 70px);
+  overflow: auto;
+  padding: 80px 70px;
+
+  @media screen and (max-width: 768px) {
+    min-height: calc(100vh - 114px);
+    max-height: calc(100vh - 114px);
+    padding: 30px 20px;
+  }
+
+  .table {
+    .table-grid {
+      &__id {
+        width: 380px;
+      }
+
+      &__picture {
+        width: 70px;
+      }
+
+      &__guild-name,
+      &__leader {
+        width: 130px;
+      }
+
+      &__guild-id-json {
+        width: 220px;
+      }
+    }
+  }
+}

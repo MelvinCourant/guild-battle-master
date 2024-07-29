@@ -44,10 +44,9 @@ function othersText(numberMonsters) {
 
 <template>
   <li class="grid-card">
-    <div v-if="actions" class="grid-card__actions-container">
+    <div v-if="actions.length > 0" class="grid-card__actions-container">
       <div class="grid-card__actions">
         <More
-          v-if="actions"
           :actions="actions"
           :memberRole="content.role"
           orientation="right"
@@ -77,7 +76,10 @@ function othersText(numberMonsters) {
           <Grade v-if="info !== 'member'" :grade="info" />
           <span>{{ info }}</span>
         </div>
-        <ul v-else-if="badges.includes(key)" :class="columns[index - 1].class">
+        <ul
+          v-else-if="badges && badges.includes(key)"
+          :class="columns[index - 1].class"
+        >
           <template v-for="(monster, index) in info">
             <Badge
               v-if="index < 3"

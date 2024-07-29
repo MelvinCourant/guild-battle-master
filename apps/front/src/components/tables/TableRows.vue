@@ -35,8 +35,15 @@ function othersText(numberMonsters) {
   <tbody class="table-rows">
     <tr v-for="(row, index) in rows" :key="index">
       <template v-for="(info, key, index) in row" :key="row.id">
-        <td v-if="key !== 'id'" :class="columns[index - 1].class">
-          <ul v-if="badges.includes(key)">
+        <td
+          v-if="key !== 'id'"
+          :class="
+            columns[0].key === 'id'
+              ? columns[index].class
+              : columns[index - 1].class
+          "
+        >
+          <ul v-if="badges && badges.includes(key)">
             <template v-for="(monster, index) in info">
               <Badge
                 v-if="index < 3"
@@ -68,14 +75,23 @@ function othersText(numberMonsters) {
             <Grade v-if="info !== 'member'" :grade="info" />
             <span>{{ info }}</span>
           </div>
-          <router-link :to="link + row.id" v-else-if="key === 'pseudo'">
+          <router-link
+            :to="link + row.id"
+            v-else-if="key === 'pseudo' || key === 'name'"
+          >
             <span>{{ info }}</span>
           </router-link>
           <span v-else>{{ info }}</span>
         </td>
         <td
+          v-if="columns[index].key === 'id' && key === 'id'"
+          :class="columns[index].class"
+        >
+          <span>{{ info }}</span>
+        </td>
+        <td
           class="table-rows__actions"
-          v-if="index === Object.keys(row).length - 1"
+          v-if="data.actions && index === Object.keys(row).length - 1"
         >
           <More
             :actions="data.actions"

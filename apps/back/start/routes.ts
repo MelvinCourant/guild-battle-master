@@ -255,7 +255,7 @@ router
     })
 
     router.post('/search-guilds', async (data) => {
-      return adminController.searchGuild(data)
+      return adminController.searchGuilds(data)
     })
 
     router.get('/list-users', async (data) => {

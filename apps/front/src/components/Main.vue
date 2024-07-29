@@ -5,7 +5,7 @@ import { useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
-const hideNavbar = ref(false);
+const hideNavbar = ref(true);
 const route = useRoute();
 
 watch(route, () => {

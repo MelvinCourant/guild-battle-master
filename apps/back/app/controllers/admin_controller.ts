@@ -38,18 +38,20 @@ export default class AdminController {
           .where('user_id', guild.leader_id)
           .select('pseudo')
           .firstOrFail()
+        let guildImage = 'placeholder.jpg'
+
+        if (guild.image) {
+          guildImage = guild.image
+        }
+
         return {
-          guild: {
-            id: guild.id,
-            guild_id_json: guild.guild_id_json,
-            name: guild.name,
-            image: guild.image,
-            created_at: guild.createdAt,
-          },
-          leader: {
-            user_id: guild.leader_id,
-            pseudo: leader.pseudo,
-          },
+          id: guild.id,
+          image: guildImage,
+          name: guild.name,
+          guild_id_json: guild.guild_id_json,
+          leader: leader.pseudo,
+          created_at: guild.createdAt,
+          user_id: guild.leader_id,
         }
       })
     )
@@ -80,7 +82,7 @@ export default class AdminController {
     query = query.select('guilds.*', 'members.pseudo as leader_pseudo')
 
     if (sort) {
-      if (sort.name === 'pseudo') {
+      if (sort.name === 'leader') {
         query = query.orderBy('members.pseudo', sort.order)
       } else {
         query = query.orderBy(sort.name, sort.order)
@@ -112,18 +114,21 @@ export default class AdminController {
           .where('user_id', guild.leader_id)
           .select('pseudo')
           .firstOrFail()
+
+        let guildImage = 'placeholder.jpg'
+
+        if (guild.image) {
+          guildImage = guild.image
+        }
+
         return {
-          guild: {
-            id: guild.id,
-            guild_id_json: guild.guild_id_json,
-            name: guild.name,
-            image: guild.image,
-            created_at: guild.createdAt,
-          },
-          leader: {
-            user_id: guild.leader_id,
-            pseudo: leader.pseudo,
-          },
+          id: guild.id,
+          image: guildImage,
+          name: guild.name,
+          guild_id_json: guild.guild_id_json,
+          leader: leader.pseudo,
+          created_at: guild.createdAt,
+          user_id: guild.leader_id,
         }
       })
     )

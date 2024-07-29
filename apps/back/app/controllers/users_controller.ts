@@ -12,7 +12,7 @@ export default class UsersController {
   async verify({ auth, response }: HttpContext) {
     const user = await auth.authenticate()
 
-    if (user) {
+    if (user && user.role !== 'admin') {
       const userInfos = await User.query()
         .where('id', user.id)
         .select('email', 'username', 'role', 'image')
@@ -36,6 +36,14 @@ export default class UsersController {
           image: userImage,
           member_id: member.id,
           guild_id: member.guild_id,
+        },
+      })
+    } else if (user && user.role === 'admin') {
+      return response.status(200).send({
+        user: {
+          role: user.role,
+          username: user.username,
+          image: user.image,
         },
       })
     }
