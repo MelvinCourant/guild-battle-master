@@ -12,7 +12,6 @@ const { t } = useI18n();
 const userStore = useUserStore();
 const token = userStore.token;
 const env = import.meta.env;
-const page = ref(1);
 const pageSize = ref(25);
 const fields = [
   {
@@ -66,8 +65,12 @@ const sortOptions = [
 const actualSort = ref("created_at");
 const data = ref({});
 const guilds = ref([]);
+const keyword = ref("");
 const loading = ref(true);
-const pager = ref({});
+const pager = reactive({
+  currentPage: 1,
+  lastPage: 1,
+});
 
 provide("fields", fields);
 provide("columns", columns);
@@ -82,7 +85,7 @@ function formatDatetime(datetime) {
 
 async function getGuilds() {
   const result = await fetch(
-    `${env.VITE_URL}/api/admin/list-guilds/?page=${page.value}&pageSize=${pageSize.value}`,
+    `${env.VITE_URL}/api/admin/list-guilds/?page=${pager.currentPage}&pageSize=${pageSize.value}`,
     {
       method: "GET",
       headers: {
@@ -97,10 +100,8 @@ async function getGuilds() {
     const resultJson = await result.json();
     const resultMeta = resultJson.meta;
 
-    pager.value = {
-      currentPage: 4,
-      lastPage: 5,
-    };
+    pager.currentPage = resultMeta.current_page;
+    pager.lastPage = resultMeta.last_page;
 
     let resultData = resultJson.data;
 
@@ -170,6 +171,8 @@ async function searchGuilds(inputName, value) {
     return;
   }
 
+  keyword.value = value;
+
   const result = await fetch(`${env.VITE_URL}/api/admin/search-guilds`, {
     method: "POST",
     headers: {
@@ -178,7 +181,7 @@ async function searchGuilds(inputName, value) {
       "Accept-Language": userStore.language,
     },
     body: JSON.stringify({
-      keyword: value,
+      keyword: keyword.value,
       sort: {
         name: actualSort.value,
         order: columns.find((column) => column.key === actualSort.value)
@@ -189,7 +192,13 @@ async function searchGuilds(inputName, value) {
 
   if (result.ok) {
     const resultJson = await result.json();
+    const resultMeta = resultJson.meta;
+
+    pager.currentPage = resultMeta.current_page;
+    pager.lastPage = resultMeta.last_page;
+
     let resultData = resultJson.data;
+
     resultData = resultData.map((guild) => {
       return {
         id: guild.id,
@@ -208,6 +217,16 @@ async function searchGuilds(inputName, value) {
     guilds.value = resultData;
   }
 }
+
+function goToPage(page) {
+  pager.currentPage = page;
+
+  if (keyword.value === "") {
+    getGuilds();
+  } else {
+    searchGuilds("search", keyword.value);
+  }
+}
 </script>
 
 <template>
@@ -219,6 +238,11 @@ async function searchGuilds(inputName, value) {
       v-if="pager && pager.lastPage > 1"
       :currentPage="pager.currentPage"
       :lastPage="pager.lastPage"
+      @gotToFirstPage="() => goToPage(1)"
+      @goToPreviousPage="() => goToPage(pager.currentPage - 1)"
+      @goToPage="goToPage"
+      @goToNextPage="() => goToPage(pager.currentPage + 1)"
+      @goToLastPage="() => goToPage(pager.lastPage)"
     />
   </main>
 </template>

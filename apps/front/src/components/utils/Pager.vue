@@ -12,6 +12,13 @@ const props = defineProps({
     default: 1,
   },
 });
+defineEmits([
+  "gotToFirstPage",
+  "goToPreviousPage",
+  "goToPage",
+  "goToNextPage",
+  "goToLastPage",
+]);
 
 const pagesButtons = ref([]);
 
@@ -54,7 +61,11 @@ watch(
 <template>
   <ul class="pager">
     <li>
-      <button class="pager__button" :disabled="props.currentPage === 1">
+      <button
+        class="pager__button"
+        :disabled="props.currentPage === 1"
+        @click="$emit('gotToFirstPage')"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="21"
@@ -74,7 +85,11 @@ watch(
       </button>
     </li>
     <li>
-      <button class="pager__button" :disabled="props.currentPage === 1">
+      <button
+        class="pager__button"
+        :disabled="props.currentPage === 1"
+        @click="$emit('goToPreviousPage')"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="11"
@@ -93,6 +108,7 @@ watch(
       <button
         class="pager__button"
         :class="{ 'pager__button--selected': page.selected }"
+        @click="$emit('goToPage', page.label)"
       >
         <span>{{ page.label }}</span>
       </button>
@@ -101,6 +117,7 @@ watch(
       <button
         class="pager__button"
         :disabled="props.currentPage === props.lastPage"
+        @click="$emit('goToNextPage')"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -120,6 +137,7 @@ watch(
       <button
         class="pager__button"
         :disabled="props.currentPage === props.lastPage"
+        @click="$emit('goToLastPage')"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
