@@ -11,7 +11,7 @@ import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 const env = import.meta.env;
-const desktopLinks = [
+const userDesktopLinks = [
   {
     name: t("guild"),
     path: "/",
@@ -28,7 +28,7 @@ const desktopLinks = [
     selected: false,
   },
 ];
-const mobileLinks = [
+const userMobileLinks = ref([
   {
     name: t("guild"),
     path: "/",
@@ -49,7 +49,19 @@ const mobileLinks = [
     path: "/notifications",
     selected: false,
   },
+]);
+const adminDesktopLinks = [
+  {
+    name: t("guilds"),
+    path: "/admin",
+  },
+  {
+    name: t("users"),
+    path: "/admin/users",
+  },
 ];
+const desktopLinks = ref([]);
+const mobileLinks = ref([]);
 const route = useRoute();
 const userStore = useUserStore();
 const user = userStore.user;
@@ -59,7 +71,7 @@ const userProfile = ref({
   image: user.image,
   grade: user.grade,
 });
-const submenu = [
+const userSubmenu = [
   {
     icon: "profile",
     text: t("member_profile"),
@@ -81,6 +93,19 @@ const submenu = [
     path: "/logout",
   },
 ];
+const adminSubmenu = [
+  {
+    icon: "information",
+    text: t("about_us"),
+    path: "/about-us",
+  },
+  {
+    icon: "logout",
+    text: t("logout"),
+    path: "/logout",
+  },
+];
+const submenu = ref([]);
 const onMobile = ref(false);
 const notifications = ref([]);
 const notificationsOpen = ref(false);
@@ -102,6 +127,20 @@ provide("submenu", submenu);
 provide("userProfile", userProfile);
 provide("onMobile", onMobile);
 
+function initNavbar() {
+  if (user.role === "admin") {
+    desktopLinks.value = adminDesktopLinks;
+    mobileLinks.value = adminDesktopLinks.value;
+    submenu.value = adminSubmenu;
+  } else {
+    desktopLinks.value = userDesktopLinks;
+    mobileLinks.value = userMobileLinks.value;
+    submenu.value = userSubmenu;
+  }
+}
+
+initNavbar();
+
 watch(
   () => userStore.user,
   (newUser) => {
@@ -110,6 +149,7 @@ watch(
       image: newUser.image,
       grade: newUser.grade,
     };
+    initNavbar();
   },
   { deep: true },
 );

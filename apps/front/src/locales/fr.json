@@ -42,6 +42,7 @@
   "founder_designer_developer": "Fondateur, designer et développeur",
   "go_to_personal_website": "Aller sur le site personnel de {name}",
   "guild": "Guilde",
+  "guilds": "Guildes",
   "guild_lowercase": "guilde",
   "in_game": "en jeu",
   "lds_nat_5": "5 nat lds",
@@ -97,6 +98,7 @@
   "upload": "Importer",
   "upload_json": "Importer un json",
   "username": "Nom d'utilisateur",
+  "users": "Utilisateurs",
   "validate": "Valider",
   "water": "Eau",
   "wind": "Vent"
