@@ -23,4 +23,12 @@
       height: 0;
     }
   }
+
+  a {
+    &:hover {
+      span {
+        color: var(--primary-darkened);
+      }
+    }
+  }
 }

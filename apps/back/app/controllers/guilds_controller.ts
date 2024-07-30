@@ -12,15 +12,18 @@ import { cuid } from '@adonisjs/core/helpers'
 export default class GuildsController {
   async show({ i18n, auth, params, response }: HttpContext) {
     const user = await auth.authenticate()
-    const memberGuild = await Member.query()
-      .where('user_id', user.id)
-      .select('guild_id')
-      .firstOrFail()
-    const memberGuildId = memberGuild.guild_id
     const guildId = params.id
 
-    if (guildId !== memberGuildId) {
-      return response.status(403).json({ message: i18n.t('messages.guild_invalid_not_exist') })
+    if (user.role !== 'admin') {
+      const memberGuild = await Member.query()
+        .where('user_id', user.id)
+        .select('guild_id')
+        .firstOrFail()
+      const memberGuildId = memberGuild.guild_id
+
+      if (guildId !== memberGuildId) {
+        return response.status(403).json({ message: i18n.t('messages.guild_invalid_not_exist') })
+      }
     }
 
     const guild = await Guild.query().where('id', guildId).select('name', 'image').firstOrFail()
@@ -213,16 +216,19 @@ export default class GuildsController {
   async search({ i18n, auth, params, request, response }: HttpContext) {
     const user = await auth.authenticate()
     const keyword = decodeURIComponent(request.input('keyword'))
-    const memberGuild = await Member.query()
-      .where('user_id', user.id)
-      .select('guild_id')
-      .firstOrFail()
-    const memberGuildId = memberGuild.guild_id
-    const guildId = params.id
     const sort = request.input('sort')
+    const guildId = params.id
 
-    if (guildId !== memberGuildId) {
-      return response.status(403).json({ message: i18n.t('messages.guild_invalid_not_exist') })
+    if (user.role !== 'admin') {
+      const memberGuild = await Member.query()
+        .where('user_id', user.id)
+        .select('guild_id')
+        .firstOrFail()
+      const memberGuildId = memberGuild.guild_id
+
+      if (guildId !== memberGuildId) {
+        return response.status(403).json({ message: i18n.t('messages.guild_invalid_not_exist') })
+      }
     }
 
     let members: any

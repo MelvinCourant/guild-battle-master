@@ -87,7 +87,9 @@ function othersText(numberMonsters) {
           v-if="columns[index].key === 'id' && key === 'id'"
           :class="columns[index].class"
         >
-          <span>{{ info }}</span>
+          <router-link :to="link + row.id">
+            <span>{{ info }}</span>
+          </router-link>
         </td>
         <td
           class="table-rows__actions"

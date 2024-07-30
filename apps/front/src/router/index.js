@@ -27,6 +27,13 @@ const router = createRouter({
       },
     },
     {
+      path: "/guild/:id",
+      component: Guild,
+      meta: {
+        title: "guild",
+      },
+    },
+    {
       path: "/map",
       component: Map,
       meta: {

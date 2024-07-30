@@ -30,4 +30,12 @@
     width: 55px;
     padding: 0 15px;
   }
+
+  a {
+    &:hover {
+      span {
+        color: var(--primary-darkened);
+      }
+    }
+  }
 }

@@ -101,6 +101,8 @@ router.beforeEach(async (to, from, next) => {
       to.path === "/reset-password"
     ) {
       next({ path: from.path });
+    } else if (to.path === "/" && userStore.user.role === "admin") {
+      next({ path: "/admin" });
     } else {
       next();
     }

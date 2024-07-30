@@ -6,7 +6,7 @@ import GuildProfile from "../components/GuildProfile.vue";
 import Dialog from "../components/utils/Dialog.vue";
 import Alert from "../components/utils/Alert.vue";
 import TableGrid from "../components/utils/TableGrid.vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
@@ -154,7 +154,10 @@ const alert = reactive({
 });
 const loading = ref(true);
 const router = useRouter();
+const route = useRoute();
+const params = route.params;
 const roleSelected = ref("");
+const guildId = ref(user.guild_id);
 
 provide("fields", fields);
 provide("columns", columns);
@@ -164,7 +167,7 @@ provide("data", data);
 provide("loading", loading);
 
 async function getMembers() {
-  const result = await fetch(`${env.VITE_URL}/api/guilds/${user.guild_id}`, {
+  const result = await fetch(`${env.VITE_URL}/api/guilds/${guildId.value}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -185,6 +188,10 @@ async function getMembers() {
     guild.value = resultJson.guild;
     loading.value = false;
   }
+}
+
+if (params.id && user.role === "admin") {
+  guildId.value = params.id;
 }
 
 getMembers();
@@ -400,7 +407,7 @@ async function madeSearch(inputName, value) {
   }
 
   const result = await fetch(
-    `${env.VITE_URL}/api/guilds/${user.guild_id}/members`,
+    `${env.VITE_URL}/api/guilds/${guildId.value}/members`,
     {
       method: "POST",
       headers: {
