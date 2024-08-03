@@ -182,7 +182,11 @@ export default class AuthController {
         const leader = await Member.query()
           .where('wizard_id', jsonParsed.guild.guild_info.master_wizard_id)
           .select('pseudo')
-          .firstOrFail()
+          .first()
+
+        if (!leader) {
+          return response.status(404).send({ message: i18n.t('messages.leader_doesnt_correspond') })
+        }
 
         memberExists.user_id = user.id
         memberExists.save()

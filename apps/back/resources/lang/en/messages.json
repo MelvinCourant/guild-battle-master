@@ -23,6 +23,7 @@
   "incorrect_member": "Invalid member",
   "invalid_action": "Invalid action",
   "invalid_step": "Invalid step",
+  "leader_doesnt_correspond": "It seems that the leader of your json does'nt correspond to current leader. If you haven't already done so, update your JSON or contact your new and/or old leader to update guild.",
   "link_expired_invalid": "Link expired or invalid",
   "member_has_been_excluded_from_guild": "Member {pseudo} has been excluded from the guild",
   "member_have_already_role": "Member {pseudo} already has the role {role}",

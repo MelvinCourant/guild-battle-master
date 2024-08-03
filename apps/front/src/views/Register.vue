@@ -5,9 +5,11 @@ import Alert from "../components/utils/Alert.vue";
 import { reactive, ref, provide } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
+import { useUserStore } from "../stores/user.js";
 
 const { t } = useI18n();
 const env = import.meta.env;
+const userStore = useUserStore();
 const router = useRouter();
 
 function generateImgSrc(src) {
