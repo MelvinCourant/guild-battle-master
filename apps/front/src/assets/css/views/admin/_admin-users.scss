@@ -1,6 +1,6 @@
 @use "../../partials/functions";
 
-.admin-guilds {
+.admin-users {
   position: relative;
   width: 100%;
   min-height: calc(100vh - 70px);
@@ -25,11 +25,15 @@
         width: 70px;
       }
 
+      &__pseudo,
       &__leader {
         width: 160px;
       }
 
-      &__guild-id-json,
+      &__guild-name {
+        width: 250px;
+      }
+
       &__created-at{
         width: 220px;
       }

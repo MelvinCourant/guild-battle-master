@@ -174,33 +174,28 @@ export default class AdminController {
 
         if (!member) {
           return {
-            user: {
-              id: user.id,
-              username: user.username,
-              image: user.image,
-              created_at: user.createdAt,
-            },
-            member: null,
+            id: user.id,
+            image: user.image,
+            username: user.username,
+            member_id: null,
+            pseudo: null,
+            guild_name: null,
+            created_at: user.createdAt,
+            guild_id: null,
           }
         }
 
         const guild = await Guild.query().where('id', member.guild_id).firstOrFail()
 
         return {
-          user: {
-            id: user.id,
-            username: user.username,
-            image: user.image,
-            created_at: user.createdAt,
-          },
-          member: {
-            id: member.id,
-            pseudo: member.pseudo,
-          },
-          guild: {
-            id: guild.id,
-            name: guild.name,
-          },
+          id: user.id,
+          image: user.image,
+          username: user.username,
+          member_id: member.id,
+          pseudo: member.pseudo,
+          guild_name: guild.name,
+          created_at: user.createdAt,
+          guild_id: guild.id,
         }
       })
     )
@@ -272,33 +267,28 @@ export default class AdminController {
 
         if (!member) {
           return {
-            user: {
-              id: user.id,
-              username: user.username,
-              image: user.image,
-              created_at: user.createdAt,
-            },
-            member: null,
+            id: user.id,
+            image: user.image,
+            username: user.username,
+            member_id: null,
+            pseudo: null,
+            guild_name: null,
+            created_at: user.createdAt,
+            guild_id: null,
           }
         }
 
         const guild = await Guild.query().where('id', member.guild_id).firstOrFail()
 
         return {
-          user: {
-            id: user.id,
-            username: user.username,
-            image: user.image,
-            created_at: user.createdAt,
-          },
-          member: {
-            id: member.id,
-            pseudo: member.pseudo,
-          },
-          guild: {
-            id: guild.id,
-            name: guild.name,
-          },
+          id: user.id,
+          image: user.image,
+          username: user.username,
+          member_id: member.id,
+          pseudo: member.pseudo,
+          guild_name: guild.name,
+          created_at: user.createdAt,
+          guild_id: guild.id,
         }
       })
     )

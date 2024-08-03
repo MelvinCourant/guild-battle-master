@@ -63,7 +63,7 @@ function othersText(numberMonsters) {
               element="dark-light"
             />
           </ul>
-          <router-link :to="link + row.id" v-else-if="key === 'image'">
+          <router-link :to="link + row.id" v-else-if="link && key === 'image'">
             <Avatar
               :className="'table-rows__image'"
               :src="info"
@@ -71,25 +71,36 @@ function othersText(numberMonsters) {
               :disableSkeleton="true"
             />
           </router-link>
+          <Avatar
+            :className="'table-rows__image'"
+            :src="info"
+            :alt="row.pseudo"
+            :disableSkeleton="true"
+            v-else-if="!link && key === 'image'"
+          />
           <div v-else-if="key === 'grade'" class="table-grid__grade-name">
             <Grade v-if="info !== 'member'" :grade="info" />
             <span>{{ info }}</span>
           </div>
           <router-link
             :to="link + row.id"
-            v-else-if="key === 'pseudo' || key === 'name'"
+            v-else-if="(link && key === 'pseudo') || key === 'name'"
           >
             <span>{{ info }}</span>
           </router-link>
+          <span v-else-if="(!link && key === 'pseudo') || key === 'name'">{{
+            info
+          }}</span>
           <span v-else>{{ info }}</span>
         </td>
         <td
           v-if="columns[index].key === 'id' && key === 'id'"
           :class="columns[index].class"
         >
-          <router-link :to="link + row.id">
+          <router-link :to="link + row.id" v-if="link">
             <span>{{ info }}</span>
           </router-link>
+          <span v-else>{{ info }}</span>
         </td>
         <td
           class="table-rows__actions"

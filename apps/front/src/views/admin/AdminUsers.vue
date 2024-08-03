@@ -1,5 +1,5 @@
 <script setup>
-import "../../assets/css/views/admin/_admin-guilds.scss";
+import "../../assets/css/views/admin/_admin-users.scss";
 import { useI18n } from "vue-i18n";
 import { useUserStore } from "../../stores/user.js";
 import { provide, reactive, ref } from "vue";
@@ -16,7 +16,7 @@ const fields = [
   {
     type: "search",
     name: "search",
-    placeholder: t("search_guild"),
+    placeholder: t("search_user"),
   },
 ];
 const columns = reactive([
@@ -31,21 +31,21 @@ const columns = reactive([
     class: "table-grid__picture",
   },
   {
-    name: t("name"),
+    name: t("username"),
     key: "name",
+    class: "table-grid__username",
+    sortOrder: "",
+  },
+  {
+    name: "Pseudo",
+    key: "pseudo",
+    class: "table-grid__pseudo",
+    sortOrder: "",
+  },
+  {
+    name: t("guild_name"),
+    key: "guild_name",
     class: "table-grid__guild-name",
-    sortOrder: "",
-  },
-  {
-    name: "Guild ID JSON",
-    key: "guild_id_json",
-    class: "table-grid__guild-id-json",
-    sortOrder: "",
-  },
-  {
-    name: "Leader",
-    key: "leader",
-    class: "table-grid__leader",
     sortOrder: "",
   },
   {
@@ -56,14 +56,14 @@ const columns = reactive([
   },
 ]);
 const sortOptions = [
-  { value: "name", label: t("name") },
-  { value: "guild_id_json", label: "Guild ID JSON" },
-  { value: "leader", label: "Leader" },
+  { value: "username", label: t("username") },
+  { value: "pseudo", label: "Pseudo" },
+  { value: "guild_name", label: t("guild_name") },
   { value: "created_at", label: t("created_at") },
 ];
 const actualSort = ref("created_at");
 const data = ref({});
-const guilds = ref([]);
+const users = ref([]);
 const keyword = ref("");
 const loading = ref(true);
 const pager = reactive({
@@ -82,9 +82,9 @@ function formatDatetime(datetime) {
   return new Date(datetime).toLocaleString(userStore.language);
 }
 
-async function getGuilds() {
+async function getUsers() {
   const result = await fetch(
-    `${env.VITE_URL}/api/admin/list-guilds/?page=${pager.currentPage}&pageSize=${pageSize.value}`,
+    `${env.VITE_URL}/api/admin/list-users/?page=${pager.currentPage}&pageSize=${pageSize.value}`,
     {
       method: "GET",
       headers: {
@@ -104,27 +104,26 @@ async function getGuilds() {
 
     let resultData = resultJson.data;
 
-    resultData = resultData.map((guild) => {
+    resultData = resultData.map((user) => {
       return {
-        id: guild.id,
-        image: guild.image,
-        name: guild.name,
-        guild_id_json: guild.guild_id_json,
-        leader: guild.leader,
-        created_at: formatDatetime(guild.created_at),
+        id: user.id,
+        image: user.image,
+        username: user.username,
+        pseudo: user.pseudo,
+        guild_name: user.guild_name,
+        created_at: formatDatetime(user.created_at),
       };
     });
 
     data.value = {
       rows: resultData,
-      link: "/guild/",
     };
-    guilds.value = resultData;
+    users.value = resultData;
     loading.value = false;
   }
 }
 
-getGuilds();
+getUsers();
 
 function sort(key) {
   function ascendingSort(a, b) {
@@ -155,24 +154,24 @@ function sort(key) {
   if (key === "picture" || key === "id") {
     return;
   } else if (actualSort.value === key) {
-    guilds.value = guilds.value.reverse();
+    users.value = users.value.reverse();
   } else {
-    guilds.value = guilds.value.sort(ascendingSort);
+    users.value = users.value.sort(ascendingSort);
     actualSort.value = key;
   }
 
   toggleSortOrder(columns);
 }
 
-async function searchGuilds(inputName, value) {
+async function searchUsers(inputName, value) {
   if (value === "") {
-    await getGuilds();
+    await getUsers();
     return;
   }
 
   keyword.value = value;
 
-  const result = await fetch(`${env.VITE_URL}/api/admin/search-guilds`, {
+  const result = await fetch(`${env.VITE_URL}/api/admin/search-users`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -198,22 +197,21 @@ async function searchGuilds(inputName, value) {
 
     let resultData = resultJson.data;
 
-    resultData = resultData.map((guild) => {
+    resultData = resultData.map((user) => {
       return {
-        id: guild.id,
-        image: guild.image,
-        name: guild.name,
-        guild_id_json: guild.guild_id_json,
-        leader: guild.leader,
-        created_at: formatDatetime(guild.created_at),
+        id: user.id,
+        image: user.image,
+        username: user.username,
+        pseudo: user.pseudo,
+        guild_name: user.guild_name,
+        created_at: formatDatetime(user.created_at),
       };
     });
 
     data.value = {
       rows: resultData,
-      link: "/guild/",
     };
-    guilds.value = resultData;
+    users.value = resultData;
   }
 }
 
@@ -221,17 +219,17 @@ function goToPage(page) {
   pager.currentPage = page;
 
   if (keyword.value === "") {
-    getGuilds();
+    getUsers();
   } else {
-    searchGuilds("search", keyword.value);
+    searchUsers("search", keyword.value);
   }
 }
 </script>
 
 <template>
-  <main class="admin-guilds">
-    <h1 class="hidden-title">{{ t("admin_list_guilds") }}</h1>
-    <FiltersBar @search="searchGuilds" />
+  <main class="admin-users">
+    <h1 class="hidden-title">{{ t("admin_list_users") }}</h1>
+    <FiltersBar @search="searchUsers" />
     <Table @sort="sort" />
     <Pager
       v-if="pager && pager.lastPage > 1"

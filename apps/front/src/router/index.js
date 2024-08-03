@@ -15,6 +15,7 @@ import ForgotPassword from "../views/ForgotPassword.vue";
 import ResetPassword from "../views/ResetPassword.vue";
 import AboutUs from "../views/AboutUs.vue";
 import AdminGuilds from "../views/admin/AdminGuilds.vue";
+import AdminUsers from "../views/admin/AdminUsers.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -161,6 +162,13 @@ const router = createRouter({
       component: AdminGuilds,
       meta: {
         title: "admin_list_guilds",
+      },
+    },
+    {
+      path: "/admin/users",
+      component: AdminUsers,
+      meta: {
+        title: "admin_list_users",
       },
     },
   ],
