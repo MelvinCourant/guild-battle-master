@@ -62,7 +62,7 @@ watch(
 
 function generateSrc(src) {
   if (src === "placeholder.jpg") {
-    return new URL("../../assets/imgs/placeholder.jpg", import.meta.url).href;
+    return new URL("../../src/assets/imgs/placeholder.jpg", import.meta.url).href;
   } else {
     return `${env.VITE_URL}/uploads/${src}`;
   }
