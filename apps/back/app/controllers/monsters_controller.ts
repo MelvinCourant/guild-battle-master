@@ -77,6 +77,10 @@ export default class MonstersController {
         'Ciri',
         'Yennefer',
         'Triss',
+        'Satoru Gojo',
+        'Megumi Fushiguro',
+        'Yuji Itadori',
+        'Nobara Kugisaki',
       ]
 
       if (monster.awakens_to || collabMonsters.includes(monsterName)) {
@@ -128,6 +132,7 @@ export default class MonstersController {
           'cow-girl',
           'wind-totemist',
           'wind-valkyrja',
+          'dark-ryomen-sukuna',
         ]
 
         if (

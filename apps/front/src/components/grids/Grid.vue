@@ -1,82 +1,57 @@
 <script setup>
-import '../../assets/css/components/grids/_grid.scss'
-import {inject, nextTick, onMounted, ref, watch} from "vue";
-import GridCard from "./GridCard.vue";
+import "../../assets/css/components/grids/_grid.scss";
+import { inject, nextTick, onMounted, ref, watch } from "vue";
 import Loader from "../utils/Loader.vue";
 import SortGrid from "./SortGrid.vue";
 
-defineEmits(['actionSelected', 'sortGrid'])
+defineEmits(["sortGrid"]);
 
-const data = ref(inject('data'))
-const columns = inject('columns')
-const rows = ref([])
-const loading = ref(inject('loading'))
-const displayModes = ref(inject('displayModes'))
-const gridTemplateColumns  = ref(null)
-const cardWidth = 190
-const styleGrid = ref('')
-
-watch(data, () => {
-  rows.value = data.value.rows
-})
+const loading = ref(inject("loading"));
+const displayModes = ref(inject("displayModes"));
+const gridTemplateColumns = ref(null);
+const cardWidth = 190;
+const styleGrid = ref("");
 
 async function updateGrid() {
-  const gridMode = displayModes.value.find(mode => mode.name === 'grid')
+  const gridMode = displayModes.value.find((mode) => mode.name === "grid");
 
-  if (
-      gridMode.isSelected &&
-      window.innerWidth > 768
-  ) {
+  if (gridMode.isSelected && window.innerWidth > 768) {
     await nextTick();
-    const grid = document.querySelector('.grid')
+    const grid = document.querySelector(".grid");
 
-    gridTemplateColumns.value = Math.floor(grid.clientWidth / cardWidth)
-    styleGrid.value = `grid-template-columns: repeat(${gridTemplateColumns.value}, 1fr);`
+    gridTemplateColumns.value = Math.floor(grid.clientWidth / cardWidth);
+    styleGrid.value = `grid-template-columns: repeat(${gridTemplateColumns.value}, 1fr);`;
   } else {
-    styleGrid.value = ''
+    styleGrid.value = "";
   }
 }
 
 watch(displayModes.value, () => {
-  updateGrid()
+  updateGrid();
 });
 
 onMounted(() => {
-  updateGrid()
-})
+  updateGrid();
+});
 
-window.addEventListener('resize', updateGrid)
+window.addEventListener("resize", updateGrid);
 </script>
 
 <template>
   <div class="grid-container">
-    <SortGrid
-        @sortGrid="$emit('sortGrid', $event)"
-    />
+    <SortGrid @sortGrid="$emit('sortGrid', $event)" />
     <div
-        :class="[
-          'grid',
-          {
-            'grid--loading': loading
-          }
+      :class="[
+        'grid',
+        {
+          'grid--loading': loading,
+        },
       ]"
     >
-      <ul
-          class="grid__list"
-          :style="styleGrid"
-      >
-        <GridCard
-            v-for="(row, index) in rows"
-            :key="rows[index].id"
-            :link="data.link"
-            :badges="data.badges"
-            :columns="columns"
-            :content="row"
-            :actions="data.actions"
-            @actionSelected="$emit('actionSelected', $event)"
-        />
+      <ul class="grid__list" :style="styleGrid">
+        <slot></slot>
       </ul>
-      <Loader v-if="loading"/>
+      <Loader v-if="loading" />
     </div>
   </div>
 </template>

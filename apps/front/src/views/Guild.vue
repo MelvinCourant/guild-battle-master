@@ -8,6 +8,16 @@ import Alert from "../components/utils/Alert.vue";
 import TableGrid from "../components/utils/TableGrid.vue";
 import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
+import FiltersBar from "../components/utils/FiltersBar.vue";
+import Table from "../components/tables/Table.vue";
+import TableRows from "../components/tables/TableRows.vue";
+import Avatar from "../components/utils/Avatar.vue";
+import { usePreferencesStore } from "../stores/preferences.js";
+import Grade from "../components/utils/Grade.vue";
+import Badge from "../components/utils/Badge.vue";
+import More from "../components/utils/More.vue";
+import Grid from "../components/grids/Grid.vue";
+import GridCard from "../components/grids/GridCard.vue";
 
 const { t } = useI18n();
 const userStore = useUserStore();
@@ -75,8 +85,10 @@ const sortOptions = [
     text: t("lds_nat_5"),
   },
 ];
-const actualSort = ref("grade");
-const data = ref({});
+const actualSort = reactive({
+  key: "grade",
+  order: "asc",
+});
 const actions = [
   {
     name: "update",
@@ -158,13 +170,25 @@ const route = useRoute();
 const params = route.params;
 const roleSelected = ref("");
 const guildId = ref(user.guild_id);
+const preferencesStore = usePreferencesStore();
+const preferences = preferencesStore.preferences;
+const displayModes = reactive([
+  {
+    name: "list",
+    isSelected: true,
+  },
+  {
+    name: "grid",
+    isSelected: false,
+  },
+]);
 
 provide("fields", fields);
 provide("columns", columns);
 provide("sortOptions", sortOptions);
-provide("sortValue", actualSort);
-provide("data", data);
+provide("sortValue", actualSort.key);
 provide("loading", loading);
+provide("displayModes", displayModes);
 
 async function getMembers() {
   const result = await fetch(`${env.VITE_URL}/api/guilds/${guildId.value}`, {
@@ -178,14 +202,14 @@ async function getMembers() {
 
   if (result.ok) {
     const resultJson = await result.json();
-    data.value = {
-      rows: resultJson.members,
-      link: "/member/",
-      badges: ["lds"],
-      actions: actions,
-    };
+
     members.value = resultJson.members;
     guild.value = resultJson.guild;
+
+    if (actualSort.key !== "grade") {
+      sort(actualSort.key, actualSort.order);
+    }
+
     loading.value = false;
   }
 }
@@ -196,12 +220,22 @@ if (params.id && user.role === "admin") {
 
 getMembers();
 
-function sort(key) {
+function sort(key, order = "") {
   function ascendingSort(a, b) {
     if (a[key] < b[key]) {
       return -1;
     }
     if (a[key] > b[key]) {
+      return 1;
+    }
+    return 0;
+  }
+
+  function descendingSort(a, b) {
+    if (a[key] > b[key]) {
+      return -1;
+    }
+    if (a[key] < b[key]) {
       return 1;
     }
     return 0;
@@ -214,8 +248,10 @@ function sort(key) {
         (column.key === key && column.sortOrder === "desc")
       ) {
         column.sortOrder = "asc";
+        actualSort.order = "asc";
       } else if (column.key === key && column.sortOrder === "asc") {
         column.sortOrder = "desc";
+        actualSort.order = "desc";
       } else {
         column.sortOrder = "";
       }
@@ -224,21 +260,29 @@ function sort(key) {
 
   if (key === "picture" || key === "actions") {
     return;
-  } else if (actualSort.value === key) {
+  } else if (actualSort.key === key && !order) {
     members.value = members.value.reverse();
-  } else if (key === "grade") {
+  } else if (
+    (key === "grade" && !order) ||
+    (key === "grade" && order === "asc")
+  ) {
     const gradeOrder = ["leader", "vice-leader", "senior", "member"];
 
     members.value = members.value.sort((a, b) => {
       return gradeOrder.indexOf(a.grade) - gradeOrder.indexOf(b.grade);
     });
-    actualSort.value = key;
+    actualSort.key = key;
+  } else if (order === "desc") {
+    members.value = members.value.sort(descendingSort);
+    actualSort.key = key;
   } else {
     members.value = members.value.sort(ascendingSort);
-    actualSort.value = key;
+    actualSort.key = key;
   }
 
-  toggleSortOrder(columns);
+  if (!order) {
+    toggleSortOrder(columns);
+  }
 }
 
 function actionSelected(selection) {
@@ -418,8 +462,8 @@ async function madeSearch(inputName, value) {
       body: JSON.stringify({
         keyword: value,
         sort: {
-          name: actualSort.value,
-          order: columns.find((column) => column.key === actualSort.value)
+          name: actualSort.key,
+          order: columns.find((column) => column.key === actualSort.key)
             .sortOrder,
         },
       }),
@@ -428,31 +472,183 @@ async function madeSearch(inputName, value) {
 
   if (result.ok) {
     const resultJson = await result.json();
-    data.value = {
-      rows: resultJson.members,
-      link: "/member/",
-      badges: ["lds"],
-      actions: actions,
-    };
+
     members.value = resultJson.members;
   }
 }
 
-function sortGrid(key) {
-  sort(key);
-  actualSort.value = key;
+if (preferences.displayMode) {
+  displayModes.forEach((displayMode) => {
+    if (displayMode.name === preferences.displayMode) {
+      displayMode.isSelected = true;
+      preferencesStore.updatePreferences("displayMode", displayMode.name);
+    } else {
+      displayMode.isSelected = false;
+    }
+  });
+}
+
+function toggleModeSelectedMobile() {
+  if (window.innerWidth <= 991 && displayModes[0].isSelected) {
+    displayModes[0].isSelected = false;
+    displayModes[1].isSelected = true;
+  }
+}
+
+if (window.innerWidth <= 768 && displayModes[0].isSelected) {
+  toggleModeSelectedMobile();
+}
+
+window.addEventListener("resize", toggleModeSelectedMobile);
+
+function updateDisplayMode(mode) {
+  displayModes.forEach((displayMode) => {
+    if (displayMode.name === mode) {
+      displayMode.isSelected = true;
+      preferencesStore.updatePreferences("displayMode", displayMode.name);
+    } else {
+      displayMode.isSelected = false;
+    }
+  });
+}
+
+function othersText(numberMonsters) {
+  if (numberMonsters - 3 > 1) {
+    return `+${numberMonsters - 3} ${t("others")}`;
+  } else {
+    return `+1 ${t("other")}`;
+  }
 }
 </script>
 
 <template>
   <main class="guild">
     <GuildProfile :name="guild.name" :image="guild.image" />
-    <TableGrid
-      @sort="sort"
-      @actionSelected="actionSelected"
-      @search="madeSearch"
-      @sortGrid="sortGrid"
-    />
+    <TableGrid>
+      <FiltersBar @search="madeSearch" @modeSelected="updateDisplayMode" />
+      <Table
+        v-show="
+          displayModes.find((displayMode) => displayMode.isSelected).name ===
+          'list'
+        "
+        @sort="sort"
+      >
+        <TableRows :rows="members">
+          <template #default="{ row }">
+            <td class="table-grid__picture">
+              <router-link :to="`/member/${row.id}`"
+                ><Avatar
+                  className="table-rows__image"
+                  :src="row.image"
+                  :alt="row.pseudo"
+                  :disableSkeleton="true"
+                />
+              </router-link>
+            </td>
+            <td class="table-grid__pseudo">
+              <router-link :to="`/member/${row.id}`"
+                ><span>{{ row.pseudo }}</span></router-link
+              >
+            </td>
+            <td class="table-grid__grade">
+              <div class="table-grid__grade-name">
+                <Grade v-if="row.grade !== 'member'" :grade="row.grade" />
+                <span>{{ row.grade }}</span>
+              </div>
+            </td>
+            <td class="table-grid__role">
+              {{ row.role }}
+            </td>
+            <td class="table-grid__lds">
+              <ul>
+                <template v-for="(monster, index) in row.lds">
+                  <Badge
+                    v-if="index < 3"
+                    :key="monster.unit_master_id"
+                    :monstersIds="[monster.unit_master_id]"
+                    :name="monster.name"
+                    :element="monster.element"
+                  />
+                </template>
+                <Badge
+                  v-if="row.lds.length > 3"
+                  :key="'others'"
+                  :monstersIds="
+                    row.lds.slice(3).map((monster) => monster.unit_master_id)
+                  "
+                  :name="othersText(row.lds.length)"
+                  element="dark-light"
+                />
+              </ul>
+            </td>
+            <td class="table-rows__actions">
+              <More
+                v-if="row.id !== user.member_id"
+                :actions="actions"
+                :memberRole="row.role"
+                @actionSelected="actionSelected({ action: $event, id: row.id })"
+              />
+            </td>
+          </template>
+        </TableRows>
+      </Table>
+      <Grid
+        v-show="
+          displayModes.find((displayMode) => displayMode.isSelected).name ===
+          'grid'
+        "
+        @sortGrid="sort"
+      >
+        <GridCard v-for="row in members" :key="row.id">
+          <div class="grid-card__actions-container">
+            <div class="grid-card__actions" v-if="row.id !== user.member_id">
+              <More
+                :actions="actions"
+                :memberRole="row.role"
+                orientation="right"
+                @actionSelected="actionSelected({ action: $event, id: row.id })"
+              />
+            </div>
+          </div>
+          <router-link :to="`/member/${row.id}`"
+            ><Avatar
+              className="table-grid__picture"
+              :src="row.image"
+              :alt="row.pseudo"
+              :disableSkeleton="true"
+            />
+          </router-link>
+          <router-link :to="`/member/${row.id}`">
+            <span class="table-grid__pseudo">{{ row.pseudo }}</span>
+          </router-link>
+          <div class="table-grid__grade-name">
+            <Grade v-if="row.grade !== 'member'" :grade="row.grade" />
+            <span>{{ row.grade }}</span>
+          </div>
+          <span class="table-grid__role">{{ row.role }}</span>
+          <ul class="table-grid__lds">
+            <template v-for="(monster, index) in row.lds">
+              <Badge
+                v-if="index < 3"
+                :key="monster.unit_master_id"
+                :monstersIds="[monster.unit_master_id]"
+                :name="monster.name"
+                :element="monster.element"
+              />
+            </template>
+            <Badge
+              v-if="row.lds.length > 3"
+              :key="'others'"
+              :monstersIds="
+                row.lds.slice(3).map((monster) => monster.unit_master_id)
+              "
+              :name="othersText(row.lds.length)"
+              element="dark-light"
+            />
+          </ul>
+        </GridCard>
+      </Grid>
+    </TableGrid>
   </main>
   <Dialog
     :dialog="dialog"
