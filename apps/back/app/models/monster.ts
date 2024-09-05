@@ -26,6 +26,9 @@ export default class Monster extends BaseModel {
   declare image: string
 
   @column()
+  declare similar_monster_id: number
+
+  @column()
   declare is_fully_awakened: boolean
 
   @column()

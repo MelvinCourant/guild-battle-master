@@ -3,6 +3,7 @@ import Monster from '#models/monster'
 import fs from 'node:fs'
 import { pipeline } from 'node:stream'
 import { promisify } from 'node:util'
+import monstersConfig from '../../monsters_config.json' assert { type: 'json' }
 
 export default class MonstersController {
   async create({ response }: HttpContext) {
@@ -33,19 +34,8 @@ export default class MonstersController {
           continue
         }
 
-        const notKorean = new RegExp(/^[a-z A-Z0-9]+$/)
-        const monstersNotReleased = [
-          'unit_icon_0019_0_3.png',
-          'unit_icon_0019_0_4.png',
-          'unit_icon_0019_1_3.png',
-          'unit_icon_0019_1_4.png',
-          'unit_icon_0019_2_3.png',
-          'unit_icon_0019_2_4.png',
-          'unit_icon_0019_3_3.png',
-          'unit_icon_0019_3_4.png',
-          'unit_icon_0019_4_3.png',
-          'unit_icon_0019_4_4.png',
-        ]
+        const notKorean = new RegExp(/^[a-zA-Z0-9-. éï]+$/)
+        const monstersNotReleased = monstersConfig.not_released
 
         if (
           notKorean.test(monster.name) &&
@@ -60,24 +50,8 @@ export default class MonstersController {
     async function insertMonsterIntoDb(monster: any) {
       let monsterName: string = monster.name
       const monsterElement: string = monster.element.toLowerCase()
-      const collabMonsters = [
-        'RYU',
-        'CHUN-LI',
-        'DHALSIM',
-        'M. BISON',
-        'Madeleine Cookie',
-        'Espresso Cookie',
-        'Hollyberry Cookie',
-        'Pure Vanilla Cookie',
-        'Eivor',
-        'Kassandra',
-        'Ezio',
-        'Bayek',
-        'Geralt',
-        'Ciri',
-        'Yennefer',
-        'Triss',
-      ]
+      const collabMonsters = monstersConfig.collab
+      const freeCollabMonsters = monstersConfig.free_collab
 
       if (monster.awakens_to || collabMonsters.includes(monsterName)) {
         monsterName = `${monster.element} ${monsterName}`
@@ -105,34 +79,12 @@ export default class MonstersController {
         let isFullyAwakened = false
         let isFusionOrShop = false
 
-        const fusionOrShopMonsters = [
-          'water-ifrit',
-          'fire-ifrit',
-          'wind-ifrit',
-          'dark-ifrit',
-          'light-ifrit',
-          'water-phoenix',
-          'fire-panda-warrior',
-          'light-paladin',
-          'dark-dokkaebi-lord',
-          'light-fairy-queen',
-          'dark-vampire-lord',
-          'homunculus',
-          'fire-ken',
-          'light-dual-blade',
-          'fire-shadow-claw',
-          'light-altaïr',
-          'light-magical-archer-fami',
-          'wind-lollipop-warrior',
-          'wind-gingerbrave',
-          'cow-girl',
-          'wind-totemist',
-          'wind-valkyrja',
-        ]
+        const fusionOrShopMonsters = monstersConfig.fusion_shop
 
         if (
           (monster.awakens_from && !monster.awakens_to) ||
-          collabMonsters.includes(monster.name)
+          collabMonsters.includes(monster.name) ||
+          freeCollabMonsters.includes(monster.name)
         ) {
           isFullyAwakened = true
         }
