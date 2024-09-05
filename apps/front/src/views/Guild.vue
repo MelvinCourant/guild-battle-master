@@ -89,6 +89,7 @@ const actualSort = reactive({
   key: "grade",
   order: "asc",
 });
+const actualSortKey = ref("grade");
 const actions = [
   {
     name: "update",
@@ -186,7 +187,7 @@ const displayModes = reactive([
 provide("fields", fields);
 provide("columns", columns);
 provide("sortOptions", sortOptions);
-provide("sortValue", actualSort.key);
+provide("sortValue", actualSortKey);
 provide("loading", loading);
 provide("displayModes", displayModes);
 
@@ -272,12 +273,15 @@ function sort(key, order = "") {
       return gradeOrder.indexOf(a.grade) - gradeOrder.indexOf(b.grade);
     });
     actualSort.key = key;
+    actualSortKey.value = key;
   } else if (order === "desc") {
     members.value = members.value.sort(descendingSort);
     actualSort.key = key;
+    actualSortKey.value = key;
   } else {
     members.value = members.value.sort(ascendingSort);
     actualSort.key = key;
+    actualSortKey.value = key;
   }
 
   if (!order) {
