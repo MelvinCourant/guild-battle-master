@@ -78,6 +78,7 @@ export default class MonstersController {
       if (!monsterExists) {
         let isFullyAwakened = false
         let isFusionOrShop = false
+        let similarMonster = null
 
         const fusionOrShopMonsters = monstersConfig.fusion_shop
 
@@ -93,6 +94,19 @@ export default class MonstersController {
           isFusionOrShop = true
         }
 
+        monstersConfig.similar.forEach(
+          (similar: {
+            collab: { name: string; unit_master_id: any }
+            non_collab: { unit_master_id: any; name: string }
+          }) => {
+            if (similar.collab.name === monsterName) {
+              similarMonster = similar.non_collab.unit_master_id
+            } else if (similar.non_collab.name === monsterName) {
+              similarMonster = similar.collab.unit_master_id
+            }
+          }
+        )
+
         const monsterData = {
           unit_master_id: monster.com2us_id,
           name: monsterName,
@@ -101,6 +115,7 @@ export default class MonstersController {
           image: `monsters/${monsterFileName}`,
           is_fully_awakened: isFullyAwakened,
           is_fusion_shop: isFusionOrShop,
+          similar_monster_id: similarMonster,
         }
         // @ts-ignore
         await Monster.create(monsterData)
