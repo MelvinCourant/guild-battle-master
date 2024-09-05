@@ -21,6 +21,5 @@
       "#start/*": ["./start/*.js"],
       "#config/*": ["./config/*.js"],
     },
-    "resolveJsonModule": true
   },
 }

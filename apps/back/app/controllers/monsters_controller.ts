@@ -1,14 +1,16 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Monster from '#models/monster'
 import fs from 'node:fs'
+import { promises as fsPromises } from 'node:fs'
 import { pipeline } from 'node:stream'
 import { promisify } from 'node:util'
-import monstersConfig from '../../monsters_config.json' assert { type: 'json' }
 
 export default class MonstersController {
   async create({ response }: HttpContext) {
     const streamPipeline = promisify(pipeline)
     let totalPages: number = 1
+
+    const monstersConfig = JSON.parse(await fsPromises.readFile('./monsters_config.json', 'utf-8'))
 
     async function getSwarfarmMonsters(page: number) {
       const result = await fetch(
