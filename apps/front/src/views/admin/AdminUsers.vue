@@ -240,7 +240,7 @@ function goToPage(page) {
               :disableSkeleton="true"
             />
           </td>
-          <td class="table-grid__pseudo">
+          <td class="table-grid__username">
             <span>{{ row.username }}</span>
           </td>
           <td class="table-grid__pseudo">

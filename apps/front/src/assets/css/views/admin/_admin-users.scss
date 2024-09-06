@@ -19,23 +19,28 @@
     .table-grid {
       &__id {
         width: 380px;
+        max-width: 380px;
       }
 
       &__picture {
         width: 70px;
+        max-width: 70px;
       }
 
-      &__pseudo,
-      &__leader {
+      &__username,
+      &__pseudo {
         width: 160px;
+        max-width: 160px;
       }
 
       &__guild-name {
         width: 250px;
+        max-width: 250px;
       }
 
       &__created-at{
         width: 220px;
+        max-width: 220px;
       }
     }
   }

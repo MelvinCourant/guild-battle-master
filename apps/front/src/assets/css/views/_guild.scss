@@ -30,14 +30,17 @@
     .table-grid {
       &__picture {
         width: 70px;
+        max-width: 70px;
       }
 
       &__pseudo {
         width: 160px;
+        max-width: 160px;
       }
 
       &__grade {
         width: 160px;
+        max-width: 160px;
 
         &-name {
           display: flex;
@@ -49,6 +52,7 @@
 
       &__role {
         width: 180px;
+        max-width: 180px;
         text-transform: capitalize;
       }
 

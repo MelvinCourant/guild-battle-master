@@ -19,19 +19,23 @@
     .table-grid {
       &__id {
         width: 380px;
+        max-width: 380px;
       }
 
       &__picture {
         width: 70px;
+        max-width: 70px;
       }
 
       &__leader {
         width: 160px;
+        max-width: 160px;
       }
 
       &__guild-id-json,
       &__created-at{
         width: 220px;
+        max-width: 220px;
       }
     }
   }
