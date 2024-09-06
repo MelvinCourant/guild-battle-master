@@ -6,6 +6,8 @@ import { provide, reactive, ref } from "vue";
 import Table from "../../components/tables/Table.vue";
 import FiltersBar from "../../components/utils/FiltersBar.vue";
 import Pager from "../../components/utils/Pager.vue";
+import Avatar from "../../components/utils/Avatar.vue";
+import TableRows from "../../components/tables/TableRows.vue";
 
 const { t } = useI18n();
 const userStore = useUserStore();
@@ -62,7 +64,6 @@ const sortOptions = [
   { value: "created_at", label: t("created_at") },
 ];
 const actualSort = ref("created_at");
-const data = ref({});
 const users = ref([]);
 const keyword = ref("");
 const loading = ref(true);
@@ -75,7 +76,6 @@ provide("fields", fields);
 provide("columns", columns);
 provide("sortOptions", sortOptions);
 provide("sortValue", actualSort);
-provide("data", data);
 provide("loading", loading);
 
 function formatDatetime(datetime) {
@@ -109,15 +109,13 @@ async function getUsers() {
         id: user.id,
         image: user.image,
         username: user.username,
+        member_id: user.member_id,
         pseudo: user.pseudo,
         guild_name: user.guild_name,
         created_at: formatDatetime(user.created_at),
+        guild_id: user.guild_id,
       };
     });
-
-    data.value = {
-      rows: resultData,
-    };
     users.value = resultData;
     loading.value = false;
   }
@@ -202,15 +200,13 @@ async function searchUsers(inputName, value) {
         id: user.id,
         image: user.image,
         username: user.username,
+        member_id: user.member_id,
         pseudo: user.pseudo,
         guild_name: user.guild_name,
         created_at: formatDatetime(user.created_at),
+        guild_id: user.guild_id,
       };
     });
-
-    data.value = {
-      rows: resultData,
-    };
     users.value = resultData;
   }
 }
@@ -230,7 +226,39 @@ function goToPage(page) {
   <main class="admin-users">
     <h1 class="hidden-title">{{ t("admin_list_users") }}</h1>
     <FiltersBar @search="searchUsers" />
-    <Table @sort="sort" />
+    <Table @sort="sort">
+      <TableRows :rows="users">
+        <template #default="{ row }">
+          <td class="table-grid__id">
+            <span>{{ row.id }}</span>
+          </td>
+          <td class="table-grid__picture">
+            <Avatar
+              className="table-rows__image"
+              :src="row.image"
+              :alt="row.username"
+              :disableSkeleton="true"
+            />
+          </td>
+          <td class="table-grid__pseudo">
+            <span>{{ row.username }}</span>
+          </td>
+          <td class="table-grid__pseudo">
+            <router-link :to="`/member/${row.member_id}`"
+              ><span>{{ row.pseudo }}</span>
+            </router-link>
+          </td>
+          <td class="table-grid__guild-name">
+            <router-link :to="`/guild/${row.guild_id}`"
+              ><span>{{ row.guild_name }}</span>
+            </router-link>
+          </td>
+          <td class="table-grid__created-at">
+            <span>{{ row.created_at }}</span>
+          </td>
+        </template>
+      </TableRows>
+    </Table>
     <Pager
       v-if="pager && pager.lastPage > 1"
       :currentPage="pager.currentPage"
