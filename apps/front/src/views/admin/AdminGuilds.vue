@@ -4,8 +4,10 @@ import { useI18n } from "vue-i18n";
 import { useUserStore } from "../../stores/user.js";
 import { provide, reactive, ref } from "vue";
 import Table from "../../components/tables/Table.vue";
+import TableRows from "../../components/tables/TableRows.vue";
 import FiltersBar from "../../components/utils/FiltersBar.vue";
 import Pager from "../../components/utils/Pager.vue";
+import Avatar from "../../components/utils/Avatar.vue";
 
 const { t } = useI18n();
 const userStore = useUserStore();
@@ -62,7 +64,6 @@ const sortOptions = [
   { value: "created_at", label: t("created_at") },
 ];
 const actualSort = ref("created_at");
-const data = ref({});
 const guilds = ref([]);
 const keyword = ref("");
 const loading = ref(true);
@@ -75,7 +76,6 @@ provide("fields", fields);
 provide("columns", columns);
 provide("sortOptions", sortOptions);
 provide("sortValue", actualSort);
-provide("data", data);
 provide("loading", loading);
 
 function formatDatetime(datetime) {
@@ -114,11 +114,6 @@ async function getGuilds() {
         created_at: formatDatetime(guild.created_at),
       };
     });
-
-    data.value = {
-      rows: resultData,
-      link: "/guild/",
-    };
     guilds.value = resultData;
     loading.value = false;
   }
@@ -208,11 +203,6 @@ async function searchGuilds(inputName, value) {
         created_at: formatDatetime(guild.created_at),
       };
     });
-
-    data.value = {
-      rows: resultData,
-      link: "/guild/",
-    };
     guilds.value = resultData;
   }
 }
@@ -232,7 +222,41 @@ function goToPage(page) {
   <main class="admin-guilds">
     <h1 class="hidden-title">{{ t("admin_list_guilds") }}</h1>
     <FiltersBar @search="searchGuilds" />
-    <Table @sort="sort" />
+    <Table @sort="sort">
+      <TableRows :rows="guilds">
+        <template #default="{ row }">
+          <td class="table-grid__id">
+            <router-link :to="`/guild/${row.id}`"
+              ><span>{{ row.id }}</span>
+            </router-link>
+          </td>
+          <td class="table-grid__picture">
+            <router-link :to="`/guild/${row.id}`"
+              ><Avatar
+                className="table-rows__image"
+                :src="row.image"
+                :alt="row.pseudo"
+                :disableSkeleton="true"
+              />
+            </router-link>
+          </td>
+          <td class="table-grid__guild-name">
+            <router-link :to="`/guild/${row.id}`"
+              ><span>{{ row.name }}</span>
+            </router-link>
+          </td>
+          <td class="table-grid__guild-id-json">
+            <span>{{ row.guild_id_json }}</span>
+          </td>
+          <td class="table-grid__leader">
+            <span>{{ row.leader }}</span>
+          </td>
+          <td class="table-grid__created-at">
+            <span>{{ row.created_at }}</span>
+          </td>
+        </template>
+      </TableRows>
+    </Table>
     <Pager
       v-if="pager && pager.lastPage > 1"
       :currentPage="pager.currentPage"
