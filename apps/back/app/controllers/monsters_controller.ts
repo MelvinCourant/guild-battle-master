@@ -1,6 +1,7 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Monster from '#models/monster'
 import fs from 'node:fs'
+import { promises as fsPromises } from 'node:fs'
 import { pipeline } from 'node:stream'
 import { promisify } from 'node:util'
 
@@ -8,6 +9,8 @@ export default class MonstersController {
   async create({ response }: HttpContext) {
     const streamPipeline = promisify(pipeline)
     let totalPages: number = 1
+
+    const monstersConfig = JSON.parse(await fsPromises.readFile('./monsters_config.json', 'utf-8'))
 
     async function getSwarfarmMonsters(page: number) {
       const result = await fetch(
@@ -33,19 +36,8 @@ export default class MonstersController {
           continue
         }
 
-        const notKorean = new RegExp(/^[a-z A-Z0-9]+$/)
-        const monstersNotReleased = [
-          'unit_icon_0019_0_3.png',
-          'unit_icon_0019_0_4.png',
-          'unit_icon_0019_1_3.png',
-          'unit_icon_0019_1_4.png',
-          'unit_icon_0019_2_3.png',
-          'unit_icon_0019_2_4.png',
-          'unit_icon_0019_3_3.png',
-          'unit_icon_0019_3_4.png',
-          'unit_icon_0019_4_3.png',
-          'unit_icon_0019_4_4.png',
-        ]
+        const notKorean = new RegExp(/^[a-zA-Z0-9-. éï]+$/)
+        const monstersNotReleased = monstersConfig.not_released
 
         if (
           notKorean.test(monster.name) &&
@@ -60,28 +52,8 @@ export default class MonstersController {
     async function insertMonsterIntoDb(monster: any) {
       let monsterName: string = monster.name
       const monsterElement: string = monster.element.toLowerCase()
-      const collabMonsters = [
-        'RYU',
-        'CHUN-LI',
-        'DHALSIM',
-        'M. BISON',
-        'Madeleine Cookie',
-        'Espresso Cookie',
-        'Hollyberry Cookie',
-        'Pure Vanilla Cookie',
-        'Eivor',
-        'Kassandra',
-        'Ezio',
-        'Bayek',
-        'Geralt',
-        'Ciri',
-        'Yennefer',
-        'Triss',
-        'Satoru Gojo',
-        'Megumi Fushiguro',
-        'Yuji Itadori',
-        'Nobara Kugisaki',
-      ]
+      const collabMonsters = monstersConfig.collab
+      const freeCollabMonsters = monstersConfig.free_collab
 
       if (monster.awakens_to || collabMonsters.includes(monsterName)) {
         monsterName = `${monster.element} ${monsterName}`
@@ -108,36 +80,14 @@ export default class MonstersController {
       if (!monsterExists) {
         let isFullyAwakened = false
         let isFusionOrShop = false
+        let similarMonster = null
 
-        const fusionOrShopMonsters = [
-          'water-ifrit',
-          'fire-ifrit',
-          'wind-ifrit',
-          'dark-ifrit',
-          'light-ifrit',
-          'water-phoenix',
-          'fire-panda-warrior',
-          'light-paladin',
-          'dark-dokkaebi-lord',
-          'light-fairy-queen',
-          'dark-vampire-lord',
-          'homunculus',
-          'fire-ken',
-          'light-dual-blade',
-          'fire-shadow-claw',
-          'light-altaïr',
-          'light-magical-archer-fami',
-          'wind-lollipop-warrior',
-          'wind-gingerbrave',
-          'cow-girl',
-          'wind-totemist',
-          'wind-valkyrja',
-          'dark-ryomen-sukuna',
-        ]
+        const fusionOrShopMonsters = monstersConfig.fusion_shop
 
         if (
           (monster.awakens_from && !monster.awakens_to) ||
-          collabMonsters.includes(monster.name)
+          collabMonsters.includes(monster.name) ||
+          freeCollabMonsters.includes(monster.name)
         ) {
           isFullyAwakened = true
         }
@@ -145,6 +95,19 @@ export default class MonstersController {
         if (fusionOrShopMonsters.some((slug) => monster.bestiary_slug.includes(slug))) {
           isFusionOrShop = true
         }
+
+        monstersConfig.similar.forEach(
+          (similar: {
+            collab: { name: string; unit_master_id: any }
+            non_collab: { unit_master_id: any; name: string }
+          }) => {
+            if (similar.collab.name === monsterName) {
+              similarMonster = similar.non_collab.unit_master_id
+            } else if (similar.non_collab.name === monsterName) {
+              similarMonster = similar.collab.unit_master_id
+            }
+          }
+        )
 
         const monsterData = {
           unit_master_id: monster.com2us_id,
@@ -154,6 +117,7 @@ export default class MonstersController {
           image: `monsters/${monsterFileName}`,
           is_fully_awakened: isFullyAwakened,
           is_fusion_shop: isFusionOrShop,
+          similar_monster_id: similarMonster,
         }
         // @ts-ignore
         await Monster.create(monsterData)

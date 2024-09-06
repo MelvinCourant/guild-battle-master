@@ -305,10 +305,24 @@ export default class BoxesController {
       }
 
       if (grade === '5') {
-        query = query.select('unit_master_id', 'image', 'element', 'natural_grade', 'name')
+        query = query.select(
+          'unit_master_id',
+          'image',
+          'element',
+          'natural_grade',
+          'name',
+          'similar_monster_id'
+        )
       } else {
         query = query
-          .select('unit_master_id', 'image', 'element', 'natural_grade', 'name')
+          .select(
+            'unit_master_id',
+            'image',
+            'element',
+            'natural_grade',
+            'name',
+            'similar_monster_id'
+          )
           .whereRaw('natural_grade < 4')
       }
 
@@ -336,14 +350,18 @@ export default class BoxesController {
               )
             } else {
               possibilities = possibilities.concat(
-                monsters.filter((m) => m.unit_master_id === monster)
+                monsters.filter(
+                  (m) => m.unit_master_id === monster || m.similar_monster_id === monster
+                )
               )
             }
           })
         } else {
           requestMonsters.forEach((monster: any) => {
             possibilities = possibilities.concat(
-              monsters.filter((m) => m.unit_master_id === monster)
+              monsters.filter(
+                (m) => m.unit_master_id === monster || m.similar_monster_id === monster
+              )
             )
           })
         }

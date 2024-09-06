@@ -1,0 +1,908 @@
+{
+  "not_released":  [
+    "unit_icon_0019_0_3.png",
+    "unit_icon_0019_0_4.png",
+    "unit_icon_0019_1_3.png",
+    "unit_icon_0019_1_4.png",
+    "unit_icon_0019_2_3.png",
+    "unit_icon_0019_2_4.png",
+    "unit_icon_0019_3_3.png",
+    "unit_icon_0019_3_4.png",
+    "unit_icon_0019_4_3.png",
+    "unit_icon_0019_4_4.png"
+  ],
+  "collab": [
+    "RYU",
+    "CHUN-LI",
+    "DHALSIM",
+    "M. BISON",
+    "Madeleine Cookie",
+    "Espresso Cookie",
+    "Hollyberry Cookie",
+    "Pure Vanilla Cookie",
+    "Eivor",
+    "Kassandra",
+    "Ezio",
+    "Bayek",
+    "Geralt",
+    "Ciri",
+    "Yennefer",
+    "Triss",
+    "Nobara Kugisaki",
+    "Megumi Fushiguro",
+    "Satoru Gojo",
+    "Yuji Itadori"
+  ],
+  "free_collab": [
+    "KEN",
+    "Altaïr",
+    "Ryomen Sukuna"
+  ],
+  "fusion_shop": [
+    "water-ifrit",
+    "fire-ifrit",
+    "wind-ifrit",
+    "dark-ifrit",
+    "light-ifrit",
+    "water-phoenix",
+    "fire-panda-warrior",
+    "light-paladin",
+    "dark-dokkaebi-lord",
+    "light-fairy-queen",
+    "dark-vampire-lord",
+    "homunculus",
+    "fire-ken",
+    "light-dual-blade",
+    "fire-shadow-claw",
+    "light-altaïr",
+    "light-magical-archer-fami",
+    "wind-lollipop-warrior",
+    "wind-gingerbrave",
+    "cow-girl",
+    "wind-totemist",
+    "wind-valkyrja",
+    "dark-ryomen-sukuna"
+  ],
+  "similar": [
+    {
+      "collab": {
+        "name": "Ken",
+        "unit_master_id": 24112
+      },
+      "non_collab": {
+        "name": "Bernadotte",
+        "unit_master_id": 24612
+      }
+    },
+    {
+      "collab": {
+        "name": "Fire CHUN-LI",
+        "unit_master_id": 24412
+      },
+      "non_collab": {
+        "name": "Berenice",
+        "unit_master_id": 24912
+      }
+    },
+    {
+      "collab": {
+        "name": "Water CHUN-LI",
+        "unit_master_id": 24411
+      },
+      "non_collab": {
+        "name": "Lariel",
+        "unit_master_id": 24911
+      }
+    },
+    {
+      "collab": {
+        "name": "Wind CHUN-LI",
+        "unit_master_id": 24413
+      },
+      "non_collab": {
+        "name": "Cordelia",
+        "unit_master_id": 24913
+      }
+    },
+    {
+      "collab": {
+        "name": "Light CHUN-LI",
+        "unit_master_id": 24414
+      },
+      "non_collab": {
+        "name": "Leah",
+        "unit_master_id": 24914
+      }
+    },
+    {
+      "collab": {
+        "name": "Dark CHUN-LI",
+        "unit_master_id": 24415
+      },
+      "non_collab": {
+        "name": "Vereesa",
+        "unit_master_id": 24914
+      }
+    },
+    {
+      "collab": {
+        "name": "Fire DHALSIM",
+        "unit_master_id": 24312
+      },
+      "non_collab": {
+        "name": "Todd",
+        "unit_master_id": 24812
+      }
+    },
+    {
+      "collab": {
+        "name": "Water DHALSIM",
+        "unit_master_id": 24311
+      },
+      "non_collab": {
+        "name": "Kyle",
+        "unit_master_id": 24811
+      }
+    },
+    {
+      "collab": {
+        "name": "Wind DHALSIM",
+        "unit_master_id": 24313
+      },
+      "non_collab": {
+        "name": "Jarett",
+        "unit_master_id": 24813
+      }
+    },
+    {
+      "collab": {
+        "name": "Light DHALSIM",
+        "unit_master_id": 24314
+      },
+      "non_collab": {
+        "name": "Hekerson",
+        "unit_master_id": 24814
+      }
+    },
+    {
+      "collab": {
+        "name": "Dark DHALSIM",
+        "unit_master_id": 24315
+      },
+      "non_collab": {
+        "name": "Cayde",
+        "unit_master_id": 24815
+      }
+    },
+    {
+      "collab": {
+        "name": "Fire RYU",
+        "unit_master_id": 24012
+      },
+      "non_collab": {
+        "name": "Douglas",
+        "unit_master_id": 24512
+      }
+    },
+    {
+      "collab": {
+        "name": "Water RYU",
+        "unit_master_id": 24011
+      },
+      "non_collab": {
+        "name": "Moore",
+        "unit_master_id": 24511
+      }
+    },
+    {
+      "collab": {
+        "name": "Wind RYU",
+        "unit_master_id": 24013
+      },
+      "non_collab": {
+        "name": "Kashmir",
+        "unit_master_id": 24513
+      }
+    },
+    {
+      "collab": {
+        "name": "Light RYU",
+        "unit_master_id": 24014
+      },
+      "non_collab": {
+        "name": "Talisman",
+        "unit_master_id": 24514
+      }
+    },
+    {
+      "collab": {
+        "name": "Dark RYU",
+        "unit_master_id": 24015
+      },
+      "non_collab": {
+        "name": "Vancliffe",
+        "unit_master_id": 24515
+      }
+    },
+    {
+      "collab": {
+        "name": "Fire M. BISON",
+        "unit_master_id": 24212
+      },
+      "non_collab": {
+        "name": "Karnal",
+        "unit_master_id": 24712
+      }
+    },
+    {
+      "collab": {
+        "name": "Water M. BISON",
+        "unit_master_id": 24211
+      },
+      "non_collab": {
+        "name": "Borgnine",
+        "unit_master_id": 24711
+      }
+    },
+    {
+      "collab": {
+        "name": "Wind M. BISON",
+        "unit_master_id": 24213
+      },
+      "non_collab": {
+        "name": "Sagar",
+        "unit_master_id": 24713
+      }
+    },
+    {
+      "collab": {
+        "name": "Light M. BISON",
+        "unit_master_id": 24214
+      },
+      "non_collab": {
+        "name": "Craig",
+        "unit_master_id": 24714
+      }
+    },
+    {
+      "collab": {
+        "name": "Dark M. BISON",
+        "unit_master_id": 24215
+      },
+      "non_collab": {
+        "name": "Gurkha",
+        "unit_master_id": 24715
+      }
+    },
+    {
+      "collab": {
+        "name": "GingerBrave",
+        "unit_master_id": 26213
+      },
+      "non_collab": {
+        "name": "Thomas",
+        "unit_master_id": 26713
+      }
+    },
+    {
+      "collab": {
+        "name": "Fire Espresso Cookie",
+        "unit_master_id": 26512
+      },
+      "non_collab": {
+        "name": "Hibiscus",
+        "unit_master_id": 27012
+      }
+    },
+    {
+      "collab": {
+        "name": "Water Espresso Cookie",
+        "unit_master_id": 26511
+      },
+      "non_collab": {
+        "name": "Rosemary",
+        "unit_master_id": 27011
+      }
+    },
+    {
+      "collab": {
+        "name": "Wind Espresso Cookie",
+        "unit_master_id": 26513
+      },
+      "non_collab": {
+        "name": "Chamomile",
+        "unit_master_id": 27013
+      }
+    },
+    {
+      "collab": {
+        "name": "Light Espresso Cookie",
+        "unit_master_id": 26514
+      },
+      "non_collab": {
+        "name": "Jasmine",
+        "unit_master_id": 27014
+      }
+    },
+    {
+      "collab": {
+        "name": "Dark Espresso Cookie",
+        "unit_master_id": 26515
+      },
+      "non_collab": {
+        "name": "Lavender",
+        "unit_master_id": 27015
+      }
+    },
+    {
+      "collab": {
+        "name": "Fire Madeleine Cookie",
+        "unit_master_id": 26612
+      },
+      "non_collab": {
+        "name": "Pavé",
+        "unit_master_id": 27112
+      }
+    },
+    {
+      "collab": {
+        "name": "Water Madeleine Cookie",
+        "unit_master_id": 26611
+      },
+      "non_collab": {
+        "name": "Ganache",
+        "unit_master_id": 27111
+      }
+    },
+    {
+      "collab": {
+        "name": "Wind Madeleine Cookie",
+        "unit_master_id": 26613
+      },
+      "non_collab": {
+        "name": "Praline",
+        "unit_master_id": 27113
+      }
+    },
+    {
+      "collab": {
+        "name": "Light Madeleine Cookie",
+        "unit_master_id": 26614
+      },
+      "non_collab": {
+        "name": "Fudge",
+        "unit_master_id": 27114
+      }
+    },
+    {
+      "collab": {
+        "name": "Dark Madeleine Cookie",
+        "unit_master_id": 26615
+      },
+      "non_collab": {
+        "name": "Truffle",
+        "unit_master_id": 27115
+      }
+    },
+    {
+      "collab": {
+        "name": "Fire Pure Vanilla Cookie",
+        "unit_master_id": 26312
+      },
+      "non_collab": {
+        "name": "Lucia",
+        "unit_master_id": 26812
+      }
+    },
+    {
+      "collab": {
+        "name": "Water Pure Vanilla Cookie",
+        "unit_master_id": 26311
+      },
+      "non_collab": {
+        "name": "Adriana",
+        "unit_master_id": 26811
+      }
+    },
+    {
+      "collab": {
+        "name": "Wind Pure Vanilla Cookie",
+        "unit_master_id": 26313
+      },
+      "non_collab": {
+        "name": "Angela",
+        "unit_master_id": 26813
+      }
+    },
+    {
+      "collab": {
+        "name": "Light Pure Vanilla Cookie",
+        "unit_master_id": 26314
+      },
+      "non_collab": {
+        "name": "Ariana",
+        "unit_master_id": 26814
+      }
+    },
+    {
+      "collab": {
+        "name": "Dark Pure Vanilla Cookie",
+        "unit_master_id": 26315
+      },
+      "non_collab": {
+        "name": "Elena",
+        "unit_master_id": 26815
+      }
+    },
+    {
+      "collab": {
+        "name": "Fire Hollyberry Cookie",
+        "unit_master_id": 26412
+      },
+      "non_collab": {
+        "name": "Alice",
+        "unit_master_id": 26912
+      }
+    },
+    {
+      "collab": {
+        "name": "Water Hollyberry Cookie",
+        "unit_master_id": 26411
+      },
+      "non_collab": {
+        "name": "Manon",
+        "unit_master_id": 26911
+      }
+    },
+    {
+      "collab": {
+        "name": "Wind Hollyberry Cookie",
+        "unit_master_id": 26413
+      },
+      "non_collab": {
+        "name": "Jade",
+        "unit_master_id": 26913
+      }
+    },
+    {
+      "collab": {
+        "name": "Light Hollyberry Cookie",
+        "unit_master_id": 26414
+      },
+      "non_collab": {
+        "name": "Audrey",
+        "unit_master_id": 26914
+      }
+    },
+    {
+      "collab": {
+        "name": "Dark Hollyberry Cookie",
+        "unit_master_id": 26415
+      },
+      "non_collab": {
+        "name": "Giselle",
+        "unit_master_id": 26915
+      }
+    },
+    {
+      "collab": {
+        "name": "Altaïr",
+        "unit_master_id": 27314
+      },
+      "non_collab": {
+        "name": "Frederic",
+        "unit_master_id": 27814
+      }
+    },
+    {
+      "collab": {
+        "name": "Fire Eivor",
+        "unit_master_id": 27712
+      },
+      "non_collab": {
+        "name": "Solveig",
+        "unit_master_id": 28212
+      }
+    },
+    {
+      "collab": {
+        "name": "Water Eivor",
+        "unit_master_id": 27711
+      },
+      "non_collab": {
+        "name": "Brita",
+        "unit_master_id": 28211
+      }
+    },
+    {
+      "collab": {
+        "name": "Wind Eivor",
+        "unit_master_id": 27713
+      },
+      "non_collab": {
+        "name": "Astrid",
+        "unit_master_id": 28213
+      }
+    },
+    {
+      "collab": {
+        "name": "Light Eivor",
+        "unit_master_id": 27714
+      },
+      "non_collab": {
+        "name": "Berghild",
+        "unit_master_id": 28214
+      }
+    },
+    {
+      "collab": {
+        "name": "Dark Eivor",
+        "unit_master_id": 27715
+      },
+      "non_collab": {
+        "name": "Sigrid",
+        "unit_master_id": 28215
+      }
+    },
+    {
+      "collab": {
+        "name": "Fire Eivor",
+        "unit_master_id": 27715
+      },
+      "non_collab": {
+        "name": "Sigrid",
+        "unit_master_id": 28215
+      }
+    },
+    {
+      "collab": {
+        "name": "Fire Ezio",
+        "unit_master_id": 27412
+      },
+      "non_collab": {
+        "name": "Patrick",
+        "unit_master_id": 27912
+      }
+    },
+    {
+      "collab": {
+        "name": "Water Ezio",
+        "unit_master_id": 27411
+      },
+      "non_collab": {
+        "name": "Lionel",
+        "unit_master_id": 27911
+      }
+    },
+    {
+      "collab": {
+        "name": "Wind Ezio",
+        "unit_master_id": 27413
+      },
+      "non_collab": {
+        "name": "Hector",
+        "unit_master_id": 27913
+      }
+    },
+    {
+      "collab": {
+        "name": "Light Ezio",
+        "unit_master_id": 27414
+      },
+      "non_collab": {
+        "name": "Ian",
+        "unit_master_id": 27914
+      }
+    },
+    {
+      "collab": {
+        "name": "Dark Ezio",
+        "unit_master_id": 27415
+      },
+      "non_collab": {
+        "name": "Evan",
+        "unit_master_id": 27915
+      }
+    },
+    {
+      "collab": {
+        "name": "Fire Bayek",
+        "unit_master_id": 27512
+      },
+      "non_collab": {
+        "name": "Ashour",
+        "unit_master_id": 28012
+      }
+    },
+    {
+      "collab": {
+        "name": "Water Bayek",
+        "unit_master_id": 27511
+      },
+      "non_collab": {
+        "name": "Omar",
+        "unit_master_id": 28011
+      }
+    },
+    {
+      "collab": {
+        "name": "Wind Bayek",
+        "unit_master_id": 27513
+      },
+      "non_collab": {
+        "name": "Shahat",
+        "unit_master_id": 28013
+      }
+    },
+    {
+      "collab": {
+        "name": "Light Bayek",
+        "unit_master_id": 27514
+      },
+      "non_collab": {
+        "name": "Ahmed",
+        "unit_master_id": 28014
+      }
+    },
+    {
+      "collab": {
+        "name": "Dark Bayek",
+        "unit_master_id": 27515
+      },
+      "non_collab": {
+        "name": "Salah",
+        "unit_master_id": 28015
+      }
+    },
+    {
+      "collab": {
+        "name": "Fire Kassandra",
+        "unit_master_id": 27612
+      },
+      "non_collab": {
+        "name": "Federica",
+        "unit_master_id": 28112
+      }
+    },
+    {
+      "collab": {
+        "name": "Water Kassandra",
+        "unit_master_id": 27611
+      },
+      "non_collab": {
+        "name": "Kalantatze",
+        "unit_master_id": 28111
+      }
+    },
+    {
+      "collab": {
+        "name": "Wind Kassandra",
+        "unit_master_id": 27613
+      },
+      "non_collab": {
+        "name": "Eleni",
+        "unit_master_id": 28113
+      }
+    },
+    {
+      "collab": {
+        "name": "Light Kassandra",
+        "unit_master_id": 27614
+      },
+      "non_collab": {
+        "name": "Aurelia",
+        "unit_master_id": 28114
+      }
+    },
+    {
+      "collab": {
+        "name": "Dark Kassandra",
+        "unit_master_id": 27615
+      },
+      "non_collab": {
+        "name": "Kiara",
+        "unit_master_id": 28115
+      }
+    },
+    {
+      "collab": {
+        "name": "Fire Ciri",
+        "unit_master_id": 29312
+      },
+      "non_collab": {
+        "name": "Reyka",
+        "unit_master_id": 29712
+      }
+    },
+    {
+      "collab": {
+        "name": "Water Ciri",
+        "unit_master_id": 29311
+      },
+      "non_collab": {
+        "name": "Rigna",
+        "unit_master_id": 29711
+      }
+    },
+    {
+      "collab": {
+        "name": "Wind Ciri",
+        "unit_master_id": 29313
+      },
+      "non_collab": {
+        "name": "Tirsa",
+        "unit_master_id": 29713
+      }
+    },
+    {
+      "collab": {
+        "name": "Light Ciri",
+        "unit_master_id": 29314
+      },
+      "non_collab": {
+        "name": "Birgitta",
+        "unit_master_id": 29714
+      }
+    },
+    {
+      "collab": {
+        "name": "Dark Ciri",
+        "unit_master_id": 29315
+      },
+      "non_collab": {
+        "name": "Fiona",
+        "unit_master_id": 29715
+      }
+    },
+    {
+      "collab": {
+        "name": "Fire Geralt",
+        "unit_master_id": 29212
+      },
+      "non_collab": {
+        "name": "Magnus",
+        "unit_master_id": 29612
+      }
+    },
+    {
+      "collab": {
+        "name": "Water Geralt",
+        "unit_master_id": 29211
+      },
+      "non_collab": {
+        "name": "Anders",
+        "unit_master_id": 29611
+      }
+    },
+    {
+      "collab": {
+        "name": "Wind Geralt",
+        "unit_master_id": 29213
+      },
+      "non_collab": {
+        "name": "Henrik",
+        "unit_master_id": 29613
+      }
+    },
+    {
+      "collab": {
+        "name": "Light Geralt",
+        "unit_master_id": 29214
+      },
+      "non_collab": {
+        "name": "Lars",
+        "unit_master_id": 29614
+      }
+    },
+    {
+      "collab": {
+        "name": "Dark Geralt",
+        "unit_master_id": 29215
+      },
+      "non_collab": {
+        "name": "Valdemar",
+        "unit_master_id": 29615
+      }
+    },
+    {
+      "collab": {
+        "name": "Fire Yennefer",
+        "unit_master_id": 29412
+      },
+      "non_collab": {
+        "name": "Tarnisha",
+        "unit_master_id": 29812
+      }
+    },
+    {
+      "collab": {
+        "name": "Water Yennefer",
+        "unit_master_id": 29412
+      },
+      "non_collab": {
+        "name": "Johanna",
+        "unit_master_id": 29811
+      }
+    },
+    {
+      "collab": {
+        "name": "Wind Yennefer",
+        "unit_master_id": 29413
+      },
+      "non_collab": {
+        "name": "Hexarina",
+        "unit_master_id": 29813
+      }
+    },
+    {
+      "collab": {
+        "name": "Light Yennefer",
+        "unit_master_id": 29414
+      },
+      "non_collab": {
+        "name": "Arcana",
+        "unit_master_id": 29814
+      }
+    },
+    {
+      "collab": {
+        "name": "Dark Yennefer",
+        "unit_master_id": 29415
+      },
+      "non_collab": {
+        "name": "Hilda",
+        "unit_master_id": 29815
+      }
+    },
+    {
+      "collab": {
+        "name": "Fire Triss",
+        "unit_master_id": 29512
+      },
+      "non_collab": {
+        "name": "Enshia",
+        "unit_master_id": 29912
+      }
+    },
+    {
+      "collab": {
+        "name": "Water Triss",
+        "unit_master_id": 29511
+      },
+      "non_collab": {
+        "name": "Lumina",
+        "unit_master_id": 29911
+      }
+    },
+    {
+      "collab": {
+        "name": "Wind Triss",
+        "unit_master_id": 29513
+      },
+      "non_collab": {
+        "name": "Nobella",
+        "unit_master_id": 29913
+      }
+    },
+    {
+      "collab": {
+        "name": "Light Triss",
+        "unit_master_id": 29514
+      },
+      "non_collab": {
+        "name": "Groa",
+        "unit_master_id": 29914
+      }
+    },
+    {
+      "collab": {
+        "name": "Dark Triss",
+        "unit_master_id": 29515
+      },
+      "non_collab": {
+        "name": "Celestara",
+        "unit_master_id": 29915
+      }
+    }
+  ]
+}

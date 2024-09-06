@@ -111,6 +111,21 @@ async function getActualComposition() {
       actualComposition.value = resultJson.defenses;
     }
 
+    if (router.currentRoute.value.query.dtu) {
+      const defensesTemporarilyUnassigned = JSON.parse(
+        router.currentRoute.value.query.dtu,
+      );
+      actualComposition.value = actualComposition.value.filter((defense) => {
+        return !defensesTemporarilyUnassigned.some(
+          (unassigned) =>
+            unassigned.member === defense.member.id &&
+            unassigned.leader === defense.leader.unit_master_id &&
+            unassigned.second === defense.second.unit_master_id &&
+            unassigned.third === defense.third.unit_master_id,
+        );
+      });
+    }
+
     initialCompositions.value = JSON.parse(JSON.stringify(resultJson.defenses));
   } else {
     await router.push("/composition");
