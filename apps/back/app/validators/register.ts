@@ -15,7 +15,7 @@ const messages = {
 
 vine.messagesProvider = new SimpleMessagesProvider(messages)
 
-export const createUserMemberValidator = vine.compile(
+export const createUserValidator = vine.compile(
   vine.object({
     email: vine.string().trim().email(),
     password: vine.string().trim().minLength(8).maxLength(20).confirmed(),
@@ -29,11 +29,12 @@ export const createUserMemberValidator = vine.compile(
   })
 )
 
-export const createGuildValidator = vine.compile(
+export const jsonCreateGuildValidator = vine.compile(
   vine.object({
     json: vine.file({
       extnames: ['json'],
     }),
+    create_guild: vine.string().trim().minLength(3).maxLength(5),
   })
 )
 

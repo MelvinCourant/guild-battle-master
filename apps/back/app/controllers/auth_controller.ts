@@ -3,8 +3,8 @@ import { cuid } from '@adonisjs/core/helpers'
 import app from '@adonisjs/core/services/app'
 import {
   registerValidator,
-  createUserMemberValidator,
-  createGuildValidator,
+  createUserValidator,
+  jsonCreateGuildValidator,
 } from '#validators/register'
 import { loginValidator } from '#validators/login'
 import fs from 'node:fs'
@@ -19,7 +19,7 @@ export default class AuthController {
   async register({ i18n, request, response }: HttpContext) {
     if (request.params().step === '1') {
       // Verify user and member and create user
-      const payload = await request.validateUsing(createUserMemberValidator)
+      const payload = await request.validateUsing(createUserValidator)
       const user: any = await User.query().where('email', payload.email).first()
 
       // eslint-disable-next-line no-inner-declarations
@@ -67,7 +67,7 @@ export default class AuthController {
       return response.created({ message: i18n.t('messages.user_created') })
     } else if (request.params().step === '2') {
       // Verify guild and create guild and member
-      const payload = await request.validateUsing(createGuildValidator)
+      const payload = await request.validateUsing(jsonCreateGuildValidator)
       const user: any = await User.query()
         .where('email', request.input('email'))
         .select('id')
@@ -92,47 +92,6 @@ export default class AuthController {
       if (!data) {
         fs.unlinkSync(jsonLink)
         return response.status(500).send({ message: i18n.t('messages.error_reading_json_file') })
-      }
-
-      // eslint-disable-next-line no-inner-declarations
-      async function createMembers(wizardId: number, members: any) {
-        for (const memberIndex of Object.keys(members)) {
-          const member: any = members[memberIndex]
-          let grade: any
-          const pseudo: string = member.wizard_name
-
-          if (member.grade === 1) {
-            grade = 'leader'
-            leaderPseudo = member.wizard_name
-          } else if (member.grade === 2) {
-            grade = 'member'
-          } else if (member.grade === 3) {
-            grade = 'vice-leader'
-          } else if (member.grade === 4) {
-            grade = 'senior'
-          }
-
-          if (member.wizard_id === wizardId) {
-            const memberRegistered = await Member.create({
-              wizard_id: member.wizard_id,
-              pseudo: pseudo,
-              grade: grade,
-              guild_id: guild.id,
-              user_id: user.id,
-            })
-
-            memberId = memberRegistered.id
-            const monsters: any = jsonParsed.unit_list
-            await createBoxes(memberId, monsters)
-          } else {
-            await Member.create({
-              wizard_id: member.wizard_id,
-              pseudo: pseudo,
-              grade: grade,
-              guild_id: guild.id,
-            })
-          }
-        }
       }
 
       // eslint-disable-next-line no-inner-declarations
@@ -167,14 +126,75 @@ export default class AuthController {
         }
       }
 
+      async function createTowers(guild: any) {
+        const fourNatTowers = [4, 7, 11]
+
+        for (let towerBlueId = 1; towerBlueId <= 12; towerBlueId++) {
+          if (fourNatTowers.includes(towerBlueId)) {
+            await Tower.create({
+              guild_id: guild.id,
+              position: towerBlueId,
+              side: 'blue',
+              map: 'classic',
+              grade: '4',
+            })
+          } else {
+            await Tower.create({
+              guild_id: guild.id,
+              position: towerBlueId,
+              side: 'blue',
+              map: 'classic',
+              grade: '5',
+            })
+          }
+        }
+
+        for (let towerRedId = 6; towerRedId <= 9; towerRedId++) {
+          if (fourNatTowers.includes(towerRedId)) {
+            await Tower.create({
+              guild_id: guild.id,
+              position: towerRedId,
+              side: 'red',
+              map: 'classic',
+              grade: '4',
+            })
+          } else {
+            await Tower.create({
+              guild_id: guild.id,
+              position: towerRedId,
+              side: 'red',
+              map: 'classic',
+              grade: '5',
+            })
+          }
+        }
+
+        for (let towerYellowId = 9; towerYellowId <= 12; towerYellowId++) {
+          if (fourNatTowers.includes(towerYellowId)) {
+            await Tower.create({
+              guild_id: guild.id,
+              position: towerYellowId,
+              side: 'yellow',
+              map: 'classic',
+              grade: '4',
+            })
+          } else {
+            await Tower.create({
+              guild_id: guild.id,
+              position: towerYellowId,
+              side: 'yellow',
+              map: 'classic',
+              grade: '5',
+            })
+          }
+        }
+      }
+
       const jsonParsed: any = JSON.parse(data)
       const wizardId: number = jsonParsed.wizard_info.wizard_id
-      let guild: any = null
-
+      const createGuildParam = request.input('create_guild')
       const memberExists: any = await Member.query().where('wizard_id', wizardId).first()
-      const guildExists: any = await Guild.query()
-        .where('guild_id_json', jsonParsed.guild.guild_info.guild_id)
-        .first()
+      let memberId: string = ''
 
       if (memberExists) {
         const memberGuild: any = await Guild.query().where('id', memberExists.guild_id).first()
@@ -200,122 +220,120 @@ export default class AuthController {
         })
       }
 
-      if (guildExists) {
-        return response.status(400).send({ message: i18n.t('messages.guild_already_exist') })
-      }
+      if (createGuildParam === 'true') {
+        let guild: any = null
+        console.log('guild', jsonParsed.guild)
 
-      const guildName: string = jsonParsed.guild.guild_info.name
-      guild = await Guild.create({
-        guild_id_json: jsonParsed.guild.guild_info.guild_id,
-        name: guildName,
-        leader_id: user.id,
-        image: userImage.image,
-      }).catch((error) => {
-        throw error
-      })
+        const guildExists: any = await Guild.query()
+          .where('guild_id_json', jsonParsed.guild.guild_info.guild_id)
+          .first()
 
-      const members: any = jsonParsed.guild.guild_members
-      let memberId: string = ''
-      let leaderPseudo: string = members[wizardId].wizard_name
-
-      user.role = 'leader'
-      user.save()
-
-      await createMembers(wizardId, members)
-
-      const membersNumber = Object.keys(members).length
-
-      fs.unlinkSync(jsonLink)
-
-      const fourNatTowers = [4, 7, 11]
-
-      for (let towerBlueId = 1; towerBlueId <= 12; towerBlueId++) {
-        if (fourNatTowers.includes(towerBlueId)) {
-          await Tower.create({
-            guild_id: guild.id,
-            position: towerBlueId,
-            side: 'blue',
-            map: 'classic',
-            grade: '4',
-          })
-        } else {
-          await Tower.create({
-            guild_id: guild.id,
-            position: towerBlueId,
-            side: 'blue',
-            map: 'classic',
-            grade: '5',
-          })
+        if (guildExists) {
+          return response.status(400).send({ message: i18n.t('messages.guild_already_exist') })
         }
-      }
 
-      for (let towerRedId = 6; towerRedId <= 9; towerRedId++) {
-        if (fourNatTowers.includes(towerRedId)) {
-          await Tower.create({
-            guild_id: guild.id,
-            position: towerRedId,
-            side: 'red',
-            map: 'classic',
-            grade: '4',
-          })
-        } else {
-          await Tower.create({
-            guild_id: guild.id,
-            position: towerRedId,
-            side: 'red',
-            map: 'classic',
-            grade: '5',
-          })
+        const guildName: string = jsonParsed.guild.guild_info.name
+        guild = await Guild.create({
+          guild_id_json: jsonParsed.guild.guild_info.guild_id,
+          name: guildName,
+          leader_id: user.id,
+          image: userImage.image,
+        }).catch((error) => {
+          throw error
+        })
+
+        const members: any = jsonParsed.guild.guild_members
+        let leaderPseudo: string = members[wizardId].wizard_name
+
+        user.role = 'leader'
+        user.save()
+
+        // eslint-disable-next-line no-inner-declarations
+        async function createMembers(wizardId: number, members: any) {
+          for (const memberIndex of Object.keys(members)) {
+            const member: any = members[memberIndex]
+            let grade: any
+            const pseudo: string = member.wizard_name
+
+            if (member.grade === 1) {
+              grade = 'leader'
+              leaderPseudo = member.wizard_name
+            } else if (member.grade === 2) {
+              grade = 'member'
+            } else if (member.grade === 3) {
+              grade = 'vice-leader'
+            } else if (member.grade === 4) {
+              grade = 'senior'
+            }
+
+            if (member.wizard_id === wizardId) {
+              const memberRegistered = await Member.create({
+                wizard_id: member.wizard_id,
+                pseudo: pseudo,
+                grade: grade,
+                guild_id: guild.id,
+                user_id: user.id,
+              })
+
+              memberId = memberRegistered.id
+              const monsters: any = jsonParsed.unit_list
+              await createBoxes(memberId, monsters)
+            } else {
+              await Member.create({
+                wizard_id: member.wizard_id,
+                pseudo: pseudo,
+                grade: grade,
+                guild_id: guild.id,
+              })
+            }
+          }
         }
-      }
 
-      for (let towerYellowId = 9; towerYellowId <= 12; towerYellowId++) {
-        if (fourNatTowers.includes(towerYellowId)) {
-          await Tower.create({
-            guild_id: guild.id,
-            position: towerYellowId,
-            side: 'yellow',
-            map: 'classic',
-            grade: '4',
-          })
-        } else {
-          await Tower.create({
-            guild_id: guild.id,
-            position: towerYellowId,
-            side: 'yellow',
-            map: 'classic',
-            grade: '5',
-          })
-        }
-      }
+        await createMembers(wizardId, members)
 
-      return response.created({
-        message: i18n.t('messages.guild_member_guild_mates_created'),
-        guildName: guildName,
-        leader: leaderPseudo,
-        members: membersNumber,
-      })
+        const membersNumber = Object.keys(members).length
+
+        fs.unlinkSync(jsonLink)
+
+        await createTowers(guild)
+
+        return response.created({
+          message: i18n.t('messages.guild_member_guild_mates_created'),
+          guildName: guildName,
+          leader: leaderPseudo,
+          members: membersNumber,
+        })
+      } else if (createGuildParam === 'false') {
+        const member = await Member.create({
+          wizard_id: wizardId,
+          pseudo: jsonParsed.wizard_info.wizard_name,
+          grade: 'member',
+          user_id: user.id,
+          guild_id: null,
+        })
+
+        await createBoxes(member.id, jsonParsed.unit_list)
+
+        fs.unlinkSync(jsonLink)
+
+        return response.created({
+          message: i18n.t('messages.member_created'),
+          guildName: i18n.t('messages.no_guild'),
+          pseudo: member.pseudo,
+        })
+      }
     } else if (request.params().step === '3') {
       const user: any = await User.query().where('email', request.input('email')).first()
       const member: any = await Member.query().where('user_id', user.id).first()
-      const guild: any = await Guild.query().where('id', member.guild_id).first()
 
-      if (!user && !guild && !member) {
+      if (!user && !member) {
         return response.status(404).send({
-          message: i18n.t('messages.user_guild_member_not_found'),
+          message: i18n.t('messages.user_member_not_found'),
         })
-      } else if (!guild || !member) {
-        let modelsNotFound = ''
-
-        if (!guild && !member) {
-          modelsNotFound = i18n.t('messages.guild_member_not_found_back_step_2')
-        } else if (!guild) {
-          modelsNotFound = i18n.t('messages.guild_not_found_back_step_2')
-        } else {
-          modelsNotFound = i18n.t('messages.member_not_found_back_step_2')
-        }
-
-        return response.status(404).send({ message: modelsNotFound })
+      } else if (!member) {
+        return response
+          .status(404)
+          .send({ message: i18n.t('messages.member_not_found_back_step_2') })
       } else if (!user) {
         return response.status(404).send({ message: i18n.t('messages.user_not_found_back_step_1') })
       }
