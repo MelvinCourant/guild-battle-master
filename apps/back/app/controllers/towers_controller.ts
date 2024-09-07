@@ -71,16 +71,22 @@ export default class TowersController {
     return response.json(towerData)
   }
 
-  async list({ auth, response }: HttpContext) {
+  async list({ auth, request, response }: HttpContext) {
     const user = await auth.authenticate()
     const member = await Member.query().where('user_id', user.id).select('guild_id').firstOrFail()
-    const towers = await Tower.query()
-      .where('guild_id', member.guild_id)
-      .andWhere('map', 'classic')
+    const towerGrade = request.qs().grade
+    let query = Tower.query().where('guild_id', member.guild_id).andWhere('map', 'classic')
+
+    if (towerGrade) {
+      query = query.andWhere('grade', towerGrade)
+    }
+
+    const towers = await query
       .orderByRaw(
         "CASE WHEN side = 'blue' THEN 1 WHEN side = 'red' THEN 2 WHEN side = 'yellow' THEN 3 END, position ASC"
       )
       .select('id', 'position', 'side')
+
     const defenses = await Defense.query()
       .where(
         'tower_id',
