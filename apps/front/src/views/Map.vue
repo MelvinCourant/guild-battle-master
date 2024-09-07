@@ -1,7 +1,7 @@
 <script setup>
 import "../assets/css/views/_map.scss";
 import Tabs from "../components/menus/Tabs.vue";
-import { ref } from "vue";
+import { provide, reactive, ref } from "vue";
 import MapGrid from "../components/grids/MapGrid.vue";
 import { useUserStore } from "../stores/user.js";
 import Dialog from "../components/utils/Dialog.vue";
@@ -27,10 +27,38 @@ const links = [
 ];
 const tools = [
   {
+    name: "filters",
+    title: t("tower_type"),
+  },
+  {
     name: "reset",
     title: t("reset_map"),
   },
 ];
+const filters = reactive([
+  {
+    title: t("tower_type"),
+    fields: [
+      {
+        label: t("nb_stars", { number: 4 }),
+        attributes: {
+          type: "checkbox",
+          name: "4_stars",
+          checked: true,
+        },
+      },
+      {
+        label: t("nb_stars", { number: 5 }),
+        attributes: {
+          type: "checkbox",
+          name: "5_stars",
+          checked: true,
+        },
+      },
+    ],
+  },
+]);
+const filtersValues = ref({});
 const cards = ref([]);
 const dialog = {
   content: {
@@ -53,8 +81,27 @@ const dialog = {
 };
 const dialogIsOpen = ref(false);
 
+provide("filters", filters);
+provide("filtersValues", filtersValues);
+
 async function getTowers() {
-  const result = await fetch(`${env.VITE_URL}/api/towers/list`, {
+  let gradeParam = "";
+  let valuesInTrue = [];
+
+  filters.forEach((filter) => {
+    filter.fields.forEach((field) => {
+      if (field.attributes.checked === true) {
+        valuesInTrue.push(field.attributes.name);
+      }
+    });
+  });
+
+  if (valuesInTrue.length > 0 && valuesInTrue.length < 2) {
+    const formattedValue = parseInt(valuesInTrue[0].split("_")[0]);
+    gradeParam = `?grade=${formattedValue}`;
+  }
+
+  const result = await fetch(`${env.VITE_URL}/api/towers/list${gradeParam}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -93,6 +140,25 @@ function toolClicked(tool) {
   }
 }
 
+function filterTowers(inputName, value) {
+  filtersValues.value = value;
+  filters.forEach((filter) => {
+    filter.fields.forEach((field) => {
+      for (const key in filtersValues.value) {
+        if (field.attributes.name === key) {
+          field.attributes.checked = value[key];
+
+          if (value[key] === true) {
+            delete filtersValues.value[key];
+          }
+        }
+      }
+    });
+  });
+
+  getTowers();
+}
+
 function confirmOrCancelReset(action) {
   if (action === "confirm") {
     resetTowers();
@@ -105,7 +171,12 @@ function confirmOrCancelReset(action) {
 <template>
   <main class="map">
     <h1 class="hidden-title">{{ t("siege_map") }}</h1>
-    <Tabs :links="links" :tools="tools" @toolClicked="toolClicked" />
+    <Tabs
+      :links="links"
+      :tools="tools"
+      @toolClicked="toolClicked"
+      @search="filterTowers"
+    />
     <MapGrid :cards="cards" />
     <Dialog
       :dialog="dialog"
