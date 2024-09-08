@@ -60,6 +60,26 @@ router.beforeEach(async (to, from, next) => {
 
   const pathsWithPermissions = [
     {
+      path: "/",
+      roles: ["leader", "moderator", "member"],
+      redirect: "/guilds-list",
+    },
+    {
+      path: "/map",
+      roles: ["leader", "moderator", "member"],
+      redirect: "/guilds-list",
+    },
+    {
+      path: "/defenses-per-member",
+      roles: ["leader", "moderator", "member"],
+      redirect: "/guilds-list",
+    },
+    {
+      path: "/defenses",
+      roles: ["leader", "moderator", "member"],
+      redirect: "/guilds-list",
+    },
+    {
       path: "/composition",
       roles: ["leader", "moderator"],
       redirect: "/defenses",
@@ -79,11 +99,21 @@ router.beforeEach(async (to, from, next) => {
       roles: ["admin"],
       redirect: "/",
     },
+    {
+      path: "/guilds-list",
+      roles: ["wanderer"],
+      redirect: "/",
+    },
+    {
+      path: "/create-guild",
+      roles: ["wanderer"],
+      redirect: "/",
+    },
   ];
 
   if (isLogged) {
     const pathHavePermission = pathsWithPermissions.find(
-      (path) => to.path.match(path.path) !== null,
+      (path) => to.path === path.path,
     );
 
     if (pathHavePermission) {
