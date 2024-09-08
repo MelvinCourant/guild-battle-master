@@ -16,6 +16,7 @@
   "browse": "Parcourir",
   "cancel": "Annuler",
   "created_at": "Créé le",
+  "create_guild_json": "Créer la guilde à partir du json",
   "choose_role_dialog_description": "Choisissez un rôle pour cet utilisateur. Si le rôle choisi est Leader, {pseudo} recevra une notification pour accepter ou refuser le rôle.",
   "composition_name": "Nom d'une composition",
   "confirm": "Confirmer",

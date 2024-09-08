@@ -110,6 +110,13 @@ const registerForm = reactive({
           },
         },
         {
+          label: t("create_guild_json"),
+          attributes: {
+            type: "checkbox",
+            name: "create_guild",
+          },
+        },
+        {
           attributes: {
             type: "submit",
             value: t("continue"),
@@ -175,6 +182,7 @@ const formValues = reactive({
   confirmationPassword: "",
   username: "",
   json: null,
+  create_guild: "false",
 });
 const memberImage = ref();
 const formStepOne = registerForm.forms[0];
@@ -200,6 +208,8 @@ function updateValue(inputName, value) {
     formValues.confirmationPassword = value;
   } else if (inputName === "json") {
     formValues.json = value;
+  } else if (inputName === "create_guild") {
+    formValues.create_guild = `${value}`;
   }
 }
 
@@ -252,6 +262,7 @@ async function register(step, fields, optionalFiles) {
       password_confirmation: formValues.confirmationPassword,
       username: formValues.username,
       json: formValues.json,
+      create_guild: formValues.create_guild,
     };
   }
 
@@ -289,7 +300,7 @@ async function register(step, fields, optionalFiles) {
           };
         }
 
-        if (resumeContent) {
+        if (resumeContent && resultJson.leader && resultJson.members) {
           resumeContent[1].text = resultJson.guildName;
           resumeContent[2].text = resultJson.leader;
 
@@ -300,6 +311,19 @@ async function register(step, fields, optionalFiles) {
           } else if (resultJson.members === 1) {
             resumeContent[3].text = t("1_member");
           }
+        } else {
+          resumeContent[1].text = resultJson.guildName;
+          const index = resumeContent.findIndex(
+            (item) =>
+              item.type === "text" &&
+              item.image &&
+              item.image.alt === "Leader icon",
+          );
+          if (index !== -1) {
+            resumeContent.splice(index, 1);
+          }
+          resumeContent[2].text = resultJson.pseudo;
+          resumeContent.splice(3, 1);
         }
       }
     } else {

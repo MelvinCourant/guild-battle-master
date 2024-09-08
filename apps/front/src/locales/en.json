@@ -16,6 +16,7 @@
   "back": "Back",
   "cancel": "Cancel",
   "created_at": "Created at",
+  "create_guild_json": "Create the guild from the json",
   "choose_role_dialog_description": "Choose a role for this user. If the chosen role is Leader, {pseudo} will receive a notification to accept or reject the role.",
   "composition_name": "Composition name",
   "confirm": "Confirm",

@@ -222,7 +222,6 @@ export default class AuthController {
 
       if (createGuildParam === 'true') {
         let guild: any = null
-        console.log('guild', jsonParsed.guild)
 
         const guildExists: any = await Guild.query()
           .where('guild_id_json', jsonParsed.guild.guild_info.guild_id)
