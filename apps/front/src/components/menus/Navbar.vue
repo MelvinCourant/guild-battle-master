@@ -60,6 +60,36 @@ const adminDesktopLinks = [
     path: "/admin/users",
   },
 ];
+const userWithoutGuildDesktopLinks = [
+  {
+    name: t("guilds"),
+    path: "/guilds-list",
+    selected: false,
+  },
+  {
+    name: t("create_your_guild"),
+    path: "/create-guild",
+    selected: false,
+  },
+];
+const userWithoutGuildMobileLinks = [
+  {
+    name: t("guilds"),
+    path: "/guilds-list",
+    selected: false,
+  },
+  {
+    name: t("create_your_guild"),
+    path: "/create-guild",
+    selected: false,
+  },
+  {
+    name: t("notifications"),
+    path: "/notifications",
+    selected: false,
+  },
+];
+
 const desktopLinks = ref([]);
 const mobileLinks = ref([]);
 const route = useRoute();
@@ -132,6 +162,10 @@ function initNavbar() {
     desktopLinks.value = adminDesktopLinks;
     mobileLinks.value = adminDesktopLinks.value;
     submenu.value = adminSubmenu;
+  } else if (user.role === "member" && user.guild_id === null) {
+    desktopLinks.value = userWithoutGuildDesktopLinks;
+    mobileLinks.value = userWithoutGuildMobileLinks.value;
+    submenu.value = userSubmenu;
   } else {
     desktopLinks.value = userDesktopLinks;
     mobileLinks.value = userMobileLinks.value;
