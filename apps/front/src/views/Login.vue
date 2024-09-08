@@ -136,7 +136,7 @@ async function login() {
 
     if (user.role === "admin") {
       await router.push("/admin");
-    } else if (user.role === "member" && user.guild_id === null) {
+    } else if (user.role === "wanderer") {
       await router.push("/guilds-list");
     } else {
       await router.push("/");

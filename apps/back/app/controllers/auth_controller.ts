@@ -311,6 +311,9 @@ export default class AuthController {
           guild_id: null,
         })
 
+        user.role = 'wanderer'
+        user.save()
+
         await createBoxes(member.id, jsonParsed.unit_list)
 
         fs.unlinkSync(jsonLink)
@@ -370,7 +373,7 @@ export default class AuthController {
       } else {
         const member: any = await Member.query()
           .where('user_id', user.id)
-          .select('pseudo', 'grade', 'guild_id')
+          .select('pseudo', 'grade')
           .firstOrFail()
         const token = await User.accessTokens.create(user)
 
@@ -386,7 +389,6 @@ export default class AuthController {
             grade: member.grade,
             image: userImage,
             role: user.role,
-            guild_id: member.guild_id,
           },
           token,
         })

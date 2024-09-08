@@ -30,7 +30,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare password: string
 
   @column()
-  declare role: 'admin' | 'leader' | 'moderator' | 'member'
+  declare role: 'admin' | 'leader' | 'moderator' | 'member' | 'wanderer'
 
   @column()
   declare image: string | null

@@ -162,7 +162,7 @@ function initNavbar() {
     desktopLinks.value = adminDesktopLinks;
     mobileLinks.value = adminDesktopLinks.value;
     submenu.value = adminSubmenu;
-  } else if (user.role === "member" && user.guild_id === null) {
+  } else if (user.role === "wanderer") {
     desktopLinks.value = userWithoutGuildDesktopLinks;
     mobileLinks.value = userWithoutGuildMobileLinks.value;
     submenu.value = userSubmenu;
