@@ -192,14 +192,17 @@ provide("loading", loading);
 provide("displayModes", displayModes);
 
 async function getMembers() {
-  const result = await fetch(`${env.VITE_URL}/api/guilds/${guildId.value}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-      "Accept-Language": userStore.language,
+  const result = await fetch(
+    `${env.VITE_URL}/api/guilds/list-members/${guildId.value}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        "Accept-Language": userStore.language,
+      },
     },
-  });
+  );
 
   if (result.ok) {
     const resultJson = await result.json();

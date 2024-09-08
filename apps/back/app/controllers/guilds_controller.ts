@@ -383,4 +383,138 @@ export default class GuildsController {
 
     return response.json({ members: membersInformations })
   }
+
+  async listGuilds({ i18n, auth, request, response }: HttpContext) {
+    const user = await auth.authenticate()
+
+    if (user.role !== 'wanderer') {
+      return response.status(403).json({ message: i18n.t('messages.forbidden') })
+    }
+
+    const page = request.input('page') || 1
+    const pageSize = request.input('pageSize') || 25
+    const guilds = await Guild.query()
+      .select('id', 'guild_id_json', 'name', 'image', 'leader_id', 'created_at')
+      .paginate(page, pageSize)
+    guilds.namingStrategy = {
+      paginationMetaKeys() {
+        return {
+          total: 'total',
+          perPage: 'per_page',
+          currentPage: 'current_page',
+          lastPage: 'last_page',
+          firstPage: 'first_page',
+          firstPageUrl: 'first_page_url',
+          lastPageUrl: 'last_page_url',
+          nextPageUrl: 'next_page_url',
+          previousPageUrl: 'previous_page_url',
+        }
+      },
+    }
+
+    const guildsData = await Promise.all(
+      guilds.toJSON().data.map(async (guild) => {
+        const leader = await Member.query()
+          .where('user_id', guild.leader_id)
+          .select('pseudo')
+          .firstOrFail()
+        const members = await Member.query().where('guild_id', guild.id).select('id')
+        let guildImage = 'placeholder.jpg'
+
+        if (guild.image) {
+          guildImage = guild.image
+        }
+
+        return {
+          id: guild.id,
+          image: guildImage,
+          name: guild.name,
+          leader: leader.pseudo,
+          members: members.length,
+          created_at: guild.createdAt,
+        }
+      })
+    )
+
+    return response.json({
+      meta: guilds.toJSON().meta,
+      data: guildsData,
+    })
+  }
+
+  async searchGuilds({ i18n, auth, request, response }: HttpContext) {
+    const user = await auth.authenticate()
+
+    if (user.role !== 'wanderer') {
+      return response.status(403).json({ message: i18n.t('messages.forbidden') })
+    }
+
+    const keyword = request.input('keyword')
+    const sort = request.input('sort')
+    let query = Guild.query().leftJoin('members', 'guilds.leader_id', 'members.user_id')
+
+    if (keyword) {
+      query = query
+        .where('guilds.name', 'like', `%${keyword}%`)
+        .orWhere('members.pseudo', 'like', `%${keyword}%`)
+    }
+
+    query = query.select('guilds.*', 'members.pseudo as leader_pseudo')
+
+    if (sort) {
+      if (sort.name === 'leader') {
+        query = query.orderBy('members.pseudo', sort.order)
+      } else {
+        query = query.orderBy(sort.name, sort.order)
+      }
+    }
+
+    const page = request.input('page') || 1
+    const pageSize = request.input('pageSize') || 25
+    const guilds = await query.paginate(page, pageSize)
+    guilds.namingStrategy = {
+      paginationMetaKeys() {
+        return {
+          total: 'total',
+          perPage: 'per_page',
+          currentPage: 'current_page',
+          lastPage: 'last_page',
+          firstPage: 'first_page',
+          firstPageUrl: 'first_page_url',
+          lastPageUrl: 'last_page_url',
+          nextPageUrl: 'next_page_url',
+          previousPageUrl: 'previous_page_url',
+        }
+      },
+    }
+
+    const guildsData = await Promise.all(
+      guilds.toJSON().data.map(async (guild) => {
+        const leader = await Member.query()
+          .where('user_id', guild.leader_id)
+          .select('pseudo')
+          .firstOrFail()
+        const members = await Member.query().where('guild_id', guild.id).select('id')
+        let guildImage = 'placeholder.jpg'
+
+        if (guild.image) {
+          guildImage = guild.image
+        }
+
+        return {
+          id: guild.id,
+          image: guildImage,
+          name: guild.name,
+          leader: leader.pseudo,
+          members: members.length,
+          created_at: guild.createdAt,
+        }
+      })
+    )
+
+    return response.json({
+      meta: guilds.toJSON().meta,
+      data: guildsData,
+    })
+  }
 }

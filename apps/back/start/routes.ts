@@ -76,7 +76,7 @@ router
   .group(() => {
     const guildsController = new GuildsController()
 
-    router.get('/:id', async (data) => {
+    router.get('/list-members/:id', async (data) => {
       return guildsController.show(data)
     })
 
@@ -86,6 +86,14 @@ router
 
     router.post('/:id/members', async (data) => {
       return guildsController.search(data)
+    })
+
+    router.get('/list-guilds', async (data) => {
+      return guildsController.listGuilds(data)
+    })
+
+    router.post('/search-guilds', async (data) => {
+      return guildsController.searchGuilds(data)
     })
   })
   .prefix('api/guilds')

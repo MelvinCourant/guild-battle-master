@@ -37,6 +37,7 @@
   "no_monster_updated": "aucun monstre mis à jour",
   "no_users_found_with_email_address": "Aucun utilisateur trouvé avec cette adresse email",
   "notification_send_to": "Une notification a été envoyée à {pseudo}",
+  "number_members": "Nombre de membres",
   "one_of_member_does_not_save_monster_listed": "Un des membres n'a pas les monstres indiqués",
   "operation_impossible": "Opération impossible",
   "password_reset": "Réinitialiser mon mot de passe",
